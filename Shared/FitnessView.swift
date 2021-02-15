@@ -6,18 +6,31 @@
 //
 
 import SwiftUI
-
+extension Color {
+    static let myGray = Color.init(red: 28/255, green: 29/255, blue: 31/255)
+}
 struct FitnessView: View {
     @EnvironmentObject var fitness: FitnessCalculations
-//    @State var progress: Float = FitnessCalculations().getProgressToWeight()
-//    @State var progressTowardDate = FitnessCalculations().getProgressToDate()
+    @EnvironmentObject var healthKit: MyHealthKit
     
     var body: some View {
         ZStack {
-            ProgressCircle(progress: self.$fitness.progressToWeight, progressTowardDate: self.$fitness.progressToDate, successPercentage: self.$fitness.successPercentage)
+            ProgressCircle().environmentObject(fitness)
                 .padding()
-                .background(Color.init(red: 28/255, green: 29/255, blue: 31/255))
+                .background(Color.myGray)
+            CalorieCircle().environmentObject(healthKit)
+                .padding()
+                .padding()
             VStack {
+//                Text(String(format: "%.2f", healthKit.burned ?? 0))
+                Text(String(healthKit.remaining) + " cal ")
+                    .foregroundColor(.white)
+                    .font(.caption)
+//                Text(String(format: "%.2f", healthKit.eaten ?? 0))
+//                Text(String(fitness.currentWeight)).foregroundColor(.white)
+                Text(String(format: "%.2f", (fitness.startingWeight - fitness.currentWeight)) + " lost")
+                    .foregroundColor(.white)
+                    .font(.caption)
 //                Text(fitness.progressString(from: fitness.progressToWeight) + "% to weight")
 //                Text(fitness.progressString(from: fitness.progressToDate) + "% to date")
                 let success = fitness.successPercentage
@@ -26,6 +39,7 @@ struct FitnessView: View {
                     "-" + fitness.progressString(from: 0 - success) + "%"
                 Text(successString)
                     .foregroundColor(.white)
+                    .font(.caption)
             }
         }
     }
@@ -33,6 +47,6 @@ struct FitnessView: View {
 
 struct FitnessView_Previews: PreviewProvider {
     static var previews: some View {
-        FitnessView().environmentObject(FitnessCalculations())
+        FitnessView().environmentObject(FitnessCalculations()).environmentObject(MyHealthKit())
     }
 }

@@ -7,26 +7,24 @@
 
 import Foundation
 import HealthKit
+import WidgetKit
 
 class FitnessCalculations: ObservableObject {
-    let startDateString = "01.20.2021"
-    let endDateString = "07.01.2021"
-    let startingWeight: Float = 231
-    var currentWeight: Float = 200
-    let endingWeight: Float = 185
+    let startDateString = "01.23.2021"
+    let endDateString = "09.18.2021"
+    @Published var startingWeight: Float = 231.8
+    @Published var currentWeight: Float = 200
+    @Published var endingWeight: Float = 180
     let formatter = DateFormatter()
     @Published var progressToWeight: Float = 0
     @Published var progressToDate: Float = 0
     @Published var successPercentage: Float = 0
     
     init() {
-        getAllStats { _, _, _ in
-            
-        }
-    }
-    
-    init(completion: @escaping((_ success: Float, _ progressToWeight: Float, _ progressToDate: Float) -> Void)) {
-        getAllStats(completion: completion)
+//        authorizeHealthKit { _, _ in
+//
+//        }
+        getAllStats()
     }
     
     init(completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
@@ -41,11 +39,15 @@ class FitnessCalculations: ObservableObject {
             .day
     }
     
-    private func getProgressToWeight() {
+    func getProgressToWeight() {
         let lost = startingWeight - currentWeight
         let totalToLose = startingWeight - endingWeight
         let progress = lost / totalToLose
-        progressToWeight = progress
+        DispatchQueue.main.async {
+            self.progressToWeight = progress
+            WidgetCenter.shared.reloadAllTimelines()
+            self.getSuccess()
+        }
     }
     
     private func getProgressToDate() {
@@ -62,7 +64,10 @@ class FitnessCalculations: ObservableObject {
         else { return }
         
         let progress = Float(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Float(daysBetweenStartAndEnd)
-        progressToDate = progress
+        DispatchQueue.main.async {
+            self.progressToDate = progress
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
     
     func progressString(from float: Float) -> String {
@@ -70,15 +75,17 @@ class FitnessCalculations: ObservableObject {
     }
     
     private func getSuccess() {
-        successPercentage = progressToWeight - progressToDate
+        DispatchQueue.main.async {
+            self.successPercentage = self.progressToWeight - self.progressToDate
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
     
-    func getAllStats(completion: @escaping((_ success: Float, _ progressToWeight: Float, _ progressToDate: Float) -> Void)) {
+    func getAllStats() {
         getCurrentWeightFromHealthKit { success in
             self.getProgressToWeight()
             self.getProgressToDate()
             self.getSuccess()
-            completion(self.successPercentage, self.progressToWeight, self.progressToDate)
         }
     }
     
@@ -95,26 +102,26 @@ class FitnessCalculations: ObservableObject {
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
-//    private func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
-//        if health
-//        if !HKHealthStore.isHealthDataAvailable() {
-//            return
-//        }
-//
-//        let readDataTypes: Set<HKSampleType> = [bodyMassType]
-//
-//        healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in
-//            completion(success, error)
-//        }
-//
-//    }
+    private func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
+        if !HKHealthStore.isHealthDataAvailable() {
+            return
+        }
+
+        let readDataTypes: Set<HKSampleType> = [bodyMassType,
+                                                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
+                                                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!]
+
+        healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in
+            completion(success, error)
+        }
+
+    }
     
     
     //returns the weight entry in pounds or nil if no data
     private func bodyMass(completion: @escaping ((_ bodyMass: Double?, _ date: Date?) -> Void)) {
-        
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 1, sortDescriptors: [sortDescriptor]) { (query, results, error) in
+        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 20, sortDescriptors: [sortDescriptor]) { (query, results, error) in
             if let result = results?.first as? HKQuantitySample {
                 let bodyMass = result.quantity.doubleValue(for: HKUnit.pound())
                 completion(bodyMass, result.endDate)
@@ -126,6 +133,29 @@ class FitnessCalculations: ObservableObject {
         }
         healthStore.execute(query)
     }
+    
+//    func getWeights(_ weights: [HKSample]?, _ offset: Int, amount: Int, completion: @escaping ((_ weights: [HKSample]?) -> Void)) {
+//    func getWeights(amount: Int, completion: @escaping ((_ weights: [HKSample]?) -> Void)) {
+//        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+//        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: amount * 3, sortDescriptors: [sortDescriptor]) { (query, results, error) in
+//            guard let results = results else {
+//                completion(nil)
+//                return
+//            }
+//            var n: [HKSample]? = []
+//            for x in results {
+//                if !((x as? HKQuantitySample)?.description.contains("MyFitnessPal") ?? true) {
+//                    n?.append(x)
+//                    if n?.count == amount {
+//                        completion(n)
+//                        return
+//                    }
+//                }
+//            }
+//            completion(n)
+//        }
+//        healthStore.execute(query)
+//    }
     
     private func getWeight(completion: @escaping ((_ weight: Double?, _ date: Date?) -> Void)) {
 //        authorizeHealthKit { (success, error) in
@@ -148,8 +178,10 @@ class FitnessCalculations: ObservableObject {
                 completion(false)
                 return
             }
-            self.currentWeight = Float(weight)
-            completion(true)
+            DispatchQueue.main.async {
+                self.currentWeight = Float(weight)
+                completion(true)
+            }
         }
     }
 }

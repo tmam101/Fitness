@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4845B79525C0987D003BF999 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
+		4845B79B25C0987E003BF999 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
+		4845B7A225C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
+		4845B7A325C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
+		4845B7A425C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
 		48821CCC25B8BF3800C9F58A /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CCB25B8BF3800C9F58A /* Tests_iOS.swift */; };
 		48821CD725B8BF3800C9F58A /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CD625B8BF3800C9F58A /* Tests_macOS.swift */; };
 		48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
@@ -72,6 +77,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4845B78F25C09853003BF999 /* Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lines.swift; sourceTree = "<group>"; };
+		4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHealthKit.swift; sourceTree = "<group>"; };
 		48821CB025B8BF3600C9F58A /* FitnessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessApp.swift; sourceTree = "<group>"; };
 		48821CB125B8BF3600C9F58A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		48821CB225B8BF3800C9F58A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -162,12 +169,14 @@
 		48821CAF25B8BF3600C9F58A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4845B78F25C09853003BF999 /* Lines.swift */,
 				48821CB025B8BF3600C9F58A /* FitnessApp.swift */,
 				48821CB125B8BF3600C9F58A /* ContentView.swift */,
 				48821CB225B8BF3800C9F58A /* Assets.xcassets */,
 				48D7995C25B8C7950047C8E0 /* ProgressCircle.swift */,
 				48EC266925B8D1280003B455 /* FitnessCalculations.swift */,
 				48A0D45225BB6605007C40ED /* FitnessView.swift */,
+				4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -429,9 +438,11 @@
 			files = (
 				48821CDB25B8BF3800C9F58A /* ContentView.swift in Sources */,
 				48A0D45325BB6605007C40ED /* FitnessView.swift in Sources */,
+				4845B7A225C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
 				48D7995D25B8C7950047C8E0 /* ProgressCircle.swift in Sources */,
 				48EC266A25B8D1280003B455 /* FitnessCalculations.swift in Sources */,
 				48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */,
+				4845B79525C0987D003BF999 /* Lines.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,9 +452,11 @@
 			files = (
 				48821CDC25B8BF3800C9F58A /* ContentView.swift in Sources */,
 				48A0D45425BB6605007C40ED /* FitnessView.swift in Sources */,
+				4845B7A325C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
 				48D7995E25B8C7950047C8E0 /* ProgressCircle.swift in Sources */,
 				48EC266B25B8D1280003B455 /* FitnessCalculations.swift in Sources */,
 				48821CDA25B8BF3800C9F58A /* FitnessApp.swift in Sources */,
+				4845B79B25C0987E003BF999 /* Lines.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +483,7 @@
 				48A0D46D25BB71CB007C40ED /* FitnessWidget.swift in Sources */,
 				48A0D48D25BB72F8007C40ED /* FitnessCalculations.swift in Sources */,
 				48A0D49325BB72FC007C40ED /* ProgressCircle.swift in Sources */,
+				4845B7A425C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
 				48A0D48725BB72E3007C40ED /* FitnessView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
