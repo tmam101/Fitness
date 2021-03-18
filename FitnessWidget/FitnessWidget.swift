@@ -44,9 +44,23 @@ struct FitnessWidgetEntryView : View {
     @Environment(\.widgetFamily) var family
     
     var body: some View {
-        FitnessView()
-            .environmentObject(entry.fitness)
-            .environmentObject(entry.healthKit)
+        GeometryReader { geometry in
+            ZStack {
+                Color.myGray.ignoresSafeArea(.all)
+                VStack(alignment: .leading) {
+                    FitnessView(shouldShowText: false, lineWidth: 6, widget: true)
+                        .environmentObject(entry.fitness)
+                        .environmentObject(entry.healthKit)
+                        .frame(maxWidth: 80, maxHeight: 80, alignment: .leading)
+                    HealthText(percentages: true)
+                        .environmentObject(entry.fitness)
+                        .environmentObject(entry.healthKit)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading], 10)
+                        .padding([.bottom], 10)
+                }
+            }
+        }
     }
 }
 

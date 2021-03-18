@@ -11,14 +11,19 @@ import WidgetKit
 
 class FitnessCalculations: ObservableObject {
     let startDateString = "01.23.2021"
-    let endDateString = "09.18.2021"
+    let endDateString = "05.01.2021"
     @Published var startingWeight: Float = 231.8
-    @Published var currentWeight: Float = 200
-    @Published var endingWeight: Float = 180
+    @Published var currentWeight: Float = 231.8
+    @Published var endingWeight: Float = 210
     let formatter = DateFormatter()
     @Published var progressToWeight: Float = 0
     @Published var progressToDate: Float = 0
     @Published var successPercentage: Float = 0
+    @Published var weightLost: Float = 0
+    @Published public var percentWeightLost: Int = 0
+    @Published public var weightToLose: Float = 0
+    
+
     
     init() {
 //        authorizeHealthKit { _, _ in
@@ -86,6 +91,9 @@ class FitnessCalculations: ObservableObject {
             self.getProgressToWeight()
             self.getProgressToDate()
             self.getSuccess()
+            self.weightLost = self.startingWeight - self.currentWeight
+            self.weightToLose = self.startingWeight - self.endingWeight
+            self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
         }
     }
     
@@ -94,6 +102,9 @@ class FitnessCalculations: ObservableObject {
             self.getProgressToWeight()
             self.getProgressToDate()
             self.getSuccess()
+            self.weightLost = self.startingWeight - self.currentWeight
+            self.weightToLose = self.startingWeight - self.endingWeight
+            self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
             completion(self)
         }
     }
@@ -109,6 +120,7 @@ class FitnessCalculations: ObservableObject {
 
         let readDataTypes: Set<HKSampleType> = [bodyMassType,
                                                 HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
+                                                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
                                                 HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!]
 
         healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in

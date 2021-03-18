@@ -24,10 +24,25 @@ struct AppView: View {
         ZStack {
             Color.myGray.edgesIgnoringSafeArea(.all)
             VStack {
+//                VStack {
                 FitnessView()
                     .environmentObject(fitness)
                     .environmentObject(healthKit)
                     .frame(height: 400)
+//                ScrollView {
+//                    Text("Hey")
+//                        .frame(height: 400)
+//                    Text("Hey")
+//                        .frame(height: 400)
+//                    Text("Hey")
+//                        .frame(height: 400)
+//                    Text("Hey")
+//                        .frame(height: 400)
+//
+//                }
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//                .padding()
+//                .background(Color.red)
             }
         }
     }
