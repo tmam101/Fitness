@@ -18,7 +18,7 @@ struct FitnessView: View {
     
     var body: some View {
         let paddingSize = lineWidth + 2
-        ScrollView {
+        VStack {
         ZStack {
             ProgressCircle(lineWidth: lineWidth).environmentObject(fitness)
                 .padding(paddingSize)
