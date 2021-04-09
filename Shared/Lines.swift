@@ -40,11 +40,11 @@ struct Lines: View {
 }
 
 
-struct Lines_Previews: PreviewProvider {
-    static var previews: some View {
-        Lines().environmentObject(MyHealthKit())
-    }
-}
+//struct Lines_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Lines().environmentObject(MyHealthKit())
+//    }
+//}
 
 struct LineView: View {
     @State var data: [(Double)]

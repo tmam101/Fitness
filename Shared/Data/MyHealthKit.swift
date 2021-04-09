@@ -8,9 +8,29 @@
 import Foundation
 import HealthKit
 import WidgetKit
+import SwiftUI
+
+//struct DayAndDeficit {
+//    var dailyDeficits: [Int:CGFloat] = [:]
+//    var orderedDeficits: [CGFloat] {
+//        var x: [CGFloat] = []
+//        let size = dailyDeficits.count
+//        for i in 0..<size {
+//            x.append(dailyDeficits[i] ?? 0)
+//        }
+//        return x
+//    }
+////    func sort() {
+////        let size = dailyDeficits.count
+////        for i in 0..<size {
+////            print(i)
+////        }
+////    }
+//}
 
 class MyHealthKit: ObservableObject {
     //MARK: PROPERTIES
+    var environment: AppEnvironmentConfig?
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
@@ -33,6 +53,8 @@ class MyHealthKit: ObservableObject {
     @Published public var daysBetweenStartAndEnd: Int = 0
     @Published public var daysBetweenStartAndNow: Int = 0
     @Published public var daysBetweenNowAndEnd: Int = 0
+    @Published public var dailyDeficits0: [Int:Float] = [:]
+    @Published public var dailyDeficits: [Int:Float] = [:]
     
     // Constants 
     let minimumActiveCalories: Float = 200
@@ -45,12 +67,47 @@ class MyHealthKit: ObservableObject {
     let formatter = DateFormatter()
     
     //MARK: INITIALIZATION
-    init() {
-        setValues(nil)
+    init(environment: AppEnvironmentConfig) {
+        self.environment = environment
+        switch environment {
+        case .release:
+            setValues(nil)
+        case .debug:
+            setValuesDebug(nil)
+        }
+        
     }
     
-    init(_ completion: @escaping ((_ health: MyHealthKit) -> Void)) {
-        setValues(completion)
+    init(environment: AppEnvironmentConfig, _ completion: @escaping ((_ health: MyHealthKit) -> Void)) {
+        self.environment = environment
+        switch environment {
+        case .release:
+            setValues(completion)
+        case .debug:
+            setValuesDebug(completion)
+        }
+    }
+    
+    func setValuesDebug(_ completion: ((_ health: MyHealthKit) -> Void)?) {
+        // Deficits
+        self.deficitToday = 800
+        self.deficitToGetCorrectDeficit = 1200
+        self.averageDeficitThisWeek = 750
+        self.percentWeeklyDeficit = Int((self.averageDeficitThisWeek / goalDeficit) * 100)
+        self.averageDeficitThisMonth = 850
+        self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
+        self.projectedAverageWeeklyDeficitForTomorrow = 757
+        self.projectedAverageTotalDeficitForTomorrow = 760
+        self.dailyDeficits = [0: Float(300), 1: Float(200), 2:Float(500), 3: Float(300), 4: Float(200), 5:Float(500),6: Float(300), 7: Float(200)]
+        
+//            let expectedWeightLossThisMonth: Float = ((averageDeficitThisMonth ?? 1) * 30) / caloriesInPound
+        
+        let averageWeightLossSinceStart = (231.8 - Double(221)) / (Double(daysBetweenStartAndNow) / Double(7)) // TODO calculate with real values
+        let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart) / 3500) * 7
+        self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
+        self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
+        self.averageDeficitSinceStart = 750
+        completion?(self)
     }
     
     func setupDates() {
@@ -71,6 +128,18 @@ class MyHealthKit: ObservableObject {
         self.daysBetweenNowAndEnd = daysBetweenNowAndEnd
     }
     
+    func getIndividualDeficits(forPastDays days: Int, completion: @escaping ([Int:Float]) -> Void) {
+        var deficits: [Int:Float] = [:]
+        for i in 0...days {
+            self.getDeficitForDay(daysAgo: i) { deficit in
+                deficits[i] = deficit
+                if deficits.count == days + 1 {
+                    completion(deficits)
+                }
+            }
+        }
+    }
+    
     private func setValues(_ completion: ((_ health: MyHealthKit) -> Void)?) {
         setupDates()
         
@@ -81,8 +150,10 @@ class MyHealthKit: ObservableObject {
         self.getAverageDeficit(forPast: 30) { averageDeficitThisMonth in
         self.getAverageDeficit(forPast: 0) { averageDeficitToday in
         self.getAverageDeficit(forPast: self.daysBetweenStartAndNow) { averageDeficitSinceStart in
+        self.getIndividualDeficits(forPastDays: 7) { individualDeficits in
+//        self.getDeficitForDay(daysAgo: 1) { yesterdaysDeficit in
         DispatchQueue.main.async { [self] in
-                                
+            self.dailyDeficits = individualDeficits
             // Deficits
             self.deficitToday = averageDeficitToday ?? 0
             self.deficitToGetCorrectDeficit = deficitToReachToday ?? 0
@@ -100,9 +171,10 @@ class MyHealthKit: ObservableObject {
             self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
             self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
             self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
+//            let d = yesterdaysDeficit
             completion?(self)
             
-        }}}}}}}}
+        }}}}}}}}}
             }
     
     //MARK: PRIVATE
@@ -116,6 +188,25 @@ class MyHealthKit: ObservableObject {
             Calendar.current.startOfDay(for: Date())
         let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
+
+        let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
+            guard let result = result, let sum = result.sumQuantity() else {
+                completion(0.0)
+                return
+            }
+            completion(sum.doubleValue(for: HKUnit.kilocalorie()))
+        }
+        healthStore.execute(query)
+    }
+    
+    private func sumValueForDay(daysAgo: Int, forType type: HKQuantityTypeIdentifier, completion: @escaping (Double) -> Void) {
+        guard let quantityType = HKObjectType.quantityType(forIdentifier: type) else {
+            print("*** Unable to create a type ***")
+            return
+        }
+        var startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -daysAgo), to: Date())!)
+        let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
 
         let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
             guard let result = result, let sum = result.sumQuantity() else {
@@ -172,6 +263,18 @@ class MyHealthKit: ObservableObject {
         getRestingCaloriesBurned(forPast: 7) { total in
             completion(Float(total) / 7)
         }
+    }
+    
+    func getDeficitForDay(daysAgo: Int, completion: @escaping ((_ eaten: Float?) -> Void)) {
+        sumValueForDay(daysAgo: daysAgo, forType: .basalEnergyBurned) { resting in
+        self.sumValueForDay(daysAgo: daysAgo, forType: .activeEnergyBurned) { active in
+        self.sumValueForDay(daysAgo: daysAgo, forType: .dietaryEnergyConsumed) { eaten in
+            let realResting = max(resting, 2300)
+            let realActive = max(active, 200)
+            print("\(daysAgo) days ago: resting: \(realResting) active: \(realActive) eaten: \(eaten)")
+            let deficit = self.getDeficit(resting: realResting, active: realActive, eaten: eaten)
+            completion(Float(deficit))
+        }}}
     }
     
 //    func getAverageDeficitThisMonth(completion: @escaping ((_ eaten: Float?) -> Void)) {

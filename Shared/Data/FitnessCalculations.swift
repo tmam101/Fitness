@@ -10,6 +10,7 @@ import HealthKit
 import WidgetKit
 
 class FitnessCalculations: ObservableObject {
+    var environment: AppEnvironmentConfig?
     let startDateString = "01.23.2021"
     let endDateString = "05.01.2021"
     @Published var startingWeight: Float = 231.8
@@ -22,18 +23,38 @@ class FitnessCalculations: ObservableObject {
     @Published var weightLost: Float = 0
     @Published public var percentWeightLost: Int = 0
     @Published public var weightToLose: Float = 0
+    @Published public var averageWeightLostPerWeek: Float = 0
+    @Published public var weights: [Weight] = []
+    @Published public var averageWeightLostPerWeekThisMonth: Float = 0
+    
+    struct Weight {
+        var weight: Double
+        var date: Date
+    }
     
 
     
-    init() {
+    init(environment: AppEnvironmentConfig) {
 //        authorizeHealthKit { _, _ in
 //
 //        }
-        getAllStats()
+        self.environment = environment
+        switch environment {
+        case .release:
+            getAllStats()
+        case .debug:
+            getAllStatsDebug(completion: nil)
+        }
     }
     
-    init(completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
-        getAllStats(completion: completion)
+    init(environment: AppEnvironmentConfig, completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
+        self.environment = environment
+        switch environment {
+        case .release:
+            getAllStats(completion: completion)
+        case .debug:
+            getAllStatsDebug(completion: completion)
+        }
     }
     
     
@@ -86,6 +107,18 @@ class FitnessCalculations: ObservableObject {
         }
     }
     
+    func getAllStatsDebug(completion: ((_ fitness: FitnessCalculations) -> Void)?) {
+        self.progressToWeight = 0.65
+        self.successPercentage = 0.75
+        self.weightLost = 12
+        self.weightToLose = 20
+        self.percentWeightLost = 60
+        let weeks = 10
+        self.averageWeightLostPerWeek = self.weightLost / Float(weeks)
+        self.averageWeightLostPerWeekThisMonth = 1.9
+        completion?(self)
+    }
+    
     func getAllStats() {
         getCurrentWeightFromHealthKit { success in
             self.getProgressToWeight()
@@ -94,7 +127,53 @@ class FitnessCalculations: ObservableObject {
             self.weightLost = self.startingWeight - self.currentWeight
             self.weightToLose = self.startingWeight - self.endingWeight
             self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
+            guard
+                let startDate = self.formatter.date(from: self.startDateString)
+            else { return }
+            
+            guard
+                let daysBetweenStartAndNow = self.daysBetween(date1: startDate, date2: Date())
+            else { return }
+            
+            let weeks: Float = Float(daysBetweenStartAndNow) / Float(7)
+            self.averageWeightLostPerWeek = self.weightLost / weeks
+            self.getWeightFromAMonthAgo()
         }
+    }
+    
+    func getWeightFromAMonthAgo() {
+        var index: Int = 0
+        var days: Int = 0
+        var finalWeight: Weight
+        
+        for i in stride(from: 0, to: self.weights.count, by: 1) {
+            let weight = self.weights[i]
+            let date = weight.date
+            guard
+            let dayCount = daysBetween(date1: date, date2: Date())
+            else { return }
+            print(dayCount)
+            if dayCount >= 30 {
+                index = i
+                days = dayCount
+                break
+            }
+        }
+        let newIndex = index - 1
+        let newDays = daysBetween(date1: self.weights[newIndex].date, date2: Date())!
+        let between1 = abs(days - 30)
+        let between2 = abs(newDays - 30)
+        
+        if between1 <= between2 {
+            finalWeight = self.weights[index]
+        } else {
+            finalWeight = self.weights[newIndex]
+            days = newDays
+        }
+        let difference = finalWeight.weight - self.weights.first!.weight
+        let weeklyAverageThisMonth = (difference / Double(days)) * Double(7)
+        self.averageWeightLostPerWeekThisMonth = Float(weeklyAverageThisMonth)
+        
     }
     
     func getAllStats(completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
@@ -133,8 +212,12 @@ class FitnessCalculations: ObservableObject {
     //returns the weight entry in pounds or nil if no data
     private func bodyMass(completion: @escaping ((_ bodyMass: Double?, _ date: Date?) -> Void)) {
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 20, sortDescriptors: [sortDescriptor]) { (query, results, error) in
-            if let result = results?.first as? HKQuantitySample {
+        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 31, sortDescriptors: [sortDescriptor]) { (query, results, error) in
+            if let results = results as? [HKQuantitySample],
+            let result = results.first {
+                self.weights = results.map{
+                    Weight(weight: $0.quantity.doubleValue(for: HKUnit.pound()), date: $0.endDate)
+                }
                 let bodyMass = result.quantity.doubleValue(for: HKUnit.pound())
                 completion(bodyMass, result.endDate)
                 return

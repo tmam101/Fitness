@@ -10,8 +10,8 @@ import SwiftUI
 import HealthKit
 
 struct Provider: TimelineProvider {
-    var fitness: FitnessCalculations = FitnessCalculations()
-    var healthKit: MyHealthKit = MyHealthKit()
+    var fitness: FitnessCalculations = FitnessCalculations(environment: GlobalEnvironment.environment)
+    var healthKit: MyHealthKit = MyHealthKit(environment: GlobalEnvironment.environment)
     
     func placeholder(in context: Context) -> SimpleEntry {
         return SimpleEntry(date: Date(), fitness: fitness, healthKit: healthKit)
@@ -24,8 +24,8 @@ struct Provider: TimelineProvider {
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let  entryDate = Calendar.current.date(byAdding: .second, value: 1 , to: Date())!
-        let _ = MyHealthKit { health in
-            let entry = SimpleEntry(date: entryDate, fitness: fitness, healthKit: health)
+        let _ = MyHealthKit(environment: GlobalEnvironment.environment) { health in
+            let entry = SimpleEntry(date: entryDate, fitness: fitness, healthKit: healthKit)
             let refreshDate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
             let timeline = Timeline(entries: [entry], policy: .after(refreshDate))
             completion(timeline)
@@ -48,19 +48,42 @@ struct FitnessWidgetEntryView : View {
             ZStack {
                 Color.myGray.ignoresSafeArea(.all)
                 VStack(alignment: .leading) {
-                    FitnessView(shouldShowText: false, lineWidth: 6, widget: true)
-                        .environmentObject(entry.fitness)
-                        .environmentObject(entry.healthKit)
-                        .frame(maxWidth: 80, maxHeight: 80, alignment: .leading)
-                    HealthText(percentages: true)
-                        .environmentObject(entry.fitness)
-                        .environmentObject(entry.healthKit)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding([.leading], 10)
-                        .padding([.bottom], 10)
+                    switch family {
+                    case WidgetFamily.systemLarge:
+                        AllRings()
+                            .environmentObject(entry.fitness)
+                            .environmentObject(entry.healthKit)
+                            .padding()
+                    default:
+                        DeficitRings()
+                            .environmentObject(entry.fitness)
+                            .environmentObject(entry.healthKit)
+                            .padding()
+                    }
                 }
             }
         }
+        //        GeometryReader { geometry in
+//            ZStack {
+//                Color.myGray.ignoresSafeArea(.all)
+//                VStack(alignment: .leading) {
+////                    FitnessView(shouldShowText: false, lineWidth: 6, widget: true)
+////                        .environmentObject(entry.fitness)
+////                        .environmentObject(entry.healthKit)
+////                        .frame(maxWidth: 80, maxHeight: 80, alignment: .leading)
+////                    DeficitText(percentages: true)
+////                        .environmentObject(entry.fitness)
+////                        .environmentObject(entry.healthKit)
+////                        .frame(maxWidth: .infinity, alignment: .leading)
+////                        .padding([.leading], 10)
+////                        .padding([.bottom], 10)
+//                    DeficitRings()
+//                        .environmentObject(entry.fitness)
+//                        .environmentObject(entry.healthKit)
+//                        .padding()
+//                }
+//            }
+//        }
     }
 }
 
@@ -77,9 +100,9 @@ struct FitnessWidget: Widget {
     }
 }
 
-struct FitnessWidget_Previews: PreviewProvider {
-    static var previews: some View {
-        FitnessWidgetEntryView(entry: SimpleEntry(date: Date(), fitness: FitnessCalculations(), healthKit: MyHealthKit()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
-    }
-}
+//struct FitnessWidget_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FitnessWidgetEntryView(entry: SimpleEntry(date: Date(), fitness: FitnessCalculations(), healthKit: MyHealthKit()))
+//            .previewContext(WidgetPreviewContext(family: .systemSmall))
+//    }
+//}

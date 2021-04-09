@@ -17,32 +17,22 @@ struct FitnessApp: App {
 }
 
 struct AppView: View {
-    @State var fitness = FitnessCalculations()
-    @State var healthKit = MyHealthKit()
+    @State var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
+    @State var healthKit = MyHealthKit(environment: GlobalEnvironment.environment)
     
     var body: some View {
         ZStack {
-            Color.myGray.edgesIgnoringSafeArea(.all)
+            Color.black.edgesIgnoringSafeArea(.all)
             VStack {
-//                VStack {
+//                let deficits = [0,1,2,3,4,5,6].map { healthKit.getDeficitForDay(daysAgo: $0) { i in return i } }
+//                let percents = BarChart.deficitsToPercents(daysAndDeficits: healthKit.dailyDeficits)
+//                BarChart()
+//                    .environmentObject(healthKit)
+//                    .frame(width: 300, height: 200)
+//                    .background(Color.myGray)
                 FitnessView()
                     .environmentObject(fitness)
                     .environmentObject(healthKit)
-                    .frame(height: 400)
-//                ScrollView {
-//                    Text("Hey")
-//                        .frame(height: 400)
-//                    Text("Hey")
-//                        .frame(height: 400)
-//                    Text("Hey")
-//                        .frame(height: 400)
-//                    Text("Hey")
-//                        .frame(height: 400)
-//
-//                }
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                .padding()
-//                .background(Color.red)
             }
         }
     }
