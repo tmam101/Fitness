@@ -29,6 +29,23 @@ struct WeightLossText: View {
     }
 }
 
+struct LiftingText: View {
+    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var healthKit: MyHealthKit
+    
+    var body: some View {
+        let benchString = String(format: "%.2f", (healthKit.benchORM / fitness.currentWeight)*100) + "% bw"
+        let squatString = String(format: "%.2f", (healthKit.squatORM / fitness.currentWeight)*100) + "% bw"
+//        let averageWeeklyLostString = String(format: "%.2f", fitness.averageWeightLostPerWeek) + " / week"
+//        let averageMonthlyLostString = String(format: "%.2f", fitness.averageWeightLostPerWeekThisMonth) + " / week"
+        
+        VStack(alignment: .leading) {
+            StatsText(color: .purple, title: "Bench", stat: benchString)
+            StatsText(color: .pink, title: "Squat", stat: squatString)
+        }
+    }
+}
+
 struct DeficitText: View {
     @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit

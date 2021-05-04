@@ -56,6 +56,11 @@ class MyHealthKit: ObservableObject {
     @Published public var dailyDeficits0: [Int:Float] = [:]
     @Published public var dailyDeficits: [Int:Float] = [:]
     
+    @Published public var workouts: Workouts = []
+    @Published public var benchORM: Float = 0.0
+    @Published public var squatORM: Float = 0.0
+
+    
     // Constants 
     let minimumActiveCalories: Float = 200
     let minimumRestingCalories: Float = 2300
@@ -96,9 +101,9 @@ class MyHealthKit: ObservableObject {
         self.percentWeeklyDeficit = Int((self.averageDeficitThisWeek / goalDeficit) * 100)
         self.averageDeficitThisMonth = 850
         self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
-        self.projectedAverageWeeklyDeficitForTomorrow = 757
+        self.projectedAverageWeeklyDeficitForTomorrow = 900
         self.projectedAverageTotalDeficitForTomorrow = 760
-        self.dailyDeficits = [0: Float(300), 1: Float(200), 2:Float(500), 3: Float(300), 4: Float(200), 5:Float(500),6: Float(300), 7: Float(200)]
+        self.dailyDeficits = [0: Float(300), 1: Float(200), 2:Float(500), 3: Float(1200), 4: Float(-300), 5:Float(500),6: Float(300), 7: Float(200)]
         
 //            let expectedWeightLossThisMonth: Float = ((averageDeficitThisMonth ?? 1) * 30) / caloriesInPound
         
@@ -171,7 +176,20 @@ class MyHealthKit: ObservableObject {
             self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
             self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
             self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
-//            let d = yesterdaysDeficit
+            //            let d = yesterdaysDeficit
+            //            LineGraph.xtoy(weights: width: 200, height: 200)
+            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
+                do {
+                    let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
+                    let workoutjson = try JSONDecoder().decode(Workouts.self, from: data)
+                    self.workouts = workoutjson
+                    self.benchORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Bench")}.last?.oneRepMax() ?? 0.0)
+                    self.squatORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Squat")}.last?.oneRepMax() ?? 0.0)
+    
+                } catch {
+                    // handle error
+                }
+            }
             completion?(self)
             
         }}}}}}}}}

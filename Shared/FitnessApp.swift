@@ -9,21 +9,28 @@ import SwiftUI
 
 @main
 struct FitnessApp: App {
+    @State var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
+    @State var healthKit = MyHealthKit(environment: GlobalEnvironment.environment)
     var body: some Scene {
         WindowGroup {
             AppView()
+                .environmentObject(fitness)
+                .environmentObject(healthKit)
         }
     }
 }
 
 struct AppView: View {
-    @State var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
-    @State var healthKit = MyHealthKit(environment: GlobalEnvironment.environment)
+    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var healthKit: MyHealthKit
     
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
+//                LineGraph(color: .yellow)
+//                    .frame(width: 200, height: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+//                    .background(Color.black.opacity(0.5))
 //                let deficits = [0,1,2,3,4,5,6].map { healthKit.getDeficitForDay(daysAgo: $0) { i in return i } }
 //                let percents = BarChart.deficitsToPercents(daysAndDeficits: healthKit.dailyDeficits)
 //                BarChart()
@@ -39,23 +46,26 @@ struct AppView: View {
 }
 
 struct FitnessApp_Previews: PreviewProvider {
+    
     static var previews: some View {
         AppView()
+            .environmentObject(FitnessCalculations(environment: .debug))
+            .environmentObject(MyHealthKit(environment: .debug))
     }
 }
 
-struct Deets: View {
-    @EnvironmentObject var fitness: FitnessCalculations
-    var body: some View {
-        VStack {
-            Text("Weight: \(Int(fitness.currentWeight))").foregroundColor(.white)
-            Text("Goal Weight: \(Int(fitness.endingWeight))").foregroundColor(.white)
-//            Button("Press") {
-//                self.fitness.currentWeight = 220
-//                self.fitness.getAllStats { _ in
-//
-//                }
-//            }
-        }
-    }
-}
+//struct Deets: View {
+//    @EnvironmentObject var fitness: FitnessCalculations
+//    var body: some View {
+//        VStack {
+//            Text("Weight: \(Int(fitness.currentWeight))").foregroundColor(.white)
+//            Text("Goal Weight: \(Int(fitness.endingWeight))").foregroundColor(.white)
+////            Button("Press") {
+////                self.fitness.currentWeight = 220
+////                self.fitness.getAllStats { _ in
+////
+////                }
+////            }
+//        }
+//    }
+//}

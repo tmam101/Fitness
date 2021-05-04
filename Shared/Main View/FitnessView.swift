@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-struct GlobalEnvironment {
-    static var environment = AppEnvironmentConfig.release
-}
-
-enum AppEnvironmentConfig {
-    case debug
-    case release
-}
-
 struct FitnessView: View {
     @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
@@ -35,12 +26,18 @@ struct FitnessView: View {
                 
                 BarChart()
                     .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
                     .background(Color.myGray)
                     .cornerRadius(20)
                 
                 StatsTitle(title: "Weight Loss")
                 StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
+                    .environmentObject(healthKit)
+                    .environmentObject(fitness)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                
+                StatsTitle(title: "Lifts")
+                StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
                     .environmentObject(healthKit)
                     .environmentObject(fitness)
                     .frame(minWidth: 0, maxWidth: .infinity)

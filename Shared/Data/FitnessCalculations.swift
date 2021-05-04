@@ -15,7 +15,7 @@ class FitnessCalculations: ObservableObject {
     let endDateString = "05.01.2021"
     @Published var startingWeight: Float = 231.8
     @Published var currentWeight: Float = 231.8
-    @Published var endingWeight: Float = 210
+    @Published var endingWeight: Float = 190
     let formatter = DateFormatter()
     @Published var progressToWeight: Float = 0
     @Published var progressToDate: Float = 0

@@ -42,6 +42,7 @@ struct WeightLossRings: View {
                 .environmentObject(fitness)
                 .padding(paddingSize)
             AverageTotalWeightLossCircle(lineWidth: lineWidth, color: .green2)
+//            BenchPressRing(lineWidth: lineWidth, color: .purple)
                 .environmentObject(healthKit)
                 .environmentObject(fitness)
                 .padding(paddingSize)
@@ -50,6 +51,29 @@ struct WeightLossRings: View {
                 .environmentObject(fitness)
                 .padding(paddingSize)
                 .padding(paddingSize)
+                .padding(paddingSize)
+        }
+    }
+}
+
+struct LiftingRings: View {
+    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var fitness: FitnessCalculations
+
+    var lineWidth: CGFloat = 10
+    
+    var body: some View {
+        let paddingSize = lineWidth + 2
+        
+        ZStack {
+            BenchPressRing(lineWidth: lineWidth, color: .purple)
+                .environmentObject(healthKit)
+                .environmentObject(fitness)
+//                .padding(paddingSize)
+            SquatRing(lineWidth: lineWidth, color: .pink)
+                .environmentObject(healthKit)
+                .environmentObject(fitness)
+//                .padding(paddingSize)
                 .padding(paddingSize)
         }
     }
