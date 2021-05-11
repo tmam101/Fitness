@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LineGraph: View {
-    let weights: [Float] = [150.0, 160.0, 120.0, 200.0]
+    var weights: [Float] = [-150.0, 160.0, 120.0, 200.0,-150.0, 160.0, 120.0, 200.0]
     var color: Color = .black
     
 //    var points: [CGPoint] = [CGPoint(x: 0.0, y: 0.0), CGPoint(x: 50.0, y: 50.0)]

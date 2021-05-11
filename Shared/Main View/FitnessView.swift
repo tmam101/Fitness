@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FitnessView: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
@@ -21,36 +20,68 @@ struct FitnessView: View {
                 StatsTitle(title: "Deficits")
                 StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
                     .environmentObject(healthKit)
-                    .environmentObject(fitness)
                     .frame(minWidth: 0, maxWidth: .infinity)
-                
+                    .onTapGesture {
+                        healthKit.fitness.shouldShowBars.toggle()
+                    }
+                if healthKit.fitness.shouldShowBars {
                 BarChart()
                     .environmentObject(healthKit)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
                     .background(Color.myGray)
                     .cornerRadius(20)
+                    .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 
                 StatsTitle(title: "Weight Loss")
                 StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
                     .environmentObject(healthKit)
-                    .environmentObject(fitness)
                     .frame(minWidth: 0, maxWidth: .infinity)
                 
                 StatsTitle(title: "Lifts")
                 StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
                     .environmentObject(healthKit)
-                    .environmentObject(fitness)
                     .frame(minWidth: 0, maxWidth: .infinity)
+                    .onTapGesture {
+                        healthKit.workouts.smithMachine.toggle()
+                        healthKit.workouts.calculate()
+                    }
+                ZStack {
+                    BenchGraph()
+                        .environmentObject(healthKit.workouts)
+                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                        .padding()
+                        .background(Color.myGray)
+                        .cornerRadius(20)
+                    SquatGraph()
+                        .environmentObject(healthKit.workouts)
+                        .padding()
+                }
             }
             .padding()
         }
     }
 }
 
+struct BenchGraph: View {
+    @EnvironmentObject var workouts: WorkoutInformation
+    
+    var body: some View {
+        LineGraph(weights: workouts.benchPRs, color: .purple)
+    }
+}
+
+struct SquatGraph: View {
+    @EnvironmentObject var workouts: WorkoutInformation
+    
+    var body: some View {
+        LineGraph(weights: workouts.squatPRs, color: .pink)
+    }
+}
+
 struct FitnessView_Previews: PreviewProvider {
     static var previews: some View {
         FitnessView()
-            .environmentObject(FitnessCalculations(environment: .debug))
             .environmentObject(MyHealthKit(environment: .debug))
     }
 }

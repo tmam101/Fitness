@@ -10,12 +10,12 @@ import Foundation
 import SwiftUI
 
 struct MonthlyAverageWeightLossCircle: View {
-    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10.0
     var color = Color.green1
     
     var body: some View {
-        let average = CGFloat(fitness.averageWeightLostPerWeekThisMonth / 2)
+        let average = CGFloat(healthKit.fitness.averageWeightLostPerWeekThisMonth / 2)
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: average, opacity: 1, lineWidth: lineWidth)
 
@@ -58,7 +58,7 @@ struct DailyDeficitCircle: View {
 }
 
 struct TotalWeightLossCircle: View {
-    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10.0
     var color = Color.green2
     
@@ -69,7 +69,7 @@ struct TotalWeightLossCircle: View {
                 BackgroundCircle(color: color, lineWidth: lineWidth)
                             
                 // Progress
-                GenericCircle(color: color, starting: 0.0, ending: CGFloat(min(fitness.progressToWeight, 1.0)), opacity: 1, lineWidth: lineWidth)
+                GenericCircle(color: color, starting: 0.0, ending: CGFloat(min(healthKit.fitness.progressToWeight, 1.0)), opacity: 1, lineWidth: lineWidth)
             }
         }
     }
@@ -99,13 +99,12 @@ struct AverageTotalDeficitCircle: View {
 
 struct WeightLossAccuracyCircle: View {
     @EnvironmentObject var healthKit: MyHealthKit
-    @EnvironmentObject var fitness: FitnessCalculations
     var lineWidth: CGFloat = 10.0
     var color = Color.green3
     
     var body: some View {
         let averageDeficit = healthKit.averageDeficitSinceStart / 1000
-        let averageWeightLoss = fitness.averageWeightLostPerWeek / 2
+        let averageWeightLoss = healthKit.fitness.averageWeightLostPerWeek / 2
         let ratio = CGFloat(averageWeightLoss / averageDeficit).corrected()
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: ratio, opacity: 1, lineWidth: lineWidth)
@@ -114,45 +113,61 @@ struct WeightLossAccuracyCircle: View {
 
 struct AverageTotalWeightLossCircle: View {
     @EnvironmentObject var healthKit: MyHealthKit
-    @EnvironmentObject var fitness: FitnessCalculations
     var lineWidth: CGFloat = 10.0
     var color = Color.green1
     
     var body: some View {
-        let averageWeightLoss = CGFloat(fitness.averageWeightLostPerWeek / 2)
+        let averageWeightLoss = CGFloat(healthKit.fitness.averageWeightLostPerWeek / 2)
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: averageWeightLoss, opacity: 1, lineWidth: lineWidth)
     }
 }
 
 struct BenchPressRing: View {
-    @EnvironmentObject var healthKit: MyHealthKit
     @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var workouts: WorkoutInformation
 
     var lineWidth: CGFloat = 10.0
     var color = Color.green1
     
     var body: some View {
-        let benchORM = healthKit.benchORM
+        let startingBench = workouts.firstBenchORM 
+        let startingWeight = fitness.startingWeight
+        let startingRatio = CGFloat(startingBench / startingWeight) / 1.5 // 80
+        
+        let benchORM = workouts.benchORM 
         let currentWeight = fitness.currentWeight
-        let ratio = CGFloat(benchORM / currentWeight) / 1.5
+        let ratio = CGFloat(benchORM / currentWeight) / 1.5 // 90
+        
+        let corrected = (ratio - startingRatio) / (1 - startingRatio)
+        let c2 = corrected < 0 ? 0 : corrected
+        
         BackgroundCircle(color: color, lineWidth: lineWidth)
-        GenericCircle(color: color, starting: 0.0, ending: ratio, opacity: 1, lineWidth: lineWidth)
+        GenericCircle(color: color, starting: 0.0, ending: c2, opacity: 1, lineWidth: lineWidth)
     }
 }
 
 struct SquatRing: View {
-    @EnvironmentObject var healthKit: MyHealthKit
     @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var workouts: WorkoutInformation
+
 
     var lineWidth: CGFloat = 10.0
     var color = Color.green1
     
     var body: some View {
-        let benchORM: Float = Float(healthKit.workouts.filter { $0.exerciseName.rawValue.contains("Squat") }.last?.oneRepMax() ?? 0.0)
+        let startingSquat = workouts.firstSquatORM
+        let startingWeight = fitness.startingWeight
+        let startingRatio = CGFloat(startingSquat / startingWeight) / 1.75
+        
+        let squatORM = workouts.squatORM
         let currentWeight = fitness.currentWeight
-        let ratio = CGFloat(benchORM / currentWeight) / 1.75
+        let ratio = CGFloat(squatORM / currentWeight) / 1.75
+        
+        let corrected = (ratio - startingRatio) / (1 - startingRatio)
+        let c2 = corrected < 0 ? 0 : corrected
+
         BackgroundCircle(color: color, lineWidth: lineWidth)
-        GenericCircle(color: color, starting: 0.0, ending: ratio, opacity: 1, lineWidth: lineWidth)
+        GenericCircle(color: color, starting: 0.0, ending: c2, opacity: 1, lineWidth: lineWidth)
     }
 }

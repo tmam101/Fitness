@@ -9,19 +9,21 @@ import Foundation
 import SwiftUI
 
 struct DeficitRings: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10
     
     var body: some View {
         let paddingSize = lineWidth + 2
         ZStack() {
-            AverageTotalDeficitCircle(lineWidth: lineWidth).environmentObject(healthKit)
+            AverageTotalDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
-            WeeklyAverageDeficitCircle(lineWidth: lineWidth).environmentObject(healthKit)
+            WeeklyAverageDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
-            DailyDeficitCircle(lineWidth: lineWidth).environmentObject(healthKit)
+            DailyDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
@@ -30,7 +32,6 @@ struct DeficitRings: View {
 }
 
 struct WeightLossRings: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10
     
@@ -39,16 +40,14 @@ struct WeightLossRings: View {
         
         ZStack {
             TotalWeightLossCircle(lineWidth: lineWidth, color: .green3)
-                .environmentObject(fitness)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
             AverageTotalWeightLossCircle(lineWidth: lineWidth, color: .green2)
-//            BenchPressRing(lineWidth: lineWidth, color: .purple)
                 .environmentObject(healthKit)
-                .environmentObject(fitness)
                 .padding(paddingSize)
                 .padding(paddingSize)
             MonthlyAverageWeightLossCircle(lineWidth: lineWidth, color: .green1)
-                .environmentObject(fitness)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
@@ -58,7 +57,6 @@ struct WeightLossRings: View {
 
 struct LiftingRings: View {
     @EnvironmentObject var healthKit: MyHealthKit
-    @EnvironmentObject var fitness: FitnessCalculations
 
     var lineWidth: CGFloat = 10
     
@@ -67,20 +65,17 @@ struct LiftingRings: View {
         
         ZStack {
             BenchPressRing(lineWidth: lineWidth, color: .purple)
-                .environmentObject(healthKit)
-                .environmentObject(fitness)
-//                .padding(paddingSize)
+                .environmentObject(healthKit.fitness)
+                .environmentObject(healthKit.workouts)
             SquatRing(lineWidth: lineWidth, color: .pink)
-                .environmentObject(healthKit)
-                .environmentObject(fitness)
-//                .padding(paddingSize)
+                .environmentObject(healthKit.fitness)
+                .environmentObject(healthKit.workouts)
                 .padding(paddingSize)
         }
     }
 }
 
 struct AllRings: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10
     
@@ -88,31 +83,33 @@ struct AllRings: View {
         let paddingSize = lineWidth + 2
         
         ZStack {
-            AverageTotalDeficitCircle(lineWidth: lineWidth).environmentObject(healthKit)
+            AverageTotalDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
-            WeeklyAverageDeficitCircle(lineWidth: lineWidth).environmentObject(healthKit)
+            WeeklyAverageDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
-            DailyDeficitCircle(lineWidth: lineWidth).environmentObject(healthKit)
+            DailyDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
             TotalWeightLossCircle(lineWidth: lineWidth, color: .green3)
-                .environmentObject(fitness)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
             AverageTotalWeightLossCircle(lineWidth: lineWidth, color: .green2)
                 .environmentObject(healthKit)
-                .environmentObject(fitness)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)
             MonthlyAverageWeightLossCircle(lineWidth: lineWidth, color: .green1)
-                .environmentObject(fitness)
+                .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
                 .padding(paddingSize)

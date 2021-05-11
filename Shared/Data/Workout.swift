@@ -6,7 +6,7 @@
 import Foundation
 
 // MARK: - WorkoutElement
-struct WorkoutElement: Codable {
+struct Set: Codable {
     let date, workoutName: String
     let exerciseName: ExerciseName
     let setOrder: Int
@@ -31,8 +31,14 @@ struct WorkoutElement: Codable {
         case rpe = "RPE"
     }
     
-    func oneRepMax() -> Double {
-        return weight / (1.0278 - 0.0278 * Double(reps))
+    func oneRepMax() -> Float {
+        return Float(weight) / (1.0278 - 0.0278 * Float(reps))
+    }
+    
+    func getDate() -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter.date(from: self.date)
     }
 }
 
@@ -93,4 +99,174 @@ enum Notes: String, Codable {
     case the220NotDeepEnough = "220 not deep enough"
 }
 
-typealias Workouts = [WorkoutElement]
+typealias Workout = [Set]
+
+class WorkoutInformation: ObservableObject {
+    var environment: AppEnvironmentConfig
+    @Published var workouts: Workout = []
+    @Published var workoutsGroupedByDay: [Workout] = []
+    @Published public var firstBenchORM: Float = 0.0
+    @Published public var benchORM: Float = 0.0
+    @Published public var firstSquatORM: Float = 0.0
+    @Published public var squatORM: Float = 0.0
+    @Published public var smithMachine: Bool = true
+    
+    @Published public var benchPRs: [Float] = []
+    @Published public var squatPRs: [Float] = []
+    
+    let formatter = DateFormatter()
+    
+//    init() {
+//        if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
+//            do {
+//                let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
+//                let decoded = try JSONDecoder().decode(Workouts.self, from: data)
+//                self.workouts = decoded
+//                self.benchORM = oneRepMax(timeFrame: .mostRecent, tag: "bench")
+//                self.squatORM = oneRepMax(timeFrame: .mostRecent, tag: "squat")
+//            } catch {
+//                
+//            }
+//        }
+//    }
+    
+    init(afterDate: Date, environment: AppEnvironmentConfig) {
+        self.environment = environment
+        switch environment {
+        case .release:
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
+                do {
+                    let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
+                    let decoded = try JSONDecoder().decode(Workout.self, from: data)
+                    self.workouts = decoded
+                    self.workouts = workouts.filter {
+                        formatter.date(from: $0.date)! > afterDate
+                    }
+                    
+                    calculate()
+                } catch {
+                    
+                }
+            }
+        case .debug:
+            self.firstBenchORM = 100
+            self.firstSquatORM = 100
+            self.benchORM = 150
+            self.squatORM = 150
+        }
+    }
+    
+    init(afterDate: String, environment: AppEnvironmentConfig) {
+        self.environment = environment
+        switch environment {
+        case .release:
+            
+            formatter.dateFormat = "MM.dd.yyyy"
+            let afterDateCorrected = formatter.date(from: afterDate)
+            
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
+                do {
+                    let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
+                    let decoded = try JSONDecoder().decode(Workout.self, from: data)
+                    self.workouts = decoded
+                    self.workouts = workouts.filter {
+                        formatter.date(from: $0.date)! > afterDateCorrected!
+                    }
+                    
+                    calculate()
+                } catch {
+                    
+                }
+            }
+        case .debug:
+            //            self.workouts = Workouts(arrayLiteral: [WorkoutElement(])
+            self.firstBenchORM = 100
+            self.firstSquatORM = 100
+            self.benchORM = 150
+            self.squatORM = 150
+        }
+    }
+    
+    func calculate() {
+        switch environment {
+        case .release:
+            let squatType: ExerciseName = smithMachine ? .squatSmithMachine : .squatBarbell
+            let benchType: ExerciseName = smithMachine ? .benchPressSmithMachine : .benchPressBarbell
+            
+            self.firstBenchORM = oneRepMax(timeFrame: .first, exerciseName: benchType)
+            self.firstSquatORM = oneRepMax(timeFrame: .first, exerciseName: squatType)
+            self.benchORM = oneRepMax(timeFrame: .mostRecent, exerciseName: benchType)
+            self.squatORM = oneRepMax(timeFrame: .mostRecent, exerciseName: squatType)
+            self.benchPRs = allOneRepMaxes(exerciseName: benchType)
+            self.squatPRs = allOneRepMaxes(exerciseName: squatType)
+        case .debug:
+            self.firstBenchORM = 100
+            self.firstSquatORM = 100
+            self.benchORM = 150
+            self.squatORM = 150
+        }
+    }
+    
+    enum TimeFrame {
+        case mostRecent
+        case first
+    }
+    
+    func allOneRepMaxes(exerciseName: ExerciseName? = nil, exerciseNames: [ExerciseName]? = nil, tag: String? = nil) -> [Float] {
+        var exercises: Workout = []
+        if let name = exerciseName {
+            exercises = workouts.filter { $0.exerciseName == name }
+        } else if let names = exerciseNames {
+            exercises = workouts.filter { names.contains($0.exerciseName) }
+        } else if let tag = tag {
+            exercises = workouts.filter { $0.exerciseName.rawValue.lowercased().contains(tag.lowercased())}
+        } else {
+            return []
+        }
+//        var sameDates: [Workout] = []
+        var x: [Date: Float] = [:]
+//        let sameDate = exercises.filter {
+//            timeFrame == .mostRecent ?
+//                $0.getDate() == exercises.last?.getDate() :
+//                $0.getDate() == exercises.first?.getDate()
+//        }
+        for e in exercises {
+            print(e.oneRepMax())
+            print(e.getDate())
+            if e.oneRepMax() > (x[e.getDate()!] ?? 0) {
+                print("adding")
+                x[e.getDate()!] = e.oneRepMax()
+            }
+        }
+        var y = x.map { (date: $0.key, max: $0.value) }
+        y.sort { $0.date < $1.date }
+        return y.map { $0.max }
+    }
+    
+    func oneRepMax(timeFrame: TimeFrame, exerciseName: ExerciseName? = nil, exerciseNames: [ExerciseName]? = nil, tag: String? = nil) -> Float {
+        var exercises: Workout = []
+        if let name = exerciseName {
+            exercises = workouts.filter { $0.exerciseName == name }
+        } else if let names = exerciseNames {
+            exercises = workouts.filter { names.contains($0.exerciseName) }
+        } else if let tag = tag {
+            exercises = workouts.filter { $0.exerciseName.rawValue.lowercased().contains(tag.lowercased())}
+        } else {
+            return 0.0
+        }
+        let sameDate = exercises.filter {
+            timeFrame == .mostRecent ?
+                $0.getDate() == exercises.last?.getDate() :
+                $0.getDate() == exercises.first?.getDate()
+        }
+        let max = sameDate
+            .map { $0.oneRepMax() }
+            .max() ?? 0.0
+        return max
+    }
+    
+}

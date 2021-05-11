@@ -10,22 +10,21 @@ import SwiftUI
 import HealthKit
 
 struct Provider: TimelineProvider {
-    var fitness: FitnessCalculations = FitnessCalculations(environment: GlobalEnvironment.environment)
     var healthKit: MyHealthKit = MyHealthKit(environment: GlobalEnvironment.environment)
     
     func placeholder(in context: Context) -> SimpleEntry {
-        return SimpleEntry(date: Date(), fitness: fitness, healthKit: healthKit)
+        return SimpleEntry(date: Date(), healthKit: healthKit)
     }
     
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), fitness: fitness, healthKit: healthKit)
+        let entry = SimpleEntry(date: Date(), healthKit: healthKit)
         completion(entry)
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let  entryDate = Calendar.current.date(byAdding: .second, value: 1 , to: Date())!
         let _ = MyHealthKit(environment: GlobalEnvironment.environment) { health in
-            let entry = SimpleEntry(date: entryDate, fitness: fitness, healthKit: healthKit)
+            let entry = SimpleEntry(date: entryDate, healthKit: healthKit)
             let refreshDate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
             let timeline = Timeline(entries: [entry], policy: .after(refreshDate))
             completion(timeline)
@@ -35,7 +34,6 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    @State var fitness: FitnessCalculations
     @State var healthKit: MyHealthKit
 }
 
@@ -51,12 +49,10 @@ struct FitnessWidgetEntryView : View {
                     switch family {
                     case WidgetFamily.systemLarge:
                         AllRings()
-                            .environmentObject(entry.fitness)
                             .environmentObject(entry.healthKit)
                             .padding()
                     default:
                         DeficitRings()
-                            .environmentObject(entry.fitness)
                             .environmentObject(entry.healthKit)
                             .padding()
                     }

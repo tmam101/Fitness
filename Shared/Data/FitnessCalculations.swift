@@ -27,6 +27,9 @@ class FitnessCalculations: ObservableObject {
     @Published public var weights: [Weight] = []
     @Published public var averageWeightLostPerWeekThisMonth: Float = 0
     
+    @Published var shouldShowBars = true
+
+    
     struct Weight {
         var weight: Double
         var date: Date
@@ -192,21 +195,21 @@ class FitnessCalculations: ObservableObject {
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
-    private func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
-        if !HKHealthStore.isHealthDataAvailable() {
-            return
-        }
-
-        let readDataTypes: Set<HKSampleType> = [bodyMassType,
-                                                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
-                                                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
-                                                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!]
-
-        healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in
-            completion(success, error)
-        }
-
-    }
+//    private func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
+//        if !HKHealthStore.isHealthDataAvailable() {
+//            return
+//        }
+//
+//        let readDataTypes: Set<HKSampleType> = [bodyMassType,
+//                                                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
+//                                                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
+//                                                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!]
+//
+//        healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in
+//            completion(success, error)
+//        }
+//
+//    }
     
     
     //returns the weight entry in pounds or nil if no data

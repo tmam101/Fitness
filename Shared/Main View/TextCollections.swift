@@ -8,16 +8,15 @@
 import SwiftUI
 
 struct WeightLossText: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     
     var body: some View {
-        let weightLostString = String(format: "%.2f", fitness.weightLost)
-        let averageWeeklyLostString = String(format: "%.2f", fitness.averageWeightLostPerWeek) + " / week"
-        let averageMonthlyLostString = String(format: "%.2f", fitness.averageWeightLostPerWeekThisMonth) + " / week"
+        let weightLostString = String(format: "%.2f", healthKit.fitness.weightLost)
+        let averageWeeklyLostString = String(format: "%.2f", healthKit.fitness.averageWeightLostPerWeek) + " / week"
+        let averageMonthlyLostString = String(format: "%.2f", healthKit.fitness.averageWeightLostPerWeekThisMonth) + " / week"
         
         let averageDeficit = healthKit.averageDeficitSinceStart / 1000
-        let averageWeightLoss = fitness.averageWeightLostPerWeek / 2
+        let averageWeightLoss = healthKit.fitness.averageWeightLostPerWeek / 2
 //        let ratio = Int(((averageWeightLoss / averageDeficit) * 100 - 100).corrected())
         
         VStack(alignment: .leading) {
@@ -30,24 +29,42 @@ struct WeightLossText: View {
 }
 
 struct LiftingText: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     
     var body: some View {
-        let benchString = String(format: "%.2f", (healthKit.benchORM / fitness.currentWeight)*100) + "% bw"
-        let squatString = String(format: "%.2f", (healthKit.squatORM / fitness.currentWeight)*100) + "% bw"
-//        let averageWeeklyLostString = String(format: "%.2f", fitness.averageWeightLostPerWeek) + " / week"
-//        let averageMonthlyLostString = String(format: "%.2f", fitness.averageWeightLostPerWeekThisMonth) + " / week"
+        LiftingTextInterior()
+            .environmentObject(healthKit.fitness)
+            .environmentObject(healthKit.workouts)
+    }
+}
+
+private struct LiftingTextInterior: View {
+    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var workouts: WorkoutInformation
+    
+    var body: some View {
+        let currentWeight = fitness.currentWeight
+
+        let squatORM = workouts.squatORM
+        let squatRatio = CGFloat(squatORM / currentWeight)
         
+        let benchORM = workouts.benchORM
+        let benchRatio = CGFloat(benchORM / currentWeight)
+        
+        let benchString = String(Int(benchRatio * 100)) + "/150 % bw"
+        let squatString = String(Int(squatRatio * 100)) + "/175 % bw"
+        
+        let benchTitle = "Bench" + (workouts.smithMachine ? " (Smith)" : "")
+        let squatTitle = "Squat" + (workouts.smithMachine ? " (Smith)" : "")
+
         VStack(alignment: .leading) {
-            StatsText(color: .purple, title: "Bench", stat: benchString)
-            StatsText(color: .pink, title: "Squat", stat: squatString)
+            StatsText(color: .purple, title: benchTitle, stat: benchString)
+            StatsText(color: .pink, title: squatTitle, stat: squatString)
         }
     }
 }
 
 struct DeficitText: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     var percentages: Bool = false
     
@@ -62,7 +79,7 @@ struct DeficitText: View {
         let deficitTodayString = String(deficitToday) + "/" + String(idealDeficit) + ""
         let totalDeficitString = String(totalDeficit) + "/1000"
         // Percentages
-        let weightLostPercentString = String(fitness.percentWeightLost) + "% lost"
+        let weightLostPercentString = String(healthKit.fitness.percentWeightLost) + "% lost"
         let averageDeficitPercentString = String(healthKit.percentWeeklyDeficit) + "% dfct"
         let deficitTodayPercentString = String(healthKit.percentDailyDeficit) + "% dfct tdy"
         

@@ -9,19 +9,16 @@ import SwiftUI
 
 @main
 struct FitnessApp: App {
-    @State var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
     @State var healthKit = MyHealthKit(environment: GlobalEnvironment.environment)
     var body: some Scene {
         WindowGroup {
             AppView()
-                .environmentObject(fitness)
                 .environmentObject(healthKit)
         }
     }
 }
 
 struct AppView: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
     
     var body: some View {
@@ -38,7 +35,6 @@ struct AppView: View {
 //                    .frame(width: 300, height: 200)
 //                    .background(Color.myGray)
                 FitnessView()
-                    .environmentObject(fitness)
                     .environmentObject(healthKit)
             }
         }
@@ -49,7 +45,6 @@ struct FitnessApp_Previews: PreviewProvider {
     
     static var previews: some View {
         AppView()
-            .environmentObject(FitnessCalculations(environment: .debug))
             .environmentObject(MyHealthKit(environment: .debug))
     }
 }

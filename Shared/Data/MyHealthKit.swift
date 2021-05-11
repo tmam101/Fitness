@@ -10,30 +10,13 @@ import HealthKit
 import WidgetKit
 import SwiftUI
 
-//struct DayAndDeficit {
-//    var dailyDeficits: [Int:CGFloat] = [:]
-//    var orderedDeficits: [CGFloat] {
-//        var x: [CGFloat] = []
-//        let size = dailyDeficits.count
-//        for i in 0..<size {
-//            x.append(dailyDeficits[i] ?? 0)
-//        }
-//        return x
-//    }
-////    func sort() {
-////        let size = dailyDeficits.count
-////        for i in 0..<size {
-////            print(i)
-////        }
-////    }
-//}
-
 class MyHealthKit: ObservableObject {
     //MARK: PROPERTIES
     var environment: AppEnvironmentConfig?
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
+    @Published public var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
     // Deficits
     @Published public var deficitToday: Float = 0
     @Published public var averageDeficitThisWeek: Float = 0
@@ -56,9 +39,7 @@ class MyHealthKit: ObservableObject {
     @Published public var dailyDeficits0: [Int:Float] = [:]
     @Published public var dailyDeficits: [Int:Float] = [:]
     
-    @Published public var workouts: Workouts = []
-    @Published public var benchORM: Float = 0.0
-    @Published public var squatORM: Float = 0.0
+    @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
 
     
     // Constants 
@@ -122,6 +103,8 @@ class MyHealthKit: ObservableObject {
             let startDate = formatter.date(from: startDateString)
         else { return }
         
+        workouts = WorkoutInformation(afterDate: startDate, environment: environment ?? .release)
+        
         guard
             let daysBetweenStartAndEnd = daysBetween(date1: startDate, date2: endDate),
             let daysBetweenStartAndNow = daysBetween(date1: startDate, date2: Date()),
@@ -178,18 +161,18 @@ class MyHealthKit: ObservableObject {
             self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
             //            let d = yesterdaysDeficit
             //            LineGraph.xtoy(weights: width: 200, height: 200)
-            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
-                do {
-                    let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
-                    let workoutjson = try JSONDecoder().decode(Workouts.self, from: data)
-                    self.workouts = workoutjson
-                    self.benchORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Bench")}.last?.oneRepMax() ?? 0.0)
-                    self.squatORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Squat")}.last?.oneRepMax() ?? 0.0)
-    
-                } catch {
-                    // handle error
-                }
-            }
+//            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
+//                do {
+//                    let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
+//                    let workoutjson = try JSONDecoder().decode(Workouts.self, from: data)
+//                    self.workouts = workoutjson
+//                    self.benchORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Bench")}.last?.oneRepMax() ?? 0.0)
+//                    self.squatORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Squat")}.last?.oneRepMax() ?? 0.0)
+//    
+//                } catch {
+//                    // handle error
+//                }
+//            }
             completion?(self)
             
         }}}}}}}}}
