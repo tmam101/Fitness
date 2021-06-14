@@ -51,6 +51,19 @@ struct FitnessWidgetEntryView : View {
                         AllRings()
                             .environmentObject(entry.healthKit)
                             .padding()
+                    case WidgetFamily.systemMedium:
+                        HStack {
+                            DeficitRings()
+                                .environmentObject(entry.healthKit)
+                                .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                            BarChart()
+                                .environmentObject(entry.healthKit)
+                                .frame(minWidth: 0, maxWidth: .infinity)
+                                .background(Color.myGray)
+                                .cornerRadius(5)
+                                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                        }
+                        
                     default:
                         DeficitRings()
                             .environmentObject(entry.healthKit)
@@ -98,7 +111,9 @@ struct FitnessWidget: Widget {
 
 //struct FitnessWidget_Previews: PreviewProvider {
 //    static var previews: some View {
-//        FitnessWidgetEntryView(entry: SimpleEntry(date: Date(), fitness: FitnessCalculations(), healthKit: MyHealthKit()))
+//        let healthKit = MyHealthKit(environment: GlobalEnvironment.environment)
+//        let entry = SimpleEntry(date: Date(), healthKit: healthKit)
+//        FitnessWidgetEntryView(entry: entry)
 //            .previewContext(WidgetPreviewContext(family: .systemSmall))
 //    }
 //}
