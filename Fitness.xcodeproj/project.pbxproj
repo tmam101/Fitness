@@ -48,7 +48,6 @@
 		48755A84267A715700F7680E /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A83267A715700F7680E /* FitnessCalculations.swift */; };
 		487A95192640F97500627BA3 /* strong.json in Resources */ = {isa = PBXBuildFile; fileRef = 487A95182640F97500627BA3 /* strong.json */; };
 		48821CCC25B8BF3800C9F58A /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CCB25B8BF3800C9F58A /* Tests_iOS.swift */; };
-		48821CD725B8BF3800C9F58A /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CD625B8BF3800C9F58A /* Tests_macOS.swift */; };
 		48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
 		48821CDA25B8BF3800C9F58A /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
 		48821CDD25B8BF3800C9F58A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48821CB225B8BF3800C9F58A /* Assets.xcassets */; };
@@ -169,14 +168,10 @@
 		48821CB725B8BF3800C9F58A /* Fitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48821CBA25B8BF3800C9F58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48821CBF25B8BF3800C9F58A /* Fitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		48821CC125B8BF3800C9F58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		48821CC225B8BF3800C9F58A /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		48821CC725B8BF3800C9F58A /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48821CCB25B8BF3800C9F58A /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
 		48821CCD25B8BF3800C9F58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48821CD225B8BF3800C9F58A /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		48821CD625B8BF3800C9F58A /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
-		48821CD825B8BF3800C9F58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48A0D45225BB6605007C40ED /* FitnessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessView.swift; sourceTree = "<group>"; };
 		48A0D46525BB71CB007C40ED /* FitnessWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FitnessWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		48A0D46725BB71CB007C40ED /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -321,9 +316,7 @@
 				48A0D49925BB8703007C40ED /* FitnessDebug.entitlements */,
 				48821CAF25B8BF3600C9F58A /* Shared */,
 				48821CB925B8BF3800C9F58A /* iOS */,
-				48821CC025B8BF3800C9F58A /* macOS */,
 				48821CCA25B8BF3800C9F58A /* Tests iOS */,
-				48821CD525B8BF3800C9F58A /* Tests macOS */,
 				48A0D46B25BB71CB007C40ED /* FitnessWidget */,
 				48755A47267A707800F7680E /* MacFitness */,
 				48755A5A267A707900F7680E /* MacFitnessTests */,
@@ -372,15 +365,6 @@
 			path = iOS;
 			sourceTree = "<group>";
 		};
-		48821CC025B8BF3800C9F58A /* macOS */ = {
-			isa = PBXGroup;
-			children = (
-				48821CC125B8BF3800C9F58A /* Info.plist */,
-				48821CC225B8BF3800C9F58A /* macOS.entitlements */,
-			);
-			path = macOS;
-			sourceTree = "<group>";
-		};
 		48821CCA25B8BF3800C9F58A /* Tests iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -388,15 +372,6 @@
 				48821CCD25B8BF3800C9F58A /* Info.plist */,
 			);
 			path = "Tests iOS";
-			sourceTree = "<group>";
-		};
-		48821CD525B8BF3800C9F58A /* Tests macOS */ = {
-			isa = PBXGroup;
-			children = (
-				48821CD625B8BF3800C9F58A /* Tests_macOS.swift */,
-				48821CD825B8BF3800C9F58A /* Info.plist */,
-			);
-			path = "Tests macOS";
 			sourceTree = "<group>";
 		};
 		48A0D46625BB71CB007C40ED /* Frameworks */ = {
@@ -834,7 +809,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48821CD725B8BF3800C9F58A /* Tests_macOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
