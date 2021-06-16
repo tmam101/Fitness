@@ -32,6 +32,8 @@ class MyHealthKit: ObservableObject {
     @Published public var averageWeightLossSinceStart: Float = 0
     @Published public var expectedAverageWeightLossSinceStart: Float = 0
     
+    @Published public var expectedWeightLossSinceStart: Float = 0
+    
     // Days
     @Published public var daysBetweenStartAndEnd: Int = 0
     @Published public var daysBetweenStartAndNow: Int = 0
@@ -154,11 +156,12 @@ class MyHealthKit: ObservableObject {
             
 //            let expectedWeightLossThisMonth: Float = ((averageDeficitThisMonth ?? 1) * 30) / caloriesInPound
             
-            let averageWeightLossSinceStart = (231.8 - Double(221)) / (Double(daysBetweenStartAndNow) / Double(7)) // TODO calculate with real values
+//            let averageWeightLossSinceStart = (231.8 - Double(221)) / (Double(daysBetweenStartAndNow) / Double(7)) // TODO calculate with real values
             let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) / 3500) * 7
             self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
             self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
             self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
+            self.expectedWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) * Float(self.daysBetweenStartAndNow)) / Float(3500)
             //            let d = yesterdaysDeficit
             //            LineGraph.xtoy(weights: width: 200, height: 200)
 //            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
@@ -173,6 +176,7 @@ class MyHealthKit: ObservableObject {
 //                    // handle error
 //                }
 //            }
+            // todo line graph comparing weight loss to calorie deficit
             completion?(self)
             
         }}}}}}}}}

@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct Bar: View {
+    var cornerRadius: CGFloat = 7.0
     var color: Color = .yellow
     var height: CGFloat = 100.0
     var body: some View {
         
-        RoundedRectangle(cornerRadius: 7.0)
+        RoundedRectangle(cornerRadius: cornerRadius)
             .frame(height: height, alignment: .bottom)
             .foregroundColor(color)
     }
@@ -20,6 +21,7 @@ struct Bar: View {
 
 struct BarChart: View {
     @EnvironmentObject var healthKit: MyHealthKit
+    var cornerRadius: CGFloat = 7.0
     
     var body: some View {
         let results = BarChart.deficitsToPercents(daysAndDeficits: healthKit.dailyDeficits)
@@ -36,7 +38,7 @@ struct BarChart: View {
                         let isPositive = indexAndPercent.percent >= 0
                         let color: Color = isPositive ? (isToday ? .blue : .yellow) : .red
                         
-                        Bar(color: color, height: height)
+                        Bar(cornerRadius: cornerRadius, color: color, height: height)
                     }
                 }
                 if horizontalRatio != 0 {

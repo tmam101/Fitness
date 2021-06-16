@@ -7,8 +7,7 @@ import Foundation
 
 // MARK: - WorkoutElement
 struct Set: Codable {
-    let date, workoutName: String
-    let exerciseName: ExerciseName
+    let date, workoutName, duration, exerciseName: String
     let setOrder: Int
     let weight: Double
     let reps: Int
@@ -16,10 +15,11 @@ struct Set: Codable {
     let seconds: Int
     let notes: Notes
     let workoutNotes, rpe: String
-
+    
     enum CodingKeys: String, CodingKey {
         case date = "Date"
         case workoutName = "Workout Name"
+        case duration = "Duration"
         case exerciseName = "Exercise Name"
         case setOrder = "Set Order"
         case weight = "Weight"
@@ -31,6 +31,63 @@ struct Set: Codable {
         case rpe = "RPE"
     }
     
+    enum Notes: String, Codable {
+        case chestPress = "Chest press"
+        case empty = ""
+        case seatHeight7 = "Seat Height 7"
+        case the220NotDeepEnough = "220 not deep enough"
+    }
+    
+    enum ExerciseName: String {
+        case benchPressBarbell = "Bench Press (Barbell)"
+        case benchPressDumbbell = "Bench Press (Dumbbell)"
+        case benchPressSmithMachine = "Bench Press (Smith Machine)"
+        case bentOverOneArmRowDumbbell = "Bent Over One Arm Row (Dumbbell)"
+        case bicepCurlBarbell = "Bicep Curl (Barbell)"
+        case bicepCurlCable = "Bicep Curl (Cable)"
+        case bicepCurlDumbbell = "Bicep Curl (Dumbbell)"
+        case bicepCurlMachine = "Bicep Curl (Machine)"
+        case cableCrossover = "Cable Crossover"
+        case chestFly = "Chest Fly"
+        case chestFlyDumbbell = "Chest Fly (Dumbbell)"
+        case chestPress = "Chest Press"
+        case chestPressMachine = "Chest Press (Machine)"
+        case chinUpAssisted = "Chin Up (Assisted)"
+        case cycling = "Cycling"
+        case frontPulldown = "Front Pulldown"
+        case hammerCurlDumbbell = "Hammer Curl (Dumbbell)"
+        case inclineBenchPressBarbell = "Incline Bench Press (Barbell)"
+        case inclineBenchPressDumbbell = "Incline Bench Press (Dumbbell)"
+        case inclineChestPressMachine = "Incline Chest Press (Machine)"
+        case latPulldownCable = "Lat Pulldown (Cable)"
+        case latPulldownMachine = "Lat Pulldown (Machine)"
+        case lateralRaiseDumbbell = "Lateral Raise (Dumbbell)"
+        case legCurl = "Leg Curl"
+        case legExtensionMachine = "Leg Extension (Machine)"
+        case legPress = "Leg Press"
+        case overheadPressDumbbell = "Overhead Press (Dumbbell)"
+        case overheadPressSmithMachine = "Overhead Press (Smith Machine)"
+        case pullUpAssisted = "Pull Up (Assisted)"
+        case pushUp = "Push Up"
+        case reverseFlyCable = "Reverse Fly (Cable)"
+        case reverseFlyMachine = "Reverse Fly (Machine)"
+        case running = "Running"
+        case seatedRowCable = "Seated Row (Cable)"
+        case shoulderPressMachine = "Shoulder Press (Machine)"
+        case sitUp = "Sit Up"
+        case squatBarbell = "Squat (Barbell)"
+        case squatBodyweight = "Squat (Bodyweight)"
+        case squatSmithMachine = "Squat (Smith Machine)"
+        case standingCalfRaiseBarbell = "Standing Calf Raise (Barbell)"
+        case standingCalfRaiseDumbbell = "Standing Calf Raise (Dumbbell)"
+        case standingCalfRaiseMachine = "Standing Calf Raise (Machine)"
+        case standingCalfRaiseSmithMachine = "Standing Calf Raise (Smith Machine)"
+        case stretching = "Stretching"
+        case tricepsExtension = "Triceps Extension"
+        case tricepsExtensionCable = "Triceps Extension (Cable)"
+        case tricepsExtensionDumbbell = "Triceps Extension (Dumbbell)"
+    }
+    
     func oneRepMax() -> Float {
         return Float(weight) / (1.0278 - 0.0278 * Float(reps))
     }
@@ -40,63 +97,6 @@ struct Set: Codable {
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter.date(from: self.date)
     }
-}
-
-enum ExerciseName: String, Codable {
-    case benchPressBarbell = "Bench Press (Barbell)"
-    case benchPressDumbbell = "Bench Press (Dumbbell)"
-    case benchPressSmithMachine = "Bench Press (Smith Machine)"
-    case bentOverOneArmRowDumbbell = "Bent Over One Arm Row (Dumbbell)"
-    case bicepCurlBarbell = "Bicep Curl (Barbell)"
-    case bicepCurlCable = "Bicep Curl (Cable)"
-    case bicepCurlDumbbell = "Bicep Curl (Dumbbell)"
-    case bicepCurlMachine = "Bicep Curl (Machine)"
-    case cableCrossover = "Cable Crossover"
-    case chestFly = "Chest Fly"
-    case chestFlyDumbbell = "Chest Fly (Dumbbell)"
-    case chestPress = "Chest Press"
-    case chestPressMachine = "Chest Press (Machine)"
-    case chinUpAssisted = "Chin Up (Assisted)"
-    case cycling = "Cycling"
-    case frontPulldown = "Front Pulldown"
-    case hammerCurlDumbbell = "Hammer Curl (Dumbbell)"
-    case inclineBenchPressBarbell = "Incline Bench Press (Barbell)"
-    case inclineBenchPressDumbbell = "Incline Bench Press (Dumbbell)"
-    case inclineChestPressMachine = "Incline Chest Press (Machine)"
-    case latPulldownCable = "Lat Pulldown (Cable)"
-    case latPulldownMachine = "Lat Pulldown (Machine)"
-    case lateralRaiseDumbbell = "Lateral Raise (Dumbbell)"
-    case legCurl = "Leg Curl"
-    case legExtensionMachine = "Leg Extension (Machine)"
-    case legPress = "Leg Press"
-    case overheadPressDumbbell = "Overhead Press (Dumbbell)"
-    case overheadPressSmithMachine = "Overhead Press (Smith Machine)"
-    case pullUpAssisted = "Pull Up (Assisted)"
-    case pushUp = "Push Up"
-    case reverseFlyCable = "Reverse Fly (Cable)"
-    case reverseFlyMachine = "Reverse Fly (Machine)"
-    case running = "Running"
-    case seatedRowCable = "Seated Row (Cable)"
-    case shoulderPressMachine = "Shoulder Press (Machine)"
-    case sitUp = "Sit Up"
-    case squatBarbell = "Squat (Barbell)"
-    case squatBodyweight = "Squat (Bodyweight)"
-    case squatSmithMachine = "Squat (Smith Machine)"
-    case standingCalfRaiseBarbell = "Standing Calf Raise (Barbell)"
-    case standingCalfRaiseDumbbell = "Standing Calf Raise (Dumbbell)"
-    case standingCalfRaiseMachine = "Standing Calf Raise (Machine)"
-    case standingCalfRaiseSmithMachine = "Standing Calf Raise (Smith Machine)"
-    case stretching = "Stretching"
-    case tricepsExtension = "Triceps Extension"
-    case tricepsExtensionCable = "Triceps Extension (Cable)"
-    case tricepsExtensionDumbbell = "Triceps Extension (Dumbbell)"
-}
-
-enum Notes: String, Codable {
-    case chestPress = "Chest press"
-    case empty = ""
-    case seatHeight7 = "Seat Height 7"
-    case the220NotDeepEnough = "220 not deep enough"
 }
 
 typealias Workout = [Set]
@@ -147,7 +147,7 @@ class WorkoutInformation: ObservableObject {
                     
                     calculate()
                 } catch {
-                    
+                    print("error failed getting workouts")
                 }
             }
         case .debug:
@@ -194,8 +194,8 @@ class WorkoutInformation: ObservableObject {
     func calculate() {
         switch environment {
         case .release:
-            let squatType: ExerciseName = smithMachine ? .squatSmithMachine : .squatBarbell
-            let benchType: ExerciseName = smithMachine ? .benchPressSmithMachine : .benchPressBarbell
+            let squatType: Set.ExerciseName = smithMachine ? .squatSmithMachine : .squatBarbell
+            let benchType: Set.ExerciseName = smithMachine ? .benchPressSmithMachine : .benchPressBarbell
             
             self.firstBenchORM = oneRepMax(timeFrame: .first, exerciseName: benchType)
             self.firstSquatORM = oneRepMax(timeFrame: .first, exerciseName: squatType)
@@ -216,14 +216,14 @@ class WorkoutInformation: ObservableObject {
         case first
     }
     
-    func allOneRepMaxes(exerciseName: ExerciseName? = nil, exerciseNames: [ExerciseName]? = nil, tag: String? = nil) -> [Float] {
+    func allOneRepMaxes(exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> [Float] {
         var exercises: Workout = []
         if let name = exerciseName {
-            exercises = workouts.filter { $0.exerciseName == name }
+            exercises = workouts.filter { $0.exerciseName == name.rawValue }
         } else if let names = exerciseNames {
-            exercises = workouts.filter { names.contains($0.exerciseName) }
+            exercises = workouts.filter { names.map { $0.rawValue }.contains($0.exerciseName) }
         } else if let tag = tag {
-            exercises = workouts.filter { $0.exerciseName.rawValue.lowercased().contains(tag.lowercased())}
+            exercises = workouts.filter { $0.exerciseName.lowercased().contains(tag.lowercased())}
         } else {
             return []
         }
@@ -247,14 +247,14 @@ class WorkoutInformation: ObservableObject {
         return y.map { $0.max }
     }
     
-    func oneRepMax(timeFrame: TimeFrame, exerciseName: ExerciseName? = nil, exerciseNames: [ExerciseName]? = nil, tag: String? = nil) -> Float {
+    func oneRepMax(timeFrame: TimeFrame, exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> Float {
         var exercises: Workout = []
         if let name = exerciseName {
-            exercises = workouts.filter { $0.exerciseName == name }
+            exercises = workouts.filter { $0.exerciseName == name.rawValue }
         } else if let names = exerciseNames {
-            exercises = workouts.filter { names.contains($0.exerciseName) }
+            exercises = workouts.filter { names.map { $0.rawValue }.contains($0.exerciseName) }
         } else if let tag = tag {
-            exercises = workouts.filter { $0.exerciseName.rawValue.lowercased().contains(tag.lowercased())}
+            exercises = workouts.filter { $0.exerciseName.lowercased().contains(tag.lowercased())}
         } else {
             return 0.0
         }

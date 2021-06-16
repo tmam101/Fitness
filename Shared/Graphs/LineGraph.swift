@@ -30,6 +30,7 @@ struct LineGraph: View {
     }
     
     func floatsToGraphCoordinates(weights: [Float], width: CGFloat, height: CGFloat) -> [CGPoint] {
+        guard weights.count != 0 else { return [CGPoint(x: 0, y: 0)] }
         let max = weights.max()!
         let min = weights.min()!
         let diff = max - min
