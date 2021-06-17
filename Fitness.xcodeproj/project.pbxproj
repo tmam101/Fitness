@@ -8,28 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		48199FB72628D045000247E8 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
-		48199FB82628D045000247E8 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
 		48199FB92628D045000247E8 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
 		4845B79525C0987D003BF999 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
-		4845B79B25C0987E003BF999 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		4845B7A225C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
-		4845B7A325C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
 		4845B7A425C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
-		485B727A2631EBA70070E096 /* RingCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1F626041DE50037EEAF /* RingCollections.swift */; };
 		485B72802631EBB40070E096 /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
-		485B72812631EBB50070E096 /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
-		485B728D2631EBCB0070E096 /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
-		485B72932631EBD20070E096 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E20A26041E700037EEAF /* Stats.swift */; };
 		485B72992631EBD70070E096 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		486388E1261F9099005B1227 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
-		486388E2261F9099005B1227 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
 		486388E3261F9099005B1227 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
 		48755A4B267A707800F7680E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A4A267A707800F7680E /* ContentView.swift */; };
 		48755A4D267A707900F7680E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48755A4C267A707900F7680E /* Assets.xcassets */; };
 		48755A50267A707900F7680E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48755A4F267A707900F7680E /* Preview Assets.xcassets */; };
 		48755A5C267A707900F7680E /* MacFitnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A5B267A707900F7680E /* MacFitnessTests.swift */; };
 		48755A67267A707900F7680E /* MacFitnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A66267A707900F7680E /* MacFitnessUITests.swift */; };
-		48755A72267A708700F7680E /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D45225BB6605007C40ED /* FitnessView.swift */; };
 		48755A73267A70AC00F7680E /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
 		48755A74267A70AC00F7680E /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		48755A75267A70AC00F7680E /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
@@ -37,7 +28,6 @@
 		48755A77267A70AC00F7680E /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
 		48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
 		48755A79267A70AC00F7680E /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
-		48755A7A267A70AC00F7680E /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
 		48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1F626041DE50037EEAF /* RingCollections.swift */; };
 		48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
@@ -46,14 +36,16 @@
 		48755A80267A70AC00F7680E /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
 		48755A82267A70DD00F7680E /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A81267A70DD00F7680E /* MyHealthKit.swift */; };
 		48755A84267A715700F7680E /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A83267A715700F7680E /* FitnessCalculations.swift */; };
+		48755A86267A8F5300F7680E /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A85267A8F5300F7680E /* FitnessView.swift */; };
+		48755A88267A8FDA00F7680E /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A87267A8FDA00F7680E /* Environment.swift */; };
+		48755A8A267AF13200F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
+		48755A8C267AF13200F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
+		48755A8D267AF1BF00F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
 		487A95192640F97500627BA3 /* strong.json in Resources */ = {isa = PBXBuildFile; fileRef = 487A95182640F97500627BA3 /* strong.json */; };
 		48821CCC25B8BF3800C9F58A /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CCB25B8BF3800C9F58A /* Tests_iOS.swift */; };
 		48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
-		48821CDA25B8BF3800C9F58A /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
 		48821CDD25B8BF3800C9F58A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48821CB225B8BF3800C9F58A /* Assets.xcassets */; };
-		48821CDE25B8BF3800C9F58A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48821CB225B8BF3800C9F58A /* Assets.xcassets */; };
 		48A0D45325BB6605007C40ED /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D45225BB6605007C40ED /* FitnessView.swift */; };
-		48A0D45425BB6605007C40ED /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D45225BB6605007C40ED /* FitnessView.swift */; };
 		48A0D46825BB71CB007C40ED /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A0D46725BB71CB007C40ED /* WidgetKit.framework */; };
 		48A0D46A25BB71CB007C40ED /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A0D46925BB71CB007C40ED /* SwiftUI.framework */; };
 		48A0D46D25BB71CB007C40ED /* FitnessWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D46C25BB71CB007C40ED /* FitnessWidget.swift */; };
@@ -65,16 +57,12 @@
 		48A0D49B25BB8703007C40ED /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A0D49A25BB8703007C40ED /* HealthKit.framework */; };
 		48A0D4A225BB92DE007C40ED /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A0D49A25BB8703007C40ED /* HealthKit.framework */; };
 		48A7706B260529C3002E5853 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
-		48A7706C260529C3002E5853 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48A7706D260529C3002E5853 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
-		48A7707626053296002E5853 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
 		48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
 		48AF60EB2640F65C00C6CC11 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
-		48AF60EC2640F65C00C6CC11 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
 		48AF60ED2640F65C00C6CC11 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
 		48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
-		48D7995E25B8C7950047C8E0 /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
 		48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
 		48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
 		48E0E1E12603C47F0037EEAF /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
@@ -85,10 +73,8 @@
 		48E0E21826041F3D0037EEAF /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
 		48E0E21926041F3D0037EEAF /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
 		48E4B44D262619DE002321B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
-		48E4B44E262619DE002321B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
 		48E4B44F262619DE002321B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
 		48EC266A25B8D1280003B455 /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
-		48EC266B25B8D1280003B455 /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,13 +98,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 48821CB625B8BF3800C9F58A;
 			remoteInfo = "Fitness (iOS)";
-		};
-		48821CD325B8BF3800C9F58A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 48821CAB25B8BF3600C9F58A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 48821CBE25B8BF3800C9F58A;
-			remoteInfo = "Fitness (macOS)";
 		};
 		48A0D47125BB71CD007C40ED /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -162,12 +141,14 @@
 		48755A68267A707A00F7680E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48755A81267A70DD00F7680E /* MyHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHealthKit.swift; sourceTree = "<group>"; };
 		48755A83267A715700F7680E /* FitnessCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessCalculations.swift; sourceTree = "<group>"; };
+		48755A85267A8F5300F7680E /* FitnessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessView.swift; sourceTree = "<group>"; };
+		48755A87267A8FDA00F7680E /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		48755A89267AF13200F7680E /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
 		487A95182640F97500627BA3 /* strong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strong.json; sourceTree = "<group>"; };
 		48821CB025B8BF3600C9F58A /* FitnessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessApp.swift; sourceTree = "<group>"; };
 		48821CB225B8BF3800C9F58A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48821CB725B8BF3800C9F58A /* Fitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48821CBA25B8BF3800C9F58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		48821CBF25B8BF3800C9F58A /* Fitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48821CC725B8BF3800C9F58A /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48821CCB25B8BF3800C9F58A /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
 		48821CCD25B8BF3800C9F58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -225,13 +206,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		48821CBC25B8BF3800C9F58A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		48821CC425B8BF3800C9F58A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -279,6 +253,8 @@
 				48755A4E267A707900F7680E /* Preview Content */,
 				48755A81267A70DD00F7680E /* MyHealthKit.swift */,
 				48755A83267A715700F7680E /* FitnessCalculations.swift */,
+				48755A85267A8F5300F7680E /* FitnessView.swift */,
+				48755A87267A8FDA00F7680E /* Environment.swift */,
 			);
 			path = MacFitness;
 			sourceTree = "<group>";
@@ -338,6 +314,7 @@
 				48E0E20826041E4A0037EEAF /* Main View */,
 				4845B78F25C09853003BF999 /* Lines.swift */,
 				48821CB225B8BF3800C9F58A /* Assets.xcassets */,
+				48755A89267AF13200F7680E /* Weight.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -346,7 +323,6 @@
 			isa = PBXGroup;
 			children = (
 				48821CB725B8BF3800C9F58A /* Fitness.app */,
-				48821CBF25B8BF3800C9F58A /* Fitness.app */,
 				48821CC725B8BF3800C9F58A /* Tests iOS.xctest */,
 				48821CD225B8BF3800C9F58A /* Tests macOS.xctest */,
 				48A0D46525BB71CB007C40ED /* FitnessWidgetExtension.appex */,
@@ -509,23 +485,6 @@
 			productReference = 48821CB725B8BF3800C9F58A /* Fitness.app */;
 			productType = "com.apple.product-type.application";
 		};
-		48821CBE25B8BF3800C9F58A /* Fitness (macOS) */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 48821CE425B8BF3800C9F58A /* Build configuration list for PBXNativeTarget "Fitness (macOS)" */;
-			buildPhases = (
-				48821CBB25B8BF3800C9F58A /* Sources */,
-				48821CBC25B8BF3800C9F58A /* Frameworks */,
-				48821CBD25B8BF3800C9F58A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Fitness (macOS)";
-			productName = "Fitness (macOS)";
-			productReference = 48821CBF25B8BF3800C9F58A /* Fitness.app */;
-			productType = "com.apple.product-type.application";
-		};
 		48821CC625B8BF3800C9F58A /* Tests iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 48821CE725B8BF3800C9F58A /* Build configuration list for PBXNativeTarget "Tests iOS" */;
@@ -555,7 +514,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				48821CD425B8BF3800C9F58A /* PBXTargetDependency */,
 			);
 			name = "Tests macOS";
 			productName = "Tests macOS";
@@ -602,9 +560,6 @@
 					48821CB625B8BF3800C9F58A = {
 						CreatedOnToolsVersion = 12.3;
 					};
-					48821CBE25B8BF3800C9F58A = {
-						CreatedOnToolsVersion = 12.3;
-					};
 					48821CC625B8BF3800C9F58A = {
 						CreatedOnToolsVersion = 12.3;
 						TestTargetID = 48821CB625B8BF3800C9F58A;
@@ -632,7 +587,6 @@
 			projectRoot = "";
 			targets = (
 				48821CB625B8BF3800C9F58A /* Fitness (iOS) */,
-				48821CBE25B8BF3800C9F58A /* Fitness (macOS) */,
 				48821CC625B8BF3800C9F58A /* Tests iOS */,
 				48821CD125B8BF3800C9F58A /* Tests macOS */,
 				48A0D46425BB71CB007C40ED /* FitnessWidgetExtension */,
@@ -676,14 +630,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		48821CBD25B8BF3800C9F58A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				48821CDE25B8BF3800C9F58A /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		48821CC525B8BF3800C9F58A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -721,16 +667,17 @@
 				48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */,
 				48755A74267A70AC00F7680E /* Lines.swift in Sources */,
 				48755A73267A70AC00F7680E /* GenericCircles.swift in Sources */,
-				48755A72267A708700F7680E /* FitnessView.swift in Sources */,
+				48755A8C267AF13200F7680E /* Weight.swift in Sources */,
 				48755A7F267A70AC00F7680E /* Workout.swift in Sources */,
 				48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */,
 				48755A79267A70AC00F7680E /* LineGraph.swift in Sources */,
 				48755A77267A70AC00F7680E /* TextCollections.swift in Sources */,
 				48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */,
 				48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */,
+				48755A86267A8F5300F7680E /* FitnessView.swift in Sources */,
+				48755A88267A8FDA00F7680E /* Environment.swift in Sources */,
 				48755A82267A70DD00F7680E /* MyHealthKit.swift in Sources */,
 				48755A84267A715700F7680E /* FitnessCalculations.swift in Sources */,
-				48755A7A267A70AC00F7680E /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,29 +718,7 @@
 				486388E1261F9099005B1227 /* BarChart.swift in Sources */,
 				48AF60EB2640F65C00C6CC11 /* Workout.swift in Sources */,
 				4845B79525C0987D003BF999 /* Lines.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		48821CBB25B8BF3800C9F58A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				48A7706C260529C3002E5853 /* ColorExtension.swift in Sources */,
-				48A7707626053296002E5853 /* FloatingPointExtensions.swift in Sources */,
-				485B72812631EBB50070E096 /* Ring (unused).swift in Sources */,
-				48AF60EC2640F65C00C6CC11 /* Workout.swift in Sources */,
-				48A0D45425BB6605007C40ED /* FitnessView.swift in Sources */,
-				485B72932631EBD20070E096 /* Stats.swift in Sources */,
-				48199FB82628D045000247E8 /* LineGraph.swift in Sources */,
-				4845B7A325C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
-				48D7995E25B8C7950047C8E0 /* Progress Rings.swift in Sources */,
-				485B728D2631EBCB0070E096 /* TextCollections.swift in Sources */,
-				485B727A2631EBA70070E096 /* RingCollections.swift in Sources */,
-				48EC266B25B8D1280003B455 /* FitnessCalculations.swift in Sources */,
-				48E4B44E262619DE002321B5 /* Environment.swift in Sources */,
-				48821CDA25B8BF3800C9F58A /* FitnessApp.swift in Sources */,
-				486388E2261F9099005B1227 /* BarChart.swift in Sources */,
-				4845B79B25C0987E003BF999 /* Lines.swift in Sources */,
+				48755A8A267AF13200F7680E /* Weight.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,6 +758,7 @@
 				48A0D48725BB72E3007C40ED /* FitnessView.swift in Sources */,
 				48AF60ED2640F65C00C6CC11 /* Workout.swift in Sources */,
 				48E0E20226041E2F0037EEAF /* RingCollections.swift in Sources */,
+				48755A8D267AF1BF00F7680E /* Weight.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -853,11 +779,6 @@
 			isa = PBXTargetDependency;
 			target = 48821CB625B8BF3800C9F58A /* Fitness (iOS) */;
 			targetProxy = 48821CC825B8BF3800C9F58A /* PBXContainerItemProxy */;
-		};
-		48821CD425B8BF3800C9F58A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 48821CBE25B8BF3800C9F58A /* Fitness (macOS) */;
-			targetProxy = 48821CD325B8BF3800C9F58A /* PBXContainerItemProxy */;
 		};
 		48A0D47225BB71CD007C40ED /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1168,54 +1089,6 @@
 			};
 			name = Release;
 		};
-		48821CE525B8BF3800C9F58A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = macOS/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness;
-				PRODUCT_NAME = Fitness;
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		48821CE625B8BF3800C9F58A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = macOS/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness;
-				PRODUCT_NAME = Fitness;
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 		48821CE825B8BF3800C9F58A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1398,15 +1271,6 @@
 			buildConfigurations = (
 				48821CE225B8BF3800C9F58A /* Debug */,
 				48821CE325B8BF3800C9F58A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		48821CE425B8BF3800C9F58A /* Build configuration list for PBXNativeTarget "Fitness (macOS)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				48821CE525B8BF3800C9F58A /* Debug */,
-				48821CE625B8BF3800C9F58A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

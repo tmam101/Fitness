@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct LineGraph: View {
-    var weights: [Float] = [-150.0, 160.0, 120.0, 200.0,-150.0, 160.0, 120.0, 200.0]
+    // todo need fitness info to get access to weights
+    @EnvironmentObject var fitness: FitnessCalculations
+    var oneRepMaxes: [OneRepMax] = [OneRepMax(exerciseName: "Test", date: Date(), weight: 150)]
     var color: Color = .black
     
 //    var points: [CGPoint] = [CGPoint(x: 0.0, y: 0.0), CGPoint(x: 50.0, y: 50.0)]
     
     var body: some View {
         GeometryReader { geometry in
-            let points = floatsToGraphCoordinates(weights: weights, width: geometry.size.width, height: geometry.size.height)
+            let points = floatsToGraphCoordinates(oneRepMaxes: oneRepMaxes, width: geometry.size.width, height: geometry.size.height)
 
             Path { path in
                 path.move(to: CGPoint(x: points.first?.x ?? 0.0, y: points.first?.y ?? 0.0))
@@ -26,16 +28,43 @@ struct LineGraph: View {
             }
             .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
             .foregroundColor(color)
+//            let heightOffset = geometry.size.height - (geometry.size.height / CGFloat(horizontalRatio))
+//            Rectangle()
+//                .size(width: geometry.size.width, height: 2.0)
+//                .offset(x: 0.0, y: heightOffset)
+//                .foregroundColor(.gray)
         }
     }
     
-    func floatsToGraphCoordinates(weights: [Float], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        guard weights.count != 0 else { return [CGPoint(x: 0, y: 0)] }
-        let max = weights.max()!
-        let min = weights.min()!
+    func floatsToGraphCoordinates(oneRepMaxes: [OneRepMax], width: CGFloat, height: CGFloat) -> [CGPoint] {
+        guard oneRepMaxes.count != 0 else { return [CGPoint(x: 0, y: 0)] }
+        var percentages: [Float] = []
+        
+        // Compare ORMs to bodyweight and create a ratio
+        let adjustedOneRepMaxes = oneRepMaxes // one rep maxes
+            .map { (name: $0.exerciseName, weights: Weight.closestTwoWeightsToDate(weights: fitness.weights, date: $0.date), date: $0.date, orm: $0.weight) } // get the body weights that each is between and the date
+            .map { (name: $0.name, bodyweight: Weight.weightBetweenTwoWeights(date: $0.date, weight1: $0.weights?.first, weight2: $0.weights?.last), orm: $0.orm) } // get the average body weight
+            .map { (name: $0.name, bodyweight: $0.bodyweight, orm: $0.orm, percentage: $0.orm / $0.bodyweight) }
+        guard let first = oneRepMaxes.first else { return [CGPoint(x: 0, y: 0)] }
+        
+        // Normalize ORMS according to desired bodyweight ratio
+        if first.exerciseName.contains("Squat") {
+            percentages = adjustedOneRepMaxes.map{$0.percentage / 1.75}
+        } else if first.exerciseName.contains("Bench") {
+            percentages = adjustedOneRepMaxes.map{ $0.percentage / 1.5}
+        }
+        
+        print("adjustedORMS: \(adjustedOneRepMaxes)")
+        print("percentages: \(percentages)")
+        
+        // Create line graph
+        // Handle y axis placement
+        let max = percentages.max()!
+        let min = percentages.min()!
         let diff = max - min
-        let adjusted = weights.map { ($0 - min) / diff }
+        let adjusted = percentages.map { ($0 - min) / diff }
         var points: [CGPoint] = []
+        // Handle x axis placement
         let widthIncrement = width / CGFloat(adjusted.count - 1)
         for i in 0..<adjusted.count {
             let s = CGFloat(i) * widthIncrement

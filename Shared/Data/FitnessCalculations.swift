@@ -9,6 +9,28 @@ import Foundation
 import HealthKit
 import WidgetKit
 
+extension Date {
+    static func daysBetween(date1: Date, date2: Date) -> Int? {
+        return Calendar
+            .current
+            .dateComponents([.day], from: date1, to: date2)
+            .day
+    }
+    
+    static func dateFromString(_ string: String) -> Date?  {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        return formatter.date(from: string)
+    }
+    
+    // MM.dd.yy
+    static func dateFromString(month: String, day: String, year: String) -> Date?  {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        return formatter.date(from: "\(month).\(day).\(year)")
+    }
+}
+
 class FitnessCalculations: ObservableObject {
     var environment: AppEnvironmentConfig?
     let startDateString = "01.23.2021"
@@ -16,7 +38,6 @@ class FitnessCalculations: ObservableObject {
     @Published var startingWeight: Float = 231.8
     @Published var currentWeight: Float = 231.8
     @Published var endingWeight: Float = 190
-    let formatter = DateFormatter()
     @Published var progressToWeight: Float = 0
     @Published var progressToDate: Float = 0
     @Published var successPercentage: Float = 0
@@ -28,12 +49,6 @@ class FitnessCalculations: ObservableObject {
     @Published public var averageWeightLostPerWeekThisMonth: Float = 0
     
     @Published var shouldShowBars = true
-
-    
-    struct Weight {
-        var weight: Double
-        var date: Date
-    }
     
 
     
@@ -60,14 +75,6 @@ class FitnessCalculations: ObservableObject {
         }
     }
     
-    
-    func daysBetween(date1: Date, date2: Date) -> Int? {
-        return Calendar
-            .current
-            .dateComponents([.day], from: date1, to: date2)
-            .day
-    }
-    
     func getProgressToWeight() {
         let lost = startingWeight - currentWeight
         let totalToLose = startingWeight - endingWeight
@@ -80,16 +87,14 @@ class FitnessCalculations: ObservableObject {
     }
     
     private func getProgressToDate() {
-        formatter.dateFormat = "MM.dd.yyyy"
-        
         guard
-            let endDate = formatter.date(from: endDateString),
-            let startDate = formatter.date(from: startDateString)
+            let endDate = Date.dateFromString(endDateString),
+            let startDate = Date.dateFromString(startDateString)
         else { return }
         
         guard
-            let daysBetweenStartAndEnd = daysBetween(date1: startDate, date2: endDate),
-            let daysBetweenNowAndEnd = daysBetween(date1: Date(), date2: endDate)
+            let daysBetweenStartAndEnd = Date.daysBetween(date1: startDate, date2: endDate),
+            let daysBetweenNowAndEnd = Date.daysBetween(date1: Date(), date2: endDate)
         else { return }
         
         let progress = Float(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Float(daysBetweenStartAndEnd)
@@ -131,11 +136,11 @@ class FitnessCalculations: ObservableObject {
             self.weightToLose = self.startingWeight - self.endingWeight
             self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
             guard
-                let startDate = self.formatter.date(from: self.startDateString)
+                let startDate = Date.dateFromString(self.startDateString)
             else { return }
             
             guard
-                let daysBetweenStartAndNow = self.daysBetween(date1: startDate, date2: Date())
+                let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
             else { return }
             
             let weeks: Float = Float(daysBetweenStartAndNow) / Float(7)
@@ -153,9 +158,9 @@ class FitnessCalculations: ObservableObject {
             let weight = self.weights[i]
             let date = weight.date
             guard
-            let dayCount = daysBetween(date1: date, date2: Date())
+                let dayCount = Date.daysBetween(date1: date, date2: Date())
             else { return }
-            print(dayCount)
+            print("dayCount: \(dayCount)")
             if dayCount >= 30 {
                 index = i
                 days = dayCount
@@ -163,7 +168,7 @@ class FitnessCalculations: ObservableObject {
             }
         }
         let newIndex = index - 1
-        let newDays = daysBetween(date1: self.weights[newIndex].date, date2: Date())!
+        let newDays = Date.daysBetween(date1: self.weights[newIndex].date, date2: Date())!
         let between1 = abs(days - 30)
         let between2 = abs(newDays - 30)
         
@@ -218,9 +223,11 @@ class FitnessCalculations: ObservableObject {
         let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 31, sortDescriptors: [sortDescriptor]) { (query, results, error) in
             if let results = results as? [HKQuantitySample],
             let result = results.first {
-                self.weights = results.map{
-                    Weight(weight: $0.quantity.doubleValue(for: HKUnit.pound()), date: $0.endDate)
-                }
+                self.weights = results
+                    .map{ Weight(weight: $0.quantity.doubleValue(for: HKUnit.pound()), date: $0.endDate) }
+//                    .sorted(by: { $0.date < $1.date })
+//                Weight.weightBetweenTwoWeights(date: self.weights.first?.date.advanced(by: (24 * 60 * 60 * 4)) ?? Date(), weight1: self.weights.first, weight2: self.weights[1])
+//                Weight.closestTwoWeightsToDate(weights: self.weights, date: Date.dateFromString(month: "04", day: "04", year: "2021") ?? Date())
                 let bodyMass = result.quantity.doubleValue(for: HKUnit.pound())
                 completion(bodyMass, result.endDate)
                 return

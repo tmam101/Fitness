@@ -34,7 +34,6 @@ class MyHealthKit: ObservableObject {
     @Published public var daysBetweenStartAndEnd: Int = 0
     @Published public var daysBetweenStartAndNow: Int = 0
     @Published public var daysBetweenNowAndEnd: Int = 0
-    @Published public var dailyDeficits0: [Int:Float] = [:]
     @Published public var dailyDeficits: [Int:Float] = [:]
     
     @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)

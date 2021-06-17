@@ -38,12 +38,10 @@ class MyHealthKit: ObservableObject {
     @Published public var daysBetweenStartAndEnd: Int = 0
     @Published public var daysBetweenStartAndNow: Int = 0
     @Published public var daysBetweenNowAndEnd: Int = 0
-    @Published public var dailyDeficits0: [Int:Float] = [:]
     @Published public var dailyDeficits: [Int:Float] = [:]
     
     @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
 
-    
     // Constants 
     let minimumActiveCalories: Float = 200
     let minimumRestingCalories: Float = 2300
@@ -51,6 +49,7 @@ class MyHealthKit: ObservableObject {
     let goalEaten: Float = 1500
     let caloriesInPound: Float = 3500
     let startDateString = "01.23.2021"
+    var startDate: Date?
     let endDateString = "05.01.2021"
     let formatter = DateFormatter()
     
@@ -87,9 +86,7 @@ class MyHealthKit: ObservableObject {
         self.projectedAverageWeeklyDeficitForTomorrow = 900
         self.projectedAverageTotalDeficitForTomorrow = 760
         self.dailyDeficits = [0: Float(300), 1: Float(200), 2:Float(500), 3: Float(1200), 4: Float(-300), 5:Float(500),6: Float(300), 7: Float(200)]
-        
-//            let expectedWeightLossThisMonth: Float = ((averageDeficitThisMonth ?? 1) * 30) / caloriesInPound
-        
+                
         let averageWeightLossSinceStart = (231.8 - Double(221)) / (Double(daysBetweenStartAndNow) / Double(7)) // TODO calculate with real values
         let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart) / 3500) * 7
         self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
@@ -105,7 +102,7 @@ class MyHealthKit: ObservableObject {
             let startDate = formatter.date(from: startDateString)
         else { return }
         
-        workouts = WorkoutInformation(afterDate: startDate, environment: environment ?? .release)
+        self.startDate = startDate
         
         guard
             let daysBetweenStartAndEnd = daysBetween(date1: startDate, date2: endDate),
@@ -130,8 +127,12 @@ class MyHealthKit: ObservableObject {
         }
     }
     
-    private func setValues(_ completion: ((_ health: MyHealthKit) -> Void)?) {
+    func setValues(_ completion: ((_ health: MyHealthKit) -> Void)?) {
         setupDates()
+        workouts = WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release)
+        fitness.getAllStats()
+        
+        print("setting values")
         
         self.getDeficitToReachIdeal { deficitToReachToday in
         self.getProjectedAverageDeficitForTomorrow(forPast: 6) { averageWeeklyDeficitTomorrow in
@@ -153,29 +154,12 @@ class MyHealthKit: ObservableObject {
             self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
             self.projectedAverageWeeklyDeficitForTomorrow = averageWeeklyDeficitTomorrow ?? 0
             self.projectedAverageTotalDeficitForTomorrow = averageTotalDeficitTomorrow ?? 0
-            
-//            let expectedWeightLossThisMonth: Float = ((averageDeficitThisMonth ?? 1) * 30) / caloriesInPound
-            
-//            let averageWeightLossSinceStart = (231.8 - Double(221)) / (Double(daysBetweenStartAndNow) / Double(7)) // TODO calculate with real values
+                        
             let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) / 3500) * 7
             self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
             self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
             self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
             self.expectedWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) * Float(self.daysBetweenStartAndNow)) / Float(3500)
-            //            let d = yesterdaysDeficit
-            //            LineGraph.xtoy(weights: width: 200, height: 200)
-//            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
-//                do {
-//                    let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
-//                    let workoutjson = try JSONDecoder().decode(Workouts.self, from: data)
-//                    self.workouts = workoutjson
-//                    self.benchORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Bench")}.last?.oneRepMax() ?? 0.0)
-//                    self.squatORM = Float(workouts.filter { $0.exerciseName.rawValue.contains("Squat")}.last?.oneRepMax() ?? 0.0)
-//    
-//                } catch {
-//                    // handle error
-//                }
-//            }
             // todo line graph comparing weight loss to calorie deficit
             completion?(self)
             
@@ -209,7 +193,7 @@ class MyHealthKit: ObservableObject {
             print("*** Unable to create a type ***")
             return
         }
-        var startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -daysAgo), to: Date())!)
+        let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -daysAgo), to: Date())!)
         let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
 
@@ -241,7 +225,6 @@ class MyHealthKit: ObservableObject {
             let realDays: Double = Double(days == 0 ? 1 : days)
             let realResting = max(Double(self.minimumRestingCalories) * realDays, resting)
             let realActive = max(Double(self.minimumActiveCalories) * realDays, active)
-//            let deficit = (resting + active) - eaten
             let deficit = self.getDeficit(resting: realResting, active: realActive, eaten: eaten)
             let average = deficit / realDays
             completion(Float(average))
@@ -282,16 +265,6 @@ class MyHealthKit: ObservableObject {
         }}}
     }
     
-//    func getAverageDeficitThisMonth(completion: @escaping ((_ eaten: Float?) -> Void)) {
-//        self.getRestingCaloriesBurned(forPast: 30) { resting in
-//        self.getActiveCaloriesBurned(forPast: 30) { active in
-//        self.getTotalCaloriesEaten(forPast: 30) { eaten in
-//            let deficit = (resting + active) - eaten
-//            let average = deficit / 30
-//            completion(Float(average))
-//        }}}
-//    }
-    
     //MARK: EATEN
     
     func getCaloriesEatenToday(completion: @escaping ((_ eaten: Double?) -> Void)) {
@@ -307,19 +280,6 @@ class MyHealthKit: ObservableObject {
             completion(Float(total) / 7)
         }
     }
-    
-//    func netAmountToEat(completion: @escaping ((_ eaten: Float?) -> Void)) {
-//        self.getTotalCaloriesEaten(forPast: 6) { eaten in
-//            self.getActiveCaloriesBurned(forPast: 6) { burned in
-//                let net = eaten - burned
-//                let val = (1500*7) - net
-//                self.getActiveCaloriesBurnedToday { burnedToday in
-//                    let r = Float(val) + Float(burnedToday ?? 0)
-//                    completion(r > 0 ? r : 0)
-//                }
-//            }
-//        }
-//    }
     
     func getDeficitToReachIdeal(completion: @escaping ((_ eaten: Float?) -> Void)) {
         self.getAverageDeficit(forPast: 6) { averageDeficitForPast6Days in
@@ -342,29 +302,5 @@ class MyHealthKit: ObservableObject {
 
         }}
     }
-    
-    //MARK: WEIGHT
-    
-//    func getWeights(amount: Int, completion: @escaping ((_ weights: [HKQuantitySample]?) -> Void)) {
-//        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-//        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: amount * 3, sortDescriptors: [sortDescriptor]) { (query, results, error) in
-//            guard let results = results else {
-//                completion(nil)
-//                return
-//            }
-//            var n: [HKQuantitySample]? = []
-//            for x in results {
-//                if !((x as? HKQuantitySample)?.description.contains("MyFitnessPal") ?? true) {
-//                    n?.append(x as! HKQuantitySample)
-//                    if n?.count == amount {
-//                        completion(n)
-//                        return
-//                    }
-//                }
-//            }
-//            completion(n)
-//        }
-//        healthStore.execute(query)
-//    }
     
 }

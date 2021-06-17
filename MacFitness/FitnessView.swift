@@ -18,18 +18,17 @@ struct FitnessView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 StatsTitle(title: "Deficits")
-                StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
-                    .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .onTapGesture {
-                        healthKit.setValues(nil)
-                    }
-                BarChart()
-                    .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
-                    .background(Color.myGray)
-                    .cornerRadius(20)
-                    .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                HStack {
+                    StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
+                        .environmentObject(healthKit)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                    BarChart()
+                        .environmentObject(healthKit)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+                        .background(Color.myGray)
+                        .cornerRadius(20)
+                        .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
                 
                 StatsTitle(title: "Weight Loss")
                 StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
@@ -47,42 +46,33 @@ struct FitnessView: View {
                 ZStack {
                     BenchGraph()
                         .environmentObject(healthKit.workouts)
-                        .environmentObject(healthKit.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
                     SquatGraph()
                         .environmentObject(healthKit.workouts)
-                        .environmentObject(healthKit.fitness)
                         .padding()
                 }
             }
             .padding()
-        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            print("entering foreground")
-            healthKit.setValues(nil)
         }
     }
 }
 
 struct BenchGraph: View {
     @EnvironmentObject var workouts: WorkoutInformation
-    @EnvironmentObject var fitness: FitnessCalculations
-
+    
     var body: some View {
-        LineGraph(oneRepMaxes: workouts.benchORMs, color: .purple)
-            .environmentObject(fitness)
+        LineGraph(weights: workouts.benchORMs, color: .purple)
     }
 }
 
 struct SquatGraph: View {
     @EnvironmentObject var workouts: WorkoutInformation
-    @EnvironmentObject var fitness: FitnessCalculations
-
+    
     var body: some View {
-        LineGraph(oneRepMaxes: workouts.squatORMs, color: .pink)
-            .environmentObject(fitness)
+        LineGraph(weights: workouts.squatORMs, color: .pink)
     }
 }
 

@@ -6,6 +6,13 @@
 import Foundation
 
 // MARK: - WorkoutElement
+
+struct OneRepMax {
+    var exerciseName: String
+    var date: Date
+    var weight: Float
+}
+
 struct Set: Codable {
     let date, workoutName, duration, exerciseName: String
     let setOrder: Int
@@ -111,8 +118,8 @@ class WorkoutInformation: ObservableObject {
     @Published public var squatORM: Float = 0.0
     @Published public var smithMachine: Bool = true
     
-    @Published public var benchPRs: [Float] = []
-    @Published public var squatPRs: [Float] = []
+    @Published public var benchORMs: [OneRepMax] = []
+    @Published public var squatORMs: [OneRepMax] = []
     
     let formatter = DateFormatter()
     
@@ -201,8 +208,8 @@ class WorkoutInformation: ObservableObject {
             self.firstSquatORM = oneRepMax(timeFrame: .first, exerciseName: squatType)
             self.benchORM = oneRepMax(timeFrame: .mostRecent, exerciseName: benchType)
             self.squatORM = oneRepMax(timeFrame: .mostRecent, exerciseName: squatType)
-            self.benchPRs = allOneRepMaxes(exerciseName: benchType)
-            self.squatPRs = allOneRepMaxes(exerciseName: squatType)
+            self.benchORMs = allOneRepMaxes(exerciseName: benchType)
+            self.squatORMs = allOneRepMaxes(exerciseName: squatType)
         case .debug:
             self.firstBenchORM = 100
             self.firstSquatORM = 100
@@ -216,7 +223,7 @@ class WorkoutInformation: ObservableObject {
         case first
     }
     
-    func allOneRepMaxes(exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> [Float] {
+    func allOneRepMaxes(exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> [OneRepMax] {
         var exercises: Workout = []
         if let name = exerciseName {
             exercises = workouts.filter { $0.exerciseName == name.rawValue }
@@ -229,6 +236,7 @@ class WorkoutInformation: ObservableObject {
         }
 //        var sameDates: [Workout] = []
         var x: [Date: Float] = [:]
+//        var orms: [OneRepMax] = []
 //        let sameDate = exercises.filter {
 //            timeFrame == .mostRecent ?
 //                $0.getDate() == exercises.last?.getDate() :
@@ -242,9 +250,9 @@ class WorkoutInformation: ObservableObject {
                 x[e.getDate()!] = e.oneRepMax()
             }
         }
-        var y = x.map { (date: $0.key, max: $0.value) }
+        var y: [OneRepMax] = x.map { OneRepMax(exerciseName: (exerciseName?.rawValue ?? exerciseNames?.first?.rawValue ?? ""), date: $0.key, weight: $0.value) }
         y.sort { $0.date < $1.date }
-        return y.map { $0.max }
+        return y
     }
     
     func oneRepMax(timeFrame: TimeFrame, exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> Float {

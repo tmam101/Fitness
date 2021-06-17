@@ -423,22 +423,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D78EE3AD-562E-4D4D-AFB0-1112A45A7461"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/MyHealthKit.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
-            landmarkName = "setValues(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "804F1EA2-75DE-4C97-9A1D-E9E046F961D9"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -446,8 +430,8 @@
             filePath = "Shared/Data/MyHealthKit.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
             landmarkName = "sumValueForDay(daysAgo:forType:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -526,8 +510,8 @@
             filePath = "Shared/Data/MyHealthKit.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
             landmarkName = "getIndividualDeficits(forPastDays:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -558,8 +542,8 @@
             filePath = "Shared/Data/MyHealthKit.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
             landmarkName = "getIndividualDeficits(forPastDays:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -590,9 +574,9 @@
             filePath = "Shared/Graphs/LineGraph.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
-            landmarkName = "floatsToGraphCoordinates(weights:width:height:)"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "floatsToGraphCoordinates(oneRepMaxes:width:height:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -606,8 +590,8 @@
             filePath = "Shared/Graphs/LineGraph.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -622,8 +606,8 @@
             filePath = "Shared/Graphs/LineGraph.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -638,90 +622,10 @@
             filePath = "Shared/Graphs/LineGraph.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "body"
             landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "63A50434-ED58-4C3F-8344-D53233219D54"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/MyHealthKit.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
-            landmarkName = "setValues(_:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "63A50434-ED58-4C3F-8344-D53233219D54 - 8a8bbdbc09d325e4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Dictionary&lt;Swift.Int, Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in Fitness.MyHealthKit.setValues(Swift.Optional&lt;(Fitness.MyHealthKit) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Fitness"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/MyHealthKit.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "181"
-                  endingLineNumber = "181"
-                  offsetFromSymbolStart = "3340">
-               </Location>
-               <Location
-                  uuid = "63A50434-ED58-4C3F-8344-D53233219D54 - ec5870ed705672c3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Fitness.WorkoutElement) -&gt; Swift.Bool in closure #1 () -&gt; () in closure #1 (Swift.Dictionary&lt;Swift.Int, Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Float&gt;) -&gt; () in Fitness.MyHealthKit.setValues(Swift.Optional&lt;(Fitness.MyHealthKit) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Fitness"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/MyHealthKit.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "181"
-                  endingLineNumber = "181"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "AEFA5575-714F-40FA-A032-503EEEC3159A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/MyHealthKit.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
-            landmarkName = "setValues(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3E02B608-3725-4902-A056-279E31077293"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/MyHealthKit.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "setValues(_:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -766,8 +670,8 @@
             filePath = "Shared/Data/Workout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "246"
-            endingLineNumber = "246"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
             landmarkName = "allOneRepMaxes(exerciseName:exerciseNames:tag:)"
             landmarkType = "7">
             <Locations>
@@ -814,8 +718,8 @@
             filePath = "Shared/Data/Workout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "calculate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -823,97 +727,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "308C696F-FBAE-4C23-90C0-C8786081C0D5"
+            uuid = "89713046-A860-46E5-89EC-E27C17A21749"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Shared/Data/MyHealthKit.swift"
+            filePath = "Shared/Graphs/LineGraph.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "setValues(_:)"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "floatsToGraphCoordinates(oneRepMaxes:width:height:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "60342265-2829-4970-BC3A-611D1AD04BA0"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/Workout.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "init(afterDate:environment:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5C6E3816-96A5-4CEC-93CC-2EA1A4DC153A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/Workout.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "init(afterDate:environment:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DAC43BC3-4BD5-4CCF-858C-848E8B2C48AB"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/Workout.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
-            landmarkName = "init(afterDate:environment:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "55AA9635-AFCF-4FFA-AB9C-CB2160A9DF55"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Main View/FitnessView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B7460403-309D-472D-8F4E-9F0789C552C3"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Main View/FitnessView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "body"
-            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
