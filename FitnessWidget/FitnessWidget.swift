@@ -71,27 +71,6 @@ struct FitnessWidgetEntryView : View {
                 }
             }
         }
-        //        GeometryReader { geometry in
-//            ZStack {
-//                Color.myGray.ignoresSafeArea(.all)
-//                VStack(alignment: .leading) {
-////                    FitnessView(shouldShowText: false, lineWidth: 6, widget: true)
-////                        .environmentObject(entry.fitness)
-////                        .environmentObject(entry.healthKit)
-////                        .frame(maxWidth: 80, maxHeight: 80, alignment: .leading)
-////                    DeficitText(percentages: true)
-////                        .environmentObject(entry.fitness)
-////                        .environmentObject(entry.healthKit)
-////                        .frame(maxWidth: .infinity, alignment: .leading)
-////                        .padding([.leading], 10)
-////                        .padding([.bottom], 10)
-//                    DeficitRings()
-//                        .environmentObject(entry.fitness)
-//                        .environmentObject(entry.healthKit)
-//                        .padding()
-//                }
-//            }
-//        }
     }
 }
 

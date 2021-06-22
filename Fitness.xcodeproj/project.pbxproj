@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		48199FB72628D045000247E8 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
 		48199FB92628D045000247E8 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
+		4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
+		4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
+		4827C99F26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
+		4827C9A126828C18006700A1 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C9A026828C18006700A1 /* DoubleExtension.swift */; };
+		4827C9A226828C18006700A1 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C9A026828C18006700A1 /* DoubleExtension.swift */; };
+		4827C9A326828C18006700A1 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C9A026828C18006700A1 /* DoubleExtension.swift */; };
 		4845B79525C0987D003BF999 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		4845B7A225C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
 		4845B7A425C0B2AA003BF999 /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */; };
@@ -124,6 +130,8 @@
 
 /* Begin PBXFileReference section */
 		48199FB62628D045000247E8 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
+		4827C99C26828BEF006700A1 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		4827C9A026828C18006700A1 /* DoubleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
 		4845B78F25C09853003BF999 /* Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lines.swift; sourceTree = "<group>"; };
 		4845B7A125C0B2AA003BF999 /* MyHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHealthKit.swift; sourceTree = "<group>"; };
 		486388E0261F9099005B1227 /* BarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChart.swift; sourceTree = "<group>"; };
@@ -375,6 +383,8 @@
 			children = (
 				48A7706A260529C3002E5853 /* ColorExtension.swift */,
 				48A7707426053296002E5853 /* FloatingPointExtensions.swift */,
+				4827C99C26828BEF006700A1 /* DateExtension.swift */,
+				4827C9A026828C18006700A1 /* DoubleExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -660,6 +670,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				48755A80267A70AC00F7680E /* BarChart.swift in Sources */,
+				4827C99F26828BEF006700A1 /* DateExtension.swift in Sources */,
 				48755A4B267A707800F7680E /* ContentView.swift in Sources */,
 				48755A76267A70AC00F7680E /* Ring (unused).swift in Sources */,
 				48755A75267A70AC00F7680E /* Progress Rings.swift in Sources */,
@@ -670,6 +681,7 @@
 				48755A8C267AF13200F7680E /* Weight.swift in Sources */,
 				48755A7F267A70AC00F7680E /* Workout.swift in Sources */,
 				48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */,
+				4827C9A326828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48755A79267A70AC00F7680E /* LineGraph.swift in Sources */,
 				48755A77267A70AC00F7680E /* TextCollections.swift in Sources */,
 				48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */,
@@ -701,11 +713,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4827C9A126828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48199FB72628D045000247E8 /* LineGraph.swift in Sources */,
 				48E4B44D262619DE002321B5 /* Environment.swift in Sources */,
 				48E0E20B26041E700037EEAF /* Stats.swift in Sources */,
 				48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				48E0E1F726041DE50037EEAF /* RingCollections.swift in Sources */,
+				4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */,
 				48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */,
 				48A0D45325BB6605007C40ED /* FitnessView.swift in Sources */,
 				4845B7A225C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
@@ -741,11 +755,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4827C9A226828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48A0D46D25BB71CB007C40ED /* FitnessWidget.swift in Sources */,
 				48A7706D260529C3002E5853 /* ColorExtension.swift in Sources */,
 				48E0E1E12603C47F0037EEAF /* GenericCircles.swift in Sources */,
 				48A0D48D25BB72F8007C40ED /* FitnessCalculations.swift in Sources */,
 				485B72802631EBB40070E096 /* Ring (unused).swift in Sources */,
+				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
 				486388E3261F9099005B1227 /* BarChart.swift in Sources */,
 				48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				48A0D49325BB72FC007C40ED /* Progress Rings.swift in Sources */,

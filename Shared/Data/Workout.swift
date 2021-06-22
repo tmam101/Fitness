@@ -116,13 +116,15 @@ class WorkoutInformation: ObservableObject {
     @Published public var benchORM: Float = 0.0
     @Published public var firstSquatORM: Float = 0.0
     @Published public var squatORM: Float = 0.0
-    @Published public var smithMachine: Bool = true
+    @Published public var smithMachine: Bool = false
     
     @Published public var benchORMs: [OneRepMax] = []
     @Published public var squatORMs: [OneRepMax] = []
     
     let formatter = DateFormatter()
     
+    static let squatBodyweightRatio: Float = 1.6
+    static let benchBodyweightRatio: Float = 1.2
 //    init() {
 //        if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
 //            do {

@@ -29,10 +29,10 @@ struct LineGraph: View {
             .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
             .foregroundColor(color)
 //            let heightOffset = geometry.size.height - (geometry.size.height / CGFloat(horizontalRatio))
-//            Rectangle()
-//                .size(width: geometry.size.width, height: 2.0)
-//                .offset(x: 0.0, y: heightOffset)
-//                .foregroundColor(.gray)
+            Rectangle()
+                .size(width: geometry.size.width, height: 2.0)
+                .offset(x: 0.0, y: 0.0)
+                .foregroundColor(.gray)
         }
     }
     
@@ -49,9 +49,9 @@ struct LineGraph: View {
         
         // Normalize ORMS according to desired bodyweight ratio
         if first.exerciseName.contains("Squat") {
-            percentages = adjustedOneRepMaxes.map{$0.percentage / 1.75}
+            percentages = adjustedOneRepMaxes.map{$0.percentage / WorkoutInformation.squatBodyweightRatio}
         } else if first.exerciseName.contains("Bench") {
-            percentages = adjustedOneRepMaxes.map{ $0.percentage / 1.5}
+            percentages = adjustedOneRepMaxes.map{ $0.percentage / WorkoutInformation.benchBodyweightRatio}
         }
         
         print("adjustedORMS: \(adjustedOneRepMaxes)")
@@ -59,7 +59,8 @@ struct LineGraph: View {
         
         // Create line graph
         // Handle y axis placement
-        let max = percentages.max()!
+        var max = percentages.max()!
+        max = max > 1 ? max : 1
         let min = percentages.min()!
         let diff = max - min
         let adjusted = percentages.map { ($0 - min) / diff }

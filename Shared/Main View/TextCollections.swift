@@ -21,7 +21,7 @@ struct WeightLossText: View {
         
         VStack(alignment: .leading) {
 //            StatsText(color: .green3, title: "Compared to Deficit", stat: String(ratio) + "%")
-            StatsText(color: .green3, title: "Total", stat: weightLostString)
+            StatsText(color: .green3, title: "Total", title2: "vs " + String(format: "%.2f", healthKit.expectedWeightLossSinceStart), stat: weightLostString)
             StatsText(color: .green2, title: "Average", stat: averageWeeklyLostString)
             StatsText(color: .green1, title: "This Month", stat: averageMonthlyLostString)
         }
@@ -51,8 +51,8 @@ private struct LiftingTextInterior: View {
         let benchORM = workouts.benchORM
         let benchRatio = CGFloat(benchORM / currentWeight)
         
-        let benchString = String(Int(benchRatio * 100)) + "/150 % bw"
-        let squatString = String(Int(squatRatio * 100)) + "/175 % bw"
+        let benchString = String(Int(benchRatio * 100)) + "/\(Int(WorkoutInformation.benchBodyweightRatio * 100)) % bw"
+        let squatString = String(Int(squatRatio * 100)) + "/\(Int(WorkoutInformation.squatBodyweightRatio * 100)) % bw"
         
         let benchTitle = "Bench" + (workouts.smithMachine ? " (Smith)" : "")
         let squatTitle = "Squat" + (workouts.smithMachine ? " (Smith)" : "")

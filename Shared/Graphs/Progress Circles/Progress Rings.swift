@@ -133,11 +133,11 @@ struct BenchPressRing: View {
     var body: some View {
         let startingBench = workouts.firstBenchORM 
         let startingWeight = fitness.startingWeight
-        let startingRatio = CGFloat(startingBench / startingWeight) / 1.5 // 80
+        let startingRatio = CGFloat(startingBench / startingWeight) / CGFloat(WorkoutInformation.benchBodyweightRatio) // 80
         
         let benchORM = workouts.benchORM 
         let currentWeight = fitness.currentWeight
-        let ratio = CGFloat(benchORM / currentWeight) / 1.5 // 90
+        let ratio = CGFloat(benchORM / currentWeight) / CGFloat(WorkoutInformation.benchBodyweightRatio) // 90
         
         let corrected = (ratio - startingRatio) / (1 - startingRatio)
         let c2 = corrected < 0 ? 0 : corrected
@@ -158,11 +158,11 @@ struct SquatRing: View {
     var body: some View {
         let startingSquat = workouts.firstSquatORM
         let startingWeight = fitness.startingWeight
-        let startingRatio = CGFloat(startingSquat / startingWeight) / 1.75
+        let startingRatio = CGFloat(startingSquat / startingWeight) / CGFloat(WorkoutInformation.squatBodyweightRatio)
         
         let squatORM = workouts.squatORM
         let currentWeight = fitness.currentWeight
-        let ratio = CGFloat(squatORM / currentWeight) / 1.75
+        let ratio = CGFloat(squatORM / currentWeight) / CGFloat(WorkoutInformation.squatBodyweightRatio)
         
         let corrected = (ratio - startingRatio) / (1 - startingRatio)
         let c2 = corrected < 0 ? 0 : corrected

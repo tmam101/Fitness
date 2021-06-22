@@ -44,6 +44,7 @@ class MyHealthKit: ObservableObject {
 
     // Constants 
     let minimumActiveCalories: Float = 200
+    let activeCalorieModifier: Double = 0.715
     let minimumRestingCalories: Float = 2300
     let goalDeficit: Float = 1000
     let goalEaten: Float = 1500
@@ -96,20 +97,14 @@ class MyHealthKit: ObservableObject {
     }
     
     func setupDates() {
-        formatter.dateFormat = "MM.dd.yyyy"
-        guard
-            let endDate = formatter.date(from: endDateString),
-            let startDate = formatter.date(from: startDateString)
+        guard let startDate = Date.dateFromString(startDateString),
+              let endDate = Date.dateFromString(endDateString),
+              let daysBetweenStartAndEnd = Date.daysBetween(date1: startDate, date2: endDate),
+              let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date()),
+              let daysBetweenNowAndEnd = Date.daysBetween(date1: Date(), date2: endDate)
         else { return }
         
         self.startDate = startDate
-        
-        guard
-            let daysBetweenStartAndEnd = daysBetween(date1: startDate, date2: endDate),
-            let daysBetweenStartAndNow = daysBetween(date1: startDate, date2: Date()),
-            let daysBetweenNowAndEnd = daysBetween(date1: Date(), date2: endDate)
-        else { return }
-        
         self.daysBetweenStartAndEnd = daysBetweenStartAndEnd
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         self.daysBetweenNowAndEnd = daysBetweenNowAndEnd
@@ -207,15 +202,8 @@ class MyHealthKit: ObservableObject {
         healthStore.execute(query)
     }
     
-    func daysBetween(date1: Date, date2: Date) -> Int? {
-        return Calendar
-            .current
-            .dateComponents([.day], from: date1, to: date2)
-            .day
-    }
-    
     func getDeficit(resting: Double, active: Double, eaten: Double) -> Double {
-        return (resting + active) - eaten
+        return (resting + (active * activeCalorieModifier)) - eaten
     }
     
     func getAverageDeficit(forPast days: Int, completion: @escaping ((_ eaten: Float?) -> Void)) {

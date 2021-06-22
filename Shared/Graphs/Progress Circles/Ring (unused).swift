@@ -1,15 +1,6 @@
 import SwiftUI
 import Foundation
 
-extension Double {
-    func toRadians() -> Double {
-        return self * Double.pi / 180
-    }
-    func toCGFloat() -> CGFloat {
-        return CGFloat(self)
-    }
-}
-
 // https://liquidcoder.com/swiftui-ring-animation/
 struct RingShape: Shape {
     // Helper function to convert percent values to angles in degrees

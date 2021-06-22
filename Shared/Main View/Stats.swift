@@ -48,11 +48,18 @@ struct StatsRow<Content: View, OtherContent: View>: View {
 struct StatsText: View {
     var color: Color
     var title: String
+    var title2: String?
     var stat: String
     
     var body: some View {
-        Text(title)
-            .foregroundColor(.white)
+        HStack {
+            Text(title)
+                .foregroundColor(.white)
+            if title2 != nil {
+                Text(title2 ?? "")
+                    .foregroundColor(color)
+            }
+        }
         Text(stat)
             .foregroundColor(color)
             .font(.title2)
