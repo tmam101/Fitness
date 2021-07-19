@@ -22,12 +22,10 @@ struct Weight {
     }
     
     static func closestTwoWeightsToDate(weights: [Weight], date: Date) -> [Weight]? {
-        let theseWeights = weights.sorted(by: { $0.date < $1.date })
-        for i in stride(from: 0, to: theseWeights.count, by: 1) {
-            if theseWeights[i].date >= date {
-                return [theseWeights[i-1], theseWeights[i]]
-            }
-        }
-        return [theseWeights.last!]
+        let sortedWeights = weights.sorted(by: { $0.date < $1.date })
+        guard let firstIndex = sortedWeights.firstIndex(where: {$0.date >= date}) else { return [sortedWeights.last!] }
+        let firstValue = firstIndex == 0 ? sortedWeights[firstIndex] : sortedWeights[firstIndex - 1]
+        let secondValue = sortedWeights[firstIndex]
+        return [firstValue, secondValue]
     }
 }
