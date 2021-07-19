@@ -44,7 +44,7 @@ class MyHealthKit: ObservableObject {
 
     // Constants 
     let minimumActiveCalories: Float = 200
-    let activeCalorieModifier: Double = 0.715
+    let activeCalorieModifier: Double = 0.8
     let minimumRestingCalories: Float = 2300
     let goalDeficit: Float = 1000
     let goalEaten: Float = 1500
@@ -200,6 +200,10 @@ class MyHealthKit: ObservableObject {
             completion(sum.doubleValue(for: HKUnit.kilocalorie()))
         }
         healthStore.execute(query)
+    }
+    
+    func getActiveCalorieModifier() {
+        // todo
     }
     
     func getDeficit(resting: Double, active: Double, eaten: Double) -> Double {
