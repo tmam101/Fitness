@@ -57,7 +57,7 @@ struct FitnessWidgetEntryView : View {
                                 .environmentObject(entry.healthKit)
                                 .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                                 .frame(maxWidth: 125)
-                            BarChart(cornerRadius: 3.0)
+                            BarChart(cornerRadius: 2.0)
                                 .environmentObject(entry.healthKit)
                                 .frame(minWidth: 0, maxWidth: .infinity)
                                 .background(Color.myGray)

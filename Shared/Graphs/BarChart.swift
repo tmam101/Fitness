@@ -61,8 +61,10 @@ struct BarChart: View {
     
     var body: some View {
         VStack {
-            BarsAndLines().environmentObject(healthKit)
+            BarsAndLines(cornerRadius: cornerRadius).environmentObject(healthKit)
+                .frame(maxHeight: .infinity)
             DaysLetters().padding([.trailing], 50)
+//            NegativeBars().environmentObject(healthKit)
         }
         .padding([.leading, .bottom, .top])
     }
@@ -103,6 +105,50 @@ struct BarChart: View {
                             .offset(x: 0.0, y: heightOffset)
                             .foregroundColor(.gray)
                     }
+                }
+            }
+        }
+    }
+    
+    struct NegativeBars: View {
+        @EnvironmentObject var healthKit: MyHealthKit
+        var cornerRadius: CGFloat = 7.0
+        
+        var body: some View {
+            let results = BarChart.deficitsToPercents(daysAndDeficits: healthKit.dailyDeficits)
+            let percents = results.0
+            let top = results.1
+            let horizontalRatio = top / 1000
+            
+            GeometryReader { geometry in
+                ZStack {
+                    HStack(alignment: .bottom) {
+                        ForEach(percents ?? [], id: \.index) { indexAndPercent in
+                            let height = geometry.size.height * (indexAndPercent.percent >= 0 ? indexAndPercent.percent : (indexAndPercent.percent * -1))
+                            let isToday = indexAndPercent.index == percents!.count - 1
+                            let isPositive = indexAndPercent.percent >= 0
+                            let color: Color = isPositive ? (isToday ? .blue : .yellow) : .red
+                            if !isPositive {
+                            Bar(cornerRadius: cornerRadius, color: color, height: height).opacity(1)
+                            } else {
+                                Bar(cornerRadius: cornerRadius, color: color, height: 0).opacity(0)
+                            }
+                        }
+                    }.padding(.trailing, 50)
+                    
+//                    if horizontalRatio != 0 {
+//                        let heightOffset = geometry.size.height - (geometry.size.height / CGFloat(horizontalRatio))
+//                        Rectangle()
+//                            .size(width: geometry.size.width - 40, height: 2.0)
+//                            .offset(x: 0.0, y: heightOffset)
+//                            .foregroundColor(.gray)
+//                        Text("1000")
+//                            .font(.caption)
+//                            .frame(maxWidth: 50)
+//                            .position(x: geometry.size.width - 20, y: 0.0)
+//                            .offset(x: 0.0, y: heightOffset)
+//                            .foregroundColor(.gray)
+//                    }
                 }
             }
         }
