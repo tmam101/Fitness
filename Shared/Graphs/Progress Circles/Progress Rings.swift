@@ -24,7 +24,7 @@ struct MonthlyAverageWeightLossCircle: View {
 struct WeeklyAverageDeficitCircle: View {
     @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10.0
-    var color = Color.yellow
+    var color = Color.green
     var body: some View {
         let deficit = healthKit.averageDeficitThisWeek
         let projectedTomorrow = healthKit.projectedAverageWeeklyDeficitForTomorrow
@@ -45,7 +45,7 @@ struct WeeklyAverageDeficitCircle: View {
 struct DailyDeficitCircle: View {
     @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10
-    var color = Color.blue
+    var color = Color.green
     
     var body: some View {
         let deficit = healthKit.deficitToday
@@ -78,7 +78,7 @@ struct TotalWeightLossCircle: View {
 struct AverageTotalDeficitCircle: View {
     @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10.0
-    var color = Color.orange
+    var color = Color.green
 
     var body: some View {
         let avg = healthKit.averageDeficitSinceStart

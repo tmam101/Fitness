@@ -21,8 +21,8 @@ struct WeightLossText: View {
         
         VStack(alignment: .leading) {
 //            StatsText(color: .green3, title: "Compared to Deficit", stat: String(ratio) + "%")
-            StatsText(color: .green3, title: "Total", title2: "vs " + String(format: "%.2f", healthKit.expectedWeightLossSinceStart), stat: weightLostString)
-            StatsText(color: .green2, title: "Average", stat: averageWeeklyLostString)
+            StatsText(color: .green1, title: "Total", title2: "vs " + String(format: "%.2f", healthKit.expectedWeightLossSinceStart), stat: weightLostString)
+            StatsText(color: .green1, title: "Average", stat: averageWeeklyLostString)
             StatsText(color: .green1, title: "This Month", stat: averageMonthlyLostString)
         }
     }
@@ -85,9 +85,9 @@ struct DeficitText: View {
         
         if !self.percentages {
             VStack(alignment: .leading) {
-                StatsText(color: .orange, title: "Total", stat: totalDeficitString)
-                StatsText(color: .yellow, title: "Weekly", stat: averageDeficitString)
-                StatsText(color: .blue, title: "Today", stat: deficitTodayString)
+                StatsText(color: .green, title: "Total", stat: totalDeficitString)
+                StatsText(color: .green, title: "Weekly", stat: averageDeficitString)
+                StatsText(color: .green, title: "Today", stat: deficitTodayString)
             }
         } else {
             VStack(alignment: .leading) {

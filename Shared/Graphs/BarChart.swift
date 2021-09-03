@@ -86,9 +86,10 @@ struct BarChart: View {
                             let height = geometry.size.height * (indexAndPercent.percent >= 0 ? indexAndPercent.percent : (indexAndPercent.percent * -1))
                             let isToday = indexAndPercent.index == percents!.count - 1
                             let isPositive = indexAndPercent.percent >= 0
-                            let color: Color = isPositive ? (isToday ? .blue : .yellow) : .red
+                            let color: Color = isPositive ? .green : .red
                             
                             Bar(cornerRadius: cornerRadius, color: color, height: height)
+                                .opacity(isToday ? 0.25 : 1.0)
                         }
                     }.padding(.trailing, 50)
                     
