@@ -39,10 +39,10 @@ struct WeightLossRings: View {
         let paddingSize = lineWidth + 2
         
         ZStack {
-            TotalWeightLossCircle(lineWidth: lineWidth, color: .green1)
+            TotalWeightLossCircle(lineWidth: lineWidth, color: .green3)
                 .environmentObject(healthKit)
                 .padding(paddingSize)
-            AverageTotalWeightLossCircle(lineWidth: lineWidth, color: .green1)
+            AverageTotalWeightLossCircle(lineWidth: lineWidth, color: .green2)
                 .environmentObject(healthKit)
                 .padding(paddingSize)
                 .padding(paddingSize)
