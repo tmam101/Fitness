@@ -24,9 +24,13 @@ struct FitnessView: View {
                     .onTapGesture {
                         healthKit.setValues(nil)
                     }
+                Text("Deficits This Week")
+                    .foregroundColor(.white)
+                    .font(.title2)
+//                    .padding()
                 BarChart()
                     .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 300)
                     .background(Color.myGray)
                     .cornerRadius(20)
                     .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

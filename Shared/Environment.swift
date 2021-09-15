@@ -8,7 +8,7 @@
 import Foundation
 
 struct GlobalEnvironment {
-    static var environment = AppEnvironmentConfig.debug
+    static var environment = AppEnvironmentConfig.release
 }
 
 enum AppEnvironmentConfig {
