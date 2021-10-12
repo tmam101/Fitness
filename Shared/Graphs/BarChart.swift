@@ -223,6 +223,7 @@ struct BarChart: View {
             }
         }
         guard var topDeficit = orderedDeficits.max() else { return (nil, 0) }
+        topDeficit = max(orderedDeficits.max() ?? 0, abs(orderedDeficits.min() ?? 0))
         topDeficit = topDeficit >= 1000 ? topDeficit : 1000
         let percents = orderedDeficits.map { CGFloat($0 / topDeficit) }
         var indicesAndPercents: [IndexAndPercent]? = []

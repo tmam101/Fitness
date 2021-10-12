@@ -21,9 +21,9 @@ struct FitnessView: View {
                 StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
                     .environmentObject(healthKit)
                     .frame(minWidth: 0, maxWidth: .infinity)
-                    .onTapGesture {
-                        healthKit.setValues(nil)
-                    }
+//                    .onTapGesture {
+//                        healthKit.setValues(nil)
+//                    }
                 Text("Deficits This Week")
                     .foregroundColor(.white)
                     .font(.title2)
@@ -65,7 +65,9 @@ struct FitnessView: View {
             .padding()
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             print("entering foreground")
-            healthKit.setValues(nil)
+            Task {
+            await healthKit.setValues(nil)
+            }
         }
     }
 }
