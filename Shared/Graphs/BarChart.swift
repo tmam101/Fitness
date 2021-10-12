@@ -110,7 +110,7 @@ struct BarChart: View {
             let top = results.1
             let horizontalRatio = top / 1000
             let avgRatio = top / (healthKit.averageDeficitThisWeek == 0 ? 1 : healthKit.averageDeficitThisWeek)
-            let tmrwRatio = top / (healthKit.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthKit.projectedAverageWeeklyDeficitForTomorrow)
+             let tmrwRatio = top / (healthKit.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthKit.projectedAverageWeeklyDeficitForTomorrow)
             
             GeometryReader { geometry in
                 ZStack {

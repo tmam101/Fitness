@@ -42,9 +42,10 @@ class MyHealthKit: ObservableObject {
     
     @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
     
+    @Published public var activeCalorieModifier: Double = 1
+    
     // Constants
     let minimumActiveCalories: Float = 200
-    let activeCalorieModifier: Double = 0.8
     let minimumRestingCalories: Float = 2300
     let goalDeficit: Float = 1000
     let goalEaten: Float = 1500
@@ -127,19 +128,26 @@ class MyHealthKit: ObservableObject {
     }
     
     func setValues(_ completion: ((_ health: MyHealthKit) -> Void)?) async {
+        self.activeCalorieModifier = 1
         setupDates()
         workouts = WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release)
-        fitness.getAllStats()
+        fitness.getAllStats() // make this async?
         
         print("setting values")
+        let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
+        
+        let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
+        self.activeCalorieModifier = activeCalorieModifier
+        let averageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
+
         let deficitToReachToday = await getDeficitToReachIdeal()
         let averageWeeklyDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 6)
         let averageTotalDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: self.daysBetweenStartAndNow)
         let averageDeficitThisWeek = await getAverageDeficit(forPast: 7)
         let averageDeficitThisMonth = await getAverageDeficit(forPast: 30)
         let averageDeficitToday = await getAverageDeficit(forPast: 0)
-        let averageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
         let individualDeficits = await getIndividualDeficits(forPastDays: 7)
+        
         DispatchQueue.main.async { [self] in
             self.dailyDeficits = individualDeficits
             // Deficits
@@ -158,6 +166,7 @@ class MyHealthKit: ObservableObject {
             self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
             self.expectedWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) * Float(self.daysBetweenStartAndNow)) / Float(3500)
             // todo line graph comparing weight loss to calorie deficit
+            
             completion?(self)
             
             
@@ -208,8 +217,15 @@ class MyHealthKit: ObservableObject {
         }
     }
     
-    func getActiveCalorieModifier() {
-        // todo
+    func getActiveCalorieModifier(weightLost: Float, daysBetweenStartAndNow: Int, averageDeficitSinceStart: Float) async -> Double {
+        let weightLost = fitness.weightLost
+        let caloriesLost = weightLost * 3500
+        let currentCalorieCalculation = Float(daysBetweenStartAndNow) * averageDeficitSinceStart
+        let modifier = caloriesLost / currentCalorieCalculation
+        if modifier == Float.nan || modifier == Float.infinity {
+            return 1
+        }
+        return Double(modifier)
     }
     
     func getDeficit(resting: Double, active: Double, eaten: Double) -> Double {
