@@ -245,8 +245,8 @@ class WorkoutInformation: ObservableObject {
 //                $0.getDate() == exercises.first?.getDate()
 //        }
         for e in exercises {
-            print(e.oneRepMax())
-            print(e.getDate())
+//            print(e.oneRepMax())
+//            print(e.getDate())
             if e.oneRepMax() > (x[e.getDate()!] ?? 0) {
                 print("adding")
                 x[e.getDate()!] = e.oneRepMax()
