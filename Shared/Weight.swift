@@ -11,13 +11,13 @@ struct Weight {
     var weight: Double
     var date: Date
     
-    static func weightBetweenTwoWeights(date: Date, weight1: Weight?, weight2: Weight?) -> Float {
+    static func weightBetweenTwoWeights(date: Date, weight1: Weight?, weight2: Weight?) -> Double {
         guard let weight1 = weight1, let weight2 = weight2 else { return 0 }
         let days = Date.daysBetween(date1: weight1.date, date2: weight2.date)
-        guard days != 0 else { return Float(weight1.weight) }
-        let progress = Float(Date.daysBetween(date1: weight1.date, date2: date) ?? 1) / Float(days ?? 1)
-        let weightProgress = Float(weight2.weight - weight1.weight) * progress
-        let weight = Float(weight1.weight) + weightProgress
+        guard days != 0 else { return Double(weight1.weight) }
+        let progress = Double(Date.daysBetween(date1: weight1.date, date2: date) ?? 1) / Double(days ?? 1)
+        let weightProgress = Double(weight2.weight - weight1.weight) * progress
+        let weight = Double(weight1.weight) + weightProgress
         return weight
     }
     

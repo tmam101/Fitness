@@ -44,20 +44,20 @@ struct DaysLetters: View {
 
 struct BarViewModel {
     var isNegative: Bool
-    var activeCaloriesBurned: Float
-    var restingCaloriesBurned: Float
-    var caloriesConsumed: Float
+    var activeCaloriesBurned: Double
+    var restingCaloriesBurned: Double
+    var caloriesConsumed: Double
 }
 
 struct Bar: View {
     var cornerRadius: CGFloat = 7.0
     var color: Color = .green
     var height: CGFloat = 100.0
-    var activeCalories: Float = 1
-    var totalDeficit: Float = 1
+    var activeCalories: Double = 1
+    var totalDeficit: Double = 1
     var isPositive: Bool = true
     var indexAndPercent: BarChart.IndexAndPercent? = nil
-    let gradientColors: [Color] = [.orange, .orange, .orange, .orange, .orange, .yellow]
+    let gradientColors: [Color] = [.orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .yellow]
     
     var body: some View {
         if color == .yellow {
@@ -101,6 +101,7 @@ struct BarChart: View {
             CalorieTexts()
                 .padding([.trailing], 50)
                 .padding([.leading], 10)
+//                .padding([.bottom], 50)
             
             BarsAndLines(cornerRadius: cornerRadius).environmentObject(healthKit)
                 .frame(maxHeight: .infinity)
@@ -113,9 +114,46 @@ struct BarChart: View {
         .padding([.leading, .bottom, .top])
     }
     
+    struct Overlay: View {
+        var viewModel: OverlayViewModel?
+        
+        var body: some View {
+            let activeCalorieString = "\(Int(viewModel?.activeCalories ?? 0))"
+            let consumedCalorieString = "\(Int(viewModel?.consumedCalories ?? 0))"
+            //            let restingCalorieString = "Resting Calories: \(viewModel?.restingCalories ?? 0)"
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Active")
+                    Text(activeCalorieString)
+                        .font(.title)
+                }.padding(1)
+                VStack(alignment: .leading) {
+                    Text("Consumed")
+
+                    Text(consumedCalorieString)
+                        .font(.title)
+                }.padding(1)
+            }
+//            .background(Color(UIColor.lightGray))
+            .background(.white)
+            .cornerRadius(5)
+//            .opacity(0.7)
+        }
+    }
+    
+    struct OverlayViewModel {
+        var activeCalories: Double = 0
+        var restingCalories: Double = 0
+        var consumedCalories: Double = 0
+    }
+    
     struct BarsAndLines: View {
         @EnvironmentObject var healthKit: MyHealthKit
         var cornerRadius: CGFloat = 7.0
+        @State var isDisplayingOverlay = false
+        @State var overlayViewModel = OverlayViewModel(activeCalories: 0, restingCalories: 0, consumedCalories: 0)
+
         
         var body: some View {
             let results = BarChart.deficitsToPercents(daysAndDeficits: healthKit.dailyDeficits)
@@ -123,6 +161,7 @@ struct BarChart: View {
             let top = results.1
             let horizontalRatio = top / 1000
             let avgRatio = top / (healthKit.averageDeficitThisWeek == 0 ? 1 : healthKit.averageDeficitThisWeek)
+                        
 //            let tmrwRatio = top / (healthKit.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthKit.projectedAverageWeeklyDeficitForTomorrow)
             
             GeometryReader { geometry in
@@ -133,10 +172,18 @@ struct BarChart: View {
                             let isToday = indexAndPercent.index == percents!.count - 1
                             let isPositive = indexAndPercent.percent >= 0
                             let color: Color = isPositive ? (isToday ? .yellow : .yellow) : .red
-                            let activeCalories = healthKit.dailyActiveCalories[7 - indexAndPercent.index]
-                            let totalDeficit = healthKit.dailyDeficits[7 - indexAndPercent.index]
-                            Bar(cornerRadius: cornerRadius, color: color, height: height, activeCalories: activeCalories ?? 1, totalDeficit: totalDeficit ?? 1)
+                            
+                            let days = healthKit.individualStatistics[7 - indexAndPercent.index] ?? Day()
+                            let activeCalories = days.activeCalories
+                            let totalDeficit = days.deficit
+                            let consumed = days.consumedCalories
+                            
+                            Bar(cornerRadius: cornerRadius, color: color, height: height, activeCalories: activeCalories, totalDeficit: totalDeficit)
                                 .opacity(isToday ? 0.5 : 1)
+                                .onTapGesture {
+                                    isDisplayingOverlay.toggle()
+                                    overlayViewModel = OverlayViewModel(activeCalories: activeCalories, restingCalories: totalDeficit - activeCalories, consumedCalories: consumed)
+                                }
                         }
                     }.padding(.trailing, 50)
                         .padding([.leading], 10)
@@ -171,7 +218,15 @@ struct BarChart: View {
                             .offset(x: 0.0, y: heightOffset)
                             .foregroundColor(.yellow)
                     }
+                    
+                    if isDisplayingOverlay {
+                        Overlay(viewModel: overlayViewModel)
+                            .frame(minWidth: 100, minHeight: 100)
+                            .position(x: geometry.size.width / 2, y: 50)
+                    }
                 }
+            }.onTapGesture {
+                print("lol")
             }
         }
     }
@@ -182,9 +237,9 @@ struct BarChart: View {
     }
     
     // Here, I need to know the date of each, so that I can get the active calories burned and
-    static func deficitsToPercents(daysAndDeficits: [Int:Float]) -> ([IndexAndPercent]?, Float) {
+    static func deficitsToPercents(daysAndDeficits: [Int:Double]) -> ([IndexAndPercent]?, Double) {
         // I think I'm ordering these because they come in backwards by default?
-        var orderedDeficits: [Float] = []
+        var orderedDeficits: [Double] = []
         if daysAndDeficits.count > 0 {
             for i in stride(from: daysAndDeficits.count-1, through: 0, by: -1) {
                 orderedDeficits.append(daysAndDeficits[i] ?? 0)

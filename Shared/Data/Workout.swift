@@ -10,7 +10,7 @@ import Foundation
 struct OneRepMax {
     var exerciseName: String
     var date: Date
-    var weight: Float
+    var weight: Double
 }
 
 struct Set: Codable {
@@ -95,8 +95,8 @@ struct Set: Codable {
         case tricepsExtensionDumbbell = "Triceps Extension (Dumbbell)"
     }
     
-    func oneRepMax() -> Float {
-        return Float(weight) / (1.0278 - 0.0278 * Float(reps))
+    func oneRepMax() -> Double {
+        return Double(weight) / (1.0278 - 0.0278 * Double(reps))
     }
     
     func getDate() -> Date? {
@@ -112,10 +112,10 @@ class WorkoutInformation: ObservableObject {
     var environment: AppEnvironmentConfig
     @Published var workouts: Workout = []
     @Published var workoutsGroupedByDay: [Workout] = []
-    @Published public var firstBenchORM: Float = 0.0
-    @Published public var benchORM: Float = 0.0
-    @Published public var firstSquatORM: Float = 0.0
-    @Published public var squatORM: Float = 0.0
+    @Published public var firstBenchORM: Double = 0.0
+    @Published public var benchORM: Double = 0.0
+    @Published public var firstSquatORM: Double = 0.0
+    @Published public var squatORM: Double = 0.0
     @Published public var smithMachine: Bool = false
     
     @Published public var benchORMs: [OneRepMax] = []
@@ -123,8 +123,8 @@ class WorkoutInformation: ObservableObject {
     
     let formatter = DateFormatter()
     
-    static let squatBodyweightRatio: Float = 1.6
-    static let benchBodyweightRatio: Float = 1.2
+    static let squatBodyweightRatio: Double = 1.6
+    static let benchBodyweightRatio: Double = 1.2
 //    init() {
 //        if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
 //            do {
@@ -237,7 +237,7 @@ class WorkoutInformation: ObservableObject {
             return []
         }
 //        var sameDates: [Workout] = []
-        var x: [Date: Float] = [:]
+        var x: [Date: Double] = [:]
 //        var orms: [OneRepMax] = []
 //        let sameDate = exercises.filter {
 //            timeFrame == .mostRecent ?
@@ -257,7 +257,7 @@ class WorkoutInformation: ObservableObject {
         return y
     }
     
-    func oneRepMax(timeFrame: TimeFrame, exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> Float {
+    func oneRepMax(timeFrame: TimeFrame, exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> Double {
         var exercises: Workout = []
         if let name = exerciseName {
             exercises = workouts.filter { $0.exerciseName == name.rawValue }

@@ -18,39 +18,43 @@ class MyHealthKit: ObservableObject {
     
     @Published public var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
     // Deficits
-    @Published public var deficitToday: Float = 0
-    @Published public var averageDeficitThisWeek: Float = 0
-    @Published public var averageDeficitThisMonth: Float = 0
-    @Published public var averageDeficitSinceStart: Float = 0
+    @Published public var deficitToday: Double = 0
+    @Published public var averageDeficitThisWeek: Double = 0
+    @Published public var averageDeficitThisMonth: Double = 0
+    @Published public var averageDeficitSinceStart: Double = 0
     
-    @Published public var deficitToGetCorrectDeficit: Float = 0
+    @Published public var deficitToGetCorrectDeficit: Double = 0
     @Published public var percentWeeklyDeficit: Int = 0
     @Published public var percentDailyDeficit: Int = 0
-    @Published public var projectedAverageWeeklyDeficitForTomorrow: Float = 0
-    @Published public var projectedAverageTotalDeficitForTomorrow: Float = 0
+    @Published public var projectedAverageWeeklyDeficitForTomorrow: Double = 0
+    @Published public var projectedAverageTotalDeficitForTomorrow: Double = 0
     
-    @Published public var averageWeightLossSinceStart: Float = 0
-    @Published public var expectedAverageWeightLossSinceStart: Float = 0
+    @Published public var averageWeightLossSinceStart: Double = 0
+    @Published public var expectedAverageWeightLossSinceStart: Double = 0
     
-    @Published public var expectedWeightLossSinceStart: Float = 0
+    @Published public var expectedWeightLossSinceStart: Double = 0
     
     // Days
     @Published public var daysBetweenStartAndEnd: Int = 0
     @Published public var daysBetweenStartAndNow: Int = 0
     @Published public var daysBetweenNowAndEnd: Int = 0
-    @Published public var dailyDeficits: [Int:Float] = [:]
-    @Published public var dailyActiveCalories: [Int:Float] = [:]
+    @Published public var dailyDeficits: [Int:Double] = [:]
+    @Published public var dailyActiveCalories: [Int:Double] = [:]
     
     @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
     
     @Published public var activeCalorieModifier: Double = 1
+    @Published public var adjustActiveCalorieModifier = true
+
+
+    @Published public var individualStatistics: Days = Days()
     
     // Constants
-    let minimumActiveCalories: Float = 200
-    let minimumRestingCalories: Float = 2300
-    let goalDeficit: Float = 1000
-    let goalEaten: Float = 1500
-    let caloriesInPound: Float = 3500
+    let minimumActiveCalories: Double = 200
+    let minimumRestingCalories: Double = 2300
+    let goalDeficit: Double = 1000
+    let goalEaten: Double = 1500
+    let caloriesInPound: Double = 3500
     let startDateString = "01.23.2021"
     var startDate: Date?
     let endDateString = "05.01.2021"
@@ -92,11 +96,11 @@ class MyHealthKit: ObservableObject {
         self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
         self.projectedAverageWeeklyDeficitForTomorrow = 900
         self.projectedAverageTotalDeficitForTomorrow = 760
-        self.dailyDeficits = [0: Float(300), 1: Float(1000), 2:Float(500), 3: Float(1200), 4: Float(-300), 5:Float(500),6: Float(300), 7: Float(-1000)]
+        self.dailyDeficits = [0: Double(300), 1: Double(1000), 2:Double(500), 3: Double(1200), 4: Double(-300), 5:Double(500),6: Double(300), 7: Double(-1000)]
         
         let averageWeightLossSinceStart = (231.8 - Double(221)) / (Double(daysBetweenStartAndNow) / Double(7)) // TODO calculate with real values
         let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart) / 3500) * 7
-        self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
+        self.averageWeightLossSinceStart = averageWeightLossSinceStart
         self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
         self.averageDeficitSinceStart = 750
         completion?(self)
@@ -116,8 +120,8 @@ class MyHealthKit: ObservableObject {
         self.daysBetweenNowAndEnd = daysBetweenNowAndEnd
     }
     
-    func getIndividualDeficits(forPastDays days: Int) async -> [Int:Float] {
-        var deficits: [Int:Float] = [:]
+    func getIndividualDeficits(forPastDays days: Int) async -> [Int:Double] {
+        var deficits: [Int:Double] = [:]
         for i in 0...days {
             let deficit = await getDeficitForDay(daysAgo: i)
             deficits[i] = deficit
@@ -128,11 +132,11 @@ class MyHealthKit: ObservableObject {
         return [0:0]
     }
     
-    func getIndividualActiveCalories(forPastDays days: Int) async -> [Int:Float] {
-        var activeCalories: [Int:Float] = [:]
+    func getIndividualActiveCalories(forPastDays days: Int) async -> [Int:Double] {
+        var activeCalories: [Int:Double] = [:]
         for i in 0...days {
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
-            activeCalories[i] = Float(active)
+            activeCalories[i] = active
             if activeCalories.count == days + 1 {
                 return activeCalories
             }
@@ -140,19 +144,36 @@ class MyHealthKit: ObservableObject {
         return [0:0]
     }
     
+    func getIndividualStatistics(forPastDays days: Int) async -> Days {
+        var dayInformation = Days()
+        for i in 0...days {
+            let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
+            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
+            let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
+            let day = Day(deficit: deficit, activeCalories: active, consumedCalories: eaten)
+            dayInformation[i] = day
+            if dayInformation.count == days + 1 {
+                return dayInformation
+            }
+        }
+        return Days()
+
+    }
+    
     func setValues(_ completion: ((_ health: MyHealthKit) -> Void)?) async {
-        self.activeCalorieModifier = 1
         setupDates()
         workouts = WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release)
         fitness.getAllStats() // make this async?
         
         print("setting values")
-        let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
-        
-        let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
-        self.activeCalorieModifier = activeCalorieModifier
+        if adjustActiveCalorieModifier {
+            self.activeCalorieModifier = 1
+            let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
+            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
+            self.activeCalorieModifier = activeCalorieModifier
+        }
         let averageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
-
+        
         let deficitToReachToday = await getDeficitToReachIdeal()
         let averageWeeklyDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 6)
         let averageTotalDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: self.daysBetweenStartAndNow)
@@ -161,6 +182,7 @@ class MyHealthKit: ObservableObject {
         let averageDeficitToday = await getAverageDeficit(forPast: 0)
         let individualDeficits = await getIndividualDeficits(forPastDays: 7)
         let individualActiveCalories = await getIndividualActiveCalories(forPastDays: 7)
+        let individualStatistics = await getIndividualStatistics(forPastDays: 7)
         
         DispatchQueue.main.async { [self] in
             self.dailyDeficits = individualDeficits
@@ -176,11 +198,12 @@ class MyHealthKit: ObservableObject {
             self.projectedAverageTotalDeficitForTomorrow = averageTotalDeficitTomorrow ?? 0
             
             let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) / 3500) * 7
-            self.averageWeightLossSinceStart = Float(averageWeightLossSinceStart)
+            self.averageWeightLossSinceStart = averageWeightLossSinceStart
             self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
             self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
-            self.expectedWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) * Float(self.daysBetweenStartAndNow)) / Float(3500)
+            self.expectedWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) * Double(self.daysBetweenStartAndNow)) / Double(3500)
             // todo line graph comparing weight loss to calorie deficit
+            self.individualStatistics = individualStatistics
             
             completion?(self)
             
@@ -208,6 +231,7 @@ class MyHealthKit: ObservableObject {
             completion(sum.doubleValue(for: HKUnit.kilocalorie()))
         }
         healthStore.execute(query)
+        
     }
     
     private func sumValueForDay(daysAgo: Int, forType type: HKQuantityTypeIdentifier) async -> Double {
@@ -232,12 +256,15 @@ class MyHealthKit: ObservableObject {
         }
     }
     
-    func getActiveCalorieModifier(weightLost: Float, daysBetweenStartAndNow: Int, averageDeficitSinceStart: Float) async -> Double {
+    func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int, averageDeficitSinceStart: Double) async -> Double {
         let weightLost = fitness.weightLost
         let caloriesLost = weightLost * 3500
-        let currentCalorieCalculation = Float(daysBetweenStartAndNow) * averageDeficitSinceStart
-        let modifier = caloriesLost / currentCalorieCalculation
-        if modifier == Float.nan || modifier == Float.infinity {
+        let active = await getActiveCaloriesBurned(forPast: daysBetweenStartAndNow)
+        let currentCalorieCalculation = Double(daysBetweenStartAndNow) * averageDeficitSinceStart
+        let resting = currentCalorieCalculation - active
+        // todo the modifier is only supposed to apply to active calories!
+        let modifier = (caloriesLost - resting) / active
+        if modifier == Double.nan || modifier == Double.infinity {
             return 1
         }
         return Double(modifier)
@@ -249,7 +276,7 @@ class MyHealthKit: ObservableObject {
     
     //MARK: BURNED
     
-    func getDeficitForDay(daysAgo: Int) async -> Float? {
+    func getDeficitForDay(daysAgo: Int) async -> Double? {
         let resting = await sumValueForDay(daysAgo: daysAgo, forType: .basalEnergyBurned)
         let active = await sumValueForDay(daysAgo: daysAgo, forType: .activeEnergyBurned)
         let eaten = await sumValueForDay(daysAgo: daysAgo, forType: .dietaryEnergyConsumed)
@@ -257,7 +284,7 @@ class MyHealthKit: ObservableObject {
         let realActive = max(active, 200)
         print("\(daysAgo) days ago: resting: \(realResting) active: \(realActive) eaten: \(eaten)")
         let deficit = self.getDeficit(resting: realResting, active: realActive, eaten: eaten)
-        return Float(deficit)
+        return deficit
     }
     
     //MARK: EATEN
@@ -266,12 +293,12 @@ class MyHealthKit: ObservableObject {
         sumValue(forPast: 0, forType: .dietaryEnergyConsumed, completion: completion)
     }
     
-    func getAverageCaloriesEatenThisWeek() async -> Float? {
+    func getAverageCaloriesEatenThisWeek() async -> Double? {
         let total = await getTotalCaloriesEaten(forPast: 7)
-        return (Float(total) / 7)
+        return total / 7
     }
     
-    func getProjectedAverageDeficitForTomorrow(forPast days: Int) async -> Float? {
+    func getProjectedAverageDeficitForTomorrow(forPast days: Int) async -> Double? {
         let pastDeficit = await getAverageDeficit(forPast: days)
         let dailyDeficit = await getAverageDeficit(forPast: 0)
         guard
@@ -279,20 +306,20 @@ class MyHealthKit: ObservableObject {
             let dailyDeficit = dailyDeficit else {
                 return nil
             }
-        let projectedAverageDeficitForTomorrow = ((pastDeficit * Float(days)) + dailyDeficit) / Float((days + 1))
+        let projectedAverageDeficitForTomorrow = ((pastDeficit * Double(days)) + dailyDeficit) / (Double(days) + 1)
         return projectedAverageDeficitForTomorrow
         
     }
     
     // async await
     
-    func getDeficitToReachIdeal() async -> Float? {
+    func getDeficitToReachIdeal() async -> Double? {
         let averageDeficitForPast6Days = await getAverageDeficit(forPast: 6)
         let plan = (1000*7) - ((averageDeficitForPast6Days ?? 1) * 6)
         return plan
     }
     
-    func getAverageDeficit(forPast days: Int) async -> Float? {
+    func getAverageDeficit(forPast days: Int) async -> Double? {
         let resting = await getRestingCaloriesBurned(forPast: days)
         let active = await getActiveCaloriesBurned(forPast: days)
         let eaten = await getTotalCaloriesEaten(forPast: days)
@@ -301,11 +328,11 @@ class MyHealthKit: ObservableObject {
         let realActive = max(Double(minimumActiveCalories) * realDays, active)
         let deficit = getDeficit(resting: realResting, active: realActive, eaten: eaten)
         let average = deficit / realDays
-        return Float(average)
+        return average
     }
     
     func getActiveCaloriesBurned(forPast days: Int) async -> Double {
-        return await sumValue(forPast: days, forType: .activeEnergyBurned)
+        return await sumValue(forPast: days, forType: .activeEnergyBurned) // todo when summing these things, we don't account for the minimum of 200 active calories
     }
     
     func getTotalCaloriesEaten(forPast days: Int) async -> Double {

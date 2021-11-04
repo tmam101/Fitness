@@ -13,18 +13,18 @@ class FitnessCalculations: ObservableObject {
     var environment: AppEnvironmentConfig?
     let startDateString = "01.23.2021"
     let endDateString = "05.01.2021"
-    @Published var startingWeight: Float = 231.8
-    @Published var currentWeight: Float = 231.8
-    @Published var endingWeight: Float = 190
-    @Published var progressToWeight: Float = 0
-    @Published var progressToDate: Float = 0
-    @Published var successPercentage: Float = 0
-    @Published var weightLost: Float = 0
+    @Published var startingWeight: Double = 231.8
+    @Published var currentWeight: Double = 231.8
+    @Published var endingWeight: Double = 190
+    @Published var progressToWeight: Double = 0
+    @Published var progressToDate: Double = 0
+    @Published var successPercentage: Double = 0
+    @Published var weightLost: Double = 0
     @Published public var percentWeightLost: Int = 0
-    @Published public var weightToLose: Float = 0
-    @Published public var averageWeightLostPerWeek: Float = 0
+    @Published public var weightToLose: Double = 0
+    @Published public var averageWeightLostPerWeek: Double = 0
     @Published public var weights: [Weight] = []
-    @Published public var averageWeightLostPerWeekThisMonth: Float = 0
+    @Published public var averageWeightLostPerWeekThisMonth: Double = 0
     
     @Published var shouldShowBars = true
     
@@ -75,14 +75,14 @@ class FitnessCalculations: ObservableObject {
             let daysBetweenNowAndEnd = Date.daysBetween(date1: Date(), date2: endDate)
         else { return }
         
-        let progress = Float(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Float(daysBetweenStartAndEnd)
+        let progress = Double(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Double(daysBetweenStartAndEnd)
         DispatchQueue.main.async {
             self.progressToDate = progress
             WidgetCenter.shared.reloadAllTimelines()
         }
     }
     
-    func progressString(from float: Float) -> String {
+    func progressString(from float: Double) -> String {
         return String(format: "%.2f", float * 100)
     }
     
@@ -100,7 +100,7 @@ class FitnessCalculations: ObservableObject {
         self.weightToLose = 20
         self.percentWeightLost = 60
         let weeks = 10
-        self.averageWeightLostPerWeek = self.weightLost / Float(weeks)
+        self.averageWeightLostPerWeek = self.weightLost / Double(weeks)
         self.averageWeightLostPerWeekThisMonth = 1.9
         completion?(self)
     }
@@ -121,7 +121,7 @@ class FitnessCalculations: ObservableObject {
                 let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
             else { return }
             
-            let weeks: Float = Float(daysBetweenStartAndNow) / Float(7)
+            let weeks: Double = Double(daysBetweenStartAndNow) / Double(7)
             self.averageWeightLostPerWeek = self.weightLost / weeks
             self.getWeightFromAMonthAgo()
         }
@@ -158,7 +158,7 @@ class FitnessCalculations: ObservableObject {
         }
         let difference = finalWeight.weight - self.weights.first!.weight
         let weeklyAverageThisMonth = (difference / Double(days)) * Double(7)
-        self.averageWeightLostPerWeekThisMonth = Float(weeklyAverageThisMonth)
+        self.averageWeightLostPerWeekThisMonth = Double(weeklyAverageThisMonth)
         
     }
     
@@ -262,7 +262,7 @@ class FitnessCalculations: ObservableObject {
                 return
             }
             DispatchQueue.main.async {
-                self.currentWeight = Float(weight)
+                self.currentWeight = weight
                 completion(true)
             }
         }

@@ -30,7 +30,7 @@ struct FitnessView: View {
 //                    .padding()
                 BarChart()
                     .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 300)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 400)
                     .background(Color.myGray)
                     .cornerRadius(20)
                     .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
@@ -39,7 +39,13 @@ struct FitnessView: View {
                 StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
                     .environmentObject(healthKit)
                     .frame(minWidth: 0, maxWidth: .infinity)
-                
+                    .onTapGesture {
+                        Task {
+                            healthKit.activeCalorieModifier = 0.8
+                            healthKit.adjustActiveCalorieModifier.toggle()
+                            await healthKit.setValues(nil)
+                        }
+                    }
                 StatsTitle(title: "Lifts")
                 StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
                     .environmentObject(healthKit)

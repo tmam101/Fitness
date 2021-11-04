@@ -12,19 +12,19 @@ class FitnessCalculations: ObservableObject {
     var environment: AppEnvironmentConfig?
     let startDateString = "01.23.2021"
     let endDateString = "05.01.2021"
-    @Published var startingWeight: Float = 231.8
-    @Published var currentWeight: Float = 231.8
-    @Published var endingWeight: Float = 190
+    @Published var startingWeight: Double = 231.8
+    @Published var currentWeight: Double = 231.8
+    @Published var endingWeight: Double = 190
     let formatter = DateFormatter()
-    @Published var progressToWeight: Float = 0
-    @Published var progressToDate: Float = 0
-    @Published var successPercentage: Float = 0
-    @Published var weightLost: Float = 0
+    @Published var progressToWeight: Double = 0
+    @Published var progressToDate: Double = 0
+    @Published var successPercentage: Double = 0
+    @Published var weightLost: Double = 0
     @Published public var percentWeightLost: Int = 0
-    @Published public var weightToLose: Float = 0
-    @Published public var averageWeightLostPerWeek: Float = 0
+    @Published public var weightToLose: Double = 0
+    @Published public var averageWeightLostPerWeek: Double = 0
     @Published public var weights: [Weight] = []
-    @Published public var averageWeightLostPerWeekThisMonth: Float = 0
+    @Published public var averageWeightLostPerWeekThisMonth: Double = 0
     
     @Published var shouldShowBars = true
 
@@ -95,7 +95,7 @@ class FitnessCalculations: ObservableObject {
         }
     }
     
-    func progressString(from float: Float) -> String {
+    func progressString(from float: Double) -> String {
         return String(format: "%.2f", float * 100)
     }
     

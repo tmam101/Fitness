@@ -38,7 +38,7 @@ struct LineGraph: View {
     
     func floatsToGraphCoordinates(oneRepMaxes: [OneRepMax], width: CGFloat, height: CGFloat) -> [CGPoint] {
         guard oneRepMaxes.count != 0 else { return [CGPoint(x: 0, y: 0)] }
-        var percentages: [Float] = []
+        var percentages: [Double] = []
         
         // Compare ORMs to bodyweight and create a ratio
         let adjustedOneRepMaxes = oneRepMaxes // one rep maxes

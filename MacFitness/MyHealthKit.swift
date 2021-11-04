@@ -14,12 +14,12 @@ class MyHealthKit: ObservableObject {
     
     @Published public var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
     // Deficits
-    @Published public var deficitToday: Float = 0
-    @Published public var averageDeficitThisWeek: Float = 0
-    @Published public var averageDeficitThisMonth: Float = 0
-    @Published public var averageDeficitSinceStart: Float = 0
+    @Published public var deficitToday: Double = 0
+    @Published public var averageDeficitThisWeek: Double = 0
+    @Published public var averageDeficitThisMonth: Double = 0
+    @Published public var averageDeficitSinceStart: Double = 0
     
-    @Published public var deficitToGetCorrectDeficit: Float = 0
+    @Published public var deficitToGetCorrectDeficit: Double = 0
     @Published public var percentWeeklyDeficit: Int = 0
     @Published public var percentDailyDeficit: Int = 0
     @Published public var projectedAverageWeeklyDeficitForTomorrow: Float = 0
@@ -40,11 +40,11 @@ class MyHealthKit: ObservableObject {
 
     
     // Constants
-    let minimumActiveCalories: Float = 200
-    let minimumRestingCalories: Float = 2300
-    let goalDeficit: Float = 1000
-    let goalEaten: Float = 1500
-    let caloriesInPound: Float = 3500
+    let minimumActiveCalories: Double = 200
+    let minimumRestingCalories: Double = 2300
+    let goalDeficit: Double = 1000
+    let goalEaten: Double = 1500
+    let caloriesInPound: Double = 3500
     let startDateString = "01.23.2021"
     let endDateString = "05.01.2021"
     let formatter = DateFormatter()
@@ -81,7 +81,7 @@ class MyHealthKit: ObservableObject {
         self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
         self.projectedAverageWeeklyDeficitForTomorrow = 900
         self.projectedAverageTotalDeficitForTomorrow = 760
-        self.dailyDeficits = [0: Float(300), 1: Float(200), 2:Float(500), 3: Float(1200), 4: Float(-300), 5:Float(500),6: Float(300), 7: Float(200)]
+        self.dailyDeficits = [0: Double(300), 1: Double(200), 2:Double(500), 3: Double(1200), 4: Double(-300), 5:Double(500),6: Double(300), 7: Double(200)]
         
 //            let expectedWeightLossThisMonth: Float = ((averageDeficitThisMonth ?? 1) * 30) / caloriesInPound
         
