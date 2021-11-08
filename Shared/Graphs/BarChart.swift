@@ -148,12 +148,19 @@ struct BarChart: View {
         var consumedCalories: Double = 0
     }
     
+    struct Sheet: View {
+        var body: some View{
+            Text("Test")
+        }
+    }
+    
     struct BarsAndLines: View {
         @EnvironmentObject var healthKit: MyHealthKit
         var cornerRadius: CGFloat = 7.0
         @State var isDisplayingOverlay = false
         @State var overlayViewModel = OverlayViewModel(activeCalories: 0, restingCalories: 0, consumedCalories: 0)
 
+        @State var barViewModel = BarViewModel()
         
         var body: some View {
             let results = BarChart.deficitsToPercents(daysAndDeficits: healthKit.dailyDeficits)
@@ -173,16 +180,25 @@ struct BarChart: View {
                             let isPositive = indexAndPercent.percent >= 0
                             let color: Color = isPositive ? (isToday ? .yellow : .yellow) : .red
                             
-                            let days = healthKit.individualStatistics[7 - indexAndPercent.index] ?? Day()
-                            let activeCalories = days.activeCalories
-                            let totalDeficit = days.deficit
-                            let consumed = days.consumedCalories
+                            let day = healthKit.individualStatistics[7 - indexAndPercent.index] ?? Day()
+                            let activeCalories = day.activeCalories
+                            let totalDeficit = day.deficit
+                            let consumed = day.consumedCalories
                             
                             Bar(cornerRadius: cornerRadius, color: color, height: height, activeCalories: activeCalories, totalDeficit: totalDeficit)
                                 .opacity(isToday ? 0.5 : 1)
                                 .onTapGesture {
-                                    isDisplayingOverlay.toggle()
-                                    overlayViewModel = OverlayViewModel(activeCalories: activeCalories, restingCalories: totalDeficit - activeCalories, consumedCalories: consumed)
+                                    let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+                                    impactHeavy.impactOccurred()
+                                    isDisplayingOverlay = true
+                                    barViewModel.barClicked = day
+//                                    overlayViewModel = OverlayViewModel(activeCalories: activeCalories, restingCalories: totalDeficit - activeCalories, consumedCalories: consumed)
+                                }
+                                .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
+                                    self.isDisplayingOverlay = false
+                                }) {
+                                    BarView()
+                                        .environmentObject(barViewModel)
                                 }
                         }
                     }.padding(.trailing, 50)
@@ -219,14 +235,55 @@ struct BarChart: View {
                             .foregroundColor(.yellow)
                     }
                     
-                    if isDisplayingOverlay {
-                        Overlay(viewModel: overlayViewModel)
-                            .frame(minWidth: 100, minHeight: 100)
-                            .position(x: geometry.size.width / 2, y: 50)
-                    }
+//                    if isDisplayingOverlay {
+//                        Overlay(viewModel: overlayViewModel)
+//                            .frame(minWidth: 100, minHeight: 100)
+//                            .position(x: geometry.size.width / 2, y: 50)
+//                    }
+
+                    
                 }
             }.onTapGesture {
                 print("lol")
+            }
+        }
+    }
+    
+    
+    class BarViewModel: ObservableObject {
+        @Published var barClicked: Day = Day(deficit: 0, activeCalories: 0, consumedCalories: 0)
+    }
+    
+    struct BarView: View {
+//        @EnvironmentObject var healthKit: MyHealthKit
+        @EnvironmentObject var barViewModel: BarViewModel
+//        var run: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0)
+        var body: some View {
+            ZStack {
+                Color.myGray.edgesIgnoringSafeArea(.all)
+            VStack {
+//                let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
+//                let year = String(date.year ?? 0).trimmingCharacters(in: [","])
+//                Text("Date")
+//                Text("\(date.month ?? 0)/\(date.day ?? 0)/\(year)")
+//                    .font(.title)
+                Text("Active")
+                    .foregroundColor(.white)
+                Text(String(Int(barViewModel.barClicked.activeCalories)))
+                    .font(.title)
+                    .foregroundColor(.white)
+                Text("Consumed")
+                    .foregroundColor(.white)
+                Text(String(Int(barViewModel.barClicked.consumedCalories)))
+                    .font(.title)
+                    .foregroundColor(.white)
+                Text("Deficit")
+                    .foregroundColor(.white)
+                Text(String(Int(barViewModel.barClicked.deficit)))
+                    .font(.title)
+                    .foregroundColor(.white)
+
+            }
             }
         }
     }

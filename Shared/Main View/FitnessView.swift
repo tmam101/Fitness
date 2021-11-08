@@ -54,6 +54,7 @@ struct FitnessView: View {
                         healthKit.workouts.smithMachine.toggle()
                         healthKit.workouts.calculate()
                     }
+                
                 ZStack {
                     BenchGraph()
                         .environmentObject(healthKit.workouts)
@@ -67,6 +68,15 @@ struct FitnessView: View {
                         .environmentObject(healthKit.fitness)
                         .padding()
                 }
+                
+//                Text("Hey")
+                RunningLineGraph()
+                    .environmentObject(healthKit)
+                    .environmentObject(healthKit.fitness)
+                    .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                    .padding()
+                    .background(Color.myGray)
+                    .cornerRadius(20)
             }
             .padding()
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in

@@ -31,9 +31,9 @@ class FitnessCalculations: ObservableObject {
 
     
     init(environment: AppEnvironmentConfig) {
-//        authorizeHealthKit { _, _ in
-//
-//        }
+        authorizeHealthKit { _, _ in
+
+        }
         self.environment = environment
         switch environment {
         case .release:
@@ -178,21 +178,24 @@ class FitnessCalculations: ObservableObject {
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
-//    private func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
-//        if !HKHealthStore.isHealthDataAvailable() {
-//            return
-//        }
-//
-//        let readDataTypes: Set<HKSampleType> = [bodyMassType,
-//                                                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
-//                                                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
-//                                                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!]
-//
-//        healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in
-//            completion(success, error)
-//        }
-//
-//    }
+    private func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
+        if !HKHealthStore.isHealthDataAvailable() {
+            return
+        }
+
+        let readDataTypes: Swift.Set<HKSampleType>? = [bodyMassType,
+                                                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
+                                                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
+                                                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+                                                       HKSampleType.workoutType(),
+                                                       HKSampleType.quantityType(forIdentifier: .heartRate)!,
+                                                       HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]
+
+        healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in
+            completion(success, error)
+        }
+
+    }
     
     
     //returns the weight entry in pounds or nil if no data

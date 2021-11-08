@@ -82,6 +82,8 @@
 		48E4B44D262619DE002321B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
 		48E4B44F262619DE002321B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
 		48EC266A25B8D1280003B455 /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
+		48EE13292738C3E600128623 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
+		48EE132A2738C3E700128623 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +186,7 @@
 		48E0E21726041F3D0037EEAF /* TextCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCollections.swift; sourceTree = "<group>"; };
 		48E4B44C262619DE002321B5 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		48EC266925B8D1280003B455 /* FitnessCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessCalculations.swift; sourceTree = "<group>"; };
+		48EE13282738C3AB00128623 /* Run.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -298,6 +301,7 @@
 		48821CAA25B8BF3600C9F58A = {
 			isa = PBXGroup;
 			children = (
+				48EE13282738C3AB00128623 /* Run.swift */,
 				48A0D4A125BB92DE007C40ED /* FitnessWidgetExtensionDebug.entitlements */,
 				48A0D49925BB8703007C40ED /* FitnessDebug.entitlements */,
 				48821CAF25B8BF3600C9F58A /* Shared */,
@@ -724,6 +728,7 @@
 				4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */,
 				48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */,
 				48A0D45325BB6605007C40ED /* FitnessView.swift in Sources */,
+				48EE132A2738C3E700128623 /* Run.swift in Sources */,
 				4845B7A225C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
 				48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */,
 				48EC266A25B8D1280003B455 /* FitnessCalculations.swift in Sources */,
@@ -767,6 +772,7 @@
 				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
 				486388E3261F9099005B1227 /* BarChart.swift in Sources */,
 				48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */,
+				48EE13292738C3E600128623 /* Run.swift in Sources */,
 				48A0D49325BB72FC007C40ED /* Progress Rings.swift in Sources */,
 				4845B7A425C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
 				485B72992631EBD70070E096 /* Lines.swift in Sources */,
