@@ -17,44 +17,46 @@ struct FitnessView: View {
         
         ScrollView {
             VStack(alignment: .leading) {
-                StatsTitle(title: "Deficits")
-                StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
-                    .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-//                    .onTapGesture {
-//                        healthKit.setValues(nil)
-//                    }
-                Text("Deficits This Week")
-                    .foregroundColor(.white)
-                    .font(.title2)
-//                    .padding()
-                BarChart()
-                    .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 400)
-                    .background(Color.myGray)
-                    .cornerRadius(20)
-                    .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                
-                StatsTitle(title: "Weight Loss")
-                StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
-                    .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .onTapGesture {
-                        Task {
-                            healthKit.activeCalorieModifier = 0.8
-                            healthKit.adjustActiveCalorieModifier.toggle()
-                            await healthKit.setValues(nil)
+                Group {
+                    StatsTitle(title: "Deficits")
+                    StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
+                        .environmentObject(healthKit)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                }
+                Group {
+                    Text("Deficits This Week")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                    BarChart()
+                        .environmentObject(healthKit)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 400)
+                        .background(Color.myGray)
+                        .cornerRadius(20)
+                        .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                }
+                Group {
+                    StatsTitle(title: "Weight Loss")
+                    StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
+                        .environmentObject(healthKit)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .onTapGesture {
+                            Task {
+                                healthKit.activeCalorieModifier = 0.8
+                                healthKit.adjustActiveCalorieModifier.toggle()
+                                await healthKit.setValues(nil)
+                            }
                         }
-                    }
-                StatsTitle(title: "Lifts")
-                StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-                    .environmentObject(healthKit)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .onTapGesture {
-                        healthKit.workouts.smithMachine.toggle()
-                        healthKit.workouts.calculate()
-                    }
-                
+                }
+                Group {
+                    StatsTitle(title: "Lifts")
+                    StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
+                        .environmentObject(healthKit)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .onTapGesture {
+                            healthKit.workouts.smithMachine.toggle()
+                            healthKit.workouts.calculate()
+                        }
+                }
                 ZStack {
                     BenchGraph()
                         .environmentObject(healthKit.workouts)
@@ -68,21 +70,22 @@ struct FitnessView: View {
                         .environmentObject(healthKit.fitness)
                         .padding()
                 }
-                
-//                Text("Hey")
-                RunningLineGraph()
-                    .environmentObject(healthKit)
-                    .environmentObject(healthKit.fitness)
-                    .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
-                    .padding()
-                    .background(Color.myGray)
-                    .cornerRadius(20)
+                Group {
+                    StatsTitle(title: "Mile Time")
+                    RunningLineGraph()
+                        .environmentObject(healthKit)
+                        .environmentObject(healthKit.fitness)
+                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                        .padding()
+                        .background(Color.myGray)
+                        .cornerRadius(20)
+                }
             }
             .padding()
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             print("entering foreground")
             Task {
-            await healthKit.setValues(nil)
+                await healthKit.setValues(nil)
             }
         }
     }
@@ -91,9 +94,9 @@ struct FitnessView: View {
 struct BenchGraph: View {
     @EnvironmentObject var workouts: WorkoutInformation
     @EnvironmentObject var fitness: FitnessCalculations
-
+    
     var body: some View {
-        LineGraph(oneRepMaxes: workouts.benchORMs, color: .purple)
+        LiftingLineGraph(oneRepMaxes: workouts.benchORMs, color: .purple)
             .environmentObject(fitness)
     }
 }
@@ -101,9 +104,9 @@ struct BenchGraph: View {
 struct SquatGraph: View {
     @EnvironmentObject var workouts: WorkoutInformation
     @EnvironmentObject var fitness: FitnessCalculations
-
+    
     var body: some View {
-        LineGraph(oneRepMaxes: workouts.squatORMs, color: .pink)
+        LiftingLineGraph(oneRepMaxes: workouts.squatORMs, color: .pink)
             .environmentObject(fitness)
     }
 }

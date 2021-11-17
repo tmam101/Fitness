@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		4803BE9F271F035C00882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		4803BEA3271F1AB500882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
-		48199FB72628D045000247E8 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
-		48199FB92628D045000247E8 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
+		48199FB72628D045000247E8 /* LiftingLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LiftingLineGraph.swift */; };
+		48199FB92628D045000247E8 /* LiftingLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LiftingLineGraph.swift */; };
 		4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
 		4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
 		4827C99F26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
@@ -35,7 +35,7 @@
 		48755A76267A70AC00F7680E /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
 		48755A77267A70AC00F7680E /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
 		48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
-		48755A79267A70AC00F7680E /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LineGraph.swift */; };
+		48755A79267A70AC00F7680E /* LiftingLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LiftingLineGraph.swift */; };
 		48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1F626041DE50037EEAF /* RingCollections.swift */; };
 		48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
@@ -133,7 +133,7 @@
 
 /* Begin PBXFileReference section */
 		4803BE9E271F035C00882BCC /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
-		48199FB62628D045000247E8 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
+		48199FB62628D045000247E8 /* LiftingLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftingLineGraph.swift; sourceTree = "<group>"; };
 		4827C99C26828BEF006700A1 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		4827C9A026828C18006700A1 /* DoubleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
 		4845B78F25C09853003BF999 /* Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lines.swift; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 			children = (
 				486388E0261F9099005B1227 /* BarChart.swift */,
 				48E0E1CD2603C3370037EEAF /* Progress Circles */,
-				48199FB62628D045000247E8 /* LineGraph.swift */,
+				48199FB62628D045000247E8 /* LiftingLineGraph.swift */,
 			);
 			path = Graphs;
 			sourceTree = "<group>";
@@ -688,7 +688,7 @@
 				48755A7F267A70AC00F7680E /* Workout.swift in Sources */,
 				48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */,
 				4827C9A326828C18006700A1 /* DoubleExtension.swift in Sources */,
-				48755A79267A70AC00F7680E /* LineGraph.swift in Sources */,
+				48755A79267A70AC00F7680E /* LiftingLineGraph.swift in Sources */,
 				48755A77267A70AC00F7680E /* TextCollections.swift in Sources */,
 				48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */,
 				48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */,
@@ -720,7 +720,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4827C9A126828C18006700A1 /* DoubleExtension.swift in Sources */,
-				48199FB72628D045000247E8 /* LineGraph.swift in Sources */,
+				48199FB72628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44D262619DE002321B5 /* Environment.swift in Sources */,
 				48E0E20B26041E700037EEAF /* Stats.swift in Sources */,
 				48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */,
@@ -776,7 +776,7 @@
 				48A0D49325BB72FC007C40ED /* Progress Rings.swift in Sources */,
 				4845B7A425C0B2AA003BF999 /* MyHealthKit.swift in Sources */,
 				485B72992631EBD70070E096 /* Lines.swift in Sources */,
-				48199FB92628D045000247E8 /* LineGraph.swift in Sources */,
+				48199FB92628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44F262619DE002321B5 /* Environment.swift in Sources */,
 				4803BEA3271F1AB500882BCC /* Day.swift in Sources */,
 				48E0E21926041F3D0037EEAF /* TextCollections.swift in Sources */,
@@ -1015,6 +1015,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;

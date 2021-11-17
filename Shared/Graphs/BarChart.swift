@@ -73,7 +73,6 @@ struct Bar: View {
                 .frame(height: height, alignment: .bottom)
                 .foregroundColor(color)
         }
-        
     }
 }
 
@@ -83,7 +82,7 @@ struct CalorieTexts: View {
     var body: some View {
         HStack {
             ForEach((0...7).reversed(), id: \.self) {
-                Text(String(Int(healthKit.dailyDeficits[$0] ?? 0.0)))
+                Text(String(Int(healthKit.deficitsThisWeek[$0] ?? 0.0)))
                     .font(.system(size: 8))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -101,7 +100,6 @@ struct BarChart: View {
             CalorieTexts()
                 .padding([.trailing], 50)
                 .padding([.leading], 10)
-//                .padding([.bottom], 50)
             
             BarsAndLines(cornerRadius: cornerRadius).environmentObject(healthKit)
                 .frame(maxHeight: .infinity)
@@ -120,7 +118,6 @@ struct BarChart: View {
         var body: some View {
             let activeCalorieString = "\(Int(viewModel?.activeCalories ?? 0))"
             let consumedCalorieString = "\(Int(viewModel?.consumedCalories ?? 0))"
-            //            let restingCalorieString = "Resting Calories: \(viewModel?.restingCalories ?? 0)"
             
             HStack {
                 VStack(alignment: .leading) {
@@ -135,10 +132,8 @@ struct BarChart: View {
                         .font(.title)
                 }.padding(1)
             }
-//            .background(Color(UIColor.lightGray))
             .background(.white)
             .cornerRadius(5)
-//            .opacity(0.7)
         }
     }
     
@@ -163,7 +158,7 @@ struct BarChart: View {
         @State var barViewModel = BarViewModel()
         
         var body: some View {
-            let results = BarChart.deficitsToPercents(daysAndDeficits: healthKit.dailyDeficits)
+            let results = BarChart.deficitsToPercents(daysAndDeficits: healthKit.deficitsThisWeek)
             let percents = results.0
             let top = results.1
             let horizontalRatio = top / 1000
@@ -227,21 +222,12 @@ struct BarChart: View {
                             .foregroundColor(.yellow)
                             .opacity(0.5)
                         Text("Avg \n\(String(Int(healthKit.averageDeficitThisWeek)))")
-                        //                            .font(.caption)
                             .font(.system(size: 8))
                             .frame(maxWidth: 50)
                             .position(x: geometry.size.width - 20, y: 0.0)
                             .offset(x: 0.0, y: heightOffset)
                             .foregroundColor(.yellow)
                     }
-                    
-//                    if isDisplayingOverlay {
-//                        Overlay(viewModel: overlayViewModel)
-//                            .frame(minWidth: 100, minHeight: 100)
-//                            .position(x: geometry.size.width / 2, y: 50)
-//                    }
-
-                    
                 }
             }.onTapGesture {
                 print("lol")
@@ -255,18 +241,11 @@ struct BarChart: View {
     }
     
     struct BarView: View {
-//        @EnvironmentObject var healthKit: MyHealthKit
         @EnvironmentObject var barViewModel: BarViewModel
-//        var run: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0)
         var body: some View {
             ZStack {
                 Color.myGray.edgesIgnoringSafeArea(.all)
             VStack {
-//                let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
-//                let year = String(date.year ?? 0).trimmingCharacters(in: [","])
-//                Text("Date")
-//                Text("\(date.month ?? 0)/\(date.day ?? 0)/\(year)")
-//                    .font(.title)
                 Text("Active")
                     .foregroundColor(.white)
                 Text(String(Int(barViewModel.barClicked.activeCalories)))

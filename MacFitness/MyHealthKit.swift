@@ -34,7 +34,7 @@ class MyHealthKit: ObservableObject {
     @Published public var daysBetweenStartAndEnd: Int = 0
     @Published public var daysBetweenStartAndNow: Int = 0
     @Published public var daysBetweenNowAndEnd: Int = 0
-    @Published public var dailyDeficits: [Int:Float] = [:]
+    @Published public var deficitsThisWeek: [Int:Float] = [:]
     
     @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
 
@@ -81,7 +81,7 @@ class MyHealthKit: ObservableObject {
         self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
         self.projectedAverageWeeklyDeficitForTomorrow = 900
         self.projectedAverageTotalDeficitForTomorrow = 760
-        self.dailyDeficits = [0: Double(300), 1: Double(200), 2:Double(500), 3: Double(1200), 4: Double(-300), 5:Double(500),6: Double(300), 7: Double(200)]
+        self.deficitsThisWeek = [0: Double(300), 1: Double(200), 2:Double(500), 3: Double(1200), 4: Double(-300), 5:Double(500),6: Double(300), 7: Double(200)]
         
 //            let expectedWeightLossThisMonth: Float = ((averageDeficitThisMonth ?? 1) * 30) / caloriesInPound
         

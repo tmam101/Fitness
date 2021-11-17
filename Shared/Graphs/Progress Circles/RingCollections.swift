@@ -15,7 +15,7 @@ struct DeficitRings: View {
     var body: some View {
         let paddingSize = lineWidth + 2
         ZStack() {
-            AverageTotalDeficitCircle(lineWidth: lineWidth)
+            MonthlyDeficitCircle(lineWidth: lineWidth)
                 .environmentObject(healthKit)
                 .padding(paddingSize)
             WeeklyAverageDeficitCircle(lineWidth: lineWidth)

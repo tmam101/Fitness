@@ -72,12 +72,14 @@ struct DeficitText: View {
         let deficitToday: Int = Int(healthKit.deficitToday)
         let idealDeficit: Int = Int(healthKit.deficitToGetCorrectDeficit)
         let averageDeficit: Int = Int(healthKit.averageDeficitThisWeek)
-        let totalDeficit: Int = Int(healthKit.averageDeficitSinceStart)
+//        let totalDeficit: Int = Int(healthKit.averageDeficitSinceStart)
+         let monthlyDeficit: Int = Int(healthKit.averageDeficitThisMonth)
         
         // Non-percentages
         let averageDeficitString = String(averageDeficit) + "/1000"
         let deficitTodayString = String(deficitToday) + "/" + String(idealDeficit) + ""
-        let totalDeficitString = String(totalDeficit) + "/1000"
+//        let totalDeficitString = String(totalDeficit) + "/1000"
+        let monthDeficitString = String(monthlyDeficit) + "/1000"
         // Percentages
         let weightLostPercentString = String(healthKit.fitness.percentWeightLost) + "% lost"
         let averageDeficitPercentString = String(healthKit.percentWeeklyDeficit) + "% dfct"
@@ -85,8 +87,9 @@ struct DeficitText: View {
         
         if !self.percentages {
             VStack(alignment: .leading) {
-                StatsText(color: .orange, title: "Total", stat: totalDeficitString)
-                StatsText(color: .yellow, title: "Weekly", stat: averageDeficitString)
+//                StatsText(color: .orange, title: "Total", stat: totalDeficitString)
+                StatsText(color: .orange, title: "Month", stat: monthDeficitString)
+                StatsText(color: .yellow, title: "Week", stat: averageDeficitString)
                 StatsText(color: .blue, title: "Today", stat: deficitTodayString)
             }
         } else {

@@ -13,4 +13,5 @@ struct Run {
     var totalTime: Double
     var averageMileTime: Double
     var indoor: Bool = false
+    var caloriesBurned: Double
 }

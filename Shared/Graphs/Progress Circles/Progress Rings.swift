@@ -75,6 +75,28 @@ struct TotalWeightLossCircle: View {
     }
 }
 
+struct MonthlyDeficitCircle: View {
+    @EnvironmentObject var healthKit: MyHealthKit
+    var lineWidth: CGFloat = 10.0
+    var color = Color.orange
+
+    var body: some View {
+        let avg = healthKit.averageDeficitThisMonth
+        let projectedTomorrow = healthKit.projectedAverageMonthlyDeficitTomorrow
+        let percent = CGFloat(avg / 1000)
+        let projected: CGFloat = CGFloat(projectedTomorrow / 1000)
+
+        BackgroundCircle(color: color, lineWidth: lineWidth)
+        if projected >= percent {
+            GenericCircle(color: color, starting: 0, ending: projected, opacity: 0.4, lineWidth: lineWidth)
+        }
+        GenericCircle(color: color, starting: 0, ending: percent, opacity: 1, lineWidth: lineWidth)
+        if projected < percent {
+            GenericCircle(color: .red, starting: projected, ending: percent, opacity: 1, lineWidth: lineWidth)
+        }
+    }
+}
+
 struct AverageTotalDeficitCircle: View {
     @EnvironmentObject var healthKit: MyHealthKit
     var lineWidth: CGFloat = 10.0
