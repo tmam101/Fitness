@@ -12,7 +12,7 @@ struct FitnessView: View {
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
     var widget: Bool = false
-    
+    @State var isDisplayingOverlay = false
     var body: some View {
         
         ScrollView {
@@ -72,10 +72,23 @@ struct FitnessView: View {
                 }
                 Group {
                     StatsTitle(title: "Mile Time")
+                        .onTapGesture {
+                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+                            impactHeavy.impactOccurred()
+                            isDisplayingOverlay = true
+//                            barViewModel.barClicked = day
+//                                    overlayViewModel = OverlayViewModel(activeCalories: activeCalories, restingCalories: totalDeficit - activeCalories, consumedCalories: consumed)
+                        }
+                        .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
+                            self.isDisplayingOverlay = false
+                        }) {
+                            MileSettings()
+                                .environmentObject(healthKit)
+                        }
                     RunningLineGraph()
                         .environmentObject(healthKit)
                         .environmentObject(healthKit.fitness)
-                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 400)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
@@ -86,6 +99,38 @@ struct FitnessView: View {
             print("entering foreground")
             Task {
                 await healthKit.setValues(nil)
+            }
+        }
+    }
+}
+
+struct MileSettings: View {
+    @EnvironmentObject var healthKit: MyHealthKit
+    
+    var body: some View {
+        ZStack {
+            Color.myGray.edgesIgnoringSafeArea(.all)
+            VStack {
+                Text("Runs to Display")
+                    .font(.system(size: 50))
+                    .foregroundColor(.white)
+                HStack {
+                    Button("-") {
+                        healthKit.numberOfRuns -= 1
+                        UserDefaults.standard.set(healthKit.numberOfRuns, forKey: "numberOfRuns")
+                    }.frame(width: 100, height: 100)
+                        .font(.system(size: 70))
+                        .foregroundColor(.white)
+                    Text("\(healthKit.numberOfRuns)")
+                        .foregroundColor(.white)
+                        .font(.system(size: 70))
+                    Button("+") {
+                        healthKit.numberOfRuns += 1
+                        UserDefaults.standard.set(healthKit.numberOfRuns, forKey: "numberOfRuns")
+                    }.frame(width: 100, height: 100)
+                        .font(.system(size: 70))
+                        .foregroundColor(.white)
+                }
             }
         }
     }

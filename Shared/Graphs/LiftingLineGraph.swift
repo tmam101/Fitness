@@ -129,7 +129,7 @@ struct RunningLineGraph: View {
     var body: some View {
         GeometryReader { geometry in
             
-            let numberOfRuns = runViewModel.numberOfRuns
+            let numberOfRuns = healthKit.numberOfRuns
             let runs = Array(healthKit.runs.suffix(numberOfRuns))
             let points = averagesToGraphCoordinates(runs: runs, width: geometry.size.width - 40, height: geometry.size.height)
             let max = runViewModel.max
@@ -175,7 +175,7 @@ struct RunningLineGraph: View {
         @Published var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0)
         @Published var max: Int = 0
         @Published var min: Int = 0
-        @Published var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 5
+//        @Published var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 5
     }
     
     struct RunView: View {

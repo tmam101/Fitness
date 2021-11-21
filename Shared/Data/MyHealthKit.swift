@@ -54,7 +54,7 @@ class MyHealthKit: ObservableObject {
 
     //todo
     @Published public var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0)
-    
+    @Published public var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
     
     @Published public var individualStatistics: Days = Days()
     
