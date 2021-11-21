@@ -8,20 +8,20 @@
 import SwiftUI
 
 struct WeightLossText: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     
     var body: some View {
-        let weightLostString = String(format: "%.2f", healthKit.fitness.weightLost)
-        let averageWeeklyLostString = String(format: "%.2f", healthKit.fitness.averageWeightLostPerWeek) + " / week"
-        let averageMonthlyLostString = String(format: "%.2f", healthKit.fitness.averageWeightLostPerWeekThisMonth) + " / week"
+        let weightLostString = String(format: "%.2f", healthData.fitness.weightLost)
+        let averageWeeklyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeek) + " / week"
+        let averageMonthlyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeekThisMonth) + " / week"
         
-        let averageDeficit = healthKit.averageDeficitSinceStart / 1000
-        let averageWeightLoss = healthKit.fitness.averageWeightLostPerWeek / 2
+        let averageDeficit = healthData.averageDeficitSinceStart / 1000
+        let averageWeightLoss = healthData.fitness.averageWeightLostPerWeek / 2
 //        let ratio = Int(((averageWeightLoss / averageDeficit) * 100 - 100).corrected())
         
         VStack(alignment: .leading) {
 //            StatsText(color: .green3, title: "Compared to Deficit", stat: String(ratio) + "%")
-            StatsText(color: .green3, title: "Total", title2: "vs " + String(format: "%.2f", healthKit.expectedWeightLossSinceStart), stat: weightLostString)
+            StatsText(color: .green3, title: "Total", title2: "vs " + String(format: "%.2f", healthData.expectedWeightLossSinceStart), stat: weightLostString)
             StatsText(color: .green2, title: "Average", stat: averageWeeklyLostString)
             StatsText(color: .green1, title: "This Month", stat: averageMonthlyLostString)
         }
@@ -29,12 +29,12 @@ struct WeightLossText: View {
 }
 
 struct LiftingText: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     
     var body: some View {
         LiftingTextInterior()
-            .environmentObject(healthKit.fitness)
-            .environmentObject(healthKit.workouts)
+            .environmentObject(healthData.fitness)
+            .environmentObject(healthData.workouts)
     }
 }
 
@@ -65,15 +65,15 @@ private struct LiftingTextInterior: View {
 }
 
 struct DeficitText: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var percentages: Bool = false
     
     var body: some View {
-        let deficitToday: Int = Int(healthKit.deficitToday)
-        let idealDeficit: Int = Int(healthKit.deficitToGetCorrectDeficit)
-        let averageDeficit: Int = Int(healthKit.averageDeficitThisWeek)
-//        let totalDeficit: Int = Int(healthKit.averageDeficitSinceStart)
-         let monthlyDeficit: Int = Int(healthKit.averageDeficitThisMonth)
+        let deficitToday: Int = Int(healthData.deficitToday)
+        let idealDeficit: Int = Int(healthData.deficitToGetCorrectDeficit)
+        let averageDeficit: Int = Int(healthData.averageDeficitThisWeek)
+//        let totalDeficit: Int = Int(healthData.averageDeficitSinceStart)
+         let monthlyDeficit: Int = Int(healthData.averageDeficitThisMonth)
         
         // Non-percentages
         let averageDeficitString = String(averageDeficit) + "/1000"
@@ -81,9 +81,9 @@ struct DeficitText: View {
 //        let totalDeficitString = String(totalDeficit) + "/1000"
         let monthDeficitString = String(monthlyDeficit) + "/1000"
         // Percentages
-        let weightLostPercentString = String(healthKit.fitness.percentWeightLost) + "% lost"
-        let averageDeficitPercentString = String(healthKit.percentWeeklyDeficit) + "% dfct"
-        let deficitTodayPercentString = String(healthKit.percentDailyDeficit) + "% dfct tdy"
+        let weightLostPercentString = String(healthData.fitness.percentWeightLost) + "% lost"
+        let averageDeficitPercentString = String(healthData.percentWeeklyDeficit) + "% dfct"
+        let deficitTodayPercentString = String(healthData.percentDailyDeficit) + "% dfct tdy"
         
         if !self.percentages {
             VStack(alignment: .leading) {

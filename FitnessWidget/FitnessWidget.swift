@@ -10,21 +10,21 @@ import SwiftUI
 import HealthKit
 
 struct Provider: TimelineProvider {
-    var healthKit: MyHealthKit = MyHealthKit(environment: GlobalEnvironment.environment)
+    var healthData: HealthData = HealthData(environment: GlobalEnvironment.environment)
     
     func placeholder(in context: Context) -> SimpleEntry {
-        return SimpleEntry(date: Date(), healthKit: healthKit)
+        return SimpleEntry(date: Date(), healthData: healthData)
     }
     
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), healthKit: healthKit)
+        let entry = SimpleEntry(date: Date(), healthData: healthData)
         completion(entry)
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let  entryDate = Calendar.current.date(byAdding: .second, value: 1 , to: Date())!
-        let _ = MyHealthKit(environment: GlobalEnvironment.environment) { health in
-            let entry = SimpleEntry(date: entryDate, healthKit: healthKit)
+        let _ = HealthData(environment: GlobalEnvironment.environment) { health in
+            let entry = SimpleEntry(date: entryDate, healthData: healthData)
             let refreshDate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
             let timeline = Timeline(entries: [entry], policy: .after(refreshDate))
             completion(timeline)
@@ -34,7 +34,7 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    @State var healthKit: MyHealthKit
+    @State var healthData: HealthData
 }
 
 struct FitnessWidgetEntryView : View {
@@ -49,16 +49,16 @@ struct FitnessWidgetEntryView : View {
                     switch family {
                     case WidgetFamily.systemLarge:
                         AllRings()
-                            .environmentObject(entry.healthKit)
+                            .environmentObject(entry.healthData)
                             .padding()
                     case WidgetFamily.systemMedium:
                         HStack {
                             DeficitRings()
-                                .environmentObject(entry.healthKit)
+                                .environmentObject(entry.healthData)
                                 .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                                 .frame(maxWidth: 125)
                             BarChart(cornerRadius: 2.0)
-                                .environmentObject(entry.healthKit)
+                                .environmentObject(entry.healthData)
                                 .frame(minWidth: 0, maxWidth: .infinity)
                                 .background(Color.myGray)
                                 .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
@@ -66,7 +66,7 @@ struct FitnessWidgetEntryView : View {
                         
                     default:
                         DeficitRings()
-                            .environmentObject(entry.healthKit)
+                            .environmentObject(entry.healthData)
                             .padding()
                     }
                 }
@@ -90,8 +90,8 @@ struct FitnessWidget: Widget {
 
 //struct FitnessWidget_Previews: PreviewProvider {
 //    static var previews: some View {
-//        let healthKit = MyHealthKit(environment: GlobalEnvironment.environment)
-//        let entry = SimpleEntry(date: Date(), healthKit: healthKit)
+//        let healthData = MyHealthKit(environment: GlobalEnvironment.environment)
+//        let entry = SimpleEntry(date: Date(), healthData: healthData)
 //        FitnessWidgetEntryView(entry: entry)
 //            .previewContext(WidgetPreviewContext(family: .systemSmall))
 //    }

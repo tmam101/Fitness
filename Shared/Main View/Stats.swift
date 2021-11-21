@@ -18,7 +18,7 @@ struct StatsTitle: View {
 }
 
 struct StatsRow<Content: View, OtherContent: View>: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var shouldShowText: Bool = true
     let rings: OtherContent
     let text: Content
@@ -31,11 +31,11 @@ struct StatsRow<Content: View, OtherContent: View>: View {
     var body: some View {
         HStack(spacing: 0) {
             text
-                .environmentObject(healthKit)
+                .environmentObject(healthData)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
             
             rings
-                .environmentObject(healthKit)
+                .environmentObject(healthData)
                 .frame(minWidth: 0, maxWidth: .infinity)
             
         }

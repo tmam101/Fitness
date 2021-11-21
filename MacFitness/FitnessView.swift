@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FitnessView: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: MyHealthKit
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
     var widget: Bool = false
@@ -20,10 +20,10 @@ struct FitnessView: View {
                 StatsTitle(title: "Deficits")
                 HStack {
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
-                        .environmentObject(healthKit)
+                        .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
                     BarChart()
-                        .environmentObject(healthKit)
+                        .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
                         .background(Color.myGray)
                         .cornerRadius(20)
@@ -32,26 +32,26 @@ struct FitnessView: View {
                 
                 StatsTitle(title: "Weight Loss")
                 StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
-                    .environmentObject(healthKit)
+                    .environmentObject(healthData)
                     .frame(minWidth: 0, maxWidth: .infinity)
                 
                 StatsTitle(title: "Lifts")
                 StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-                    .environmentObject(healthKit)
+                    .environmentObject(healthData)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .onTapGesture {
-                        healthKit.workouts.smithMachine.toggle()
-                        healthKit.workouts.calculate()
+                        healthData.workouts.smithMachine.toggle()
+                        healthData.workouts.calculate()
                     }
                 ZStack {
                     BenchGraph()
-                        .environmentObject(healthKit.workouts)
+                        .environmentObject(healthData.workouts)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
                     SquatGraph()
-                        .environmentObject(healthKit.workouts)
+                        .environmentObject(healthData.workouts)
                         .padding()
                 }
             }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RunningLineGraph: View {
     @EnvironmentObject var fitness: FitnessCalculations
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     @State var presentingTest = false
     
     @State var runViewModel = RunViewModel()
@@ -18,8 +18,8 @@ struct RunningLineGraph: View {
     
     var body: some View {
         
-        let numberOfRuns = healthKit.numberOfRuns
-        let runs = Array(healthKit.runs.suffix(numberOfRuns))
+        let numberOfRuns = healthData.numberOfRuns
+        let runs = Array(healthData.runs.suffix(numberOfRuns))
         let max = runViewModel.max
         let min = runViewModel.min
         let x = (Double(max)-Double(min)) / 2
@@ -35,7 +35,7 @@ struct RunningLineGraph: View {
             
             LineGraph(points: points, color: color, width: 2)
             
-            if healthKit.runs.count > 0 {
+            if healthData.runs.count > 0 {
                 ForEach(0..<points.count, id: \.self) { index in
                     let width = (geometry.size.width / CGFloat(points.count)) - 2
                     Text("")

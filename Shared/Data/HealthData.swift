@@ -10,7 +10,7 @@ import HealthKit
 import WidgetKit
 import SwiftUI
 
-class MyHealthKit: ObservableObject {
+class HealthData: ObservableObject {
     //MARK: PROPERTIES
     var environment: AppEnvironmentConfig?
     private let healthStore = HKHealthStore()
@@ -83,7 +83,7 @@ class MyHealthKit: ObservableObject {
         
     }
     
-    init(environment: AppEnvironmentConfig, _ completion: @escaping ((_ health: MyHealthKit) -> Void)) {
+    init(environment: AppEnvironmentConfig, _ completion: @escaping ((_ health: HealthData) -> Void)) {
         Task {
             self.environment = environment
             switch environment {
@@ -95,7 +95,7 @@ class MyHealthKit: ObservableObject {
         }
     }
     
-    func setValues(_ completion: ((_ health: MyHealthKit) -> Void)?) async {
+    func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
 //        UserDefaults.standard.set(10, forKey: "numberOfRuns")
 //        let x = UserDefaults.standard.value(forKey: "Test")
         loadRunningWorkouts(completion: { [self] workouts, error in
@@ -191,7 +191,7 @@ class MyHealthKit: ObservableObject {
         }
     }
     
-    func setValuesDebug(_ completion: ((_ health: MyHealthKit) -> Void)?) {
+    func setValuesDebug(_ completion: ((_ health: HealthData) -> Void)?) {
         // Deficits
         self.deficitToday = 800
         self.deficitToGetCorrectDeficit = 1200

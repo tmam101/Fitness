@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FitnessView: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
     var widget: Bool = false
@@ -20,7 +20,7 @@ struct FitnessView: View {
                 Group {
                     StatsTitle(title: "Deficits")
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
-                        .environmentObject(healthKit)
+                        .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
                 }
                 Group {
@@ -28,7 +28,7 @@ struct FitnessView: View {
                         .foregroundColor(.white)
                         .font(.title2)
                     BarChart()
-                        .environmentObject(healthKit)
+                        .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 400)
                         .background(Color.myGray)
                         .cornerRadius(20)
@@ -37,37 +37,37 @@ struct FitnessView: View {
                 Group {
                     StatsTitle(title: "Weight Loss")
                     StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
-                        .environmentObject(healthKit)
+                        .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .onTapGesture {
                             Task {
-                                healthKit.activeCalorieModifier = 0.8
-                                healthKit.adjustActiveCalorieModifier.toggle()
-                                await healthKit.setValues(nil)
+                                healthData.activeCalorieModifier = 0.8
+                                healthData.adjustActiveCalorieModifier.toggle()
+                                await healthData.setValues(nil)
                             }
                         }
                 }
                 Group {
                     StatsTitle(title: "Lifts")
                     StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-                        .environmentObject(healthKit)
+                        .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .onTapGesture {
-                            healthKit.workouts.smithMachine.toggle()
-                            healthKit.workouts.calculate()
+                            healthData.workouts.smithMachine.toggle()
+                            healthData.workouts.calculate()
                         }
                 }
                 ZStack {
                     BenchGraph()
-                        .environmentObject(healthKit.workouts)
-                        .environmentObject(healthKit.fitness)
+                        .environmentObject(healthData.workouts)
+                        .environmentObject(healthData.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
                     SquatGraph()
-                        .environmentObject(healthKit.workouts)
-                        .environmentObject(healthKit.fitness)
+                        .environmentObject(healthData.workouts)
+                        .environmentObject(healthData.fitness)
                         .padding()
                 }
                 Group {
@@ -81,17 +81,17 @@ struct FitnessView: View {
                             self.isDisplayingOverlay = false
                         }) {
                             MileSettings()
-                                .environmentObject(healthKit)
+                                .environmentObject(healthData)
                         }
                     MileTimeStats()
-                        .environmentObject(healthKit)
+                        .environmentObject(healthData)
 //                        .padding([.top, .leading, .trailing])
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity, idealHeight: 200)
                     RunningLineGraph()
-                        .environmentObject(healthKit)
-                        .environmentObject(healthKit.fitness)
+                        .environmentObject(healthData)
+                        .environmentObject(healthData.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 400)
                         .padding()
                         .background(Color.myGray)
@@ -102,17 +102,17 @@ struct FitnessView: View {
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             print("entering foreground")
             Task {
-                await healthKit.setValues(nil)
+                await healthData.setValues(nil)
             }
         }
     }
 }
 
 struct MileTimeStats: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
 
     var body: some View {
-        let runs = Array(healthKit.runs.suffix(healthKit.numberOfRuns))
+        let runs = Array(healthData.runs.suffix(healthData.numberOfRuns))
         let decrease = (runs.first?.averageMileTime ?? 0.0) - (runs.last?.averageMileTime ?? 0.0)
         let timeDecrease = Time.doubleToString(double: decrease)
         VStack(alignment: .leading) {
@@ -128,7 +128,7 @@ struct MileTimeStats: View {
 }
 
 struct MileSettings: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     
     var body: some View {
         ZStack {
@@ -139,21 +139,21 @@ struct MileSettings: View {
                     .foregroundColor(.white)
                 HStack {
                     Button("-") {
-                        if healthKit.numberOfRuns > 2 {
-                            healthKit.numberOfRuns -= 1
-                            UserDefaults.standard.set(healthKit.numberOfRuns, forKey: "numberOfRuns")
+                        if healthData.numberOfRuns > 2 {
+                            healthData.numberOfRuns -= 1
+                            UserDefaults.standard.set(healthData.numberOfRuns, forKey: "numberOfRuns")
                         }
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))
                         .foregroundColor(.white)
-                    Text("\(healthKit.numberOfRuns)")
+                    Text("\(healthData.numberOfRuns)")
                         .foregroundColor(.white)
                         .font(.system(size: 70))
                     Button("+") {
-                        if healthKit.numberOfRuns <= healthKit.runs.count {
-                        healthKit.numberOfRuns += 1
+                        if healthData.numberOfRuns <= healthData.runs.count {
+                        healthData.numberOfRuns += 1
                         }
-                        UserDefaults.standard.set(healthKit.numberOfRuns, forKey: "numberOfRuns")
+                        UserDefaults.standard.set(healthData.numberOfRuns, forKey: "numberOfRuns")
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))
                         .foregroundColor(.white)
@@ -186,6 +186,6 @@ struct SquatGraph: View {
 struct FitnessView_Previews: PreviewProvider {
     static var previews: some View {
         FitnessView()
-            .environmentObject(MyHealthKit(environment: .debug))
+            .environmentObject(HealthData(environment: .debug))
     }
 }

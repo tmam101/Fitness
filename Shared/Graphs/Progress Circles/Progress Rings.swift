@@ -10,24 +10,24 @@ import Foundation
 import SwiftUI
 
 struct MonthlyAverageWeightLossCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10.0
     var color = Color.green1
     
     var body: some View {
-        let average = CGFloat(healthKit.fitness.averageWeightLostPerWeekThisMonth / 2)
+        let average = CGFloat(healthData.fitness.averageWeightLostPerWeekThisMonth / 2)
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: average, opacity: 1, lineWidth: lineWidth)
 
     }
 }
 struct WeeklyAverageDeficitCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10.0
     var color = Color.yellow
     var body: some View {
-        let deficit = healthKit.averageDeficitThisWeek
-        let projectedTomorrow = healthKit.projectedAverageWeeklyDeficitForTomorrow
+        let deficit = healthData.averageDeficitThisWeek
+        let projectedTomorrow = healthData.projectedAverageWeeklyDeficitForTomorrow
         let percent: CGFloat = CGFloat(deficit / 1000)
         let projected: CGFloat = CGFloat(projectedTomorrow / 1000)
         
@@ -43,13 +43,13 @@ struct WeeklyAverageDeficitCircle: View {
 }
 
 struct DailyDeficitCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10
     var color = Color.blue
     
     var body: some View {
-        let deficit = healthKit.deficitToday
-        let idealDeficit = healthKit.deficitToGetCorrectDeficit
+        let deficit = healthData.deficitToday
+        let idealDeficit = healthData.deficitToGetCorrectDeficit
         let percent: CGFloat = CGFloat((deficit / (idealDeficit == 0 ? 1 : idealDeficit)))
         
         BackgroundCircle(color: color, lineWidth: lineWidth)
@@ -58,7 +58,7 @@ struct DailyDeficitCircle: View {
 }
 
 struct TotalWeightLossCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10.0
     var color = Color.green2
     
@@ -69,20 +69,20 @@ struct TotalWeightLossCircle: View {
                 BackgroundCircle(color: color, lineWidth: lineWidth)
                             
                 // Progress
-                GenericCircle(color: color, starting: 0.0, ending: CGFloat(min(healthKit.fitness.progressToWeight, 1.0)), opacity: 1, lineWidth: lineWidth)
+                GenericCircle(color: color, starting: 0.0, ending: CGFloat(min(healthData.fitness.progressToWeight, 1.0)), opacity: 1, lineWidth: lineWidth)
             }
         }
     }
 }
 
 struct MonthlyDeficitCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10.0
     var color = Color.orange
 
     var body: some View {
-        let avg = healthKit.averageDeficitThisMonth
-        let projectedTomorrow = healthKit.projectedAverageMonthlyDeficitTomorrow
+        let avg = healthData.averageDeficitThisMonth
+        let projectedTomorrow = healthData.projectedAverageMonthlyDeficitTomorrow
         let percent = CGFloat(avg / 1000)
         let projected: CGFloat = CGFloat(projectedTomorrow / 1000)
 
@@ -98,13 +98,13 @@ struct MonthlyDeficitCircle: View {
 }
 
 struct AverageTotalDeficitCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10.0
     var color = Color.orange
 
     var body: some View {
-        let avg = healthKit.averageDeficitSinceStart
-        let projectedTomorrow = healthKit.projectedAverageTotalDeficitForTomorrow
+        let avg = healthData.averageDeficitSinceStart
+        let projectedTomorrow = healthData.projectedAverageTotalDeficitForTomorrow
         let percent = CGFloat(avg / 1000)
         let projected: CGFloat = CGFloat(projectedTomorrow / 1000)
 
@@ -120,13 +120,13 @@ struct AverageTotalDeficitCircle: View {
 }
 
 struct WeightLossAccuracyCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10.0
     var color = Color.green3
     
     var body: some View {
-        let averageDeficit = healthKit.averageDeficitSinceStart / 1000
-        let averageWeightLoss = healthKit.fitness.averageWeightLostPerWeek / 2
+        let averageDeficit = healthData.averageDeficitSinceStart / 1000
+        let averageWeightLoss = healthData.fitness.averageWeightLostPerWeek / 2
         let ratio = CGFloat(averageWeightLoss / averageDeficit).corrected()
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: ratio, opacity: 1, lineWidth: lineWidth)
@@ -134,12 +134,12 @@ struct WeightLossAccuracyCircle: View {
 }
 
 struct AverageTotalWeightLossCircle: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10.0
     var color = Color.green1
     
     var body: some View {
-        let averageWeightLoss = CGFloat(healthKit.fitness.averageWeightLostPerWeek / 2)
+        let averageWeightLoss = CGFloat(healthData.fitness.averageWeightLostPerWeek / 2)
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: averageWeightLoss, opacity: 1, lineWidth: lineWidth)
     }

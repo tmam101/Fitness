@@ -77,12 +77,12 @@ struct Bar: View {
 }
 
 struct CalorieTexts: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     
     var body: some View {
         HStack {
             ForEach((0...7).reversed(), id: \.self) {
-                Text(String(Int(healthKit.deficitsThisWeek[$0] ?? 0.0)))
+                Text(String(Int(healthData.deficitsThisWeek[$0] ?? 0.0)))
                     .font(.system(size: 8))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -92,7 +92,7 @@ struct CalorieTexts: View {
 }
 
 struct BarChart: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     var cornerRadius: CGFloat = 7.0
     
     var body: some View {
@@ -101,7 +101,7 @@ struct BarChart: View {
                 .padding([.trailing], 50)
                 .padding([.leading], 10)
             
-            BarsAndLines(cornerRadius: cornerRadius).environmentObject(healthKit)
+            BarsAndLines(cornerRadius: cornerRadius).environmentObject(healthData)
                 .frame(maxHeight: .infinity)
             
             DaysLetters()
@@ -150,7 +150,7 @@ struct BarChart: View {
     }
     
     struct BarsAndLines: View {
-        @EnvironmentObject var healthKit: MyHealthKit
+        @EnvironmentObject var healthData: HealthData
         var cornerRadius: CGFloat = 7.0
         @State var isDisplayingOverlay = false
         @State var overlayViewModel = OverlayViewModel(activeCalories: 0, restingCalories: 0, consumedCalories: 0)
@@ -158,13 +158,13 @@ struct BarChart: View {
         @State var barViewModel = BarViewModel()
         
         var body: some View {
-            let results = BarChart.deficitsToPercents(daysAndDeficits: healthKit.deficitsThisWeek)
+            let results = BarChart.deficitsToPercents(daysAndDeficits: healthData.deficitsThisWeek)
             let percents = results.0
             let top = results.1
             let horizontalRatio = top / 1000
-            let avgRatio = top / (healthKit.averageDeficitThisWeek == 0 ? 1 : healthKit.averageDeficitThisWeek)
+            let avgRatio = top / (healthData.averageDeficitThisWeek == 0 ? 1 : healthData.averageDeficitThisWeek)
                         
-//            let tmrwRatio = top / (healthKit.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthKit.projectedAverageWeeklyDeficitForTomorrow)
+//            let tmrwRatio = top / (healthData.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthData.projectedAverageWeeklyDeficitForTomorrow)
             
             GeometryReader { geometry in
                 ZStack {
@@ -175,7 +175,7 @@ struct BarChart: View {
                             let isPositive = indexAndPercent.percent >= 0
                             let color: Color = isPositive ? (isToday ? .yellow : .yellow) : .red
                             
-                            let day = healthKit.individualStatistics[7 - indexAndPercent.index] ?? Day()
+                            let day = healthData.individualStatistics[7 - indexAndPercent.index] ?? Day()
                             let activeCalories = day.activeCalories
                             let totalDeficit = day.deficit
                             let consumed = day.consumedCalories
@@ -221,7 +221,7 @@ struct BarChart: View {
                             .offset(x: 0.0, y: heightOffset - 1.25)
                             .foregroundColor(.yellow)
                             .opacity(0.5)
-                        Text("Avg \n\(String(Int(healthKit.averageDeficitThisWeek)))")
+                        Text("Avg \n\(String(Int(healthData.averageDeficitThisWeek)))")
                             .font(.system(size: 8))
                             .frame(maxWidth: 50)
                             .position(x: geometry.size.width - 20, y: 0.0)
@@ -299,7 +299,7 @@ struct BarChart: View {
 struct BarChart_Previews: PreviewProvider {
     static var previews: some View {
         BarChart()
-            .environmentObject(MyHealthKit(environment: .debug))
+            .environmentObject(HealthData(environment: .debug))
             .background(Color.myGray)
         
     }

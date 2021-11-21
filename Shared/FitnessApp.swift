@@ -9,24 +9,24 @@ import SwiftUI
 
 @main
 struct FitnessApp: App {
-    @State var healthKit = MyHealthKit(environment: GlobalEnvironment.environment)
+    @State var healthData = HealthData(environment: GlobalEnvironment.environment)
     var body: some Scene {
         WindowGroup {
             AppView()
-                .environmentObject(healthKit)
+                .environmentObject(healthData)
         }
     }
 }
 
 struct AppView: View {
-    @EnvironmentObject var healthKit: MyHealthKit
+    @EnvironmentObject var healthData: HealthData
     
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
                 FitnessView()
-                    .environmentObject(healthKit)
+                    .environmentObject(healthData)
             }
         }
     }
@@ -36,6 +36,6 @@ struct FitnessApp_Previews: PreviewProvider {
     
     static var previews: some View {
         AppView()
-            .environmentObject(MyHealthKit(environment: .debug))
+            .environmentObject(HealthData(environment: .debug))
     }
 }
