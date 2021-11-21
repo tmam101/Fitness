@@ -8,6 +8,13 @@
 import Foundation
 
 extension Date {
+    
+    static func stringFromDate(date: Date) -> String {
+        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
+        let string = "\(components.month ?? 0)/\(components.day ?? 0)/\((components.year ?? 0) - 2000)"
+        return string
+    }
+    
     static func daysBetween(date1: Date, date2: Date) -> Int? {
         return Calendar
             .current

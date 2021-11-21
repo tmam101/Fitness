@@ -17,16 +17,18 @@ struct RunningLineGraph: View {
     var color: Color = .blue
     
     var body: some View {
+        
+        let numberOfRuns = healthKit.numberOfRuns
+        let runs = Array(healthKit.runs.suffix(numberOfRuns))
+        let max = runViewModel.max
+        let min = runViewModel.min
+        let x = (Double(max)-Double(min)) / 2
+        let middle = Double(min) + x
+        
+        VStack {
         GeometryReader { geometry in
-            
-            let numberOfRuns = healthKit.numberOfRuns
-            let runs = Array(healthKit.runs.suffix(numberOfRuns))
             let points = averagesToGraphCoordinates(runs: runs, width: geometry.size.width - 40, height: geometry.size.height)
-            let max = runViewModel.max
-            let min = runViewModel.min
-            let x = (Double(max)-Double(min)) / 2
-            let middle = Double(min) + x
-            
+
             LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(Time.doubleToString(double: max))")
             LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: Time.doubleToString(double: middle))
             LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Time.doubleToString(double: min))")
@@ -56,6 +58,18 @@ struct RunningLineGraph: View {
                         }
                 }
             }
+        }
+            HStack {
+                Text(Date.stringFromDate(date: runs.first?.date ?? Date()))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.white)
+                    .font(.system(size: 8))
+                Text(Date.stringFromDate(date: runs.last?.date ?? Date()))
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .offset(x: -40)
+                    .foregroundColor(.white)
+                    .font(.system(size: 8))
+            }.frame(maxWidth: .infinity)
         }
     }
     
