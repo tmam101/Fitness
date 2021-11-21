@@ -114,9 +114,16 @@ struct MileTimeStats: View {
     var body: some View {
         let runs = Array(healthKit.runs.suffix(healthKit.numberOfRuns))
         let decrease = (runs.first?.averageMileTime ?? 0.0) - (runs.last?.averageMileTime ?? 0.0)
-        Text("Time decrease: \(Time.doubleToString(double: decrease))")
+        let timeDecrease = Time.doubleToString(double: decrease)
+        VStack(alignment: .leading) {
+        Text("Decrease")
             .foregroundColor(.white)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            .frame(maxWidth: .infinity)
+        Text("\(timeDecrease) seconds")
+            .foregroundColor(.blue)
+            .font(.title2)
+        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding()
     }
 }
 
