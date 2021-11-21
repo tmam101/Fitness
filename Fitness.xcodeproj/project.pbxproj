@@ -69,6 +69,15 @@
 		48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
 		48AF60EB2640F65C00C6CC11 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
 		48AF60ED2640F65C00C6CC11 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
+		48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6A274AFA890007AC15 /* LineGraph.swift */; };
+		48BD6E6C274AFAC50007AC15 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6A274AFA890007AC15 /* LineGraph.swift */; };
+		48BD6E6D274AFAC50007AC15 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6A274AFA890007AC15 /* LineGraph.swift */; };
+		48BD6E6F274AFAF90007AC15 /* RunningLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */; };
+		48BD6E70274AFAF90007AC15 /* RunningLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */; };
+		48BD6E71274AFAF90007AC15 /* RunningLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */; };
+		48BD6E73274AFB1E0007AC15 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */; };
+		48BD6E74274AFB1E0007AC15 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */; };
+		48BD6E75274AFB1E0007AC15 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */; };
 		48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
 		48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
 		48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
@@ -178,6 +187,9 @@
 		48A7706A260529C3002E5853 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		48A7707426053296002E5853 /* FloatingPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPointExtensions.swift; sourceTree = "<group>"; };
 		48AF60EA2640F65C00C6CC11 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
+		48BD6E6A274AFA890007AC15 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
+		48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningLineGraph.swift; sourceTree = "<group>"; };
+		48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeExtension.swift; sourceTree = "<group>"; };
 		48D7995C25B8C7950047C8E0 /* Progress Rings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Progress Rings.swift"; sourceTree = "<group>"; };
 		48E0E1CE2603C3490037EEAF /* GenericCircles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericCircles.swift; sourceTree = "<group>"; };
 		48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ring (unused).swift"; sourceTree = "<group>"; };
@@ -249,9 +261,9 @@
 		48199FB52628D02A000247E8 /* Graphs */ = {
 			isa = PBXGroup;
 			children = (
+				48BD6E69274AFA730007AC15 /* Line Graphs */,
 				486388E0261F9099005B1227 /* BarChart.swift */,
 				48E0E1CD2603C3370037EEAF /* Progress Circles */,
-				48199FB62628D045000247E8 /* LiftingLineGraph.swift */,
 			);
 			path = Graphs;
 			sourceTree = "<group>";
@@ -391,8 +403,19 @@
 				48A7707426053296002E5853 /* FloatingPointExtensions.swift */,
 				4827C99C26828BEF006700A1 /* DateExtension.swift */,
 				4827C9A026828C18006700A1 /* DoubleExtension.swift */,
+				48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		48BD6E69274AFA730007AC15 /* Line Graphs */ = {
+			isa = PBXGroup;
+			children = (
+				48BD6E6A274AFA890007AC15 /* LineGraph.swift */,
+				48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */,
+				48199FB62628D045000247E8 /* LiftingLineGraph.swift */,
+			);
+			path = "Line Graphs";
 			sourceTree = "<group>";
 		};
 		48E0E1CD2603C3370037EEAF /* Progress Circles */ = {
@@ -677,6 +700,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4827C99F26828BEF006700A1 /* DateExtension.swift in Sources */,
+				48BD6E6D274AFAC50007AC15 /* LineGraph.swift in Sources */,
 				48755A4B267A707800F7680E /* ContentView.swift in Sources */,
 				48755A76267A70AC00F7680E /* Ring (unused).swift in Sources */,
 				48755A75267A70AC00F7680E /* Progress Rings.swift in Sources */,
@@ -684,6 +708,7 @@
 				48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */,
 				48755A74267A70AC00F7680E /* Lines.swift in Sources */,
 				48755A73267A70AC00F7680E /* GenericCircles.swift in Sources */,
+				48BD6E75274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				48755A8C267AF13200F7680E /* Weight.swift in Sources */,
 				48755A7F267A70AC00F7680E /* Workout.swift in Sources */,
 				48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */,
@@ -691,6 +716,7 @@
 				48755A79267A70AC00F7680E /* LiftingLineGraph.swift in Sources */,
 				48755A77267A70AC00F7680E /* TextCollections.swift in Sources */,
 				48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */,
+				48BD6E71274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */,
 				48755A86267A8F5300F7680E /* FitnessView.swift in Sources */,
 				48755A88267A8FDA00F7680E /* Environment.swift in Sources */,
@@ -719,11 +745,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48BD6E73274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				4827C9A126828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48199FB72628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44D262619DE002321B5 /* Environment.swift in Sources */,
 				48E0E20B26041E700037EEAF /* Stats.swift in Sources */,
 				48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */,
+				48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */,
 				48E0E1F726041DE50037EEAF /* RingCollections.swift in Sources */,
 				4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */,
 				48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */,
@@ -738,6 +766,7 @@
 				48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */,
 				48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */,
 				486388E1261F9099005B1227 /* BarChart.swift in Sources */,
+				48BD6E6F274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				48AF60EB2640F65C00C6CC11 /* Workout.swift in Sources */,
 				4845B79525C0987D003BF999 /* Lines.swift in Sources */,
 				48755A8A267AF13200F7680E /* Weight.swift in Sources */,
@@ -763,11 +792,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48BD6E74274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				4827C9A226828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48A0D46D25BB71CB007C40ED /* FitnessWidget.swift in Sources */,
 				48A7706D260529C3002E5853 /* ColorExtension.swift in Sources */,
 				48E0E1E12603C47F0037EEAF /* GenericCircles.swift in Sources */,
 				48A0D48D25BB72F8007C40ED /* FitnessCalculations.swift in Sources */,
+				48BD6E6C274AFAC50007AC15 /* LineGraph.swift in Sources */,
 				485B72802631EBB40070E096 /* Ring (unused).swift in Sources */,
 				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
 				486388E3261F9099005B1227 /* BarChart.swift in Sources */,
@@ -782,6 +813,7 @@
 				48E0E21926041F3D0037EEAF /* TextCollections.swift in Sources */,
 				48E0E20C26041E700037EEAF /* Stats.swift in Sources */,
 				48A0D48725BB72E3007C40ED /* FitnessView.swift in Sources */,
+				48BD6E70274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				48AF60ED2640F65C00C6CC11 /* Workout.swift in Sources */,
 				48E0E20226041E2F0037EEAF /* RingCollections.swift in Sources */,
 				48755A8D267AF1BF00F7680E /* Weight.swift in Sources */,
