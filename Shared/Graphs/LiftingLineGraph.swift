@@ -136,12 +136,10 @@ struct RunningLineGraph: View {
             let min = runViewModel.min
             let x = (Double(max)-Double(min)) / 2
             let middle = Double(min) + x
-            let isMiddleInt = floor(middle) == middle
-            let middleText = isMiddleInt ? "\(Int(middle))" : String(format: "%.2f", middle)
             
-            LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(max)")
-            LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: middleText)
-            LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(runViewModel.min)")
+            LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(Time.doubleToString(double: max))")
+            LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: Time.doubleToString(double: middle))
+            LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Time.doubleToString(double: min))")
             
             LineGraph(points: points, color: color, width: 2)
             
@@ -173,8 +171,8 @@ struct RunningLineGraph: View {
     
     class RunViewModel: ObservableObject {
         @Published var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0)
-        @Published var max: Int = 0
-        @Published var min: Int = 0
+        @Published var max: Double = 0
+        @Published var min: Double = 0
 //        @Published var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 5
     }
     
@@ -189,12 +187,7 @@ struct RunningLineGraph: View {
                         .font(.largeTitle)
                         .foregroundColor(.white)
                     
-                    let floor = floor(runViewModel.runClicked.averageMileTime)
-                    let x = floor - runViewModel.runClicked.averageMileTime
-                    let y = x * -1
-                    let z = Int(y * 60)
-                    let s = z < 10 ? "0\(z)" : "\(z)"
-                    let mileTimeString = "\(Int(floor)):\(s)"
+                    let mileTimeString = Time.doubleToString(double: runViewModel.runClicked.averageMileTime)
                     let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
                     let year = String(date.year ?? 0).trimmingCharacters(in: [","])
                     let daysAgo = Date.daysBetween(date1: runViewModel.runClicked.date, date2: Date())
@@ -203,7 +196,7 @@ struct RunningLineGraph: View {
                     
                     RunTextView(text: "Average Mile Time")
                     Text(mileTimeString)
-                        .font(.system(size: 50))
+                        .font(.system(size: 90))
                         .foregroundColor(.blue)
                         .padding([.bottom])
                     RunTextView(text: "Date")
@@ -240,15 +233,39 @@ struct RunningLineGraph: View {
         
         // Get the highest mile time and round up to a whole number
         var max = averages.max()!
-        max.round(.up)
+        var rounded = max.rounded(.up)
+        var roundedDifference = rounded - max
+        if roundedDifference > 0.5 {
+            max = rounded - 0.5
+        } else {
+            max = rounded
+        }
         max = max > 1 ? max : 1
-        runViewModel.max = Int(max)
+        runViewModel.max = max
         
         // Get the lowest mile time and round up to a whole number
         var min = averages.min()!
-        min.round(.down)
-        runViewModel.min = Int(min)
-        
+        rounded = min.rounded(.down)
+        roundedDifference = min - rounded
+        if roundedDifference > 0.5 {
+            min = rounded + 0.5
+        } else {
+            min = rounded
+        }
+        runViewModel.min = min
         return LineGraph.numbersToPoints(points: averages, max: max, min: min, width: width, height: height)
+    }
+}
+
+class Time {
+    static func doubleToString(double: Double) -> String {
+        let floor = floor(double)
+        let x = floor - double
+        let y = x * -1
+        let z = Int(y * 60)
+        let s = z < 10 ? "0\(z)" : "\(z)"
+        let isInt = floor == double
+        let mileTimeString = isInt ? "\(Int(floor))" : "\(Int(floor)):\(s)"
+        return mileTimeString
     }
 }

@@ -96,7 +96,7 @@ class MyHealthKit: ObservableObject {
     }
     
     func setValues(_ completion: ((_ health: MyHealthKit) -> Void)?) async {
-        UserDefaults.standard.set(10, forKey: "numberOfRuns")
+//        UserDefaults.standard.set(10, forKey: "numberOfRuns")
 //        let x = UserDefaults.standard.value(forKey: "Test")
         loadRunningWorkouts(completion: { [self] workouts, error in
             print(workouts)

@@ -116,8 +116,10 @@ struct MileSettings: View {
                     .foregroundColor(.white)
                 HStack {
                     Button("-") {
-                        healthKit.numberOfRuns -= 1
-                        UserDefaults.standard.set(healthKit.numberOfRuns, forKey: "numberOfRuns")
+                        if healthKit.numberOfRuns > 2 {
+                            healthKit.numberOfRuns -= 1
+                            UserDefaults.standard.set(healthKit.numberOfRuns, forKey: "numberOfRuns")
+                        }
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))
                         .foregroundColor(.white)
@@ -125,7 +127,9 @@ struct MileSettings: View {
                         .foregroundColor(.white)
                         .font(.system(size: 70))
                     Button("+") {
+                        if healthKit.numberOfRuns <= healthKit.runs.count {
                         healthKit.numberOfRuns += 1
+                        }
                         UserDefaults.standard.set(healthKit.numberOfRuns, forKey: "numberOfRuns")
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))

@@ -952,7 +952,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0A14AA56-80B7-4194-9B33-DACC14F1575B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/MyHealthKit.swift"
@@ -1016,7 +1016,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "AD2656C1-C643-4672-9E64-BC5BB64EDE19"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/MyHealthKit.swift"
@@ -1064,7 +1064,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "5A2751EC-E1F4-4363-A327-E8B66238A73C"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/MyHealthKit.swift"
@@ -1080,7 +1080,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "FB82FE8A-2449-499A-A65F-DB486C16EB38"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/MyHealthKit.swift"
@@ -1092,11 +1092,11 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "FB82FE8A-2449-499A-A65F-DB486C16EB38 - b0de514c8a09f257"
+                  uuid = "FB82FE8A-2449-499A-A65F-DB486C16EB38 - 663e36a21b963c5b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Sendable () async -&gt; () in Fitness.MyHealthKit.setValues(Swift.Optional&lt;(Fitness.MyHealthKit) -&gt; ()&gt;) async -&gt; ()"
+                  symbolName = "Fitness.MyHealthKit.setValues(Swift.Optional&lt;(Fitness.MyHealthKit) -&gt; ()&gt;) async -&gt; ()"
                   moduleName = "Fitness"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/MyHealthKit.swift"
@@ -1104,14 +1104,14 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "148"
                   endingLineNumber = "148"
-                  offsetFromSymbolStart = "1020">
+                  offsetFromSymbolStart = "1364">
                </Location>
                <Location
-                  uuid = "FB82FE8A-2449-499A-A65F-DB486C16EB38 - fd6ae8bcb273688"
+                  uuid = "FB82FE8A-2449-499A-A65F-DB486C16EB38 - 90a5216421be60b6"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for closure #2 @Sendable () async -&gt; () in Fitness.MyHealthKit.setValues(Swift.Optional&lt;(Fitness.MyHealthKit) -&gt; ()&gt;) async -&gt; ()"
+                  symbolName = "(2) await resume partial function for Fitness.MyHealthKit.setValues(Swift.Optional&lt;(Fitness.MyHealthKit) -&gt; ()&gt;) async -&gt; ()"
                   moduleName = "Fitness"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/MyHealthKit.swift"
@@ -1119,7 +1119,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "148"
                   endingLineNumber = "148"
-                  offsetFromSymbolStart = "152">
+                  offsetFromSymbolStart = "160">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -1128,7 +1128,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "ED5CB5A3-DECC-4EB3-90DE-30FCC8428AF1"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Graphs/LiftingLineGraph.swift"
@@ -1150,10 +1150,136 @@
             filePath = "Shared/Main View/FitnessView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
             landmarkName = "previews"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4C61B3C6-9AA5-439E-8BBB-A7CFA5E0DBFE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Graphs/LiftingLineGraph.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
+            landmarkName = "averagesToGraphCoordinates(runs:width:height:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DCEF1083-DABB-405D-A7E7-D1B54E366C4D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Main View/FitnessView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CCE1DC4B-71B4-436B-8DD3-D68F96912BFA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Graphs/LiftingLineGraph.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
+            landmarkName = "averagesToGraphCoordinates(runs:width:height:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "645C9D8E-31D5-492B-8F8F-31EE08727C32"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Graphs/LiftingLineGraph.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "averagesToGraphCoordinates(runs:width:height:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "645C9D8E-31D5-492B-8F8F-31EE08727C32 - 24dce685e9bc9c8c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Fitness.Time.deinit"
+                  moduleName = "Fitness"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Graphs/LiftingLineGraph.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  uuid = "645C9D8E-31D5-492B-8F8F-31EE08727C32 - 4e9c3746ae9ed8c9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Fitness.Time.__deallocating_deinit"
+                  moduleName = "Fitness"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Graphs/LiftingLineGraph.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "645C9D8E-31D5-492B-8F8F-31EE08727C32 - 322a769a923376a0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Fitness.Time.__allocating_init() -&gt; Fitness.Time"
+                  moduleName = "Fitness"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Graphs/LiftingLineGraph.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "645C9D8E-31D5-492B-8F8F-31EE08727C32 - 2f2d55d57833fa10"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Fitness.Time.init() -&gt; Fitness.Time"
+                  moduleName = "Fitness"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Graphs/LiftingLineGraph.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "256"
+                  endingLineNumber = "256"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
