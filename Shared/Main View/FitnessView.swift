@@ -76,8 +76,6 @@ struct FitnessView: View {
                             let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                             impactHeavy.impactOccurred()
                             isDisplayingOverlay = true
-//                            barViewModel.barClicked = day
-//                                    overlayViewModel = OverlayViewModel(activeCalories: activeCalories, restingCalories: totalDeficit - activeCalories, consumedCalories: consumed)
                         }
                         .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
                             self.isDisplayingOverlay = false
@@ -85,6 +83,12 @@ struct FitnessView: View {
                             MileSettings()
                                 .environmentObject(healthKit)
                         }
+                    MileTimeStats()
+                        .environmentObject(healthKit)
+//                        .padding([.top, .leading, .trailing])
+                        .background(Color.myGray)
+                        .cornerRadius(20)
+                        .frame(maxWidth: .infinity, idealHeight: 200)
                     RunningLineGraph()
                         .environmentObject(healthKit)
                         .environmentObject(healthKit.fitness)
@@ -101,6 +105,18 @@ struct FitnessView: View {
                 await healthKit.setValues(nil)
             }
         }
+    }
+}
+
+struct MileTimeStats: View {
+    @EnvironmentObject var healthKit: MyHealthKit
+
+    var body: some View {
+        let runs = Array(healthKit.runs.suffix(healthKit.numberOfRuns))
+        let decrease = (runs.first?.averageMileTime ?? 0.0) - (runs.last?.averageMileTime ?? 0.0)
+        Text("Time decrease: \(Time.doubleToString(double: decrease))")
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
