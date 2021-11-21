@@ -7,33 +7,6 @@
 
 import SwiftUI
 
-struct LineAndLabel: View {
-    var width: CGFloat
-    var height: CGFloat
-    var text: String
-    
-    let lineWidthOffset: CGFloat = 40
-    let lineHeight: CGFloat = 0.5
-    let lineOpacity: CGFloat = 0.5
-    let labelWidth: CGFloat = 50
-    let labelFontSize: CGFloat = 8
-    let labelPosition: CGFloat = 20
-    
-    var body: some View {
-        Rectangle()
-            .size(width: width - lineWidthOffset, height: lineHeight)
-            .foregroundColor(.white)
-            .opacity(lineOpacity)
-            .offset(y: height)
-        Text(text)
-            .font(.system(size: labelFontSize))
-            .frame(maxWidth: labelWidth)
-            .position(x: width - labelPosition)
-            .offset(y: height)
-            .foregroundColor(.white)
-    }
-}
-
 struct RunningLineGraph: View {
     @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthKit: MyHealthKit
@@ -115,6 +88,34 @@ struct RunningLineGraph: View {
         return LineGraph.numbersToPoints(points: averages, max: max, min: min, width: width, height: height)
     }
 }
+
+struct LineAndLabel: View {
+    var width: CGFloat
+    var height: CGFloat
+    var text: String
+    
+    let lineWidthOffset: CGFloat = 40
+    let lineHeight: CGFloat = 0.5
+    let lineOpacity: CGFloat = 0.5
+    let labelWidth: CGFloat = 50
+    let labelFontSize: CGFloat = 8
+    let labelPosition: CGFloat = 20
+    
+    var body: some View {
+        Rectangle()
+            .size(width: width - lineWidthOffset, height: lineHeight)
+            .foregroundColor(.white)
+            .opacity(lineOpacity)
+            .offset(y: height)
+        Text(text)
+            .font(.system(size: labelFontSize))
+            .frame(maxWidth: labelWidth)
+            .position(x: width - labelPosition)
+            .offset(y: height)
+            .foregroundColor(.white)
+    }
+}
+
 class RunViewModel: ObservableObject {
     @Published var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0)
     @Published var max: Double = 0
