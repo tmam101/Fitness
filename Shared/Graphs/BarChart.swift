@@ -183,8 +183,10 @@ struct BarChart: View {
                             Bar(cornerRadius: cornerRadius, color: color, height: height, activeCalories: activeCalories, totalDeficit: totalDeficit)
                                 .opacity(isToday ? 0.5 : 1)
                                 .onTapGesture {
+#if !os(watchOS)
                                     let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                                     impactHeavy.impactOccurred()
+#endif
                                     isDisplayingOverlay = true
                                     barViewModel.barClicked = day
 //                                    overlayViewModel = OverlayViewModel(activeCalories: activeCalories, restingCalories: totalDeficit - activeCalories, consumedCalories: consumed)

@@ -7,8 +7,11 @@
 
 import Foundation
 import HealthKit
+#if !os(watchOS)
 import WidgetKit
+#endif
 import SwiftUI
+//import WatchConnectivity
 
 class HealthData: ObservableObject {
     //MARK: PROPERTIES
@@ -97,7 +100,8 @@ class HealthData: ObservableObject {
     
     func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
 //        UserDefaults.standard.set(10, forKey: "numberOfRuns")
-//        let x = UserDefaults.standard.value(forKey: "Test")
+        let x = UserDefaults.standard.value(forKey: "numberOfRuns")
+        print("numberOfRuns \(x)")
         loadRunningWorkouts(completion: { [self] workouts, error in
             print(workouts)
             if let workouts = workouts {
@@ -187,6 +191,7 @@ class HealthData: ObservableObject {
             
             completion?(self)
             
+//            WCSession.default
             
         }
     }

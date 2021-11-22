@@ -17,8 +17,14 @@ struct FitnessView: View {
         
         ScrollView {
             VStack(alignment: .leading) {
+                let x = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
                 Group {
+                    #if os(watchOS)
+                    StatsTitle(title: "\(x)")
+                    #endif
+                    #if os(iOS)
                     StatsTitle(title: "Deficits")
+                    #endif
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -73,8 +79,10 @@ struct FitnessView: View {
                 Group {
                     StatsTitle(title: "Mile Time")
                         .onTapGesture {
+#if !os(watchOS)
                             let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                             impactHeavy.impactOccurred()
+                            #endif
                             isDisplayingOverlay = true
                         }
                         .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
@@ -99,12 +107,15 @@ struct FitnessView: View {
                 }
             }
             .padding()
-        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+        }
+#if !os(watchOS)
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             print("entering foreground")
             Task {
                 await healthData.setValues(nil)
             }
         }
+        #endif
     }
 }
 

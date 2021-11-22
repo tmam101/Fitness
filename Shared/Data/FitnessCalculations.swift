@@ -7,7 +7,9 @@
 
 import Foundation
 import HealthKit
+#if !os(watchOS)
 import WidgetKit
+#endif
 
 class FitnessCalculations: ObservableObject {
     var environment: AppEnvironmentConfig?
@@ -59,7 +61,9 @@ class FitnessCalculations: ObservableObject {
         let progress = lost / totalToLose
         DispatchQueue.main.async {
             self.progressToWeight = progress
+#if !os(watchOS)
             WidgetCenter.shared.reloadAllTimelines()
+            #endif
             self.getSuccess()
         }
     }
@@ -78,7 +82,9 @@ class FitnessCalculations: ObservableObject {
         let progress = Double(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Double(daysBetweenStartAndEnd)
         DispatchQueue.main.async {
             self.progressToDate = progress
+#if !os(watchOS)
             WidgetCenter.shared.reloadAllTimelines()
+            #endif
         }
     }
     
@@ -89,7 +95,9 @@ class FitnessCalculations: ObservableObject {
     private func getSuccess() {
         DispatchQueue.main.async {
             self.successPercentage = self.progressToWeight - self.progressToDate
+#if !os(watchOS)
             WidgetCenter.shared.reloadAllTimelines()
+            #endif
         }
     }
     
@@ -123,7 +131,7 @@ class FitnessCalculations: ObservableObject {
             
             let weeks: Double = Double(daysBetweenStartAndNow) / Double(7)
             self.averageWeightLostPerWeek = self.weightLost / weeks
-            self.getWeightFromAMonthAgo()
+//            self.getWeightFromAMonthAgo()
         }
     }
     
@@ -137,7 +145,10 @@ class FitnessCalculations: ObservableObject {
             let date = weight.date
             guard
                 let dayCount = Date.daysBetween(date1: date, date2: Date())
-            else { return }
+            else {
+                print("Date that's fucked: \(date)")
+                return
+            }
             print("dayCount: \(dayCount)")
             if dayCount >= 30 {
                 index = i
@@ -146,6 +157,9 @@ class FitnessCalculations: ObservableObject {
             }
         }
         let newIndex = index - 1
+        print(newIndex)
+        print(weights)
+        print(weights.count)
         let newDays = Date.daysBetween(date1: self.weights[newIndex].date, date2: Date())!
         let between1 = abs(days - 30)
         let between2 = abs(newDays - 30)
@@ -206,6 +220,7 @@ class FitnessCalculations: ObservableObject {
             let result = results.first {
                 self.weights = results
                     .map{ Weight(weight: $0.quantity.doubleValue(for: HKUnit.pound()), date: $0.endDate) }
+                print(self.weights)
 //                    .sorted(by: { $0.date < $1.date })
 //                Weight.weightBetweenTwoWeights(date: self.weights.first?.date.advanced(by: (24 * 60 * 60 * 4)) ?? Date(), weight1: self.weights.first, weight2: self.weights[1])
 //                Weight.closestTwoWeightsToDate(weights: self.weights, date: Date.dateFromString(month: "04", day: "04", year: "2021") ?? Date())

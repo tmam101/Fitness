@@ -44,8 +44,10 @@ struct RunningLineGraph: View {
                         .opacity(0.00001)
                         .position(x: points[index].x, y: geometry.size.height / 2)
                         .onTapGesture {
+#if !os(watchOS)
                             let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                             impactHeavy.impactOccurred()
+                            #endif
                             self.presentingTest = true
                             runViewModel.runClicked = runs[index]
                         }
