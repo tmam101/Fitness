@@ -115,6 +115,11 @@
 		48BD6F59274B16380007AC15 /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
 		48BD6F5A274B169D0007AC15 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
 		48BD6F5B274B16B50007AC15 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
+		48BD6F5D274B17C20007AC15 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
+		48BD6F5E274B17C20007AC15 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
+		48BD6F5F274B17C20007AC15 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
+		48BD6F60274B17C20007AC15 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
+		48BD6F63274B191A0007AC15 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48BD6F62274B191A0007AC15 /* HealthKit.framework */; };
 		48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
 		48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
 		48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
@@ -294,6 +299,9 @@
 		48BD6F27274B12CE0007AC15 /* WatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		48BD6F2B274B12CE0007AC15 /* WatchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchUITests.swift; sourceTree = "<group>"; };
 		48BD6F2D274B12CE0007AC15 /* WatchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		48BD6F5C274B17C20007AC15 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		48BD6F61274B191A0007AC15 /* Watch WatchKit ExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Watch WatchKit ExtensionDebug.entitlements"; sourceTree = "<group>"; };
+		48BD6F62274B191A0007AC15 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS8.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		48D7995C25B8C7950047C8E0 /* Progress Rings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Progress Rings.swift"; sourceTree = "<group>"; };
 		48E0E1CE2603C3490037EEAF /* GenericCircles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericCircles.swift; sourceTree = "<group>"; };
 		48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ring (unused).swift"; sourceTree = "<group>"; };
@@ -363,6 +371,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48BD6F63274B191A0007AC15 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,6 +521,7 @@
 		48A0D46625BB71CB007C40ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				48BD6F62274B191A0007AC15 /* HealthKit.framework */,
 				48A0D49A25BB8703007C40ED /* HealthKit.framework */,
 				48A0D46725BB71CB007C40ED /* WidgetKit.framework */,
 				48A0D46925BB71CB007C40ED /* SwiftUI.framework */,
@@ -537,6 +547,7 @@
 				4827C99C26828BEF006700A1 /* DateExtension.swift */,
 				4827C9A026828C18006700A1 /* DoubleExtension.swift */,
 				48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */,
+				48BD6F5C274B17C20007AC15 /* AppView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -562,6 +573,7 @@
 		48BD6F07274B12CB0007AC15 /* Watch WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				48BD6F61274B191A0007AC15 /* Watch WatchKit ExtensionDebug.entitlements */,
 				48BD6F08274B12CB0007AC15 /* FitnessAppWatch.swift */,
 				48BD6F0A274B12CB0007AC15 /* ContentView.swift */,
 				48BD6F0C274B12CB0007AC15 /* NotificationController.swift */,
@@ -1022,6 +1034,7 @@
 				48BD6E71274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */,
 				48755A86267A8F5300F7680E /* FitnessView.swift in Sources */,
+				48BD6F5F274B17C20007AC15 /* AppView.swift in Sources */,
 				48755A88267A8FDA00F7680E /* Environment.swift in Sources */,
 				48755A82267A70DD00F7680E /* MyHealthKit.swift in Sources */,
 				48755A84267A715700F7680E /* FitnessCalculations.swift in Sources */,
@@ -1048,6 +1061,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48BD6F5D274B17C20007AC15 /* AppView.swift in Sources */,
 				48BD6E73274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				4827C9A126828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48199FB72628D045000247E8 /* LiftingLineGraph.swift in Sources */,
@@ -1095,6 +1109,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48BD6F5E274B17C20007AC15 /* AppView.swift in Sources */,
 				48BD6E74274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				4827C9A226828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48A0D46D25BB71CB007C40ED /* FitnessWidget.swift in Sources */,
@@ -1135,6 +1150,7 @@
 				48BD6F41274B15E60007AC15 /* HealthData.swift in Sources */,
 				48BD6F4A274B16140007AC15 /* Ring (unused).swift in Sources */,
 				48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */,
+				48BD6F60274B17C20007AC15 /* AppView.swift in Sources */,
 				48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */,
 				48BD6F46274B16060007AC15 /* BarChart.swift in Sources */,
 				48BD6F52274B162A0007AC15 /* FitnessView.swift in Sources */,
@@ -1732,6 +1748,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = "Watch WatchKit Extension/Watch WatchKit ExtensionDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Watch WatchKit Extension/Preview Content\"";

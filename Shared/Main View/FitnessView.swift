@@ -17,8 +17,14 @@ struct FitnessView: View {
         
         ScrollView {
             VStack(alignment: .leading) {
+                let x = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
                 Group {
+                    #if os(watchOS)
+                    StatsTitle(title: "\(x)")
+                    #endif
+                    #if os(iOS)
                     StatsTitle(title: "Deficits")
+                    #endif
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)

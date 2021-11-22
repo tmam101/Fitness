@@ -18,20 +18,6 @@ struct FitnessApp: App {
     }
 }
 
-struct AppView: View {
-    @EnvironmentObject var healthData: HealthData
-    
-    var body: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-            VStack {
-                FitnessView()
-                    .environmentObject(healthData)
-            }
-        }
-    }
-}
-
 struct FitnessApp_Previews: PreviewProvider {
     
     static var previews: some View {
