@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct FitnessApp: App {
+struct FitnessAppWatch: App {
     
     @SceneBuilder var body: some Scene {
         WindowGroup {

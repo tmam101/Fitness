@@ -73,8 +73,10 @@ struct FitnessView: View {
                 Group {
                     StatsTitle(title: "Mile Time")
                         .onTapGesture {
+#if !os(watchOS)
                             let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                             impactHeavy.impactOccurred()
+                            #endif
                             isDisplayingOverlay = true
                         }
                         .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
@@ -99,12 +101,15 @@ struct FitnessView: View {
                 }
             }
             .padding()
-        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+        }
+#if !os(watchOS)
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             print("entering foreground")
             Task {
                 await healthData.setValues(nil)
             }
         }
+        #endif
     }
 }
 

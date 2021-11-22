@@ -7,7 +7,9 @@
 
 import Foundation
 import HealthKit
+#if !os(watchOS)
 import WidgetKit
+#endif
 import SwiftUI
 
 class HealthData: ObservableObject {

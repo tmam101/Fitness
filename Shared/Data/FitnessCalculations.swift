@@ -7,7 +7,9 @@
 
 import Foundation
 import HealthKit
+#if !os(watchOS)
 import WidgetKit
+#endif
 
 class FitnessCalculations: ObservableObject {
     var environment: AppEnvironmentConfig?
@@ -59,7 +61,9 @@ class FitnessCalculations: ObservableObject {
         let progress = lost / totalToLose
         DispatchQueue.main.async {
             self.progressToWeight = progress
+#if !os(watchOS)
             WidgetCenter.shared.reloadAllTimelines()
+            #endif
             self.getSuccess()
         }
     }
@@ -78,7 +82,9 @@ class FitnessCalculations: ObservableObject {
         let progress = Double(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Double(daysBetweenStartAndEnd)
         DispatchQueue.main.async {
             self.progressToDate = progress
+#if !os(watchOS)
             WidgetCenter.shared.reloadAllTimelines()
+            #endif
         }
     }
     
@@ -89,7 +95,9 @@ class FitnessCalculations: ObservableObject {
     private func getSuccess() {
         DispatchQueue.main.async {
             self.successPercentage = self.progressToWeight - self.progressToDate
+#if !os(watchOS)
             WidgetCenter.shared.reloadAllTimelines()
+            #endif
         }
     }
     
