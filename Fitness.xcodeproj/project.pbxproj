@@ -78,6 +78,19 @@
 		48BD6E73274AFB1E0007AC15 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */; };
 		48BD6E74274AFB1E0007AC15 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */; };
 		48BD6E75274AFB1E0007AC15 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */; };
+		48BD6EFE274B12CB0007AC15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48BD6EFD274B12CB0007AC15 /* Assets.xcassets */; };
+		48BD6F04274B12CB0007AC15 /* Watch WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 48BD6F03274B12CB0007AC15 /* Watch WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		48BD6F09274B12CB0007AC15 /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F08274B12CB0007AC15 /* FitnessApp.swift */; };
+		48BD6F0B274B12CB0007AC15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F0A274B12CB0007AC15 /* ContentView.swift */; };
+		48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F0C274B12CB0007AC15 /* NotificationController.swift */; };
+		48BD6F0F274B12CB0007AC15 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F0E274B12CB0007AC15 /* NotificationView.swift */; };
+		48BD6F11274B12CB0007AC15 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F10274B12CB0007AC15 /* ComplicationController.swift */; };
+		48BD6F13274B12CD0007AC15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48BD6F12274B12CD0007AC15 /* Assets.xcassets */; };
+		48BD6F16274B12CD0007AC15 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48BD6F15274B12CD0007AC15 /* Preview Assets.xcassets */; };
+		48BD6F22274B12CE0007AC15 /* WatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F21274B12CE0007AC15 /* WatchTests.swift */; };
+		48BD6F2C274B12CE0007AC15 /* WatchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F2B274B12CE0007AC15 /* WatchUITests.swift */; };
+		48BD6F2E274B12CE0007AC15 /* WatchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F2D274B12CE0007AC15 /* WatchUITestsLaunchTests.swift */; };
+		48BD6F31274B12CE0007AC15 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 48BD6EFB274B12C80007AC15 /* Watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
 		48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
 		48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
@@ -124,6 +137,34 @@
 			remoteGlobalIDString = 48A0D46425BB71CB007C40ED;
 			remoteInfo = FitnessWidgetExtension;
 		};
+		48BD6F05274B12CB0007AC15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 48821CAB25B8BF3600C9F58A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 48BD6F02274B12CB0007AC15;
+			remoteInfo = "Watch WatchKit Extension";
+		};
+		48BD6F1E274B12CE0007AC15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 48821CAB25B8BF3600C9F58A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 48BD6F02274B12CB0007AC15;
+			remoteInfo = "Watch WatchKit Extension";
+		};
+		48BD6F28274B12CE0007AC15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 48821CAB25B8BF3600C9F58A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 48BD6EFA274B12C80007AC15;
+			remoteInfo = Watch;
+		};
+		48BD6F2F274B12CE0007AC15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 48821CAB25B8BF3600C9F58A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 48BD6EFA274B12C80007AC15;
+			remoteInfo = Watch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -134,6 +175,28 @@
 			dstSubfolderSpec = 13;
 			files = (
 				48A0D47325BB71CD007C40ED /* FitnessWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F32274B12CE0007AC15 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				48BD6F31274B12CE0007AC15 /* Watch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F35274B12CE0007AC15 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				48BD6F04274B12CB0007AC15 /* Watch WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -190,6 +253,23 @@
 		48BD6E6A274AFA890007AC15 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningLineGraph.swift; sourceTree = "<group>"; };
 		48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeExtension.swift; sourceTree = "<group>"; };
+		48BD6EFB274B12C80007AC15 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		48BD6EFD274B12CB0007AC15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		48BD6F03274B12CB0007AC15 /* Watch WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Watch WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		48BD6F08274B12CB0007AC15 /* FitnessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessApp.swift; sourceTree = "<group>"; };
+		48BD6F0A274B12CB0007AC15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		48BD6F0C274B12CB0007AC15 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		48BD6F0E274B12CB0007AC15 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		48BD6F10274B12CB0007AC15 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		48BD6F12274B12CD0007AC15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		48BD6F15274B12CD0007AC15 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		48BD6F17274B12CD0007AC15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		48BD6F18274B12CE0007AC15 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		48BD6F1D274B12CE0007AC15 /* WatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		48BD6F21274B12CE0007AC15 /* WatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTests.swift; sourceTree = "<group>"; };
+		48BD6F27274B12CE0007AC15 /* WatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		48BD6F2B274B12CE0007AC15 /* WatchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchUITests.swift; sourceTree = "<group>"; };
+		48BD6F2D274B12CE0007AC15 /* WatchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		48D7995C25B8C7950047C8E0 /* Progress Rings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Progress Rings.swift"; sourceTree = "<group>"; };
 		48E0E1CE2603C3490037EEAF /* GenericCircles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericCircles.swift; sourceTree = "<group>"; };
 		48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ring (unused).swift"; sourceTree = "<group>"; };
@@ -252,6 +332,27 @@
 				48A0D4A225BB92DE007C40ED /* HealthKit.framework in Frameworks */,
 				48A0D46A25BB71CB007C40ED /* SwiftUI.framework in Frameworks */,
 				48A0D46825BB71CB007C40ED /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F00274B12CB0007AC15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F1A274B12CE0007AC15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F24274B12CE0007AC15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +424,10 @@
 				48755A47267A707800F7680E /* MacFitness */,
 				48755A5A267A707900F7680E /* MacFitnessTests */,
 				48755A65267A707900F7680E /* MacFitnessUITests */,
+				48BD6EFC274B12C80007AC15 /* Watch */,
+				48BD6F07274B12CB0007AC15 /* Watch WatchKit Extension */,
+				48BD6F20274B12CE0007AC15 /* WatchTests */,
+				48BD6F2A274B12CE0007AC15 /* WatchUITests */,
 				48A0D46625BB71CB007C40ED /* Frameworks */,
 				48821CB825B8BF3800C9F58A /* Products */,
 			);
@@ -355,6 +460,10 @@
 				48755A46267A707800F7680E /* MacFitness.app */,
 				48755A57267A707900F7680E /* MacFitnessTests.xctest */,
 				48755A62267A707900F7680E /* MacFitnessUITests.xctest */,
+				48BD6EFB274B12C80007AC15 /* Watch.app */,
+				48BD6F03274B12CB0007AC15 /* Watch WatchKit Extension.appex */,
+				48BD6F1D274B12CE0007AC15 /* WatchTests.xctest */,
+				48BD6F27274B12CE0007AC15 /* WatchUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -416,6 +525,55 @@
 				48199FB62628D045000247E8 /* LiftingLineGraph.swift */,
 			);
 			path = "Line Graphs";
+			sourceTree = "<group>";
+		};
+		48BD6EFC274B12C80007AC15 /* Watch */ = {
+			isa = PBXGroup;
+			children = (
+				48BD6EFD274B12CB0007AC15 /* Assets.xcassets */,
+			);
+			path = Watch;
+			sourceTree = "<group>";
+		};
+		48BD6F07274B12CB0007AC15 /* Watch WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				48BD6F08274B12CB0007AC15 /* FitnessApp.swift */,
+				48BD6F0A274B12CB0007AC15 /* ContentView.swift */,
+				48BD6F0C274B12CB0007AC15 /* NotificationController.swift */,
+				48BD6F0E274B12CB0007AC15 /* NotificationView.swift */,
+				48BD6F10274B12CB0007AC15 /* ComplicationController.swift */,
+				48BD6F12274B12CD0007AC15 /* Assets.xcassets */,
+				48BD6F17274B12CD0007AC15 /* Info.plist */,
+				48BD6F18274B12CE0007AC15 /* PushNotificationPayload.apns */,
+				48BD6F14274B12CD0007AC15 /* Preview Content */,
+			);
+			path = "Watch WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		48BD6F14274B12CD0007AC15 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				48BD6F15274B12CD0007AC15 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		48BD6F20274B12CE0007AC15 /* WatchTests */ = {
+			isa = PBXGroup;
+			children = (
+				48BD6F21274B12CE0007AC15 /* WatchTests.swift */,
+			);
+			path = WatchTests;
+			sourceTree = "<group>";
+		};
+		48BD6F2A274B12CE0007AC15 /* WatchUITests */ = {
+			isa = PBXGroup;
+			children = (
+				48BD6F2B274B12CE0007AC15 /* WatchUITests.swift */,
+				48BD6F2D274B12CE0007AC15 /* WatchUITestsLaunchTests.swift */,
+			);
+			path = WatchUITests;
 			sourceTree = "<group>";
 		};
 		48E0E1CD2603C3370037EEAF /* Progress Circles */ = {
@@ -514,11 +672,13 @@
 				48821CB425B8BF3800C9F58A /* Frameworks */,
 				48821CB525B8BF3800C9F58A /* Resources */,
 				48A0D47725BB71CD007C40ED /* Embed App Extensions */,
+				48BD6F32274B12CE0007AC15 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				48A0D47225BB71CD007C40ED /* PBXTargetDependency */,
+				48BD6F30274B12CE0007AC15 /* PBXTargetDependency */,
 			);
 			name = "Fitness (iOS)";
 			productName = "Fitness (iOS)";
@@ -577,13 +737,83 @@
 			productReference = 48A0D46525BB71CB007C40ED /* FitnessWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		48BD6EFA274B12C80007AC15 /* Watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48BD6F3D274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "Watch" */;
+			buildPhases = (
+				48BD6EF9274B12C80007AC15 /* Resources */,
+				48BD6F35274B12CE0007AC15 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				48BD6F06274B12CB0007AC15 /* PBXTargetDependency */,
+			);
+			name = Watch;
+			productName = Watch;
+			productReference = 48BD6EFB274B12C80007AC15 /* Watch.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		48BD6F02274B12CB0007AC15 /* Watch WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48BD6F3C274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "Watch WatchKit Extension" */;
+			buildPhases = (
+				48BD6EFF274B12CB0007AC15 /* Sources */,
+				48BD6F00274B12CB0007AC15 /* Frameworks */,
+				48BD6F01274B12CB0007AC15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Watch WatchKit Extension";
+			productName = "Watch WatchKit Extension";
+			productReference = 48BD6F03274B12CB0007AC15 /* Watch WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+		48BD6F1C274B12CE0007AC15 /* WatchTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48BD6F3E274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "WatchTests" */;
+			buildPhases = (
+				48BD6F19274B12CE0007AC15 /* Sources */,
+				48BD6F1A274B12CE0007AC15 /* Frameworks */,
+				48BD6F1B274B12CE0007AC15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				48BD6F1F274B12CE0007AC15 /* PBXTargetDependency */,
+			);
+			name = WatchTests;
+			productName = WatchTests;
+			productReference = 48BD6F1D274B12CE0007AC15 /* WatchTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		48BD6F26274B12CE0007AC15 /* WatchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48BD6F3F274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "WatchUITests" */;
+			buildPhases = (
+				48BD6F23274B12CE0007AC15 /* Sources */,
+				48BD6F24274B12CE0007AC15 /* Frameworks */,
+				48BD6F25274B12CE0007AC15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				48BD6F29274B12CE0007AC15 /* PBXTargetDependency */,
+			);
+			name = WatchUITests;
+			productName = WatchUITests;
+			productReference = 48BD6F27274B12CE0007AC15 /* WatchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		48821CAB25B8BF3600C9F58A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1250;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1230;
 				TargetAttributes = {
 					48755A45267A707800F7680E = {
@@ -611,6 +841,20 @@
 					48A0D46425BB71CB007C40ED = {
 						CreatedOnToolsVersion = 12.3;
 					};
+					48BD6EFA274B12C80007AC15 = {
+						CreatedOnToolsVersion = 13.1;
+					};
+					48BD6F02274B12CB0007AC15 = {
+						CreatedOnToolsVersion = 13.1;
+					};
+					48BD6F1C274B12CE0007AC15 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 48BD6F02274B12CB0007AC15;
+					};
+					48BD6F26274B12CE0007AC15 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 48BD6EFA274B12C80007AC15;
+					};
 				};
 			};
 			buildConfigurationList = 48821CAE25B8BF3600C9F58A /* Build configuration list for PBXProject "Fitness" */;
@@ -633,6 +877,10 @@
 				48755A45267A707800F7680E /* MacFitness */,
 				48755A56267A707900F7680E /* MacFitnessTests */,
 				48755A61267A707900F7680E /* MacFitnessUITests */,
+				48BD6EFA274B12C80007AC15 /* Watch */,
+				48BD6F02274B12CB0007AC15 /* Watch WatchKit Extension */,
+				48BD6F1C274B12CE0007AC15 /* WatchTests */,
+				48BD6F26274B12CE0007AC15 /* WatchUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -689,6 +937,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				48A0D46F25BB71CC007C40ED /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6EF9274B12C80007AC15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48BD6EFE274B12CB0007AC15 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F01274B12CB0007AC15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48BD6F16274B12CD0007AC15 /* Preview Assets.xcassets in Resources */,
+				48BD6F13274B12CD0007AC15 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F1B274B12CE0007AC15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F25274B12CE0007AC15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -820,6 +1099,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		48BD6EFF274B12CB0007AC15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */,
+				48BD6F0B274B12CB0007AC15 /* ContentView.swift in Sources */,
+				48BD6F11274B12CB0007AC15 /* ComplicationController.swift in Sources */,
+				48BD6F09274B12CB0007AC15 /* FitnessApp.swift in Sources */,
+				48BD6F0F274B12CB0007AC15 /* NotificationView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F19274B12CE0007AC15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48BD6F22274B12CE0007AC15 /* WatchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48BD6F23274B12CE0007AC15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48BD6F2E274B12CE0007AC15 /* WatchUITestsLaunchTests.swift in Sources */,
+				48BD6F2C274B12CE0007AC15 /* WatchUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -842,6 +1150,26 @@
 			isa = PBXTargetDependency;
 			target = 48A0D46425BB71CB007C40ED /* FitnessWidgetExtension */;
 			targetProxy = 48A0D47125BB71CD007C40ED /* PBXContainerItemProxy */;
+		};
+		48BD6F06274B12CB0007AC15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 48BD6F02274B12CB0007AC15 /* Watch WatchKit Extension */;
+			targetProxy = 48BD6F05274B12CB0007AC15 /* PBXContainerItemProxy */;
+		};
+		48BD6F1F274B12CE0007AC15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 48BD6F02274B12CB0007AC15 /* Watch WatchKit Extension */;
+			targetProxy = 48BD6F1E274B12CE0007AC15 /* PBXContainerItemProxy */;
+		};
+		48BD6F29274B12CE0007AC15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 48BD6EFA274B12C80007AC15 /* Watch */;
+			targetProxy = 48BD6F28274B12CE0007AC15 /* PBXContainerItemProxy */;
+		};
+		48BD6F30274B12CE0007AC15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 48BD6EFA274B12C80007AC15 /* Watch */;
+			targetProxy = 48BD6F2F274B12CE0007AC15 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1294,6 +1622,234 @@
 			};
 			name = Release;
 		};
+		48BD6F33274B12CE0007AC15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = Watch_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = Watch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = Me.Fitness2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness2.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		48BD6F34274B12CE0007AC15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = Watch_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = Watch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = Me.Fitness2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		48BD6F36274B12CE0007AC15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Watch WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Watch WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch_WatchKit_Extension.ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness2.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		48BD6F37274B12CE0007AC15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Watch WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Watch WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch_WatchKit_Extension.ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		48BD6F38274B12CE0007AC15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.WatchTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Watch WatchKit Extension.appex/Watch WatchKit Extension";
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		48BD6F39274B12CE0007AC15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.WatchTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Watch WatchKit Extension.appex/Watch WatchKit Extension";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		48BD6F3A274B12CE0007AC15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.WatchUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = Watch;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		48BD6F3B274B12CE0007AC15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.WatchUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = Watch;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1365,6 +1921,42 @@
 			buildConfigurations = (
 				48A0D47525BB71CD007C40ED /* Debug */,
 				48A0D47625BB71CD007C40ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48BD6F3C274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "Watch WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48BD6F36274B12CE0007AC15 /* Debug */,
+				48BD6F37274B12CE0007AC15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48BD6F3D274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "Watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48BD6F33274B12CE0007AC15 /* Debug */,
+				48BD6F34274B12CE0007AC15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48BD6F3E274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "WatchTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48BD6F38274B12CE0007AC15 /* Debug */,
+				48BD6F39274B12CE0007AC15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48BD6F3F274B12CE0007AC15 /* Build configuration list for PBXNativeTarget "WatchUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48BD6F3A274B12CE0007AC15 /* Debug */,
+				48BD6F3B274B12CE0007AC15 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
