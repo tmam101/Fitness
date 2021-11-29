@@ -82,7 +82,7 @@ struct FitnessView: View {
 #if !os(watchOS)
                             let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                             impactHeavy.impactOccurred()
-                            #endif
+#endif
                             isDisplayingOverlay = true
                         }
                         .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
@@ -96,7 +96,7 @@ struct FitnessView: View {
 //                        .padding([.top, .leading, .trailing])
                         .background(Color.myGray)
                         .cornerRadius(20)
-                        .frame(maxWidth: .infinity, idealHeight: 200)
+                        .frame(maxWidth: .infinity)
                     RunningLineGraph()
                         .environmentObject(healthData)
                         .environmentObject(healthData.fitness)
@@ -115,7 +115,7 @@ struct FitnessView: View {
                 await healthData.setValues(nil)
             }
         }
-        #endif
+#endif
     }
 }
 
@@ -130,7 +130,7 @@ struct MileTimeStats: View {
         Text("Decrease")
             .foregroundColor(.white)
 //            .frame(maxWidth: .infinity)
-        Text("\(timeDecrease) seconds")
+        Text("\(timeDecrease)")
             .foregroundColor(.blue)
             .font(.title2)
         }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
