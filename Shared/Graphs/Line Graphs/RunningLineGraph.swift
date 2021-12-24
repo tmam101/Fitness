@@ -133,9 +133,20 @@ struct LineAndLabel: View {
 }
 
 class RunViewModel: ObservableObject {
-    @Published var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0)
+    @Published var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0, weightAtTime: 0)
     @Published var max: Double = 0
     @Published var min: Double = 0
+}
+
+struct RunTexts: View {
+    @EnvironmentObject var runViewModel: RunViewModel
+
+    var body: some View {
+//        RunTextView(text: "Weight")
+        Text("Weight")
+        Text("\(runViewModel.runClicked.weightAtTime)")
+//        RunTextView(number: runViewModel.runClicked.weightAtTime, isLarge: true)
+    }
 }
 
 struct RunView: View {
@@ -145,33 +156,51 @@ struct RunView: View {
         ZStack {
             Color.myGray.edgesIgnoringSafeArea(.all)
             VStack(alignment:.leading) {
-                Text("Run\n")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
+//                let mileTimeString = Time.doubleToString(double: runViewModel.runClicked.averageMileTime)
+//                let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
+//                let year = String(date.year ?? 0).trimmingCharacters(in: [","])
+//                let daysAgo = Date.daysBetween(date1: runViewModel.runClicked.date, date2: Date())
+//                let dateString = "\(date.month ?? 0)/\(date.day ?? 0)/\(year)"
+//                let daysAgoString = "\(daysAgo ?? 0) days ago"
+//                Group{
+                Text("Run")
+//                }
+                let values = getValues()
                 
-                let mileTimeString = Time.doubleToString(double: runViewModel.runClicked.averageMileTime)
-                let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
-                let year = String(date.year ?? 0).trimmingCharacters(in: [","])
-                let daysAgo = Date.daysBetween(date1: runViewModel.runClicked.date, date2: Date())
-                let dateString = "\(date.month ?? 0)/\(date.day ?? 0)/\(year)"
-                let daysAgoString = "\(daysAgo ?? 0) days ago"
-                
-                RunTextView(text: "Average Mile Time")
-                Text(mileTimeString)
+                Text("Average Mile Time")
+                Text(values.mileTimeString)
                     .font(.system(size: 90))
                     .foregroundColor(.blue)
                     .padding([.bottom])
-                RunTextView(text: "Date")
-                RunTextView(text: dateString, isLarge: true)
-                RunTextView(text: daysAgoString)
-                RunTextView(text: "Distance")
-                RunTextView(number: runViewModel.runClicked.totalDistance, isLarge: true)
-                RunTextView(text: "Time")
-                RunTextView(number: runViewModel.runClicked.totalTime, isLarge: true)
+//                RunTextView(text: "Date")
+//                RunTextView(text: dateString, isLarge: true)
+//                RunTextView(text: daysAgoString)
+//                RunTextView(text: "Distance")
+//                RunTextView(number: runViewModel.runClicked.totalDistance, isLarge: true)
+//                RunTextView(text: "Time")
+//                RunTextView(number: runViewModel.runClicked.totalTime, isLarge: true)
+                Text("Date")
+                Text(values.dateString)
+                Text(values.daysAgoString)
+                Text("Distance")
+                Text("\(runViewModel.runClicked.totalDistance)")
+                Text("Time")
+                Text("\(runViewModel.runClicked.totalTime)")
+//                Text("Weight")
+//                Text("\(runViewModel.runClicked.weightAtTime)")
+                }
             }
         }
+    func getValues() -> (mileTimeString: String, dateString: String, daysAgoString: String) {
+        let mileTimeString = Time.doubleToString(double: runViewModel.runClicked.averageMileTime)
+        let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
+        let year = String(date.year ?? 0).trimmingCharacters(in: [","])
+        let daysAgo = Date.daysBetween(date1: runViewModel.runClicked.date, date2: Date())
+        let dateString = "\(date.month ?? 0)/\(date.day ?? 0)/\(year)"
+        let daysAgoString = "\(daysAgo ?? 0) days ago"
+        return (mileTimeString: mileTimeString, dateString: dateString, daysAgoString: daysAgoString)
     }
-}
+    }
 
 struct RunTextView: View {
     var text: String? = nil

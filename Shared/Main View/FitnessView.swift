@@ -169,6 +169,13 @@ struct MileSettings: View {
                         .font(.system(size: 70))
                         .foregroundColor(.white)
                 }
+//                NavigationView {
+//                    ScrollView {
+//                        ForEach(healthData.runs, id: \.date) { run in
+//                            NavigationLink("\(run.averageMileTime)", destination: Text("\(run.averageMileTime)"))
+//                        }
+//                    }
+//                }
             }
         }
     }

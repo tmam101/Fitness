@@ -16,9 +16,16 @@ extension Date {
     }
     
     static func daysBetween(date1: Date, date2: Date) -> Int? {
+        let components1 = Calendar.current.dateComponents([.day, .month, .year], from: date1)
+        let day1String = "\(components1.month!).\(components1.day!).\(components1.year!)"
+        let components2 = Calendar.current.dateComponents([.day, .month, .year], from: date2)
+        let day2String = "\(components2.month!).\(components2.day!).\(components2.year!)"
+//        let date1String = "\(Calendar.current.dateComponents([.month], from: date1).month!).\(Calendar.current.dateComponents([.day], from: date1).day!).\(Calendar.current.dateComponents([.year], from: date1).year!)"
+        let newDate1 = dateFromString(day1String) ?? Date()
+        let newDate2 = dateFromString(day2String) ?? Date()
         return Calendar
             .current
-            .dateComponents([.day], from: date1, to: date2)
+            .dateComponents([.day], from: newDate1, to: newDate2)
             .day
     }
     

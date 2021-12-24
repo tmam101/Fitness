@@ -56,7 +56,7 @@ class HealthData: ObservableObject {
 
 
     //todo
-    @Published public var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0)
+    @Published public var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0, weightAtTime: 0)
     @Published public var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
     
     @Published public var individualStatistics: Days = Days()
@@ -111,7 +111,8 @@ class HealthData: ObservableObject {
                     let average = duration / distance
                     let indoor = item.metadata?["HKIndoorWorkout"] as! Bool
                     let burned = item.totalEnergyBurned?.doubleValue(for: .kilocalorie())
-                    let run = Run(date: item.startDate, totalDistance: distance, totalTime: duration, averageMileTime: average, indoor: indoor, caloriesBurned: burned ?? 0)
+                    let weightAtTime = fitness.weight(at: item.startDate)
+                    let run = Run(date: item.startDate, totalDistance: distance, totalTime: duration, averageMileTime: average, indoor: indoor, caloriesBurned: burned ?? 0, weightAtTime: weightAtTime)
                     return run
                 }
                 print(runs)

@@ -128,7 +128,8 @@ class FitnessCalculations: ObservableObject {
             guard
                 let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
             else { return }
-            
+            self.weight(at: Date.dateFromString("11.25.2021") ?? Date())
+
             let weeks: Double = Double(daysBetweenStartAndNow) / Double(7)
             self.averageWeightLostPerWeek = self.weightLost / weeks
 //            self.getWeightFromAMonthAgo()
@@ -174,6 +175,31 @@ class FitnessCalculations: ObservableObject {
         let weeklyAverageThisMonth = (difference / Double(days)) * Double(7)
         self.averageWeightLostPerWeekThisMonth = Double(weeklyAverageThisMonth)
         
+    }
+    
+    func weight(at date: Date) -> Double {
+        var weight1: Weight?
+        var weight2: Weight?
+        
+        for i in stride(from: 0, to: self.weights.count, by: 1) {
+            if weights[i].date == date {
+                return weights[i].weight
+            }
+            if weights[i].date < date {
+                weight1 = weights[i]
+                weight2 = weights[i-1]
+                break
+            }
+        }
+        guard let weight1 = weight1, let weight2 = weight2 else { return 0 }
+        let maxWeight = max(weight1.weight, weight2.weight)
+        let minWeight = min(weight1.weight, weight2.weight)
+        let weightDifference = weight1.weight - weight2.weight
+        let dayDifferenceBetweenWeights = Date.daysBetween(date1: weight1.date, date2: weight2.date) ?? 0
+        let dayDifferenceBetweenWeightAndDate = Date.daysBetween(date1: weight1.date, date2: date) ?? 0
+        let proportion = weightDifference * (Double(dayDifferenceBetweenWeightAndDate) / Double(dayDifferenceBetweenWeights))
+        let weightAtDate = weight1.weight - proportion
+        return weightAtDate
     }
     
     func getAllStats(completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
