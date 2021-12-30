@@ -15,8 +15,6 @@ class Network {
             guard let url = URLComponents(string: urlString)?.url else { return }
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
             
             let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
                 guard error == nil, let data = data else { return }
