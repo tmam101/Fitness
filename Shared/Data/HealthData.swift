@@ -13,6 +13,44 @@ import WidgetKit
 import SwiftUI
 //import WatchConnectivity
 
+struct DataToSend: Codable {
+    var deficitToday: Double = 0
+    var averageDeficitThisWeek: Double = 0
+    var averageDeficitThisMonth: Double = 0
+    var projectedAverageMonthlyDeficitTomorrow: Double = 0
+    var averageDeficitSinceStart: Double = 0
+    var deficitToGetCorrectDeficit: Double = 0
+    var percentWeeklyDeficit: Int = 0
+    var percentDailyDeficit: Int = 0
+    var projectedAverageWeeklyDeficitForTomorrow: Double = 0
+    var projectedAverageTotalDeficitForTomorrow: Double = 0
+    var expectedWeightLossSinceStart: Double = 0
+    var daysBetweenStartAndEnd: Int = 0
+    var daysBetweenStartAndNow: Int = 0
+    var daysBetweenNowAndEnd: Int = 0
+    var deficitsThisWeek: [Int:Double] = [:]
+    var dailyActiveCalories: [Int:Double] = [:]
+}
+
+struct DataToReceive: Codable {
+    var deficitToday: Double = 0
+    var averageDeficitThisWeek: Double = 0
+    var averageDeficitThisMonth: Double = 0
+    var projectedAverageMonthlyDeficitTomorrow: Double = 0
+    var averageDeficitSinceStart: Double = 0
+    var deficitToGetCorrectDeficit: Double = 0
+    var percentWeeklyDeficit: Int = 0
+    var percentDailyDeficit: Int = 0
+    var projectedAverageWeeklyDeficitForTomorrow: Double = 0
+    var projectedAverageTotalDeficitForTomorrow: Double = 0
+    var expectedWeightLossSinceStart: Double = 0
+    var daysBetweenStartAndEnd: Int = 0
+    var daysBetweenStartAndNow: Int = 0
+    var daysBetweenNowAndEnd: Int = 0
+    var deficitsThisWeek: [String:Double] = [:]
+    var dailyActiveCalories: [String:Double] = [:]
+}
+
 class HealthData: ObservableObject {
     //MARK: PROPERTIES
     var environment: AppEnvironmentConfig?
@@ -34,10 +72,7 @@ class HealthData: ObservableObject {
     @Published public var percentDailyDeficit: Int = 0
     @Published public var projectedAverageWeeklyDeficitForTomorrow: Double = 0
     @Published public var projectedAverageTotalDeficitForTomorrow: Double = 0
-    
-    @Published public var averageWeightLossSinceStart: Double = 0
-    @Published public var expectedAverageWeightLossSinceStart: Double = 0
-    
+        
     @Published public var expectedWeightLossSinceStart: Double = 0
     
     // Days
@@ -45,7 +80,6 @@ class HealthData: ObservableObject {
     @Published public var daysBetweenStartAndNow: Int = 0
     @Published public var daysBetweenNowAndEnd: Int = 0
     @Published public var deficitsThisWeek: [Int:Double] = [:]
-    @Published public var deficitsThisMonth: [Int:Double] = [:]
     @Published public var dailyActiveCalories: [Int:Double] = [:]
     
     @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
@@ -150,51 +184,72 @@ class HealthData: ObservableObject {
             let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
             self.activeCalorieModifier = activeCalorieModifier
         }
-        let averageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
+        let averageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow) ?? 0
         
-        let deficitToReachToday = await getDeficitToReachIdeal()
-        let averageWeeklyDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 6)
-        let averageTotalDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: self.daysBetweenStartAndNow)
-        let averageDeficitThisWeek = await getAverageDeficit(forPast: 7)
+        let deficitToReachToday = await getDeficitToReachIdeal() ?? 0
+        let averageWeeklyDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 6) ?? 0
+        let averageTotalDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: self.daysBetweenStartAndNow) ?? 0
+        let averageDeficitThisWeek = await getAverageDeficit(forPast: 7) ?? 0
         
-        let averageDeficitThisMonth = await getAverageDeficit(forPast: 30)
-        let averageMonthlyDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 30)
+        let averageDeficitThisMonth = await getAverageDeficit(forPast: 30) ?? 0
+        let averageMonthlyDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 30) ?? 0
 
-        let averageDeficitToday = await getAverageDeficit(forPast: 0)
+        let averageDeficitToday = await getAverageDeficit(forPast: 0) ?? 0
         
         let deficitsThisWeek = await getIndividualDeficits(forPastDays: 7)
-        let deficitsThisMonth = await getIndividualDeficits(forPastDays: 30)
         
         let individualActiveCalories = await getIndividualActiveCalories(forPastDays: 7)
         let individualStatistics = await getIndividualStatistics(forPastDays: 7)
+        let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
+        let percentDailyDeficit = Int((averageDeficitToday / deficitToReachToday) * 100)
+        let expectedWeightLossSinceStart = (averageDeficitSinceStart * Double(self.daysBetweenStartAndNow)) / Double(3500)
         
         DispatchQueue.main.async { [self] in
             self.deficitsThisWeek = deficitsThisWeek
             self.dailyActiveCalories = individualActiveCalories
             // Deficits
-            self.deficitToday = averageDeficitToday ?? 0
-            self.deficitToGetCorrectDeficit = deficitToReachToday ?? 0
-            self.averageDeficitThisWeek = averageDeficitThisWeek ?? 0
-            self.percentWeeklyDeficit = Int((self.averageDeficitThisWeek / goalDeficit) * 100)
-            self.averageDeficitThisMonth = averageDeficitThisMonth ?? 0
-            self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
-            self.projectedAverageWeeklyDeficitForTomorrow = averageWeeklyDeficitTomorrow ?? 0
-            self.projectedAverageTotalDeficitForTomorrow = averageTotalDeficitTomorrow ?? 0
+            self.deficitToday = averageDeficitToday
+            self.deficitToGetCorrectDeficit = deficitToReachToday
+            self.averageDeficitThisWeek = averageDeficitThisWeek
+            self.percentWeeklyDeficit = percentWeeklyDeficit
+            self.averageDeficitThisMonth = averageDeficitThisMonth
+            self.percentDailyDeficit = percentDailyDeficit
+            self.projectedAverageWeeklyDeficitForTomorrow = averageWeeklyDeficitTomorrow
+            self.projectedAverageTotalDeficitForTomorrow = averageTotalDeficitTomorrow
             
-            let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) / 3500) * 7
-            self.averageWeightLossSinceStart = averageWeightLossSinceStart
-            self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
-            self.averageDeficitSinceStart = averageDeficitSinceStart ?? 0
-            self.expectedWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) * Double(self.daysBetweenStartAndNow)) / Double(3500)
+//            let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart ?? 1) / 3500) * 7
+            self.averageDeficitSinceStart = averageDeficitSinceStart
+            self.expectedWeightLossSinceStart = expectedWeightLossSinceStart
             // todo line graph comparing weight loss to calorie deficit
-            self.projectedAverageMonthlyDeficitTomorrow = averageMonthlyDeficitTomorrow ?? 0
+            self.projectedAverageMonthlyDeficitTomorrow = averageMonthlyDeficitTomorrow
             self.individualStatistics = individualStatistics
+        }
+            
+            let dataToSend = DataToSend(deficitToday: self.deficitToday,
+                                        averageDeficitThisWeek: self.averageDeficitThisWeek,
+                                        averageDeficitThisMonth: self.averageDeficitThisMonth,
+                                        projectedAverageMonthlyDeficitTomorrow: self.projectedAverageMonthlyDeficitTomorrow,
+                                        averageDeficitSinceStart: self.averageDeficitSinceStart,
+                                        deficitToGetCorrectDeficit: self.deficitToGetCorrectDeficit,
+                                        percentWeeklyDeficit: self.percentWeeklyDeficit,
+                                        percentDailyDeficit: self.percentDailyDeficit,
+                                        projectedAverageWeeklyDeficitForTomorrow: self.projectedAverageWeeklyDeficitForTomorrow,
+                                        projectedAverageTotalDeficitForTomorrow: self.projectedAverageTotalDeficitForTomorrow,
+                                        expectedWeightLossSinceStart: self.expectedWeightLossSinceStart,
+                                        daysBetweenStartAndEnd: self.daysBetweenStartAndEnd,
+                                        daysBetweenStartAndNow: self.daysBetweenStartAndNow,
+                                        daysBetweenNowAndEnd: self.daysBetweenNowAndEnd,
+                                        deficitsThisWeek: self.deficitsThisWeek,
+                                        dailyActiveCalories: self.dailyActiveCalories)
+            let n = Network()
+//            let m = NetworkModel(deficitToday: 696969, averageDeficitThisWeek: 68, averageDeficitThisMonth: 69)
+//            let postResponse = await n.post(object: dataToSend)
+            let response = await n.get()
             
             completion?(self)
             
 //            WCSession.default
             
-        }
     }
     
     func setValuesDebug(_ completion: ((_ health: HealthData) -> Void)?) {
@@ -209,11 +264,25 @@ class HealthData: ObservableObject {
         self.projectedAverageTotalDeficitForTomorrow = 760
         self.deficitsThisWeek = [0: Double(300), 1: Double(1000), 2:Double(500), 3: Double(1200), 4: Double(-300), 5:Double(500),6: Double(300), 7: Double(-1000)]
         
-        let averageWeightLossSinceStart = (231.8 - Double(221)) / (Double(daysBetweenStartAndNow) / Double(7)) // TODO calculate with real values
-        let expectedAverageWeightLossSinceStart = ((averageDeficitSinceStart) / 3500) * 7
-        self.averageWeightLossSinceStart = averageWeightLossSinceStart
-        self.expectedAverageWeightLossSinceStart = expectedAverageWeightLossSinceStart
         self.averageDeficitSinceStart = 750
+        let dataToSend = DataToSend(deficitToday: self.deficitToday,
+                                    averageDeficitThisWeek: self.averageDeficitThisWeek,
+                                    averageDeficitThisMonth: self.averageDeficitThisMonth,
+                                    projectedAverageMonthlyDeficitTomorrow: self.projectedAverageMonthlyDeficitTomorrow,
+                                    averageDeficitSinceStart: self.averageDeficitSinceStart,
+                                    deficitToGetCorrectDeficit: self.deficitToGetCorrectDeficit,
+                                    percentWeeklyDeficit: self.percentWeeklyDeficit,
+                                    percentDailyDeficit: self.percentDailyDeficit,
+                                    projectedAverageWeeklyDeficitForTomorrow: self.projectedAverageWeeklyDeficitForTomorrow,
+                                    projectedAverageTotalDeficitForTomorrow: self.projectedAverageTotalDeficitForTomorrow,
+                                    expectedWeightLossSinceStart: self.expectedWeightLossSinceStart,
+                                    daysBetweenStartAndEnd: self.daysBetweenStartAndEnd,
+                                    daysBetweenStartAndNow: self.daysBetweenStartAndNow,
+                                    daysBetweenNowAndEnd: self.daysBetweenNowAndEnd,
+                                    deficitsThisWeek: self.deficitsThisWeek,
+                                    dailyActiveCalories: self.dailyActiveCalories)
+        let n = Network()
+//        n.post(object: dataToSend)
         completion?(self)
     }
     
