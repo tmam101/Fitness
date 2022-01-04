@@ -29,6 +29,7 @@ struct StatsRow<Content: View, OtherContent: View>: View {
     }
     
     var body: some View {
+#if os(iOS)
         HStack(spacing: 0) {
             text
                 .environmentObject(healthData)
@@ -42,6 +43,22 @@ struct StatsRow<Content: View, OtherContent: View>: View {
         .padding()
         .background(Color.myGray)
         .cornerRadius(20)
+#endif
+#if os(watchOS)
+        VStack(spacing: 0) {
+            text
+                .environmentObject(healthData)
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+            
+            rings
+                .environmentObject(healthData)
+                .frame(minWidth: 0, maxWidth: .infinity)
+            
+        }
+        .padding()
+        .background(Color.myGray)
+        .cornerRadius(20)
+#endif
     }
 }
 

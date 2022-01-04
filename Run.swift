@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Run {
+struct Run: Codable {
     var date: Date
     var totalDistance: Double
     var totalTime: Double

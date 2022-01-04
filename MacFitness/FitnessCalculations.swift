@@ -70,7 +70,7 @@ class FitnessCalculations: ObservableObject {
         let progress = lost / totalToLose
         DispatchQueue.main.async {
             self.progressToWeight = progress
-            WidgetCenter.shared.reloadAllTimelines()
+//            WidgetCenter.shared.reloadAllTimelines()
             self.getSuccess()
         }
     }
@@ -91,7 +91,7 @@ class FitnessCalculations: ObservableObject {
         let progress = Float(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Float(daysBetweenStartAndEnd)
         DispatchQueue.main.async {
             self.progressToDate = progress
-            WidgetCenter.shared.reloadAllTimelines()
+//            WidgetCenter.shared.reloadAllTimelines()
         }
     }
     
@@ -102,7 +102,7 @@ class FitnessCalculations: ObservableObject {
     private func getSuccess() {
         DispatchQueue.main.async {
             self.successPercentage = self.progressToWeight - self.progressToDate
-            WidgetCenter.shared.reloadAllTimelines()
+//            WidgetCenter.shared.reloadAllTimelines()
         }
     }
     

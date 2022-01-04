@@ -26,11 +26,11 @@ class Network {
         }
     }
     
-    func post<T: Codable>(object: T) async -> NetworkPostResponse {
+    func post<T: Codable>(object: T) async -> DataToReceive { // todo change to put
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else { return }
             var request = URLRequest(url: url)
-            request.httpMethod = "POST"
+            request.httpMethod = "POST" // todo change to put
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             
@@ -41,7 +41,7 @@ class Network {
             
             let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
                 guard error == nil, let data = data else { return }
-                if let networkPostResponse = try? JSONDecoder().decode(NetworkPostResponse.self, from: data) {
+                if let networkPostResponse = try? JSONDecoder().decode(DataToReceive.self, from: data) {
                     continuation.resume(returning: networkPostResponse)
                 }
             })

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
+    @Environment(\.scenePhase) private var scenePhase
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
     var widget: Bool = false
@@ -19,12 +20,7 @@ struct FitnessView: View {
             VStack(alignment: .leading) {
                 let x = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
                 Group {
-                    #if os(watchOS)
-                    StatsTitle(title: "\(x)")
-                    #endif
-                    #if os(iOS)
                     StatsTitle(title: "Deficits")
-                    #endif
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -33,12 +29,22 @@ struct FitnessView: View {
                     Text("Deficits This Week")
                         .foregroundColor(.white)
                         .font(.title2)
+#if os(watchOS)
+                    BarChart(showCalories: false)
+                        .environmentObject(healthData)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+                        .background(Color.myGray)
+                        .cornerRadius(20)
+                        .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+#endif
+#if os(iOS)
                     BarChart()
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 400)
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+#endif
                 }
                 Group {
                     StatsTitle(title: "Weight Loss")
@@ -97,6 +103,16 @@ struct FitnessView: View {
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)
+#if os(watchOS)
+                    RunningLineGraph()
+                        .environmentObject(healthData)
+                        .environmentObject(healthData.fitness)
+                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                        .padding()
+                        .background(Color.myGray)
+                        .cornerRadius(20)
+#endif
+#if os(iOS)
                     RunningLineGraph()
                         .environmentObject(healthData)
                         .environmentObject(healthData.fitness)
@@ -104,18 +120,18 @@ struct FitnessView: View {
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
+#endif
                 }
             }
             .padding()
         }
-#if !os(watchOS)
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            print("entering foreground")
-            Task {
-                await healthData.setValues(nil)
+        .onChange(of: scenePhase) { _ in
+            if scenePhase == .background {
+                Task {
+                    await healthData.setValues(nil)
+                }
             }
         }
-#endif
     }
 }
 

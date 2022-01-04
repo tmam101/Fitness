@@ -94,12 +94,15 @@ struct CalorieTexts: View {
 struct BarChart: View {
     @EnvironmentObject var healthData: HealthData
     var cornerRadius: CGFloat = 7.0
+    var showCalories: Bool = true
     
     var body: some View {
         VStack {
-            CalorieTexts()
-                .padding([.trailing], 50)
-                .padding([.leading], 10)
+            if showCalories {
+                CalorieTexts()
+                    .padding([.trailing], 50)
+                    .padding([.leading], 10)
+            }
             
             BarsAndLines(cornerRadius: cornerRadius).environmentObject(healthData)
                 .frame(maxHeight: .infinity)

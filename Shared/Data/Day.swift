@@ -7,11 +7,8 @@
 
 import Foundation
 
-struct Day {
+struct Day: Codable {
     var deficit: Double = 0
     var activeCalories: Double = 0
     var consumedCalories: Double = 0
-
 }
-
-typealias Days = [Int: Day]

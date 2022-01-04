@@ -22,11 +22,11 @@ struct Provider: TimelineProvider {
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let  entryDate = Calendar.current.date(byAdding: .second, value: 1 , to: Date())!
+        let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
         let _ = HealthData(environment: GlobalEnvironment.environment) { health in
             let entry = SimpleEntry(date: entryDate, healthData: healthData)
-            let refreshDate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
-            let timeline = Timeline(entries: [entry], policy: .after(refreshDate))
+//            let refreshDate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+            let timeline = Timeline(entries: [entry], policy: .atEnd)
             completion(timeline)
         }
     }
@@ -42,6 +42,13 @@ struct FitnessWidgetEntryView : View {
     @Environment(\.widgetFamily) var family
     
     var body: some View {
+        let correctedDate = Calendar.current.date(byAdding: .minute, value: -15, to: entry.date)
+        let d = Calendar.current.dateComponents([.hour, .minute], from: correctedDate!)
+        let xHour = d.hour ?? 0
+        let hour = xHour > 12 ? xHour - 12 : xHour
+        let minute = d.minute ?? 0
+        let minuteString = minute < 10 ? "0\(minute)" : "\(minute)"
+        
         GeometryReader { geometry in
             ZStack {
                 Color.myGray.ignoresSafeArea(.all)
@@ -53,11 +60,17 @@ struct FitnessWidgetEntryView : View {
                             .padding()
                     case WidgetFamily.systemMedium:
                         HStack {
-                            DeficitRings()
-                                .environmentObject(entry.healthData)
-                                .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-                                .frame(maxWidth: 125)
-                            BarChart(cornerRadius: 2.0)
+                            VStack {
+                                DeficitRings()
+                                    .environmentObject(entry.healthData)
+                                    .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                                    .frame(maxWidth: 125)
+                                Text("Last updated \(hour):\(minuteString)")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 10))
+                                    .padding([.bottom])
+                            }
+                            BarChart(cornerRadius: 2.0, showCalories: false)
                                 .environmentObject(entry.healthData)
                                 .frame(minWidth: 0, maxWidth: .infinity)
                                 .background(Color.myGray)
@@ -65,9 +78,15 @@ struct FitnessWidgetEntryView : View {
                         }
                         
                     default:
+                        VStack {
                         DeficitRings()
                             .environmentObject(entry.healthData)
-                            .padding()
+                            .padding([.top, .leading, .trailing])
+                            Text("Last updated \(hour):\(minuteString)")
+                                .foregroundColor(.white)
+                                .font(.system(size: 10))
+                                .padding([.bottom])
+                        }
                     }
                 }
             }
