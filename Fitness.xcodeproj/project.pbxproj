@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4802D48F278581CB0001BE9D /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D48E278581CB0001BE9D /* RunManager.swift */; };
+		4802D490278582AD0001BE9D /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D48E278581CB0001BE9D /* RunManager.swift */; };
+		4802D491278582AE0001BE9D /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D48E278581CB0001BE9D /* RunManager.swift */; };
+		4802D493278584750001BE9D /* CalorieManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D492278584750001BE9D /* CalorieManager.swift */; };
+		4802D494278585CE0001BE9D /* CalorieManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D492278584750001BE9D /* CalorieManager.swift */; };
+		4802D495278585CF0001BE9D /* CalorieManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D492278584750001BE9D /* CalorieManager.swift */; };
 		4803BE9F271F035C00882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		4803BEA3271F1AB500882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		48199FB72628D045000247E8 /* LiftingLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LiftingLineGraph.swift */; };
@@ -244,6 +250,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4802D48E278581CB0001BE9D /* RunManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunManager.swift; sourceTree = "<group>"; };
+		4802D492278584750001BE9D /* CalorieManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieManager.swift; sourceTree = "<group>"; };
 		4803BE9E271F035C00882BCC /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		48199FB62628D045000247E8 /* LiftingLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftingLineGraph.swift; sourceTree = "<group>"; };
 		4827C99C26828BEF006700A1 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -661,6 +669,8 @@
 				48EC266925B8D1280003B455 /* FitnessCalculations.swift */,
 				48AF60EA2640F65C00C6CC11 /* Workout.swift */,
 				4803BE9E271F035C00882BCC /* Day.swift */,
+				4802D48E278581CB0001BE9D /* RunManager.swift */,
+				4802D492278584750001BE9D /* CalorieManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1095,6 +1105,7 @@
 				4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */,
 				48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */,
 				48A0D45325BB6605007C40ED /* FitnessView.swift in Sources */,
+				4802D48F278581CB0001BE9D /* RunManager.swift in Sources */,
 				484BB68A2776ADB100E24B1C /* NetworkModel.swift in Sources */,
 				48EE132A2738C3E700128623 /* Run.swift in Sources */,
 				4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */,
@@ -1109,6 +1120,7 @@
 				48BD6E6F274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				484BB6882776AAB900E24B1C /* Network.swift in Sources */,
 				48AF60EB2640F65C00C6CC11 /* Workout.swift in Sources */,
+				4802D493278584750001BE9D /* CalorieManager.swift in Sources */,
 				4845B79525C0987D003BF999 /* Lines.swift in Sources */,
 				48755A8A267AF13200F7680E /* Weight.swift in Sources */,
 			);
@@ -1146,6 +1158,7 @@
 				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
 				486388E3261F9099005B1227 /* BarChart.swift in Sources */,
 				48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */,
+				4802D490278582AD0001BE9D /* RunManager.swift in Sources */,
 				484BB68D2776AE8F00E24B1C /* NetworkModel.swift in Sources */,
 				48EE13292738C3E600128623 /* Run.swift in Sources */,
 				48A0D49325BB72FC007C40ED /* Progress Rings.swift in Sources */,
@@ -1160,6 +1173,7 @@
 				48BD6E70274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				484BB68B2776AE8100E24B1C /* Network.swift in Sources */,
 				48AF60ED2640F65C00C6CC11 /* Workout.swift in Sources */,
+				4802D494278585CE0001BE9D /* CalorieManager.swift in Sources */,
 				48E0E20226041E2F0037EEAF /* RingCollections.swift in Sources */,
 				48755A8D267AF1BF00F7680E /* Weight.swift in Sources */,
 			);
@@ -1176,6 +1190,7 @@
 				48BD6F49274B16120007AC15 /* GenericCircles.swift in Sources */,
 				48BD6F41274B15E60007AC15 /* HealthData.swift in Sources */,
 				48BD6F4A274B16140007AC15 /* Ring (unused).swift in Sources */,
+				4802D491278582AE0001BE9D /* RunManager.swift in Sources */,
 				48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */,
 				484BB68E2776AE9000E24B1C /* NetworkModel.swift in Sources */,
 				484BB68C2776AE8200E24B1C /* Network.swift in Sources */,
@@ -1185,6 +1200,7 @@
 				48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */,
 				48BD6F52274B162A0007AC15 /* FitnessView.swift in Sources */,
 				48BD6F55274B162E0007AC15 /* FitnessCalculations.swift in Sources */,
+				4802D495278585CF0001BE9D /* CalorieManager.swift in Sources */,
 				48BD6F5B274B16B50007AC15 /* Run.swift in Sources */,
 				48BD6F48274B160F0007AC15 /* Progress Rings.swift in Sources */,
 				48BD6F0B274B12CB0007AC15 /* ContentView.swift in Sources */,

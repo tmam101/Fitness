@@ -65,7 +65,7 @@ class HealthData: ObservableObject {
     var environment: AppEnvironmentConfig?
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    
+    var calorieManager: CalorieManager?
     @Published public var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
     // Deficits
     @Published public var deficitToday: Double = 0
@@ -97,16 +97,11 @@ class HealthData: ObservableObject {
     @Published public var adjustActiveCalorieModifier = true
     @Published public var runs: [Run] = []
 
-
-    //todo
-    @Published public var runClicked: Run = Run(date: Date(), totalDistance: 0, totalTime: 0, averageMileTime: 0, caloriesBurned: 0, weightAtTime: 0)
     @Published public var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
     
     @Published public var individualStatistics: [Int:Day] = [:]
     
-    // Constants
-    let minimumActiveCalories: Double = 200
-    let minimumRestingCalories: Double = 2200
+    // Constant
     let goalDeficit: Double = 1000
     let goalEaten: Double = 1500
     let caloriesInPound: Double = 3500
@@ -141,71 +136,40 @@ class HealthData: ObservableObject {
         }
     }
     
-    func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
-        
-        //MARK: RUNS
-        loadRunningWorkouts(completion: { [self] workouts, error in
-            if let workouts = workouts {
-                var runs = workouts.map { item -> Run in
-                    let duration = Double(item.duration) / 60
-                    let distance = item.totalDistance?.doubleValue(for: .mile()) ?? 1
-                    let average = duration / distance
-                    let indoor = item.metadata?["HKIndoorWorkout"] as! Bool
-                    let burned = item.totalEnergyBurned?.doubleValue(for: .kilocalorie())
-                    let weightAtTime = fitness.weight(at: item.startDate)
-                    let run = Run(date: item.startDate, totalDistance: distance, totalTime: duration, averageMileTime: average, indoor: indoor, caloriesBurned: burned ?? 0, weightAtTime: weightAtTime)
-                    return run
-                }
-                print(runs)
-                
-                // Handle exceptions
-                //TODO: Make this something possible from within app settings
-                runs = runs.filter { item in
-                    let timeIssue = item.totalTime == 49.384849566221234
-                    let totalDistance = item.totalDistance == 3.0232693776029285
-                    return !(timeIssue && totalDistance)
-                }
-                
-                //TODO Do this somewhere else
-                runs = runs.filter { item in
-                    !item.indoor
-                }
-                
-                // Handle date
-                runs = runs.filter { item in
-                    return item.date > self.startDate ?? Date()
-                }
-                runs = runs.reversed()
-                self.runs = runs
-            }
-        })
-        
-        setupDates()
-        workouts = WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release)
-        await fitness.getAllStats()
-        
-#if os(iOS)
-        if adjustActiveCalorieModifier {
-            self.activeCalorieModifier = 1
-            let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
-            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
+    func setWorkouts(_ workouts: WorkoutInformation) async {
+        return await withUnsafeContinuation { continuation in
             DispatchQueue.main.async { [self] in
-                self.activeCalorieModifier = activeCalorieModifier
+                self.workouts = workouts
+                continuation.resume()
             }
         }
+    }
+    
+    func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
+        setupDates()
+        await fitness.getAllStats()
+        //MARK: RUNS
+        let runManager = RunManager(fitness: self.fitness, startDate: self.startDate ?? Date())
+        let runs = await runManager.getRunningWorkouts()
+        let calorieManager = CalorieManager()
+        self.calorieManager = calorieManager
+
+        await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow)
+        await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
         
+#if os(iOS)
         
-        let averageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow) ?? 0
-        let deficitToGetCorrectDeficit = await getDeficitToReachIdeal() ?? 0
-        let projectedAverageWeeklyDeficitForTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 6) ?? 0
-        let projectedAverageTotalDeficitForTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: self.daysBetweenStartAndNow) ?? 0
-        let averageDeficitThisWeek = await getAverageDeficit(forPast: 7) ?? 0
-        let averageDeficitThisMonth = await getAverageDeficit(forPast: 30) ?? 0
-        let projectedAverageMonthlyDeficitTomorrow = await getProjectedAverageDeficitForTomorrow(forPast: 30) ?? 0
-        let deficitToday = await getAverageDeficit(forPast: 0) ?? 0
-        let deficitsThisWeek = await getIndividualDeficits(forPastDays: 7)
-        let dailyActiveCalories = await getIndividualActiveCalories(forPastDays: 7)
-        let individualStatistics = await getIndividualStatistics(forPastDays: 7)
+        let averageDeficitSinceStart = await calorieManager.getAverageDeficit(forPast: self.daysBetweenStartAndNow) ?? 0
+        let deficitToGetCorrectDeficit = await calorieManager.getDeficitToReachIdeal() ?? 0
+        let projectedAverageWeeklyDeficitForTomorrow = await calorieManager.getProjectedAverageDeficitForTomorrow(forPast: 6) ?? 0
+        let projectedAverageTotalDeficitForTomorrow = await calorieManager.getProjectedAverageDeficitForTomorrow(forPast: self.daysBetweenStartAndNow) ?? 0
+        let averageDeficitThisWeek = await calorieManager.getAverageDeficit(forPast: 7) ?? 0
+        let averageDeficitThisMonth = await calorieManager.getAverageDeficit(forPast: 30) ?? 0
+        let projectedAverageMonthlyDeficitTomorrow = await calorieManager.getProjectedAverageDeficitForTomorrow(forPast: 30) ?? 0
+        let deficitToday = await calorieManager.getAverageDeficit(forPast: 0) ?? 0
+        let deficitsThisWeek = await calorieManager.getIndividualDeficits(forPastDays: 7)
+        let dailyActiveCalories = await calorieManager.getIndividualActiveCalories(forPastDays: 7)
+        let individualStatistics = await calorieManager.getIndividualStatistics(forPastDays: 7)
         let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
         let percentDailyDeficit = Int((deficitToday / deficitToGetCorrectDeficit) * 100)
         let expectedWeightLossSinceStart = (averageDeficitSinceStart * Double(self.daysBetweenStartAndNow)) / Double(3500)
@@ -234,7 +198,7 @@ class HealthData: ObservableObject {
                                     deficitsThisWeek: deficitsThisWeek,
                                     dailyActiveCalories: dailyActiveCalories,
                                     individualStatistics: individualStatistics,
-                                    runs: self.runs,
+                                    runs: runs,
                                     numberOfRuns: self.numberOfRuns,
                                     activeCalorieModifier: self.activeCalorieModifier)
         let n = Network()
@@ -255,6 +219,7 @@ class HealthData: ObservableObject {
             self.expectedWeightLossSinceStart = expectedWeightLossSinceStart
             self.projectedAverageMonthlyDeficitTomorrow = projectedAverageMonthlyDeficitTomorrow
             self.individualStatistics = individualStatistics
+            self.runs = runs
             completion?(self)
         }
 #endif
@@ -266,9 +231,12 @@ class HealthData: ObservableObject {
     }
     
     func setValuesFromNetwork() async {
+        guard let calorieManager = self.calorieManager else {
+            return
+        }
         let network = Network()
         let getResponse = await network.get()
-        let activeToday = await sumValueForDay(daysAgo: 0, forType: .activeEnergyBurned)
+        let activeToday = await calorieManager.sumValueForDay(daysAgo: 0, forType: .activeEnergyBurned)
         return await withUnsafeContinuation { continuation in
             DispatchQueue.main.async { [self] in
                 // Convert string keys to ints
@@ -280,6 +248,8 @@ class HealthData: ObservableObject {
                 for kv in getResponse.dailyActiveCalories {
                     dailyActiveCaloriesCorrected[Int(kv.key) ?? 0] = kv.value
                 }
+                // Try to calculate active calories on the watch
+                // Todo: don't think this works right
                 let activeBurnedToday = activeToday * getResponse.activeCalorieModifier
                 print("activeBurnedToday \(activeBurnedToday)")
                 print("activeCalorieModifier \(activeCalorieModifier)")
@@ -330,230 +300,5 @@ class HealthData: ObservableObject {
         self.daysBetweenNowAndEnd = daysBetweenNowAndEnd
     }
     
-    func getIndividualDeficits(forPastDays days: Int) async -> [Int:Double] {
-        var deficits: [Int:Double] = [:]
-        for i in 0...days {
-            let deficit = await getDeficitForDay(daysAgo: i)
-            deficits[i] = deficit
-            if deficits.count == days + 1 {
-                return deficits
-            }
-        }
-        return [0:0]
-    }
     
-    func getIndividualActiveCalories(forPastDays days: Int) async -> [Int:Double] {
-        var activeCalories: [Int:Double] = [:]
-        for i in 0...days {
-            let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
-            activeCalories[i] = active
-            if activeCalories.count == days + 1 {
-                return activeCalories
-            }
-        }
-        return [0:0]
-    }
-    
-    func getIndividualStatistics(forPastDays days: Int) async -> [Int:Day] {
-        var dayInformation: [Int:Day] = [:]
-        for i in 0...days {
-            let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
-            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
-            let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
-            let day = Day(deficit: deficit, activeCalories: active, consumedCalories: eaten)
-            dayInformation[i] = day
-            if dayInformation.count == days + 1 {
-                return dayInformation
-            }
-        }
-        return [:]
-
-    }
-    
-    func loadRunningWorkouts(completion:
-      @escaping ([HKWorkout]?, Error?) -> Void) {
-        
-      let workoutPredicate = HKQuery.predicateForWorkouts(with: .running)
-      
-      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
-                                            ascending: false)
-        
-        let query = HKSampleQuery(
-          sampleType: .workoutType(),
-          predicate: workoutPredicate,
-          limit: 100,
-          sortDescriptors: [sortDescriptor]) { (query, samples, error) in
-            DispatchQueue.main.async {
-              guard
-                let samples = samples as? [HKWorkout],
-                error == nil
-                else {
-                  completion(nil, error)
-                  return
-              }
-              completion(samples, nil)
-            }
-          }
-
-        HKHealthStore().execute(query)
-    }
-    
-    //MARK: PRIVATE
-    private func sumValue(forPast days: Int, forType type: HKQuantityTypeIdentifier, completion: @escaping (Double) -> Void) {
-        guard let quantityType = HKObjectType.quantityType(forIdentifier: type) else {
-            print("*** Unable to create a type ***")
-            return
-        }
-        let now = days == 0 ?
-        Date() :
-        Calendar.current.startOfDay(for: Date())
-        let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
-        
-        let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
-            guard let result = result, let sum = result.sumQuantity() else {
-                completion(0.0)
-                return
-            }
-            completion(sum.doubleValue(for: HKUnit.kilocalorie()))
-        }
-        healthStore.execute(query)
-        
-    }
-    
-    private func sumValueForDay(daysAgo: Int, forType type: HKQuantityTypeIdentifier) async -> Double {
-        return await withUnsafeContinuation { continuation in
-            guard let quantityType = HKObjectType.quantityType(forIdentifier: type) else {
-                print("*** Unable to create a type ***")
-                continuation.resume(returning: 0.0)
-                return
-            }
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -daysAgo), to: Date())!)
-            let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
-            
-            let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
-                guard let result = result, let sum = result.sumQuantity() else {
-                    continuation.resume(returning: 0.0)
-                    return
-                }
-                continuation.resume(returning: sum.doubleValue(for: HKUnit.kilocalorie()))
-            }
-            healthStore.execute(query)
-        }
-    }
-    
-    func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int, averageDeficitSinceStart: Double) async -> Double {
-        let weightLost = fitness.weightLost
-        let caloriesLost = weightLost * 3500
-        let active = await getActiveCaloriesBurned(forPast: daysBetweenStartAndNow)
-        let currentCalorieCalculation = Double(daysBetweenStartAndNow) * averageDeficitSinceStart
-        let resting = currentCalorieCalculation - active
-        // todo the modifier is only supposed to apply to active calories!
-        let modifier = (caloriesLost - resting) / active
-        if modifier == Double.nan || modifier == Double.infinity {
-            return 1
-        }
-        return Double(modifier)
-    }
-    
-    func getDeficit(resting: Double, active: Double, eaten: Double) -> Double {
-        return (resting + (active * activeCalorieModifier)) - eaten
-    }
-    
-    //MARK: BURNED
-    
-    func getDeficitForDay(daysAgo: Int) async -> Double? {
-        let resting = await sumValueForDay(daysAgo: daysAgo, forType: .basalEnergyBurned)
-        let active = await sumValueForDay(daysAgo: daysAgo, forType: .activeEnergyBurned)
-        let eaten = await sumValueForDay(daysAgo: daysAgo, forType: .dietaryEnergyConsumed)
-        let realResting = max(resting, self.minimumRestingCalories)
-        let realActive = max(active, self.minimumActiveCalories)
-        print("\(daysAgo) days ago: resting: \(realResting) active: \(realActive) eaten: \(eaten)")
-        let deficit = self.getDeficit(resting: realResting, active: realActive, eaten: eaten)
-        return deficit
-    }
-    
-    //MARK: EATEN
-    
-    func getCaloriesEatenToday(completion: @escaping ((_ eaten: Double?) -> Void)) {
-        sumValue(forPast: 0, forType: .dietaryEnergyConsumed, completion: completion)
-    }
-    
-    func getAverageCaloriesEatenThisWeek() async -> Double? {
-        let total = await getTotalCaloriesEaten(forPast: 7)
-        return total / 7
-    }
-    
-    func getProjectedAverageDeficitForTomorrow(forPast days: Int) async -> Double? {
-        let pastDeficit = await getAverageDeficit(forPast: days)
-        let dailyDeficit = await getAverageDeficit(forPast: 0)
-        guard
-            let pastDeficit = pastDeficit,
-            let dailyDeficit = dailyDeficit else {
-                return nil
-            }
-        let projectedAverageDeficitForTomorrow = ((pastDeficit * Double(days)) + dailyDeficit) / (Double(days) + 1)
-        return projectedAverageDeficitForTomorrow
-        
-    }
-    
-    // async await
-    
-    func getDeficitToReachIdeal() async -> Double? {
-        let averageDeficitForPast6Days = await getAverageDeficit(forPast: 6)
-        let plan = (1000*7) - ((averageDeficitForPast6Days ?? 1) * 6)
-        return plan
-    }
-    
-    func getAverageDeficit(forPast days: Int) async -> Double? {
-        let resting = await getRestingCaloriesBurned(forPast: days)
-        let active = await getActiveCaloriesBurned(forPast: days)
-        let eaten = await getTotalCaloriesEaten(forPast: days)
-        let realDays: Double = Double(days == 0 ? 1 : days)
-        let realResting = max(Double(minimumRestingCalories) * realDays, resting)
-        let realActive = max(Double(minimumActiveCalories) * realDays, active)
-        let deficit = getDeficit(resting: realResting, active: realActive, eaten: eaten)
-        let average = deficit / realDays
-        return average
-    }
-    
-    func getActiveCaloriesBurned(forPast days: Int) async -> Double {
-        return await sumValue(forPast: days, forType: .activeEnergyBurned) // todo when summing these things, we don't account for the minimum of 200 active calories
-    }
-    
-    func getTotalCaloriesEaten(forPast days: Int) async -> Double {
-        return await sumValue(forPast: days, forType: .dietaryEnergyConsumed)
-    }
-    
-    func getRestingCaloriesBurned(forPast days: Int) async -> Double {
-        return await sumValue(forPast: days, forType: .basalEnergyBurned)
-    }
-    
-    private func sumValue(forPast days: Int, forType type: HKQuantityTypeIdentifier) async -> Double {
-        return await withUnsafeContinuation { continuation in
-            guard let quantityType = HKObjectType.quantityType(forIdentifier: type) else {
-                print("*** Unable to create a type ***")
-                continuation.resume(returning: 0.0)
-                return
-            }
-            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
-            
-            let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, error in
-                
-                if error != nil {
-                    continuation.resume(returning: 0.0)
-                } else {
-                    guard let result = result, let sum = result.sumQuantity() else {
-                        continuation.resume(returning: 0.0)
-                        return
-                    }
-                    continuation.resume(returning: sum.doubleValue(for: HKUnit.kilocalorie()))
-                }
-            }
-            healthStore.execute(query)
-        }
-    }
 }
