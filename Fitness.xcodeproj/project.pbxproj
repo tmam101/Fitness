@@ -78,6 +78,8 @@
 		48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
 		48AF60EB2640F65C00C6CC11 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
 		48AF60ED2640F65C00C6CC11 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
+		48B984E12784E47700C0E93A /* ComplicationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B984E02784E47700C0E93A /* ComplicationViews.swift */; };
+		48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */; };
 		48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6A274AFA890007AC15 /* LineGraph.swift */; };
 		48BD6E6C274AFAC50007AC15 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6A274AFA890007AC15 /* LineGraph.swift */; };
 		48BD6E6D274AFAC50007AC15 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6A274AFA890007AC15 /* LineGraph.swift */; };
@@ -291,6 +293,8 @@
 		48A7706A260529C3002E5853 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		48A7707426053296002E5853 /* FloatingPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPointExtensions.swift; sourceTree = "<group>"; };
 		48AF60EA2640F65C00C6CC11 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
+		48B984E02784E47700C0E93A /* ComplicationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationViews.swift; sourceTree = "<group>"; };
+		48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundAppRefreshManger.swift; sourceTree = "<group>"; };
 		48BD6E6A274AFA890007AC15 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningLineGraph.swift; sourceTree = "<group>"; };
 		48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeExtension.swift; sourceTree = "<group>"; };
@@ -494,6 +498,7 @@
 				48755A89267AF13200F7680E /* Weight.swift */,
 				484BB6872776AAB900E24B1C /* Network.swift */,
 				484BB6892776ADB100E24B1C /* NetworkModel.swift */,
+				48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -598,6 +603,7 @@
 				48BD6F17274B12CD0007AC15 /* Info.plist */,
 				48BD6F18274B12CE0007AC15 /* PushNotificationPayload.apns */,
 				48BD6F14274B12CD0007AC15 /* Preview Content */,
+				48B984E02784E47700C0E93A /* ComplicationViews.swift */,
 			);
 			path = "Watch WatchKit Extension";
 			sourceTree = "<group>";
@@ -1176,6 +1182,7 @@
 				48BD6F60274B17C20007AC15 /* AppView.swift in Sources */,
 				48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */,
 				48BD6F46274B16060007AC15 /* BarChart.swift in Sources */,
+				48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */,
 				48BD6F52274B162A0007AC15 /* FitnessView.swift in Sources */,
 				48BD6F55274B162E0007AC15 /* FitnessCalculations.swift in Sources */,
 				48BD6F5B274B16B50007AC15 /* Run.swift in Sources */,
@@ -1189,6 +1196,7 @@
 				48BD6F59274B16380007AC15 /* Weight.swift in Sources */,
 				48BD6F56274B162E0007AC15 /* Day.swift in Sources */,
 				48BD6F58274B16350007AC15 /* Lines.swift in Sources */,
+				48B984E12784E47700C0E93A /* ComplicationViews.swift in Sources */,
 				4832D11927835D3C00414573 /* WatchManager.swift in Sources */,
 				48BD6F4C274B16190007AC15 /* TimeExtension.swift in Sources */,
 				48BD6F4D274B16190007AC15 /* DoubleExtension.swift in Sources */,

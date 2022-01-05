@@ -6,25 +6,33 @@
 //
 
 import SwiftUI
+import ClockKit
 
 @main
 struct FitnessAppWatch: App {
     @State var healthData = HealthData(environment: GlobalEnvironment.environment)
-    
+    @Environment(\.scenePhase) private var scenePhase
+
     @SceneBuilder var body: some Scene {
         WindowGroup {
             NavigationView {
-                let y = x()
                 AppView()
                     .environmentObject(healthData)
-            }
+            }.onAppear {
+                let server = CLKComplicationServer.sharedInstance()
+                server.activeComplications?.forEach { complication in
+                  server.reloadTimeline(for: complication)
+                }
+            }.onChange(of: scenePhase, perform: {_ in
+                let server = CLKComplicationServer.sharedInstance()
+                server.activeComplications?.forEach { complication in
+                  server.reloadTimeline(for: complication)
+                }
+            })
         }
 
         WKNotificationScene(controller: NotificationController.self, category: "myCategory")
     }
     
-    func x() -> String {
-        print(UserDefaults.standard.value(forKey: "numberOfRuns"))
-        return "x"
-    }
+
 }

@@ -6,6 +6,7 @@
 //
 
 import ClockKit
+import SwiftUI
 
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
@@ -42,7 +43,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
-        handler(nil)
+        let _ = HealthData(environment: GlobalEnvironment.environment) { health in
+            guard let cTemplate = self.makeTemplate(for: health, complication: complication) else {
+                handler(nil)
+                return
+            }
+            let entry = CLKComplicationTimelineEntry(
+                date: Date(),
+                complicationTemplate: cTemplate)
+            DispatchQueue.main.async { [self] in
+                handler(entry)
+            }
+        }
     }
     
     func getTimelineEntries(for complication: CLKComplication, after date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
@@ -57,3 +69,36 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         handler(nil)
     }
 }
+
+extension ComplicationController {
+  func makeTemplate(
+    for healthData: HealthData,
+    complication: CLKComplication
+  ) -> CLKComplicationTemplate? {
+    switch complication.family {
+//    case .modularLarge:
+//        return CLKComplicationTemplateModularLargeTallBody(
+//            BarChart()
+//        )
+    case .graphicCircular:
+        return CLKComplicationTemplateGraphicCircularView(
+            DeficitRings(lineWidth: 5)
+                .environmentObject(healthData)
+        )
+    case .graphicRectangular, .modularLarge, .modularSmall, .graphicExtraLarge:
+//    case .modularLarge:
+        return CLKComplicationTemplateGraphicRectangularFullView(
+            BarChart(cornerRadius: 1, showCalories: false, isComplication: true)
+                .environmentObject(healthData)
+        )
+//        return CLKComplicationTemplateExtraLargeSimpleImage
+//      return CLKComplicationTemplateModularLargeTallBody(headerTextProvider: CLKTextProvider(format: "Deficits"), bodyTextProvider: <#T##CLKTextProvider#>)
+//    case .graphicCorner:
+//      return CLKComplicationTemplateGraphicCornerCircularView(
+//        ComplicationViewCornerCircular(appointment: appointment))
+    default:
+      return nil
+    }
+  }
+}
+

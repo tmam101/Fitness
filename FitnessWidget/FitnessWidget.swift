@@ -22,10 +22,9 @@ struct Provider: TimelineProvider {
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
         let _ = HealthData(environment: GlobalEnvironment.environment) { health in
-            let entry = SimpleEntry(date: entryDate, healthData: healthData)
-//            let refreshDate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+            let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
+            let entry = SimpleEntry(date: entryDate, healthData: health)
             let timeline = Timeline(entries: [entry], policy: .atEnd)
             completion(timeline)
         }

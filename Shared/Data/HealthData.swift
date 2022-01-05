@@ -34,6 +34,7 @@ struct DataToSend: Codable {
     var individualStatistics: [Int:Day] = [:]
     var runs: [Run] = []
     var numberOfRuns: Int = 0
+    var activeCalorieModifier: Double = 0
 }
 
 // MARK: - DataToReceive
@@ -51,10 +52,11 @@ struct DataToReceive: Codable {
     var individualStatistics: [String: Day]
     var runs: [Run]
     var numberOfRuns: Int
+    var activeCalorieModifier: Double
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
-        case daysBetweenStartAndNow, dailyActiveCalories, averageDeficitSinceStart, projectedAverageWeeklyDeficitForTomorrow, averageDeficitThisWeek, daysBetweenStartAndEnd, daysBetweenNowAndEnd, percentWeeklyDeficit, expectedWeightLossSinceStart, deficitsThisWeek, projectedAverageMonthlyDeficitTomorrow, deficitToGetCorrectDeficit, percentDailyDeficit, deficitToday, projectedAverageTotalDeficitForTomorrow, averageDeficitThisMonth, individualStatistics, runs, numberOfRuns
+        case daysBetweenStartAndNow, dailyActiveCalories, averageDeficitSinceStart, projectedAverageWeeklyDeficitForTomorrow, averageDeficitThisWeek, daysBetweenStartAndEnd, daysBetweenNowAndEnd, percentWeeklyDeficit, expectedWeightLossSinceStart, deficitsThisWeek, projectedAverageMonthlyDeficitTomorrow, deficitToGetCorrectDeficit, percentDailyDeficit, deficitToday, projectedAverageTotalDeficitForTomorrow, averageDeficitThisMonth, individualStatistics, runs, numberOfRuns, activeCalorieModifier
     }
 }
 
@@ -104,7 +106,7 @@ class HealthData: ObservableObject {
     
     // Constants
     let minimumActiveCalories: Double = 200
-    let minimumRestingCalories: Double = 2300
+    let minimumRestingCalories: Double = 2200
     let goalDeficit: Double = 1000
     let goalEaten: Double = 1500
     let caloriesInPound: Double = 3500
@@ -180,8 +182,9 @@ class HealthData: ObservableObject {
         
         setupDates()
         workouts = WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release)
-        fitness.getAllStats() // make this async?
+        await fitness.getAllStats()
         
+#if os(iOS)
         if adjustActiveCalorieModifier {
             self.activeCalorieModifier = 1
             let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
@@ -190,6 +193,7 @@ class HealthData: ObservableObject {
                 self.activeCalorieModifier = activeCalorieModifier
             }
         }
+        
         
         let averageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow) ?? 0
         let deficitToGetCorrectDeficit = await getDeficitToReachIdeal() ?? 0
@@ -205,8 +209,7 @@ class HealthData: ObservableObject {
         let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
         let percentDailyDeficit = Int((deficitToday / deficitToGetCorrectDeficit) * 100)
         let expectedWeightLossSinceStart = (averageDeficitSinceStart * Double(self.daysBetweenStartAndNow)) / Double(3500)
-        
-#if os(iOS)
+        //todo it looks like i can get active calories on the watch
         //TODO improve
         // Dont send or use data if its messed up
         if dailyActiveCalories.values.filter({ $0 != 0 }).isEmpty {
@@ -232,7 +235,8 @@ class HealthData: ObservableObject {
                                     dailyActiveCalories: dailyActiveCalories,
                                     individualStatistics: individualStatistics,
                                     runs: self.runs,
-                                    numberOfRuns: self.numberOfRuns)
+                                    numberOfRuns: self.numberOfRuns,
+                                    activeCalorieModifier: self.activeCalorieModifier)
         let n = Network()
         let _ = await n.post(object: dataToSend)
 
@@ -251,123 +255,64 @@ class HealthData: ObservableObject {
             self.expectedWeightLossSinceStart = expectedWeightLossSinceStart
             self.projectedAverageMonthlyDeficitTomorrow = projectedAverageMonthlyDeficitTomorrow
             self.individualStatistics = individualStatistics
+            completion?(self)
         }
-//        BGTaskScheduler.shared.register(forTaskWithIdentifier: "Me.Fitness2.setValues", using: nil) { task in
-//             self.handleAppRefresh(task: task as! BGAppRefreshTask)
-//        }
 #endif
 #if os(watchOS)
         // On watch, receive relevant data
         await setValuesFromNetwork()
-#endif
         completion?(self)
+#endif
     }
-    
-//    func scheduleAppRefresh() {
-//       let request = BGAppRefreshTaskRequest(identifier: "Me.Fitness2.setValues")
-//       // Fetch no earlier than 15 minutes from now.
-//       request.earliestBeginDate = Date(timeIntervalSinceNow: 1 * 60)
-//
-//       do {
-//          try BGTaskScheduler.shared.submit(request)
-//       } catch {
-//          print("Could not schedule app refresh: \(error)")
-//       }
-//    }
-    
-//    func handleAppRefresh(task: BGAppRefreshTask) async {
-//       // Schedule a new refresh task.
-//       scheduleAppRefresh()
-//
-//       // Create an operation that performs the main part of the background task.
-//        let operation = await setValues({ health in
-//            task.setTaskCompleted(success: true)})
-//
-//       // Provide the background task with an expiration handler that cancels the operation.
-//       task.expirationHandler = {
-////          operation.cancel()
-//       }
-//
-//       // Inform the system that the background task is complete
-//       // when the operation completes.
-////       operation.completionBlock = {
-////          task.setTaskCompleted(success: !operation.isCancelled)
-////       }
-//
-//       // Start the operation.
-////       operationQueue.addOperation(operation)
-//     }
     
     func setValuesFromNetwork() async {
         let network = Network()
         let getResponse = await network.get()
-        
-        DispatchQueue.main.async { [self] in
-            // Convert string keys to ints
-            var deficitsThisWeekCorrected: [Int:Double] = [:]
-            for kv in getResponse.deficitsThisWeek {
-                deficitsThisWeekCorrected[Int(kv.key) ?? 0] = kv.value
+        let activeToday = await sumValueForDay(daysAgo: 0, forType: .activeEnergyBurned)
+        return await withUnsafeContinuation { continuation in
+            DispatchQueue.main.async { [self] in
+                // Convert string keys to ints
+                var deficitsThisWeekCorrected: [Int:Double] = [:]
+                for kv in getResponse.deficitsThisWeek {
+                    deficitsThisWeekCorrected[Int(kv.key) ?? 0] = kv.value
+                }
+                var dailyActiveCaloriesCorrected: [Int:Double] = [:]
+                for kv in getResponse.dailyActiveCalories {
+                    dailyActiveCaloriesCorrected[Int(kv.key) ?? 0] = kv.value
+                }
+                let activeBurnedToday = activeToday * getResponse.activeCalorieModifier
+                print("activeBurnedToday \(activeBurnedToday)")
+                print("activeCalorieModifier \(activeCalorieModifier)")
+                dailyActiveCaloriesCorrected[0] = activeToday * getResponse.activeCalorieModifier
+                var individualStatisticsFixed: [Int:Day] = [:]
+                for kv in getResponse.individualStatistics {
+                    individualStatisticsFixed[Int(kv.key) ?? 0] = kv.value
+                }
+                
+                self.deficitsThisWeek = deficitsThisWeekCorrected
+                self.dailyActiveCalories = dailyActiveCaloriesCorrected
+                self.deficitToday = getResponse.deficitToday
+                self.deficitToGetCorrectDeficit = getResponse.deficitToGetCorrectDeficit
+                self.averageDeficitThisWeek = getResponse.averageDeficitThisWeek
+                self.percentWeeklyDeficit = getResponse.percentWeeklyDeficit
+                self.averageDeficitThisMonth = getResponse.averageDeficitThisMonth
+                self.percentDailyDeficit = getResponse.percentDailyDeficit
+                self.projectedAverageWeeklyDeficitForTomorrow = getResponse.projectedAverageWeeklyDeficitForTomorrow
+                self.projectedAverageTotalDeficitForTomorrow = getResponse.projectedAverageTotalDeficitForTomorrow
+                self.averageDeficitSinceStart = getResponse.averageDeficitSinceStart
+                self.expectedWeightLossSinceStart = getResponse.expectedWeightLossSinceStart
+                self.projectedAverageMonthlyDeficitTomorrow = getResponse.projectedAverageMonthlyDeficitTomorrow
+                self.individualStatistics = individualStatisticsFixed
+                self.runs = getResponse.runs
+                self.numberOfRuns = getResponse.numberOfRuns
+                self.activeCalorieModifier = getResponse.activeCalorieModifier
+                continuation.resume()
             }
-            var dailyActiveCaloriesCorrected: [Int:Double] = [:]
-            for kv in getResponse.dailyActiveCalories {
-                dailyActiveCaloriesCorrected[Int(kv.key) ?? 0] = kv.value
-            }
-            var individualStatisticsFixed: [Int:Day] = [:]
-            for kv in getResponse.individualStatistics {
-                individualStatisticsFixed[Int(kv.key) ?? 0] = kv.value
-            }
-            
-            self.deficitsThisWeek = deficitsThisWeekCorrected
-            self.dailyActiveCalories = dailyActiveCaloriesCorrected
-            self.deficitToday = getResponse.deficitToday
-            self.deficitToGetCorrectDeficit = getResponse.deficitToGetCorrectDeficit
-            self.averageDeficitThisWeek = getResponse.averageDeficitThisWeek
-            self.percentWeeklyDeficit = getResponse.percentWeeklyDeficit
-            self.averageDeficitThisMonth = getResponse.averageDeficitThisMonth
-            self.percentDailyDeficit = getResponse.percentDailyDeficit
-            self.projectedAverageWeeklyDeficitForTomorrow = getResponse.projectedAverageWeeklyDeficitForTomorrow
-            self.projectedAverageTotalDeficitForTomorrow = getResponse.projectedAverageTotalDeficitForTomorrow
-            self.averageDeficitSinceStart = getResponse.averageDeficitSinceStart
-            self.expectedWeightLossSinceStart = getResponse.expectedWeightLossSinceStart
-            self.projectedAverageMonthlyDeficitTomorrow = getResponse.projectedAverageMonthlyDeficitTomorrow
-            self.individualStatistics = individualStatisticsFixed
-            self.runs = getResponse.runs
-            self.numberOfRuns = getResponse.numberOfRuns
         }
     }
     
     func setValuesDebug(_ completion: ((_ health: HealthData) -> Void)?) async {
         await setValuesFromNetwork()
-        // Deficits
-//        self.deficitToday = 800
-//        self.deficitToGetCorrectDeficit = 1200
-//        self.averageDeficitThisWeek = 750
-//        self.percentWeeklyDeficit = Int((self.averageDeficitThisWeek / goalDeficit) * 100)
-//        self.averageDeficitThisMonth = 850
-//        self.percentDailyDeficit = Int((self.deficitToday / self.deficitToGetCorrectDeficit) * 100)
-//        self.projectedAverageWeeklyDeficitForTomorrow = 900
-//        self.projectedAverageTotalDeficitForTomorrow = 760
-//        self.deficitsThisWeek = [0: Double(300), 1: Double(1000), 2:Double(500), 3: Double(1200), 4: Double(-300), 5:Double(500),6: Double(300), 7: Double(-1000)]
-//
-//        self.averageDeficitSinceStart = 750
-//        let dataToSend = DataToSend(deficitToday: self.deficitToday,
-//                                    averageDeficitThisWeek: self.averageDeficitThisWeek,
-//                                    averageDeficitThisMonth: self.averageDeficitThisMonth,
-//                                    projectedAverageMonthlyDeficitTomorrow: self.projectedAverageMonthlyDeficitTomorrow,
-//                                    averageDeficitSinceStart: self.averageDeficitSinceStart,
-//                                    deficitToGetCorrectDeficit: self.deficitToGetCorrectDeficit,
-//                                    percentWeeklyDeficit: self.percentWeeklyDeficit,
-//                                    percentDailyDeficit: self.percentDailyDeficit,
-//                                    projectedAverageWeeklyDeficitForTomorrow: self.projectedAverageWeeklyDeficitForTomorrow,
-//                                    projectedAverageTotalDeficitForTomorrow: self.projectedAverageTotalDeficitForTomorrow,
-//                                    expectedWeightLossSinceStart: self.expectedWeightLossSinceStart,
-//                                    daysBetweenStartAndEnd: self.daysBetweenStartAndEnd,
-//                                    daysBetweenStartAndNow: self.daysBetweenStartAndNow,
-//                                    daysBetweenNowAndEnd: self.daysBetweenNowAndEnd,
-//                                    deficitsThisWeek: self.deficitsThisWeek,
-//                                    dailyActiveCalories: self.dailyActiveCalories)
-//        let n = Network()
-//        n.post(object: dataToSend)
         completion?(self)
     }
     
@@ -522,8 +467,8 @@ class HealthData: ObservableObject {
         let resting = await sumValueForDay(daysAgo: daysAgo, forType: .basalEnergyBurned)
         let active = await sumValueForDay(daysAgo: daysAgo, forType: .activeEnergyBurned)
         let eaten = await sumValueForDay(daysAgo: daysAgo, forType: .dietaryEnergyConsumed)
-        let realResting = max(resting, 2300)
-        let realActive = max(active, 200)
+        let realResting = max(resting, self.minimumRestingCalories)
+        let realActive = max(active, self.minimumActiveCalories)
         print("\(daysAgo) days ago: resting: \(realResting) active: \(realActive) eaten: \(eaten)")
         let deficit = self.getDeficit(resting: realResting, active: realActive, eaten: eaten)
         return deficit

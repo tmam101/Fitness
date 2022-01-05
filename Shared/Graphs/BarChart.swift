@@ -29,6 +29,7 @@ struct TodaysDate {
 }
 
 struct DaysLetters: View {
+    var isComplication = false
     let day = TodaysDate()
     var body: some View {
         HStack {
@@ -36,7 +37,7 @@ struct DaysLetters: View {
                 Text(String(day.day(subtracting: $0).first ?? "?"))
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .font(.caption)
+                    .font(isComplication ? .system(size: 8) : .caption)
             }
         }
     }
@@ -95,24 +96,44 @@ struct BarChart: View {
     @EnvironmentObject var healthData: HealthData
     var cornerRadius: CGFloat = 7.0
     var showCalories: Bool = true
+    var isComplication = false
     
     var body: some View {
-        VStack {
-            if showCalories {
-                CalorieTexts()
+        if !isComplication {
+            VStack {
+                if showCalories {
+                    CalorieTexts()
+                        .padding([.trailing], 50)
+                        .padding([.leading], 10)
+                }
+                
+                BarsAndLines(cornerRadius: cornerRadius)
+                    .environmentObject(healthData)
+                    .frame(maxHeight: .infinity)
+                
+                DaysLetters()
+                    .padding([.trailing], 50)
+                    .padding([.leading], 10)
+                
+            }
+            .padding([.leading, .bottom, .top])
+        } else {
+            VStack {
+                if showCalories {
+                    CalorieTexts()
+                        .padding([.trailing], 50)
+                        .padding([.leading], 10)
+                }
+                
+                BarsAndLines(cornerRadius: cornerRadius, isComplication: isComplication)
+                    .environmentObject(healthData)
+                    .frame(maxHeight: .infinity)
+                
+                DaysLetters(isComplication: isComplication)
                     .padding([.trailing], 50)
                     .padding([.leading], 10)
             }
-            
-            BarsAndLines(cornerRadius: cornerRadius).environmentObject(healthData)
-                .frame(maxHeight: .infinity)
-            
-            DaysLetters()
-                .padding([.trailing], 50)
-                .padding([.leading], 10)
-            
         }
-        .padding([.leading, .bottom, .top])
     }
     
     struct Overlay: View {
@@ -159,6 +180,7 @@ struct BarChart: View {
         @State var overlayViewModel = OverlayViewModel(activeCalories: 0, restingCalories: 0, consumedCalories: 0)
 
         @State var barViewModel = BarViewModel()
+        var isComplication = false
         
         var body: some View {
             let results = BarChart.deficitsToPercents(daysAndDeficits: healthData.deficitsThisWeek)
@@ -204,11 +226,10 @@ struct BarChart: View {
                     }.padding(.trailing, 50)
                         .padding([.leading], 10)
                     
-                    
                     if horizontalRatio != 0 {
                         let heightOffset = geometry.size.height - (geometry.size.height / CGFloat(horizontalRatio))
                         Rectangle()
-                            .size(width: geometry.size.width - 40, height: 5.0)
+                            .size(width: geometry.size.width - 40, height: isComplication ? 2.5 : 5.0)
                             .offset(x: 0.0, y: heightOffset - 2.5)
                             .foregroundColor(.white)
                             .opacity(0.5)

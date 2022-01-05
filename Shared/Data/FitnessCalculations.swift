@@ -38,10 +38,12 @@ class FitnessCalculations: ObservableObject {
         }
         self.environment = environment
         switch environment {
-        case .release:
-            getAllStats()
+//        case .release:
+//            getAllStats()
         case .debug:
             getAllStatsDebug(completion: nil)
+        default:
+            return
         }
     }
     
@@ -113,26 +115,29 @@ class FitnessCalculations: ObservableObject {
         completion?(self)
     }
     
-    func getAllStats() {
-        getCurrentWeightFromHealthKit { success in
-            self.getProgressToWeight()
-            self.getProgressToDate()
-            self.getSuccess()
-            self.weightLost = self.startingWeight - self.currentWeight
-            self.weightToLose = self.startingWeight - self.endingWeight
-            self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
-            guard
-                let startDate = Date.dateFromString(self.startDateString)
-            else { return }
-            
-            guard
-                let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
-            else { return }
-            self.weight(at: Date.dateFromString("11.25.2021") ?? Date())
-
-            let weeks: Double = Double(daysBetweenStartAndNow) / Double(7)
-            self.averageWeightLostPerWeek = self.weightLost / weeks
-//            self.getWeightFromAMonthAgo()
+    func getAllStats() async {
+        return await withUnsafeContinuation { continuation in
+            getCurrentWeightFromHealthKit { success in
+                self.getProgressToWeight()
+                self.getProgressToDate()
+                self.getSuccess()
+                self.weightLost = self.startingWeight - self.currentWeight
+                self.weightToLose = self.startingWeight - self.endingWeight
+                self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
+                guard
+                    let startDate = Date.dateFromString(self.startDateString)
+                else { return }
+                
+                guard
+                    let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
+                else { return }
+                self.weight(at: Date.dateFromString("11.25.2021") ?? Date())
+                
+                let weeks: Double = Double(daysBetweenStartAndNow) / Double(7)
+                self.averageWeightLostPerWeek = self.weightLost / weeks
+                //            self.getWeightFromAMonthAgo()
+                continuation.resume()
+            }
         }
     }
     
