@@ -10,7 +10,7 @@ import Foundation
 class Network {
     let urlString = "https://tommys-fitness.herokuapp.com/api/fitness/"
     
-    func get() async -> DataToReceive {
+    func get() async -> HealthDataGetRequestModel {
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else { return }
             var request = URLRequest(url: url)
@@ -18,7 +18,7 @@ class Network {
             
             let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
                 guard error == nil, let data = data else { return }
-                if let dataReceived = try? JSONDecoder().decode(DataToReceive.self, from: data) {
+                if let dataReceived = try? JSONDecoder().decode(HealthDataGetRequestModel.self, from: data) {
                     continuation.resume(returning: dataReceived)
                 }
             })
@@ -26,7 +26,7 @@ class Network {
         }
     }
     
-    func post<T: Codable>(object: T) async -> DataToReceive { // todo change to put
+    func post<T: Codable>(object: T) async -> HealthDataGetRequestModel { // todo change to put
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else { return }
             var request = URLRequest(url: url)
@@ -41,7 +41,7 @@ class Network {
             
             let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
                 guard error == nil, let data = data else { return }
-                if let networkPostResponse = try? JSONDecoder().decode(DataToReceive.self, from: data) {
+                if let networkPostResponse = try? JSONDecoder().decode(HealthDataGetRequestModel.self, from: data) {
                     continuation.resume(returning: networkPostResponse)
                 }
             })

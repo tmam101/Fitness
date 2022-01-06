@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+func isWatch() -> Bool {
+    var isWatch = false
+#if os(watchOS)
+    isWatch = true
+#endif
+    return isWatch
+}
+
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
     @Environment(\.scenePhase) private var scenePhase
@@ -15,10 +23,11 @@ struct FitnessView: View {
     var widget: Bool = false
     @State var isDisplayingOverlay = false
     var body: some View {
-        
+//        let isWatch = #available(watchOS 7, *)
         ScrollView {
             VStack(alignment: .leading) {
-                let x = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
+                let isWatch = isWatch()
+                let sectionHeight: CGFloat = isWatch ? 150 : 400
                 Group {
                     StatsTitle(title: "Deficits")
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
@@ -29,22 +38,18 @@ struct FitnessView: View {
                     Text("Deficits This Week")
                         .foregroundColor(.white)
                         .font(.title2)
-#if os(watchOS)
-                    BarChart(showCalories: false)
+                    BarChart(showCalories: !isWatch)
                         .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-#endif
-#if os(iOS)
-                    BarChart()
-                        .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 400)
-                        .background(Color.myGray)
-                        .cornerRadius(20)
-                        .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-#endif
+//                        .if(!healthData.hasLoaded) { view in
+//                            view.redacted(reason: .placeholder)
+//                        }
+//                        .if(healthData.hasLoaded) { view in
+//                            view.unredacted()
+//                        }
                 }
                 Group {
                     StatsTitle(title: "Weight Loss")
@@ -103,24 +108,13 @@ struct FitnessView: View {
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)
-#if os(watchOS)
                     RunningLineGraph()
                         .environmentObject(healthData)
                         .environmentObject(healthData.fitness)
-                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
-#endif
-#if os(iOS)
-                    RunningLineGraph()
-                        .environmentObject(healthData)
-                        .environmentObject(healthData.fitness)
-                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 400)
-                        .padding()
-                        .background(Color.myGray)
-                        .cornerRadius(20)
-#endif
                 }
             }
             .padding()

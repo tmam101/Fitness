@@ -14,7 +14,8 @@ import SwiftUI
 import WatchConnectivity
 //import WatchConnectivity
 
-struct DataToSend: Codable {
+// MARK: Network Models
+struct HealthDataPostRequestModel: Codable {
     var deficitToday: Double = 0
     var averageDeficitThisWeek: Double = 0
     var averageDeficitThisMonth: Double = 0
@@ -37,8 +38,7 @@ struct DataToSend: Codable {
     var activeCalorieModifier: Double = 0
 }
 
-// MARK: - DataToReceive
-struct DataToReceive: Codable {
+struct HealthDataGetRequestModel: Codable {
     let id: String
     let daysBetweenStartAndNow: Int
     let dailyActiveCalories: [String: Double]
@@ -61,47 +61,50 @@ struct DataToReceive: Codable {
 }
 
 class HealthData: ObservableObject {
+    
     //MARK: PROPERTIES
     var environment: AppEnvironmentConfig?
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    var calorieManager: CalorieManager?
+    private var calorieManager: CalorieManager?
     @Published public var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
+    
     // Deficits
     @Published public var deficitToday: Double = 0
     @Published public var averageDeficitThisWeek: Double = 0
     @Published public var averageDeficitThisMonth: Double = 0
-    
     @Published public var projectedAverageMonthlyDeficitTomorrow: Double = 0
-
     @Published public var averageDeficitSinceStart: Double = 0
-    
     @Published public var deficitToGetCorrectDeficit: Double = 0
     @Published public var percentWeeklyDeficit: Int = 0
     @Published public var percentDailyDeficit: Int = 0
     @Published public var projectedAverageWeeklyDeficitForTomorrow: Double = 0
     @Published public var projectedAverageTotalDeficitForTomorrow: Double = 0
-        
-    @Published public var expectedWeightLossSinceStart: Double = 0
+    @Published public var deficitsThisWeek: [Int:Double] = [:]
+    @Published public var dailyActiveCalories: [Int:Double] = [:]
     
+    @Published public var expectedWeightLossSinceStart: Double = 0
+    @Published public var individualStatistics: [Int:Day] = [:]
+
     // Days
     @Published public var daysBetweenStartAndEnd: Int = 0
     @Published public var daysBetweenStartAndNow: Int = 0
     @Published public var daysBetweenNowAndEnd: Int = 0
-    @Published public var deficitsThisWeek: [Int:Double] = [:]
-    @Published public var dailyActiveCalories: [Int:Double] = [:]
     
+    // Workouts
     @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
     
+    // Active calorie modifier
     @Published public var activeCalorieModifier: Double = 1
     @Published public var adjustActiveCalorieModifier = true
+    
+    // Runs
     @Published public var runs: [Run] = []
-
     @Published public var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
+        
+    @Published public var hasLoaded: Bool = false
     
-    @Published public var individualStatistics: [Int:Day] = [:]
-    
-    // Constant
+    // Constants
     let goalDeficit: Double = 1000
     let goalEaten: Double = 1500
     let caloriesInPound: Double = 3500
@@ -136,7 +139,7 @@ class HealthData: ObservableObject {
         }
     }
     
-    func setWorkouts(_ workouts: WorkoutInformation) async {
+    private func setWorkouts(_ workouts: WorkoutInformation) async {
         return await withUnsafeContinuation { continuation in
             DispatchQueue.main.async { [self] in
                 self.workouts = workouts
@@ -145,20 +148,23 @@ class HealthData: ObservableObject {
         }
     }
     
+    /// Set all values of health data critifal for the app. Returns a reference to itself.
     func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
         setupDates()
+        // Fitness
         await fitness.getAllStats()
-        //MARK: RUNS
+        // Runs
         let runManager = RunManager(fitness: self.fitness, startDate: self.startDate ?? Date())
         let runs = await runManager.getRunningWorkouts()
+        // Calories
         let calorieManager = CalorieManager()
         self.calorieManager = calorieManager
-
         await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow)
+        // Workouts
         await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
         
 #if os(iOS)
-        
+        // Gather all information from calorie manager
         let averageDeficitSinceStart = await calorieManager.getAverageDeficit(forPast: self.daysBetweenStartAndNow) ?? 0
         let deficitToGetCorrectDeficit = await calorieManager.getDeficitToReachIdeal() ?? 0
         let projectedAverageWeeklyDeficitForTomorrow = await calorieManager.getProjectedAverageDeficitForTomorrow(forPast: 6) ?? 0
@@ -181,7 +187,7 @@ class HealthData: ObservableObject {
             return
         }
         // On iOS, send up the relevant data
-        let dataToSend = DataToSend(deficitToday: deficitToday,
+        let dataToSend = HealthDataPostRequestModel(deficitToday: deficitToday,
                                     averageDeficitThisWeek: averageDeficitThisWeek,
                                     averageDeficitThisMonth: averageDeficitThisMonth,
                                     projectedAverageMonthlyDeficitTomorrow: projectedAverageMonthlyDeficitTomorrow,
@@ -204,6 +210,7 @@ class HealthData: ObservableObject {
         let n = Network()
         let _ = await n.post(object: dataToSend)
 
+        // Set self values
         DispatchQueue.main.async { [self] in
             self.deficitsThisWeek = deficitsThisWeek
             self.dailyActiveCalories = dailyActiveCalories
@@ -220,6 +227,7 @@ class HealthData: ObservableObject {
             self.projectedAverageMonthlyDeficitTomorrow = projectedAverageMonthlyDeficitTomorrow
             self.individualStatistics = individualStatistics
             self.runs = runs
+            self.hasLoaded = true
             completion?(self)
         }
 #endif
@@ -230,7 +238,7 @@ class HealthData: ObservableObject {
 #endif
     }
     
-    func setValuesFromNetwork() async {
+    private func setValuesFromNetwork() async {
         guard let calorieManager = self.calorieManager else {
             return
         }
@@ -286,7 +294,7 @@ class HealthData: ObservableObject {
         completion?(self)
     }
     
-    func setupDates() {
+    private func setupDates() {
         guard let startDate = Date.dateFromString(startDateString),
               let endDate = Date.dateFromString(endDateString),
               let daysBetweenStartAndEnd = Date.daysBetween(date1: startDate, date2: endDate),

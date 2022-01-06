@@ -13,6 +13,10 @@
 		4802D493278584750001BE9D /* CalorieManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D492278584750001BE9D /* CalorieManager.swift */; };
 		4802D494278585CE0001BE9D /* CalorieManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D492278584750001BE9D /* CalorieManager.swift */; };
 		4802D495278585CF0001BE9D /* CalorieManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D492278584750001BE9D /* CalorieManager.swift */; };
+		4802D49727875B7F0001BE9D /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D49627875B7F0001BE9D /* ViewExtension.swift */; };
+		4802D49827875B7F0001BE9D /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D49627875B7F0001BE9D /* ViewExtension.swift */; };
+		4802D49927875B7F0001BE9D /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D49627875B7F0001BE9D /* ViewExtension.swift */; };
+		4802D49A27875B7F0001BE9D /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D49627875B7F0001BE9D /* ViewExtension.swift */; };
 		4803BE9F271F035C00882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		4803BEA3271F1AB500882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		48199FB72628D045000247E8 /* LiftingLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LiftingLineGraph.swift */; };
@@ -30,11 +34,8 @@
 		4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		4845B7A425C0B2AA003BF999 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		484BB6882776AAB900E24B1C /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
-		484BB68A2776ADB100E24B1C /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6892776ADB100E24B1C /* NetworkModel.swift */; };
 		484BB68B2776AE8100E24B1C /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
 		484BB68C2776AE8200E24B1C /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
-		484BB68D2776AE8F00E24B1C /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6892776ADB100E24B1C /* NetworkModel.swift */; };
-		484BB68E2776AE9000E24B1C /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6892776ADB100E24B1C /* NetworkModel.swift */; };
 		485B72802631EBB40070E096 /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
 		485B72992631EBD70070E096 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		486388E1261F9099005B1227 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
@@ -252,6 +253,7 @@
 /* Begin PBXFileReference section */
 		4802D48E278581CB0001BE9D /* RunManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunManager.swift; sourceTree = "<group>"; };
 		4802D492278584750001BE9D /* CalorieManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieManager.swift; sourceTree = "<group>"; };
+		4802D49627875B7F0001BE9D /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		4803BE9E271F035C00882BCC /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		48199FB62628D045000247E8 /* LiftingLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiftingLineGraph.swift; sourceTree = "<group>"; };
 		4827C99C26828BEF006700A1 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -260,7 +262,6 @@
 		4845B78F25C09853003BF999 /* Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lines.swift; sourceTree = "<group>"; };
 		4845B7A125C0B2AA003BF999 /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
 		484BB6872776AAB900E24B1C /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
-		484BB6892776ADB100E24B1C /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		486388E0261F9099005B1227 /* BarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChart.swift; sourceTree = "<group>"; };
 		48755A46267A707800F7680E /* MacFitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacFitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48755A4A267A707800F7680E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -505,7 +506,6 @@
 				48821CB225B8BF3800C9F58A /* Assets.xcassets */,
 				48755A89267AF13200F7680E /* Weight.swift */,
 				484BB6872776AAB900E24B1C /* Network.swift */,
-				484BB6892776ADB100E24B1C /* NetworkModel.swift */,
 				48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */,
 			);
 			path = Shared;
@@ -576,6 +576,7 @@
 				4827C9A026828C18006700A1 /* DoubleExtension.swift */,
 				48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */,
 				48BD6F5C274B17C20007AC15 /* AppView.swift */,
+				4802D49627875B7F0001BE9D /* ViewExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1049,6 +1050,7 @@
 				48BD6E6D274AFAC50007AC15 /* LineGraph.swift in Sources */,
 				48755A4B267A707800F7680E /* ContentView.swift in Sources */,
 				48755A76267A70AC00F7680E /* Ring (unused).swift in Sources */,
+				4802D49927875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				48755A75267A70AC00F7680E /* Progress Rings.swift in Sources */,
 				48755A7E267A70AC00F7680E /* Stats.swift in Sources */,
 				48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */,
@@ -1106,7 +1108,6 @@
 				48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */,
 				48A0D45325BB6605007C40ED /* FitnessView.swift in Sources */,
 				4802D48F278581CB0001BE9D /* RunManager.swift in Sources */,
-				484BB68A2776ADB100E24B1C /* NetworkModel.swift in Sources */,
 				48EE132A2738C3E700128623 /* Run.swift in Sources */,
 				4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */,
 				48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */,
@@ -1118,6 +1119,7 @@
 				48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */,
 				486388E1261F9099005B1227 /* BarChart.swift in Sources */,
 				48BD6E6F274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
+				4802D49727875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				484BB6882776AAB900E24B1C /* Network.swift in Sources */,
 				48AF60EB2640F65C00C6CC11 /* Workout.swift in Sources */,
 				4802D493278584750001BE9D /* CalorieManager.swift in Sources */,
@@ -1159,7 +1161,6 @@
 				486388E3261F9099005B1227 /* BarChart.swift in Sources */,
 				48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				4802D490278582AD0001BE9D /* RunManager.swift in Sources */,
-				484BB68D2776AE8F00E24B1C /* NetworkModel.swift in Sources */,
 				48EE13292738C3E600128623 /* Run.swift in Sources */,
 				48A0D49325BB72FC007C40ED /* Progress Rings.swift in Sources */,
 				4845B7A425C0B2AA003BF999 /* HealthData.swift in Sources */,
@@ -1171,6 +1172,7 @@
 				48E0E20C26041E700037EEAF /* Stats.swift in Sources */,
 				48A0D48725BB72E3007C40ED /* FitnessView.swift in Sources */,
 				48BD6E70274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
+				4802D49827875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				484BB68B2776AE8100E24B1C /* Network.swift in Sources */,
 				48AF60ED2640F65C00C6CC11 /* Workout.swift in Sources */,
 				4802D494278585CE0001BE9D /* CalorieManager.swift in Sources */,
@@ -1191,8 +1193,8 @@
 				48BD6F41274B15E60007AC15 /* HealthData.swift in Sources */,
 				48BD6F4A274B16140007AC15 /* Ring (unused).swift in Sources */,
 				4802D491278582AE0001BE9D /* RunManager.swift in Sources */,
+				4802D49A27875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */,
-				484BB68E2776AE9000E24B1C /* NetworkModel.swift in Sources */,
 				484BB68C2776AE8200E24B1C /* Network.swift in Sources */,
 				48BD6F60274B17C20007AC15 /* AppView.swift in Sources */,
 				48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */,
