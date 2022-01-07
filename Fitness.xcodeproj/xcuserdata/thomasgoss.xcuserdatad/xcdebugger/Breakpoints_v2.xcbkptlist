@@ -14,8 +14,8 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "setValues(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "Shared/Main View/FitnessView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "setValues(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -135,115 +135,49 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0F4A38B5-D8C8-4F1A-9A0D-63EE63F1A086"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/HealthData.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
-            landmarkName = "setValuesFromNetwork()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "91A53200-8C63-4B44-9ED8-57DF9471A50B"
-            shouldBeEnabled = "Yes"
-            nameForDebugger = "Incorrectexpectedweightloss"
-            condition = "expectedWeightLossSinceStart != 34.80"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/HealthData.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "setValues(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "68F0DFDA-1B35-4BEA-93DB-663856CA13F6"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/HealthData.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "setValues(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8493881F-E396-41E5-8D9C-12F32A4D1BBF"
+            uuid = "1A7BF3EB-B661-4BE3-956A-429D9FBA0BCC"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/CalorieManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "setup(fitness:daysBetweenStartAndNow:)"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "saveCaloriesEaten(calories:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "8493881F-E396-41E5-8D9C-12F32A4D1BBF - 2a6a79061178ceb8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) await resume partial function for Fitness.CalorieManager.setup(fitness: Fitness.FitnessCalculations, daysBetweenStartAndNow: Swift.Int) async -&gt; ()"
-                  moduleName = "Fitness"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/CalorieManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "100">
-               </Location>
-               <Location
-                  uuid = "8493881F-E396-41E5-8D9C-12F32A4D1BBF - 496f71c7bfcf90b9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) await resume partial function for Fitness.CalorieManager.setup(fitness: Fitness.FitnessCalculations, daysBetweenStartAndNow: Swift.Int) async -&gt; ()"
-                  moduleName = "Fitness"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/CalorieManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "76">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F64FB317-59AE-4036-8491-CB3F918F3902"
+            uuid = "520F7FB2-C4BC-4A6D-92D6-4E25C983C723"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/CalorieManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:averageDeficitSinceStart:)"
+            startingLineNumber = "264"
+            endingLineNumber = "264"
+            landmarkName = "saveCaloriesEaten(calories:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F1465524-9473-4A9B-93F9-D1E6DAAFAD19"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Main View/FitnessView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

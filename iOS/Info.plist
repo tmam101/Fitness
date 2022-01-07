@@ -25,7 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>"Please Please Please Please Please Please"</string>
+	<string>&quot;Please Please Please Please Please Please&quot;</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>&quot;Please Please Please Please Please Please&quot;</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

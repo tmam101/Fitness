@@ -4,6 +4,8 @@
 <dict>
 	<key>NSHealthShareUsageDescription</key>
 	<string>HKQuantityTypeIdentifierHeartRate</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>&quot;Please Please Please Please Please Please Please Please&quot;</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>

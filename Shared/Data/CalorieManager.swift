@@ -238,4 +238,34 @@ class CalorieManager {
             healthStore.execute(query)
         }
     }
+    
+    func saveCaloriesEaten(calories: Double) async -> Bool {
+        return await withUnsafeContinuation { continuation in
+            guard let caloriesEatenType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
+                continuation.resume(returning: false)
+                return
+            }
+            
+            let calorieCountUnit:HKUnit = HKUnit.kilocalorie()
+            let caloriesEatenQuantity = HKQuantity(unit: calorieCountUnit,
+                                                   doubleValue: calories)
+            
+            let calorieCountSample = HKQuantitySample(type: caloriesEatenType,
+                                                      quantity: caloriesEatenQuantity,
+                                                      start: Date(),
+                                                      end: Date())
+            
+            HKHealthStore().save(calorieCountSample) { (success, error) in
+                
+                if let error = error {
+                    continuation.resume(returning: false)
+                    print("Error Saving Steps Count Sample: \(error.localizedDescription)")
+                } else {
+                    continuation.resume(returning: true)
+                    print("Successfully saved Steps Count Sample")
+                }
+            }
+            //
+        }
+    }
 }

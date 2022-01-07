@@ -235,8 +235,11 @@ class FitnessCalculations: ObservableObject {
                                                        HKSampleType.workoutType(),
                                                        HKSampleType.quantityType(forIdentifier: .heartRate)!,
                                                        HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]
+        let writeDataTypes: Swift.Set<HKSampleType>? = [
+                                                        HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+                                                               ]
 
-        healthStore.requestAuthorization(toShare: nil, read: readDataTypes) { (success, error) in
+        healthStore.requestAuthorization(toShare: writeDataTypes, read: readDataTypes) { (success, error) in
             completion(success, error)
         }
 

@@ -15,6 +15,26 @@ func isWatch() -> Bool {
     return isWatch
 }
 
+struct NumberInput: View {
+    @State var num: String = "0"
+    @EnvironmentObject var healthData: HealthData
+    
+    var body: some View {
+        VStack {
+            TextField("0", text: $num)
+            Button("Done") {
+                Task {
+                    guard let double = Double(num) else { return }
+                    let savedCalories = await healthData.saveCaloriesEaten(calories: double)
+                    if savedCalories {
+                        await healthData.setValues(nil)
+                    }
+                }
+            }.background(.blue)
+        }
+    }
+}
+
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
     @Environment(\.scenePhase) private var scenePhase
@@ -22,12 +42,52 @@ struct FitnessView: View {
     var lineWidth: CGFloat = 10
     var widget: Bool = false
     @State var isDisplayingOverlay = false
+    
     var body: some View {
-//        let isWatch = #available(watchOS 7, *)
         ScrollView {
             VStack(alignment: .leading) {
                 let isWatch = isWatch()
                 let sectionHeight: CGFloat = isWatch ? 150 : 400
+                
+                // Add calories eaten
+//                if isWatch {
+//                    HStack {
+//                        Group {
+//                            Text("+")
+//                                .foregroundColor(.black)
+//                        }
+//                        .frame(minWidth: 50, minHeight: 50)
+//                        .background(Color.white)
+//                        .cornerRadius(20)
+//
+//                        Text("Add calories eaten")
+//                            .foregroundColor(.white)
+//                    }
+//                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 75)
+//                    .background(Color.myGray)
+//                    .cornerRadius(20)
+//                    .onTapGesture {
+//                        // TODO
+//                        print("clicked")
+//                        NavigationLink(destination: Text("H")) {
+//                            Label("Title", systemImage: "folder")
+//                        }
+//                    }
+//                }
+                
+                if isWatch {
+                    NavigationLink(destination: {
+                        NumberInput()
+                            .environmentObject(healthData)
+                    }) {
+                        Text("Add calories eaten")
+//                            .foregroundColor(.white)
+//                            .frame(minWidth: 50, minHeight: 50)
+//                            .background(.gray)
+//                            .cornerRadius(20)
+                    }
+                }
+                
                 Group {
                     StatsTitle(title: "Deficits")
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})

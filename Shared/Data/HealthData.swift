@@ -258,6 +258,7 @@ class HealthData: ObservableObject {
                 }
                 // Try to calculate active calories on the watch
                 // Todo: don't think this works right
+                // I think I need to change this value on other things like deficitsThisWeek too
                 let activeBurnedToday = activeToday * getResponse.activeCalorieModifier
                 print("activeBurnedToday \(activeBurnedToday)")
                 print("activeCalorieModifier \(activeCalorieModifier)")
@@ -292,6 +293,12 @@ class HealthData: ObservableObject {
     func setValuesDebug(_ completion: ((_ health: HealthData) -> Void)?) async {
         await setValuesFromNetwork()
         completion?(self)
+    }
+    
+    func saveCaloriesEaten(calories: Double) async -> Bool {
+        guard let calorieManager = self.calorieManager else { return false }
+        let r = await calorieManager.saveCaloriesEaten(calories: calories)
+        return r
     }
     
     private func setupDates() {
