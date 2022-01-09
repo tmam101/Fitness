@@ -131,7 +131,7 @@ class FitnessCalculations: ObservableObject {
                 guard
                     let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
                 else { return }
-                self.weight(at: Date.dateFromString("11.25.2021") ?? Date())
+//                self.weight(at: Date.dateFromString("11.25.2021") ?? Date())
                 
                 let weeks: Double = Double(daysBetweenStartAndNow) / Double(7)
                 self.averageWeightLostPerWeek = self.weightLost / weeks
@@ -197,8 +197,8 @@ class FitnessCalculations: ObservableObject {
             }
         }
         guard let weight1 = weight1, let weight2 = weight2 else { return 0 }
-        let maxWeight = max(weight1.weight, weight2.weight)
-        let minWeight = min(weight1.weight, weight2.weight)
+//        let maxWeight = max(weight1.weight, weight2.weight)
+//        let minWeight = min(weight1.weight, weight2.weight)
         let weightDifference = weight1.weight - weight2.weight
         let dayDifferenceBetweenWeights = Date.daysBetween(date1: weight1.date, date2: weight2.date) ?? 0
         let dayDifferenceBetweenWeightAndDate = Date.daysBetween(date1: weight1.date, date2: date) ?? 0

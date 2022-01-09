@@ -15,8 +15,8 @@ struct WeightLossText: View {
         let averageWeeklyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeek) + " / week"
         let averageMonthlyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeekThisMonth) + " / week"
         
-        let averageDeficit = healthData.averageDeficitSinceStart / 1000
-        let averageWeightLoss = healthData.fitness.averageWeightLostPerWeek / 2
+//        let averageDeficit = healthData.averageDeficitSinceStart / 1000
+//        let averageWeightLoss = healthData.fitness.averageWeightLostPerWeek / 2
 //        let ratio = Int(((averageWeightLoss / averageDeficit) * 100 - 100).corrected())
         
         VStack(alignment: .leading) {

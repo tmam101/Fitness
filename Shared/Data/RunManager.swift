@@ -74,7 +74,7 @@ class RunManager {
         
         // Handle date
         runs = runs.filter { item in
-            return item.date > self.startDate ?? Date()
+            return item.date > self.startDate
         }
         runs = runs.reversed()
         return runs

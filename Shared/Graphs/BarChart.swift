@@ -203,7 +203,7 @@ struct BarChart: View {
                             let day = healthData.individualStatistics[7 - indexAndPercent.index] ?? Day()
                             let activeCalories = day.activeCalories
                             let totalDeficit = day.deficit
-                            let consumed = day.consumedCalories
+//                            let consumed = day.consumedCalories
                             
                             Bar(cornerRadius: cornerRadius, color: color, height: height, activeCalories: activeCalories, totalDeficit: totalDeficit)
                                 .opacity(isToday ? 0.5 : 1)
