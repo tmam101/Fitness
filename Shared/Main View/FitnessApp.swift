@@ -25,5 +25,6 @@ struct FitnessApp_Previews: PreviewProvider {
     static var previews: some View {
         AppView()
             .environmentObject(HealthData(environment: .debug))
+            .environmentObject(WatchConnectivityIphone())
     }
 }
