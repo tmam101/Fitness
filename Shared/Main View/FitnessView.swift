@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
-    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
+//    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
     @Environment(\.scenePhase) private var scenePhase
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10

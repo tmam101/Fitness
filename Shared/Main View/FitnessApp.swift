@@ -13,9 +13,12 @@ struct FitnessApp: App {
     @State var watchConnectivityIphone = WatchConnectivityIphone()
     var body: some Scene {
         WindowGroup {
+//            AppView()
+//                .environmentObject(healthData)
+//                .environmentObject(watchConnectivityIphone)
             AppView()
                 .environmentObject(healthData)
-                .environmentObject(watchConnectivityIphone)
+//                .environmentObject(WatchConnectivityIphone())
         }
     }
 }
@@ -25,6 +28,6 @@ struct FitnessApp_Previews: PreviewProvider {
     static var previews: some View {
         AppView()
             .environmentObject(HealthData(environment: .debug))
-            .environmentObject(WatchConnectivityIphone())
+//            .environmentObject(WatchConnectivityIphone())
     }
 }

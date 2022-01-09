@@ -240,12 +240,12 @@ class HealthData: ObservableObject {
     }
     
     private func setValuesFromNetwork() async {
-        guard let calorieManager = self.calorieManager else {
-            return
-        }
+//        guard let calorieManager = self.calorieManager else {
+//            return
+//        }
         let network = Network()
         let getResponse = await network.get()
-        let activeToday = await calorieManager.sumValueForDay(daysAgo: 0, forType: .activeEnergyBurned)
+//        let activeToday = await calorieManager.sumValueForDay(daysAgo: 0, forType: .activeEnergyBurned)
         return await withUnsafeContinuation { continuation in
             DispatchQueue.main.async { [self] in
                 // Convert string keys to ints
@@ -257,13 +257,13 @@ class HealthData: ObservableObject {
                 for kv in getResponse.dailyActiveCalories {
                     dailyActiveCaloriesCorrected[Int(kv.key) ?? 0] = kv.value
                 }
-                // Try to calculate active calories on the watch
-                // Todo: don't think this works right
-                // I think I need to change this value on other things like deficitsThisWeek too
-                let activeBurnedToday = activeToday * getResponse.activeCalorieModifier
-                print("activeBurnedToday \(activeBurnedToday)")
-                print("activeCalorieModifier \(activeCalorieModifier)")
-                dailyActiveCaloriesCorrected[0] = activeToday * getResponse.activeCalorieModifier
+//                // Try to calculate active calories on the watch
+//                // Todo: don't think this works right
+//                // I think I need to change this value on other things like deficitsThisWeek too
+//                let activeBurnedToday = activeToday * getResponse.activeCalorieModifier
+//                print("activeBurnedToday \(activeBurnedToday)")
+//                print("activeCalorieModifier \(activeCalorieModifier)")
+//                dailyActiveCaloriesCorrected[0] = activeToday * getResponse.activeCalorieModifier
                 var individualStatisticsFixed: [Int:Day] = [:]
                 for kv in getResponse.individualStatistics {
                     individualStatisticsFixed[Int(kv.key) ?? 0] = kv.value

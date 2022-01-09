@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AppView: View {
     @EnvironmentObject var healthData: HealthData
-    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
+//    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
 
     var body: some View {
         ZStack {
@@ -17,7 +17,7 @@ struct AppView: View {
             VStack {
                 FitnessView()
                     .environmentObject(healthData)
-                    .environmentObject(watchConnectivityIphone)
+//                    .environmentObject(watchConnectivityIphone)
             }
         }
     }
