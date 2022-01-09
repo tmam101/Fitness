@@ -7,6 +7,7 @@
 
 import Foundation
 import WatchConnectivity
+import ClockKit
 
 class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
     var session: WCSession
@@ -32,14 +33,23 @@ class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
         replyHandler(["watch connectivity: watch sending this" : message])
         print("watch connectivity: watchOS has received a message")
         let data = message["healthData"]
+        UserDefaults.standard.set(data, forKey: "healthData")
         guard let unencoded = try? JSONDecoder().decode(HealthDataPostRequestModel.self, from: data as! Data) else { return }
         print("watch connectivity unencoded \(unencoded)")
         print("watch connectivity deficit today \(unencoded.deficitToday)")
         self.healthData?.setValues(from: unencoded)
+        let server = CLKComplicationServer.sharedInstance()
+        server.activeComplications?.forEach { complication in
+            server.reloadTimeline(for: complication)
+        }
     }
     
     func requestHealthData() {
+        UserDefaults.standard.set("success", forKey: "test")
+        print(UserDefaults.standard.value(forKey: "test") as! String)
+        healthData?.eraseValues()
         print("watch connectivity: watchOS: has delegate? \(session.delegate != nil)")
+        print("watch connectivity: watch requesting health data")
         session.sendMessage(["request" : "healthData"], replyHandler: { x in
             print("watch connectivity: ios received request for health data, respose: \(x)")
         }) { (error) in

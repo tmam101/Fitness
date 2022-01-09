@@ -320,9 +320,32 @@ class HealthData: ObservableObject {
         self.activeCalorieModifier = model.activeCalorieModifier
     }
     
+    func eraseValues() {
+        deficitToday = 0
+        averageDeficitThisWeek = 0
+        averageDeficitThisMonth = 0
+        projectedAverageMonthlyDeficitTomorrow = 0
+        averageDeficitSinceStart = 0
+        deficitToGetCorrectDeficit = 0
+        percentWeeklyDeficit = 0
+        percentDailyDeficit = 0
+        projectedAverageWeeklyDeficitForTomorrow = 0
+        projectedAverageTotalDeficitForTomorrow = 0
+        expectedWeightLossSinceStart = 0
+        daysBetweenStartAndEnd = 0
+        daysBetweenStartAndNow = 0
+        daysBetweenNowAndEnd = 0
+        deficitsThisWeek = [:]
+        dailyActiveCalories = [:]
+        individualStatistics = [:]
+        runs = []
+        numberOfRuns = 0
+        activeCalorieModifier = 0
+    }
+    
     func saveCaloriesEaten(calories: Double) async -> Bool {
-        guard let calorieManager = self.calorieManager else { return false }
-        let r = await calorieManager.saveCaloriesEaten(calories: calories)
+//        guard let calorieManager = self.calorieManager else { return false }
+        let r = await CalorieManager().saveCaloriesEaten(calories: calories)
         return r
     }
     

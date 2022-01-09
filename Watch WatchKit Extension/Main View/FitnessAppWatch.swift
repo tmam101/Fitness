@@ -34,7 +34,8 @@ struct FitnessAppWatch: App {
                     server.activeComplications?.forEach { complication in
                         server.reloadTimeline(for: complication)
                     }
-//                    watchConnectivityWatch.requestHealthData()
+                    print("reloading health data")
+                    watchConnectivityWatch.requestHealthData()
                 }
             }
         }

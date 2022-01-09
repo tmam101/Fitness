@@ -43,10 +43,17 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
+        // Get the health data that we've saved to user defaults
+        // It's saved to user defaults when the watch app opens, requests it from the phone, then saves it
+        guard
+            let data = UserDefaults.standard.value(forKey: "healthData") as? Data,
+            let unencoded = try? JSONDecoder().decode(HealthDataPostRequestModel.self, from: data)
+        else {
+            handler(nil)
+            return
+        }
         let _ = HealthData(environment: GlobalEnvironment.environment) { health in
-//            let w = WatchConnectivityWatch() // todo!
-//            w.setHealthData(healthData: health)
-            // this wont work because the values will start as 0. need a way to await it
+            health.setValues(from: unencoded)
             guard let cTemplate = self.makeTemplate(for: health, complication: complication) else {
                 handler(nil)
                 return
