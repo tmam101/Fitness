@@ -18,7 +18,7 @@ struct FitnessAppWatch: App {
     @SceneBuilder var body: some Scene {
         WindowGroup {
             NavigationView {
-                WatchAppView()
+                AppViewWatch()
                     .environmentObject(healthData)
                     .environmentObject(watchConnectivityWatch)
             }.onAppear {

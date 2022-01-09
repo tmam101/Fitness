@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WatchFitnessView: View {
+struct FitnessViewWatch: View {
     @EnvironmentObject var healthData: HealthData
     @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
     @Environment(\.scenePhase) private var scenePhase
@@ -22,52 +22,11 @@ struct WatchFitnessView: View {
             VStack(alignment: .leading) {
                 let sectionHeight: CGFloat = 150
                 
-                // Add calories eaten
-//                if isWatch {
-//                    HStack {
-//                        Group {
-//                            Text("+")
-//                                .foregroundColor(.black)
-//                        }
-//                        .frame(minWidth: 50, minHeight: 50)
-//                        .background(Color.white)
-//                        .cornerRadius(20)
-//
-//                        Text("Add calories eaten")
-//                            .foregroundColor(.white)
-//                    }
-//                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 75)
-//                    .background(Color.myGray)
-//                    .cornerRadius(20)
-//                    .onTapGesture {
-//                        // TODO
-//                        print("clicked")
-//                        NavigationLink(destination: Text("H")) {
-//                            Label("Title", systemImage: "folder")
-//                        }
-//                    }
-//                }
-//                Text(itWorked)
-//                Button(action: {
-//                    self.watchConnectivityWatch.session.sendMessage(["message" : "testMessage"], replyHandler: { x in
-//                        print("watch connectivity received \(x)")
-//                        self.itWorked = x["success"] as! String
-//                    }) { (error) in
-//                        print("watch connectivity error \(error.localizedDescription)")
-//                    }
-//                }) {
-//                    Text("Send Message")
-//                }
-                
                     NavigationLink(destination: {
                         NumberInput()
                             .environmentObject(healthData)
                     }) {
                         Text("Add calories eaten")
-//                            .foregroundColor(.white)
-//                            .frame(minWidth: 50, minHeight: 50)
-//                            .background(.gray)
-//                            .cornerRadius(20)
                     }
                 
                 Group {
@@ -86,12 +45,6 @@ struct WatchFitnessView: View {
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-//                        .if(!healthData.hasLoaded) { view in
-//                            view.redacted(reason: .placeholder)
-//                        }
-//                        .if(healthData.hasLoaded) { view in
-//                            view.unredacted()
-//                        }
                 }
                 Group {
                     StatsTitle(title: "Weight Loss")
@@ -132,10 +85,6 @@ struct WatchFitnessView: View {
                 Group {
                     StatsTitle(title: "Mile Time")
                         .onTapGesture {
-#if !os(watchOS)
-                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
-                            impactHeavy.impactOccurred()
-#endif
                             isDisplayingOverlay = true
                         }
                         .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
@@ -146,7 +95,6 @@ struct WatchFitnessView: View {
                         }
                     MileTimeStats()
                         .environmentObject(healthData)
-//                        .padding([.top, .leading, .trailing])
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)

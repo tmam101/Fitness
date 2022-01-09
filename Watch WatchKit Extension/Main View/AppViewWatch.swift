@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WatchAppView: View {
+struct AppViewWatch: View {
     @EnvironmentObject var healthData: HealthData
     @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
 
@@ -15,7 +15,7 @@ struct WatchAppView: View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
-                WatchFitnessView()
+                FitnessViewWatch()
                     .environmentObject(healthData)
                     .environmentObject(watchConnectivityWatch)
             }
@@ -25,6 +25,6 @@ struct WatchAppView: View {
 
 struct WatchAppView_Previews: PreviewProvider {
     static var previews: some View {
-        WatchAppView()
+        AppViewWatch()
     }
 }

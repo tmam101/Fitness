@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-func isWatch() -> Bool {
-    var isWatch = false
-#if os(watchOS)
-    isWatch = true
-#endif
-    return isWatch
-}
-
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
     @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
@@ -27,8 +19,7 @@ struct FitnessView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                let isWatch = isWatch()
-                let sectionHeight: CGFloat = isWatch ? 150 : 400
+                let sectionHeight: CGFloat = 400
 //                Text("watch message: \(watchConnectivityIphone.messageString)")
 //                    .foregroundColor(.white)
                 
@@ -58,7 +49,6 @@ struct FitnessView: View {
 //                    }
 //                }
                 
-                if isWatch {
                     NavigationLink(destination: {
                         NumberInput()
                             .environmentObject(healthData)
@@ -69,7 +59,6 @@ struct FitnessView: View {
 //                            .background(.gray)
 //                            .cornerRadius(20)
                     }
-                }
                 
                 Group {
                     StatsTitle(title: "Deficits")
@@ -81,7 +70,7 @@ struct FitnessView: View {
                     Text("Deficits This Week")
                         .foregroundColor(.white)
                         .font(.title2)
-                    BarChart(showCalories: !isWatch)
+                    BarChart(showCalories: true)
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
                         .background(Color.myGray)
@@ -133,10 +122,8 @@ struct FitnessView: View {
                 Group {
                     StatsTitle(title: "Mile Time")
                         .onTapGesture {
-#if !os(watchOS)
                             let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                             impactHeavy.impactOccurred()
-#endif
                             isDisplayingOverlay = true
                         }
                         .sheet(isPresented: $isDisplayingOverlay, onDismiss: {

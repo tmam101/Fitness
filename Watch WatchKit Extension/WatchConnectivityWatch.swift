@@ -31,12 +31,18 @@ class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         replyHandler(["watch connectivity: watch sending this" : message])
+        
         print("watch connectivity: watchOS has received a message")
+        
+        // Receive health data from iOS
         let data = message["healthData"]
         UserDefaults.standard.set(data, forKey: "healthData")
         guard let unencoded = try? JSONDecoder().decode(HealthDataPostRequestModel.self, from: data as! Data) else { return }
+        
         print("watch connectivity unencoded \(unencoded)")
         print("watch connectivity deficit today \(unencoded.deficitToday)")
+        
+        // Set health data, refresh complication
         self.healthData?.setValues(from: unencoded)
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach { complication in
@@ -46,10 +52,16 @@ class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
     
     func requestHealthData() {
         UserDefaults.standard.set("success", forKey: "test")
+        
         print(UserDefaults.standard.value(forKey: "test") as! String)
+        
+        // Set health data values to 0 until they are refreshed
         healthData?.eraseValues()
+        
         print("watch connectivity: watchOS: has delegate? \(session.delegate != nil)")
         print("watch connectivity: watch requesting health data")
+        
+        // Request health data from iOS
         session.sendMessage(["request" : "healthData"], replyHandler: { x in
             print("watch connectivity: ios received request for health data, respose: \(x)")
         }) { (error) in
