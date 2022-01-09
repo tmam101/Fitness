@@ -98,7 +98,7 @@ extension ComplicationController {
     case .graphicRectangular, .modularLarge, .modularSmall, .graphicExtraLarge:
 //    case .modularLarge:
         return CLKComplicationTemplateGraphicRectangularFullView(
-            BarChart(cornerRadius: 1, showCalories: false, isComplication: true)
+            BarChart(cornerRadius: 2, showCalories: false, isComplication: true)
                 .environmentObject(healthData)
         )
 //        return CLKComplicationTemplateExtraLargeSimpleImage

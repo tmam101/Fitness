@@ -29,8 +29,8 @@ struct FitnessView: View {
             VStack(alignment: .leading) {
                 let isWatch = isWatch()
                 let sectionHeight: CGFloat = isWatch ? 150 : 400
-                Text("watch message: \(watchConnectivityIphone.messageString)")
-                    .foregroundColor(.white)
+//                Text("watch message: \(watchConnectivityIphone.messageString)")
+//                    .foregroundColor(.white)
                 
                 // Add calories eaten
 //                if isWatch {

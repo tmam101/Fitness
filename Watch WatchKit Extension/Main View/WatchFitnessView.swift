@@ -80,7 +80,7 @@ struct WatchFitnessView: View {
                     Text("Deficits This Week")
                         .foregroundColor(.white)
                         .font(.title2)
-                    BarChart(showCalories: false)
+                    BarChart(cornerRadius: 2, showCalories: false)
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
                         .background(Color.myGray)

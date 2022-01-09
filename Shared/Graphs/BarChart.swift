@@ -37,7 +37,7 @@ struct DaysLetters: View {
                 Text(String(day.day(subtracting: $0).first ?? "?"))
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .font(isComplication ? .system(size: 8) : .caption)
+                    .font((isComplication || GlobalEnvironment.isWatch) ? .system(size: 8) : .caption)
             }
         }
     }

@@ -29,7 +29,8 @@ struct FitnessAppWatch: App {
                   server.reloadTimeline(for: complication)
                 }
             }.onChange(of: scenePhase) { [scenePhase] newPhase in
-                if newPhase == .active {
+                print("old scene phase \(scenePhase) new scene phase \(newPhase)")
+                if scenePhase == .background {
                     let server = CLKComplicationServer.sharedInstance()
                     server.activeComplications?.forEach { complication in
                         server.reloadTimeline(for: complication)

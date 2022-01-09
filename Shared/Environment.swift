@@ -8,7 +8,16 @@
 import Foundation
 
 struct GlobalEnvironment {
+    static var isWatch: Bool {
+        var isWatch = false
+    #if os(watchOS)
+        isWatch = true
+    #endif
+        return isWatch
+    }
+    
     static var environment = AppEnvironmentConfig.release
+    
 }
 
 enum AppEnvironmentConfig {
