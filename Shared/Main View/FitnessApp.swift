@@ -10,10 +10,12 @@ import SwiftUI
 @main
 struct FitnessApp: App {
     @State var healthData = HealthData(environment: GlobalEnvironment.environment)
+    @State var watchConnectivityIphone = WatchConnectivityIphone()
     var body: some Scene {
         WindowGroup {
             AppView()
                 .environmentObject(healthData)
+                .environmentObject(watchConnectivityIphone)
         }
     }
 }

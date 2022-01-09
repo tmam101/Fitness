@@ -103,6 +103,7 @@ class HealthData: ObservableObject {
     @Published public var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
         
     @Published public var hasLoaded: Bool = false
+    @Published public var dataToSend: HealthDataPostRequestModel = HealthDataPostRequestModel()
     
     // Constants
     let goalDeficit: Double = 1000
@@ -151,6 +152,7 @@ class HealthData: ObservableObject {
     /// Set all values of health data critifal for the app. Returns a reference to itself.
     func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
         setupDates()
+#if os(iOS)
         // Fitness
         await fitness.getAllStats()
         // Runs
@@ -162,8 +164,6 @@ class HealthData: ObservableObject {
         await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow)
         // Workouts
         await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
-        
-#if os(iOS)
         // Gather all information from calorie manager
         let averageDeficitSinceStart = await calorieManager.getAverageDeficit(forPast: self.daysBetweenStartAndNow) ?? 0
         let deficitToGetCorrectDeficit = await calorieManager.getDeficitToReachIdeal() ?? 0
@@ -212,6 +212,7 @@ class HealthData: ObservableObject {
 
         // Set self values
         DispatchQueue.main.async { [self] in
+            self.dataToSend = dataToSend
             self.deficitsThisWeek = deficitsThisWeek
             self.dailyActiveCalories = dailyActiveCalories
             self.deficitToday = deficitToday
@@ -233,7 +234,7 @@ class HealthData: ObservableObject {
 #endif
 #if os(watchOS)
         // On watch, receive relevant data
-        await setValuesFromNetwork()
+//        await setValuesFromNetwork()
         completion?(self)
 #endif
     }
@@ -293,6 +294,30 @@ class HealthData: ObservableObject {
     func setValuesDebug(_ completion: ((_ health: HealthData) -> Void)?) async {
         await setValuesFromNetwork()
         completion?(self)
+    }
+    
+    // need a way to await this
+    func setValues(from model: HealthDataPostRequestModel) {
+        self.deficitToday = model.deficitToday
+        self.averageDeficitThisWeek = model.averageDeficitThisWeek
+        self.averageDeficitThisMonth = model.averageDeficitThisMonth
+        self.projectedAverageMonthlyDeficitTomorrow = model.projectedAverageMonthlyDeficitTomorrow
+        self.averageDeficitSinceStart = model.averageDeficitSinceStart
+        self.deficitToGetCorrectDeficit = model.deficitToGetCorrectDeficit
+        self.percentWeeklyDeficit = model.percentWeeklyDeficit
+        self.percentDailyDeficit = model.percentDailyDeficit
+        self.projectedAverageWeeklyDeficitForTomorrow = model.projectedAverageWeeklyDeficitForTomorrow
+        self.projectedAverageTotalDeficitForTomorrow = model.projectedAverageTotalDeficitForTomorrow
+        self.expectedWeightLossSinceStart = model.expectedWeightLossSinceStart
+        self.daysBetweenStartAndEnd = model.daysBetweenStartAndEnd
+        self.daysBetweenStartAndNow = model.daysBetweenStartAndNow
+        self.daysBetweenNowAndEnd = model.daysBetweenNowAndEnd
+        self.deficitsThisWeek = model.deficitsThisWeek
+        self.dailyActiveCalories = model.dailyActiveCalories
+        self.individualStatistics = model.individualStatistics
+        self.runs = model.runs
+        self.numberOfRuns = model.numberOfRuns
+        self.activeCalorieModifier = model.activeCalorieModifier
     }
     
     func saveCaloriesEaten(calories: Double) async -> Bool {

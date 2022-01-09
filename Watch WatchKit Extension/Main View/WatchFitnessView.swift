@@ -7,30 +7,20 @@
 
 import SwiftUI
 
-func isWatch() -> Bool {
-    var isWatch = false
-#if os(watchOS)
-    isWatch = true
-#endif
-    return isWatch
-}
-
-struct FitnessView: View {
+struct WatchFitnessView: View {
     @EnvironmentObject var healthData: HealthData
-    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
+    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
     @Environment(\.scenePhase) private var scenePhase
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
     var widget: Bool = false
     @State var isDisplayingOverlay = false
+    @State var itWorked: String = "nothing"
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                let isWatch = isWatch()
-                let sectionHeight: CGFloat = isWatch ? 150 : 400
-                Text("watch message: \(watchConnectivityIphone.messageString)")
-                    .foregroundColor(.white)
+                let sectionHeight: CGFloat = 150
                 
                 // Add calories eaten
 //                if isWatch {
@@ -57,8 +47,18 @@ struct FitnessView: View {
 //                        }
 //                    }
 //                }
+//                Text(itWorked)
+//                Button(action: {
+//                    self.watchConnectivityWatch.session.sendMessage(["message" : "testMessage"], replyHandler: { x in
+//                        print("watch connectivity received \(x)")
+//                        self.itWorked = x["success"] as! String
+//                    }) { (error) in
+//                        print("watch connectivity error \(error.localizedDescription)")
+//                    }
+//                }) {
+//                    Text("Send Message")
+//                }
                 
-                if isWatch {
                     NavigationLink(destination: {
                         NumberInput()
                             .environmentObject(healthData)
@@ -69,7 +69,6 @@ struct FitnessView: View {
 //                            .background(.gray)
 //                            .cornerRadius(20)
                     }
-                }
                 
                 Group {
                     StatsTitle(title: "Deficits")
@@ -81,7 +80,7 @@ struct FitnessView: View {
                     Text("Deficits This Week")
                         .foregroundColor(.white)
                         .font(.title2)
-                    BarChart(showCalories: !isWatch)
+                    BarChart(showCalories: false)
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
                         .background(Color.myGray)

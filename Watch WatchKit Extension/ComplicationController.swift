@@ -44,6 +44,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
         let _ = HealthData(environment: GlobalEnvironment.environment) { health in
+//            let w = WatchConnectivityWatch() // todo!
+//            w.setHealthData(healthData: health)
+            // this wont work because the values will start as 0. need a way to await it
             guard let cTemplate = self.makeTemplate(for: health, complication: complication) else {
                 handler(nil)
                 return
