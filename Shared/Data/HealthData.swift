@@ -234,7 +234,7 @@ class HealthData: ObservableObject {
 #endif
 #if os(watchOS)
         // On watch, receive relevant data
-//        await setValuesFromNetwork()
+        await setValuesFromNetwork()
         completion?(self)
 #endif
     }

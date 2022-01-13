@@ -9,22 +9,27 @@ import SwiftUI
 
 struct AppViewWatch: View {
     @EnvironmentObject var healthData: HealthData
-    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
+//    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
 
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
+//                TabView {
                 FitnessViewWatch()
                     .environmentObject(healthData)
-                    .environmentObject(watchConnectivityWatch)
+//                    Text("Hey")
+//                }.tabViewStyle(.page)
+//                    .environmentObject(watchConnectivityWatch)
             }
         }
     }
 }
 
-struct WatchAppView_Previews: PreviewProvider {
+struct AppViewWatch_Previews: PreviewProvider {
     static var previews: some View {
         AppViewWatch()
+            .environmentObject(HealthData(environment: .debug))
+        
     }
 }

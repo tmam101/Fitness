@@ -16,9 +16,11 @@ class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
     init(session: WCSession = .default){
         self.session = session
         super.init()
+        if GlobalEnvironment.environment == .debug {
+            return
+        }
         session.delegate = self
         session.activate()
-        
     }
     
     func setHealthData(healthData: HealthData) {
@@ -56,7 +58,7 @@ class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
         print(UserDefaults.standard.value(forKey: "test") as! String)
         
         // Set health data values to 0 until they are refreshed
-        healthData?.eraseValues()
+//        healthData?.eraseValues()
         
         print("watch connectivity: watchOS: has delegate? \(session.delegate != nil)")
         print("watch connectivity: watch requesting health data")

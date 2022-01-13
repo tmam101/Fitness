@@ -12,7 +12,7 @@ struct StatsTitle: View {
     var body: some View {
         Text(title)
             .foregroundColor(.white)
-            .font(.title)
+            .font(GlobalEnvironment.isWatch ? .caption : .title)
             .bold()
     }
 }

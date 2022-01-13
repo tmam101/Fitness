@@ -44,5 +44,12 @@ struct FitnessAppWatch: App {
         WKNotificationScene(controller: NotificationController.self, category: "myCategory")
     }
     
+}
 
+struct FitnessAppWatch_Previews: PreviewProvider {
+    static var previews: some View {
+        AppViewWatch()
+            .environmentObject(HealthData(environment: .debug))
+//            .environmentObject(WatchConnectivityWatch())
+    }
 }

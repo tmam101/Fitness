@@ -16,7 +16,7 @@ struct GlobalEnvironment {
         return isWatch
     }
     
-    static var environment = AppEnvironmentConfig.debug
+    static var environment = AppEnvironmentConfig.release
     
 }
 

@@ -7,9 +7,31 @@
 
 import SwiftUI
 
+struct DeficitsView: View {
+    @EnvironmentObject var healthData: HealthData
+
+    var body: some View {
+        VStack {
+            HStack {
+                Text("\(Int(healthData.averageDeficitThisMonth))")
+                    .foregroundColor(.orange)
+                    .frame(maxWidth: .infinity)
+                Text("\(Int(healthData.averageDeficitThisWeek))")
+                    .foregroundColor(.yellow)
+                    .frame(maxWidth: .infinity)
+                Text("\(Int(healthData.deficitToday))")
+                    .foregroundColor(.blue)
+                    .frame(maxWidth: .infinity)
+            }
+            DeficitRings()
+                .environmentObject(healthData)
+        }
+    }
+}
+
 struct FitnessViewWatch: View {
     @EnvironmentObject var healthData: HealthData
-    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
+//    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
     @Environment(\.scenePhase) private var scenePhase
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
@@ -22,23 +44,24 @@ struct FitnessViewWatch: View {
             VStack(alignment: .leading) {
                 let sectionHeight: CGFloat = 150
                 
+                // Add calories eaten
                     NavigationLink(destination: {
                         NumberInput()
                             .environmentObject(healthData)
                     }) {
                         Text("Add calories eaten")
                     }
-                
                 Group {
                     StatsTitle(title: "Deficits")
-                    StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
+                    DeficitsView()
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
                         .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .background(Color.myGray)
+                        .cornerRadius(20)
                 }
+                
                 Group {
-                    Text("Deficits This Week")
-                        .foregroundColor(.white)
-                        .font(.title2)
+                    StatsTitle(title: "Deficits This Week")
                     BarChart(cornerRadius: 2, showCalories: false)
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
@@ -116,5 +139,13 @@ struct FitnessViewWatch: View {
                 }
             }
         }
+    }
+}
+
+struct FitnessViewWatch_Previews: PreviewProvider {
+    static var previews: some View {
+        FitnessViewWatch()
+            .environmentObject(HealthData(environment: AppEnvironmentConfig.debug))
+            .previewDevice(PreviewDevice(rawValue: "Apple Watch Series 7 - 45 mm"))
     }
 }
