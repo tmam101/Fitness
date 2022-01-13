@@ -15,9 +15,10 @@ struct LineGraph: View {
     var body: some View {
         Path { path in
             path.move(to: CGPoint(x: points.first?.x ?? 0.0, y: points.first?.y ?? 0.0))
-            
+            if points.count > 0 {
             for i in 1..<points.count {
                 path.addLine(to: points[i])
+            }
             }
         }
         .stroke(style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round))

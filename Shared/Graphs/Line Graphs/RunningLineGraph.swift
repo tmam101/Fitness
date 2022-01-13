@@ -7,6 +7,30 @@
 
 import SwiftUI
 
+struct WeightLossGraph: View {
+    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var healthData: HealthData
+    var color: Color = .green
+    
+    var body: some View {
+        let weights = fitness.weights
+        VStack {
+            GeometryReader { geometry in
+                let points = weightsToGraphCoordinates(weights: weights, width: geometry.size.width - 40, height: geometry.size.height)
+                LineGraph(points: points, color: color, width: 2)
+            }
+        }
+    }
+    
+    func weightsToGraphCoordinates(weights: [Weight], width: CGFloat, height: CGFloat) -> [CGPoint] {
+        var weightValues = weights.map { $0.weight }
+        weightValues = weightValues.reversed()
+        let max = weightValues.max() ?? 1
+        let min = weightValues.min() ?? 0
+        return LineGraph.numbersToPoints(points: weightValues, max: max, min: min, width: width, height: height)
+    }
+}
+
 struct RunningLineGraph: View {
     @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData

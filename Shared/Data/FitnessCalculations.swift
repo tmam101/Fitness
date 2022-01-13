@@ -190,6 +190,9 @@ class FitnessCalculations: ObservableObject {
             if weights[i].date == date {
                 return weights[i].weight
             }
+            if weights[0].date < date {
+                return weights[0].weight
+            }
             if weights[i].date < date {
                 weight1 = weights[i]
                 weight2 = weights[i-1]
@@ -249,11 +252,12 @@ class FitnessCalculations: ObservableObject {
     //returns the weight entry in pounds or nil if no data
     private func bodyMass(completion: @escaping ((_ bodyMass: Double?, _ date: Date?) -> Void)) {
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 31, sortDescriptors: [sortDescriptor]) { (query, results, error) in
+        let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 3000, sortDescriptors: [sortDescriptor]) { (query, results, error) in
             if let results = results as? [HKQuantitySample],
             let result = results.first {
                 self.weights = results
                     .map{ Weight(weight: $0.quantity.doubleValue(for: HKUnit.pound()), date: $0.endDate) }
+                    .filter { $0.date > Date.dateFromString(self.startDateString)!}
                 print(self.weights)
 //                    .sorted(by: { $0.date < $1.date })
 //                Weight.weightBetweenTwoWeights(date: self.weights.first?.date.advanced(by: (24 * 60 * 60 * 4)) ?? Date(), weight1: self.weights.first, weight2: self.weights[1])
