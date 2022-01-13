@@ -179,6 +179,13 @@ class HealthData: ObservableObject {
         let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
         let percentDailyDeficit = Int((deficitToday / deficitToGetCorrectDeficit) * 100)
         let expectedWeightLossSinceStart = (averageDeficitSinceStart * Double(self.daysBetweenStartAndNow)) / Double(3500)
+//        let statsEveryDay = await calorieManager.getIndividualDeficits(forPastDays: daysBetweenStartAndNow)
+//        let expectedWeights = statsEveryDay.map {
+//            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -$0.key), to: Date())!)
+//            var values = fitness.weights.map { $0.weight }
+//            values = values.reversed()
+//            
+//        }
         //todo it looks like i can get active calories on the watch
         //TODO improve
         // Dont send or use data if its messed up

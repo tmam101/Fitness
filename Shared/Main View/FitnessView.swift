@@ -59,13 +59,6 @@ struct FitnessView: View {
 //                            .background(.gray)
 //                            .cornerRadius(20)
                     }
-                WeightLossGraph()
-                    .environmentObject(healthData)
-                    .environmentObject(healthData.fitness)
-                    .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
-                    .padding()
-                    .background(Color.myGray)
-                    .cornerRadius(20)
                 
                 Group {
                     StatsTitle(title: "Deficits")
@@ -102,6 +95,13 @@ struct FitnessView: View {
                                 await healthData.setValues(nil)
                             }
                         }
+                    WeightLossGraph()
+                        .environmentObject(healthData)
+                        .environmentObject(healthData.fitness)
+                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
+                        .padding()
+                        .background(Color.myGray)
+                        .cornerRadius(20)
                 }
                 Group {
                     StatsTitle(title: "Lifts")
