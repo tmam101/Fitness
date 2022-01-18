@@ -23,7 +23,7 @@ struct FitnessAppWatch: App {
                     .environmentObject(watchConnectivityWatch)
             }.onAppear {
                 watchConnectivityWatch.setHealthData(healthData: healthData)
-                watchConnectivityWatch.requestHealthData()
+//                watchConnectivityWatch.requestHealthData()
                 let server = CLKComplicationServer.sharedInstance()
                 server.activeComplications?.forEach { complication in
                   server.reloadTimeline(for: complication)
@@ -36,7 +36,7 @@ struct FitnessAppWatch: App {
                         server.reloadTimeline(for: complication)
                     }
                     print("reloading health data")
-                    watchConnectivityWatch.requestHealthData()
+//                    watchConnectivityWatch.requestHealthData()
                 }
             }
         }

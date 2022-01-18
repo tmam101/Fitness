@@ -95,6 +95,7 @@ struct FitnessView: View {
                                 await healthData.setValues(nil)
                             }
                         }
+                    ZStack {
                     WeightLossGraph()
                         .environmentObject(healthData)
                         .environmentObject(healthData.fitness)
@@ -102,6 +103,13 @@ struct FitnessView: View {
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
+                        DeficitLineGraph()
+                            .environmentObject(healthData)
+                            .environmentObject(healthData.fitness)
+                            .padding()
+
+                        
+                    }
                 }
                 Group {
                     StatsTitle(title: "Lifts")

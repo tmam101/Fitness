@@ -44,18 +44,18 @@ class WatchConnectivityIphone: NSObject, WCSessionDelegate, ObservableObject {
         DispatchQueue.main.async {
             self.messageString = message["request"] as? String ?? "Unknown"
         }
-        let _ = HealthData(environment: GlobalEnvironment.environment) { healthData in
-            let dataToSend = healthData.dataToSend
-            do {
-                let encodedData = try JSONEncoder().encode(dataToSend)
-                session.sendMessage(["healthData" :encodedData], replyHandler: { response in
-                    print("watch connectivity iphone sent response correctly, received this \(response)")
-                }, errorHandler: {error in
-                    print("watch connectivity iphone error \(error)")
-                })
-            } catch {
-                return
-            }
-        }
+//        let _ = HealthData(environment: GlobalEnvironment.environment) { healthData in
+//            let dataToSend = healthData.dataToSend
+//            do {
+//                let encodedData = try JSONEncoder().encode(dataToSend)
+//                session.sendMessage(["healthData" :encodedData], replyHandler: { response in
+//                    print("watch connectivity iphone sent response correctly, received this \(response)")
+//                }, errorHandler: {error in
+//                    print("watch connectivity iphone error \(error)")
+//                })
+//            } catch {
+//                return
+//            }
+//        }
     }
 }

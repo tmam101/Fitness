@@ -189,6 +189,13 @@ class CalorieManager {
     }
     
     func getAverageDeficit(forPast days: Int) async -> Double? {
+        let deficit = await getCumulativeDeficit(forPast: days) ?? 0
+        let realDays: Double = Double(days == 0 ? 1 : days)
+        let average = deficit / realDays
+        return average
+    }
+    
+    func getCumulativeDeficit(forPast days: Int) async -> Double? {
         let resting = await getRestingCaloriesBurned(forPast: days)
         let active = await getActiveCaloriesBurned(forPast: days)
         let eaten = await getTotalCaloriesEaten(forPast: days)
@@ -196,11 +203,13 @@ class CalorieManager {
         let realResting = max(Double(minimumRestingCalories) * realDays, resting)
         let realActive = max(Double(minimumActiveCalories) * realDays, active)
         let deficit = getDeficit(resting: realResting, active: realActive, eaten: eaten)
-        let average = deficit / realDays
-        return average
+        print("days ago \(days) cumulative deficit \(deficit)")
+        return deficit
     }
     
     func getActiveCaloriesBurned(forPast days: Int) async -> Double {
+//        return await max(sumValue(forPast: days, forType: .activeEnergyBurned), Double(days + 1) * minimumActiveCalories) // todo when summing these things, we don't account for the minimum of 200 active calories
+
         return await sumValue(forPast: days, forType: .activeEnergyBurned) // todo when summing these things, we don't account for the minimum of 200 active calories
     }
     
@@ -209,6 +218,8 @@ class CalorieManager {
     }
     
     func getRestingCaloriesBurned(forPast days: Int) async -> Double {
+//        return await max(sumValue(forPast: days, forType: .basalEnergyBurned), Double(days+1) * minimumActiveCalories)
+
         return await sumValue(forPast: days, forType: .basalEnergyBurned)
     }
     

@@ -45,15 +45,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // Call the handler with the current timeline entry
         // Get the health data that we've saved to user defaults
         // It's saved to user defaults when the watch app opens, requests it from the phone, then saves it
-        guard
-            let data = UserDefaults.standard.value(forKey: "healthData") as? Data,
-            let unencoded = try? JSONDecoder().decode(HealthDataPostRequestModel.self, from: data)
-        else {
-            handler(nil)
-            return
-        }
+        //        guard
+        //            let data = UserDefaults.standard.value(forKey: "healthData") as? Data,
+        //            let unencoded = try? JSONDecoder().decode(HealthDataPostRequestModel.self, from: data)
+        //        else {
+        //            handler(nil)
+        //            return
+        //        }
         let _ = HealthData(environment: GlobalEnvironment.environment) { health in
-            health.setValues(from: unencoded)
+            //        health.setValues(from: unencoded)
             guard let cTemplate = self.makeTemplate(for: health, complication: complication) else {
                 handler(nil)
                 return

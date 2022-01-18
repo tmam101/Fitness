@@ -7,26 +7,64 @@
 
 import SwiftUI
 
+struct DeficitLineGraph: View {
+    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var healthData: HealthData
+    var color: Color = .yellow
+    
+    var body: some View {
+        let expectedWeights = healthData.expectedWeights
+        let weights = fitness.weights
+        VStack {
+            GeometryReader { geometry in
+                if weights.count > 0 && expectedWeights.count > 0 {
+                    let points = weightsToGraphCoordinates(weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
+                    LineGraph(points: points, color: color, width: 2)
+                }
+            }
+        }
+    }
+    
+    func weightsToGraphCoordinates(weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
+        var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
+        weightValues = weightValues.reversed()
+        let weightMax = weightValues.map { $0.double }.max() ?? 1
+        let weightMin = weightValues.map { $0.double }.min() ?? 0
+        let expectedWeightMax = expectedWeights.map { $0.double }.max() ?? 1
+        let expectedWeightMin = expectedWeights.map { $0.double }.min() ?? 0
+        let max = max(weightMax, expectedWeightMax)
+        let min = min(weightMin, expectedWeightMin)
+        return LineGraph.numbersToPoints(points: expectedWeights, max: max, min: min, width: width, height: height)
+    }
+}
+
 struct WeightLossGraph: View {
     @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData
     var color: Color = .green
     
     var body: some View {
+        let expectedWeights = healthData.expectedWeights
         let weights = fitness.weights
         VStack {
             GeometryReader { geometry in
-                let points = weightsToGraphCoordinates(weights: weights, width: geometry.size.width - 40, height: geometry.size.height)
-                LineGraph(points: points, color: color, width: 2)
+                if weights.count > 0 && expectedWeights.count > 0 {
+                    let points = weightsToGraphCoordinates(weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
+                    LineGraph(points: points, color: color, width: 2)
+                }
             }
         }
     }
     
-    func weightsToGraphCoordinates(weights: [Weight], width: CGFloat, height: CGFloat) -> [CGPoint] {
+    func weightsToGraphCoordinates(weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
         var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
         weightValues = weightValues.reversed()
-        let max = weightValues.map { $0.double }.max() ?? 1
-        let min = weightValues.map { $0.double }.min() ?? 0
+        let weightMax = weightValues.map { $0.double }.max() ?? 1
+        let weightMin = weightValues.map { $0.double }.min() ?? 0
+        let expectedWeightMax = expectedWeights.map { $0.double }.max() ?? 1
+        let expectedWeightMin = expectedWeights.map { $0.double }.min() ?? 0
+        let max = max(weightMax, expectedWeightMax)
+        let min = min(weightMin, expectedWeightMin)
         return LineGraph.numbersToPoints(points: weightValues, max: max, min: min, width: width, height: height)
     }
 }
@@ -50,41 +88,41 @@ struct RunningLineGraph: View {
         let middle = Double(min) + x
         
         VStack {
-        GeometryReader { geometry in
-            let points = averagesToGraphCoordinates(runs: runs, width: geometry.size.width - 40, height: geometry.size.height)
-
-            LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(Time.doubleToString(double: max))")
-            LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: Time.doubleToString(double: middle))
-            LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Time.doubleToString(double: min))")
-            
-            LineGraph(points: points, color: color, width: 2)
-            
-            if healthData.runs.count > 0 {
-                ForEach(0..<points.count, id: \.self) { index in
-                    let width = (geometry.size.width / CGFloat(points.count)) - 2
-                    Text("")
-                        .frame(maxWidth: width, maxHeight: geometry.size.height)
-                        .background(.white)
-                        .opacity(0.00001)
-                        .position(x: points[index].x, y: geometry.size.height / 2)
-                        .onTapGesture {
+            GeometryReader { geometry in
+                let points = averagesToGraphCoordinates(runs: runs, width: geometry.size.width - 40, height: geometry.size.height)
+                
+                LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(Time.doubleToString(double: max))")
+                LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: Time.doubleToString(double: middle))
+                LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Time.doubleToString(double: min))")
+                
+                LineGraph(points: points, color: color, width: 2)
+                
+                if healthData.runs.count > 0 {
+                    ForEach(0..<points.count, id: \.self) { index in
+                        let width = (geometry.size.width / CGFloat(points.count)) - 2
+                        Text("")
+                            .frame(maxWidth: width, maxHeight: geometry.size.height)
+                            .background(.white)
+                            .opacity(0.00001)
+                            .position(x: points[index].x, y: geometry.size.height / 2)
+                            .onTapGesture {
 #if !os(watchOS)
-                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
-                            impactHeavy.impactOccurred()
-                            #endif
-                            self.presentingTest = true
-                            runViewModel.runClicked = runs[index]
-                        }
-                        .sheet(isPresented: $presentingTest, onDismiss: {
-                            self.presentingTest = false
-                        }) {
-                            RunView()
-                                .environmentObject(runViewModel)
-                                .background(Color.myGray.edgesIgnoringSafeArea(.all))
-                        }
+                                let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+                                impactHeavy.impactOccurred()
+#endif
+                                self.presentingTest = true
+                                runViewModel.runClicked = runs[index]
+                            }
+                            .sheet(isPresented: $presentingTest, onDismiss: {
+                                self.presentingTest = false
+                            }) {
+                                RunView()
+                                    .environmentObject(runViewModel)
+                                    .background(Color.myGray.edgesIgnoringSafeArea(.all))
+                            }
+                    }
                 }
             }
-        }
             HStack {
                 Text(Date.stringFromDate(date: runs.first?.date ?? Date()))
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -164,12 +202,12 @@ class RunViewModel: ObservableObject {
 
 struct RunTexts: View {
     @EnvironmentObject var runViewModel: RunViewModel
-
+    
     var body: some View {
-//        RunTextView(text: "Weight")
+        //        RunTextView(text: "Weight")
         Text("Weight")
         Text("\(runViewModel.runClicked.weightAtTime)")
-//        RunTextView(number: runViewModel.runClicked.weightAtTime, isLarge: true)
+        //        RunTextView(number: runViewModel.runClicked.weightAtTime, isLarge: true)
     }
 }
 
@@ -180,15 +218,15 @@ struct RunView: View {
         ZStack {
             Color.myGray.edgesIgnoringSafeArea(.all)
             VStack(alignment:.leading) {
-//                let mileTimeString = Time.doubleToString(double: runViewModel.runClicked.averageMileTime)
-//                let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
-//                let year = String(date.year ?? 0).trimmingCharacters(in: [","])
-//                let daysAgo = Date.daysBetween(date1: runViewModel.runClicked.date, date2: Date())
-//                let dateString = "\(date.month ?? 0)/\(date.day ?? 0)/\(year)"
-//                let daysAgoString = "\(daysAgo ?? 0) days ago"
-//                Group{
+                //                let mileTimeString = Time.doubleToString(double: runViewModel.runClicked.averageMileTime)
+                //                let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
+                //                let year = String(date.year ?? 0).trimmingCharacters(in: [","])
+                //                let daysAgo = Date.daysBetween(date1: runViewModel.runClicked.date, date2: Date())
+                //                let dateString = "\(date.month ?? 0)/\(date.day ?? 0)/\(year)"
+                //                let daysAgoString = "\(daysAgo ?? 0) days ago"
+                //                Group{
                 Text("Run")
-//                }
+                //                }
                 let values = getValues()
                 
                 Text("Average Mile Time")
@@ -196,13 +234,13 @@ struct RunView: View {
                     .font(.system(size: 90))
                     .foregroundColor(.blue)
                     .padding([.bottom])
-//                RunTextView(text: "Date")
-//                RunTextView(text: dateString, isLarge: true)
-//                RunTextView(text: daysAgoString)
-//                RunTextView(text: "Distance")
-//                RunTextView(number: runViewModel.runClicked.totalDistance, isLarge: true)
-//                RunTextView(text: "Time")
-//                RunTextView(number: runViewModel.runClicked.totalTime, isLarge: true)
+                //                RunTextView(text: "Date")
+                //                RunTextView(text: dateString, isLarge: true)
+                //                RunTextView(text: daysAgoString)
+                //                RunTextView(text: "Distance")
+                //                RunTextView(number: runViewModel.runClicked.totalDistance, isLarge: true)
+                //                RunTextView(text: "Time")
+                //                RunTextView(number: runViewModel.runClicked.totalTime, isLarge: true)
                 Text("Date")
                 Text(values.dateString)
                 Text(values.daysAgoString)
@@ -210,11 +248,11 @@ struct RunView: View {
                 Text("\(runViewModel.runClicked.totalDistance)")
                 Text("Time")
                 Text("\(runViewModel.runClicked.totalTime)")
-//                Text("Weight")
-//                Text("\(runViewModel.runClicked.weightAtTime)")
-                }
+                //                Text("Weight")
+                //                Text("\(runViewModel.runClicked.weightAtTime)")
             }
         }
+    }
     func getValues() -> (mileTimeString: String, dateString: String, daysAgoString: String) {
         let mileTimeString = Time.doubleToString(double: runViewModel.runClicked.averageMileTime)
         let date = Calendar.current.dateComponents([.day, .month, .year], from: runViewModel.runClicked.date)
@@ -224,7 +262,7 @@ struct RunView: View {
         let daysAgoString = "\(daysAgo ?? 0) days ago"
         return (mileTimeString: mileTimeString, dateString: dateString, daysAgoString: daysAgoString)
     }
-    }
+}
 
 struct RunTextView: View {
     var text: String? = nil
