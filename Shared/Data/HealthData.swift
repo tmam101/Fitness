@@ -36,6 +36,8 @@ struct HealthDataPostRequestModel: Codable {
     var runs: [Run] = []
     var numberOfRuns: Int = 0
     var activeCalorieModifier: Double = 0
+    var expectedWeights: [LineGraph.DateAndDouble] = []
+    var weights: [Weight] = []
 }
 
 struct HealthDataGetRequestModel: Codable {
@@ -53,10 +55,12 @@ struct HealthDataGetRequestModel: Codable {
     var runs: [Run]
     var numberOfRuns: Int
     var activeCalorieModifier: Double
+    var expectedWeights: [LineGraph.DateAndDouble]
+    var weights: [Weight]
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
-        case daysBetweenStartAndNow, dailyActiveCalories, averageDeficitSinceStart, projectedAverageWeeklyDeficitForTomorrow, averageDeficitThisWeek, daysBetweenStartAndEnd, daysBetweenNowAndEnd, percentWeeklyDeficit, expectedWeightLossSinceStart, deficitsThisWeek, projectedAverageMonthlyDeficitTomorrow, deficitToGetCorrectDeficit, percentDailyDeficit, deficitToday, projectedAverageTotalDeficitForTomorrow, averageDeficitThisMonth, individualStatistics, runs, numberOfRuns, activeCalorieModifier
+        case daysBetweenStartAndNow, dailyActiveCalories, averageDeficitSinceStart, projectedAverageWeeklyDeficitForTomorrow, averageDeficitThisWeek, daysBetweenStartAndEnd, daysBetweenNowAndEnd, percentWeeklyDeficit, expectedWeightLossSinceStart, deficitsThisWeek, projectedAverageMonthlyDeficitTomorrow, deficitToGetCorrectDeficit, percentDailyDeficit, deficitToday, projectedAverageTotalDeficitForTomorrow, averageDeficitThisMonth, individualStatistics, runs, numberOfRuns, activeCalorieModifier, expectedWeights, weights
     }
 }
 
@@ -157,6 +161,7 @@ class HealthData: ObservableObject {
     func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
         setupDates()
 #if os(iOS)
+        await setValuesFromNetwork()
         // Fitness
         await fitness.getAllStats()
         // Runs
@@ -183,14 +188,9 @@ class HealthData: ObservableObject {
         let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
         let percentDailyDeficit = Int((deficitToday / deficitToGetCorrectDeficit) * 100)
         let expectedWeightLossSinceStart = (averageDeficitSinceStart * Double(self.daysBetweenStartAndNow)) / Double(3500) //todo maybe dont use the average but the real
-        let statsEveryDay = await calorieManager.getIndividualDeficits(forPastDays: daysBetweenStartAndNow)
-//        let expectedWeights = statsEveryDay.map {
-//            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -$0.key), to: Date())!)
-//            let v = calorieManager.getcu
-//            var values = fitness.weights.map { $0.weight }
-//            values = values.reversed()
-            
-//        }
+//        let statsEveryDay = await calorieManager.getIndividualDeficits(forPastDays: daysBetweenStartAndNow)
+        let expectedWeights = await calorieManager.getExpectedWeights()
+        
         //todo it looks like i can get active calories on the watch
         //TODO improve
         // Dont send or use data if its messed up
@@ -198,80 +198,35 @@ class HealthData: ObservableObject {
             completion?(self)
             return
         }
-//        var datesAndValues: [LineGraph.DateAndDouble] = []
-//        var reversed: [LineGraph.DateAndDouble] = []
-//        for i in 0..<statsEveryDay.count {
-//            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-//            let thisDaysDeficit = statsEveryDay[i] ?? 0
-//            if i == 0 {
-//                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit))
-//            } else {
-//                let previousCumulative = datesAndValues[i-1].double
-//                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit + previousCumulative))
-//            }
-//            print("cumulative deficit: \(datesAndValues.last)")
-//        }
-//        for i in 0..<datesAndValues.count {
-//            let reversedIndex = datesAndValues.count - 1 - i
-//            let newEntry = LineGraph.DateAndDouble(date: datesAndValues[i].date, double: datesAndValues[reversedIndex].double)
-//            reversed.append(newEntry)
-//            print("reversed: \(newEntry)")
-//        }
-//        var expectedWeights = reversed.map { LineGraph.DateAndDouble(date: $0.date, double:fitness.startingWeight - ($0.double / 3500)) }
-//        for i in 0..<daysBetweenStartAndNow {
-//            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-//            let cumulativeDeficit = await calorieManager.getCumulativeDeficit(forPast: i) ?? 0
-//            let deficitToPounds = cumulativeDeficit / 3500
-//            let expectedWeight = fitness.startingWeight - deficitToPounds
-//            expectedWeights.append(LineGraph.DateAndDouble(date: date, double: expectedWeight))
-//        }
         // On iOS, send up the relevant data
-        let dataToSend = HealthDataPostRequestModel(deficitToday: deficitToday,
-                                    averageDeficitThisWeek: averageDeficitThisWeek,
-                                    averageDeficitThisMonth: averageDeficitThisMonth,
-                                    projectedAverageMonthlyDeficitTomorrow: projectedAverageMonthlyDeficitTomorrow,
-                                    averageDeficitSinceStart: averageDeficitSinceStart,
-                                    deficitToGetCorrectDeficit: deficitToGetCorrectDeficit,
-                                    percentWeeklyDeficit: percentWeeklyDeficit,
-                                    percentDailyDeficit: percentDailyDeficit,
-                                    projectedAverageWeeklyDeficitForTomorrow: projectedAverageWeeklyDeficitForTomorrow,
-                                    projectedAverageTotalDeficitForTomorrow: projectedAverageTotalDeficitForTomorrow,
-                                    expectedWeightLossSinceStart: expectedWeightLossSinceStart,
-                                    daysBetweenStartAndEnd: daysBetweenStartAndEnd,
-                                    daysBetweenStartAndNow: daysBetweenStartAndNow,
-                                    daysBetweenNowAndEnd: daysBetweenNowAndEnd,
-                                    deficitsThisWeek: deficitsThisWeek,
-                                    dailyActiveCalories: dailyActiveCalories,
-                                    individualStatistics: individualStatistics,
-                                    runs: runs,
-                                    numberOfRuns: self.numberOfRuns,
-                                    activeCalorieModifier: self.activeCalorieModifier)
+        let dataToSend = HealthDataPostRequestModel(
+            deficitToday: deficitToday,
+            averageDeficitThisWeek: averageDeficitThisWeek,
+            averageDeficitThisMonth: averageDeficitThisMonth,
+            projectedAverageMonthlyDeficitTomorrow: projectedAverageMonthlyDeficitTomorrow,
+            averageDeficitSinceStart: averageDeficitSinceStart,
+            deficitToGetCorrectDeficit: deficitToGetCorrectDeficit,
+            percentWeeklyDeficit: percentWeeklyDeficit,
+            percentDailyDeficit: percentDailyDeficit,
+            projectedAverageWeeklyDeficitForTomorrow: projectedAverageWeeklyDeficitForTomorrow,
+            projectedAverageTotalDeficitForTomorrow: projectedAverageTotalDeficitForTomorrow,
+            expectedWeightLossSinceStart: expectedWeightLossSinceStart,
+            daysBetweenStartAndEnd: daysBetweenStartAndEnd,
+            daysBetweenStartAndNow: daysBetweenStartAndNow,
+            daysBetweenNowAndEnd: daysBetweenNowAndEnd,
+            deficitsThisWeek: deficitsThisWeek,
+            dailyActiveCalories: dailyActiveCalories,
+            individualStatistics: individualStatistics,
+            runs: runs,
+            numberOfRuns: self.numberOfRuns,
+            activeCalorieModifier: self.activeCalorieModifier,
+            expectedWeights: expectedWeights,
+            weights: fitness.weights)
         let n = Network()
         let _ = await n.post(object: dataToSend)
-
+        
         // Set self values
         DispatchQueue.main.async { [self] in
-            var datesAndValues: [LineGraph.DateAndDouble] = []
-            var reversed: [LineGraph.DateAndDouble] = []
-            for i in 0..<statsEveryDay.count {
-                let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-                let thisDaysDeficit = statsEveryDay[i] ?? 0
-                if i == 0 {
-                    datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit))
-                } else {
-                    let previousCumulative = datesAndValues[i-1].double
-                    datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit + previousCumulative))
-                }
-                print("cumulative deficit: \(datesAndValues.last)")
-            }
-            for i in 0..<datesAndValues.count {
-                let reversedIndex = datesAndValues.count - 1 - i
-                let newEntry = LineGraph.DateAndDouble(date: datesAndValues[i].date, double: datesAndValues[reversedIndex].double)
-                reversed.append(newEntry)
-                print("reversed: \(newEntry)")
-            }
-            var expectedWeights = reversed.map { LineGraph.DateAndDouble(date: $0.date, double:fitness.startingWeight - ($0.double / 3500)) }
-            
             self.dataToSend = dataToSend
             self.deficitsThisWeek = deficitsThisWeek
             self.dailyActiveCalories = dailyActiveCalories
@@ -347,6 +302,8 @@ class HealthData: ObservableObject {
                 self.runs = getResponse.runs
                 self.numberOfRuns = getResponse.numberOfRuns
                 self.activeCalorieModifier = getResponse.activeCalorieModifier
+                self.expectedWeights = getResponse.expectedWeights
+                self.fitness.weights = getResponse.weights
 //                UserDefaults.standard.set(getre, forKey: "healthData")
                 continuation.resume()
             }

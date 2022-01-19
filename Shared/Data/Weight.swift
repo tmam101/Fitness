@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Weight {
+struct Weight: Codable {
     var weight: Double
     var date: Date
     

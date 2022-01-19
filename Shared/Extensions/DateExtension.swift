@@ -41,4 +41,12 @@ extension Date {
         formatter.dateFormat = "MM.dd.yyyy"
         return formatter.date(from: "\(month).\(day).\(year)")
     }
+    
+    static func subtract(days: Int, from date: Date) -> Date {
+        return Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: date)!)
+    }
+    
+    static func sameDay(date1: Date, date2: Date) -> Bool {
+        return Calendar.current.startOfDay(for: date1) == Calendar.current.startOfDay(for: date2)
+    }
 }

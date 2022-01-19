@@ -73,6 +73,10 @@
 		48755A8C267AF13200F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
 		48755A8D267AF1BF00F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
 		487A95192640F97500627BA3 /* strong.json in Resources */ = {isa = PBXBuildFile; fileRef = 487A95182640F97500627BA3 /* strong.json */; };
+		48813F592798A9BF0045859C /* DeficitLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48813F582798A9BF0045859C /* DeficitLineGraph.swift */; };
+		48813F5A2798A9BF0045859C /* DeficitLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48813F582798A9BF0045859C /* DeficitLineGraph.swift */; };
+		48813F5B2798A9BF0045859C /* DeficitLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48813F582798A9BF0045859C /* DeficitLineGraph.swift */; };
+		48813F5C2798A9BF0045859C /* DeficitLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48813F582798A9BF0045859C /* DeficitLineGraph.swift */; };
 		48821CCC25B8BF3800C9F58A /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CCB25B8BF3800C9F58A /* Tests_iOS.swift */; };
 		48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
 		48821CDD25B8BF3800C9F58A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48821CB225B8BF3800C9F58A /* Assets.xcassets */; };
@@ -290,6 +294,7 @@
 		48755A87267A8FDA00F7680E /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		48755A89267AF13200F7680E /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
 		487A95182640F97500627BA3 /* strong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strong.json; sourceTree = "<group>"; };
+		48813F582798A9BF0045859C /* DeficitLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeficitLineGraph.swift; sourceTree = "<group>"; };
 		48821CB025B8BF3600C9F58A /* FitnessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessApp.swift; sourceTree = "<group>"; };
 		48821CB225B8BF3800C9F58A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48821CB725B8BF3800C9F58A /* Fitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -602,6 +607,7 @@
 				48BD6E6A274AFA890007AC15 /* LineGraph.swift */,
 				48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */,
 				48199FB62628D045000247E8 /* LiftingLineGraph.swift */,
+				48813F582798A9BF0045859C /* DeficitLineGraph.swift */,
 			);
 			path = "Line Graphs";
 			sourceTree = "<group>";
@@ -1081,6 +1087,7 @@
 				48755A7F267A70AC00F7680E /* Workout.swift in Sources */,
 				48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */,
 				4827C9A326828C18006700A1 /* DoubleExtension.swift in Sources */,
+				48813F5B2798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
 				48755A79267A70AC00F7680E /* LiftingLineGraph.swift in Sources */,
 				48755A77267A70AC00F7680E /* TextCollections.swift in Sources */,
 				48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */,
@@ -1132,6 +1139,7 @@
 				48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */,
 				48EC266A25B8D1280003B455 /* FitnessCalculations.swift in Sources */,
 				48108136278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
+				48813F592798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
 				48A7706B260529C3002E5853 /* ColorExtension.swift in Sources */,
 				48E0E21826041F3D0037EEAF /* TextCollections.swift in Sources */,
 				4803BE9F271F035C00882BCC /* Day.swift in Sources */,
@@ -1187,6 +1195,7 @@
 				4845B7A425C0B2AA003BF999 /* HealthData.swift in Sources */,
 				48108128278A0FE1008E9AE6 /* WatchConnectivityIphone.swift in Sources */,
 				48108137278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
+				48813F5A2798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
 				485B72992631EBD70070E096 /* Lines.swift in Sources */,
 				48199FB92628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44F262619DE002321B5 /* Environment.swift in Sources */,
@@ -1211,6 +1220,7 @@
 				48BD6F53274B162A0007AC15 /* Stats.swift in Sources */,
 				48BD6F5A274B169D0007AC15 /* Environment.swift in Sources */,
 				48BD6F4B274B16190007AC15 /* DateExtension.swift in Sources */,
+				48813F5C2798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
 				48BD6F57274B162E0007AC15 /* Workout.swift in Sources */,
 				48BD6F49274B16120007AC15 /* GenericCircles.swift in Sources */,
 				48BD6F41274B15E60007AC15 /* HealthData.swift in Sources */,

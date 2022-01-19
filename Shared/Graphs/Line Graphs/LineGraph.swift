@@ -44,7 +44,27 @@ struct LineGraph: View {
         return inverted
     }
     
-    struct DateAndDouble {
+    static func numbersToPoints(points: [DateAndDouble], firstDate: Date, max: Double, min: Double, width: CGFloat, height: CGFloat) -> [CGPoint] {
+        let diff = max - min
+        let adjusted = points.map { DateAndDouble(date: $0.date, double: ($0.double - min) / diff) }
+//        let totalDays = Date.daysBetween(date1: firstDate, date2: Date())
+//        let startDate = points.map { $0.date }.min()!
+        let adjustedForDays = adjusted.map  {
+            x(daysBetween: Date.daysBetween(date1: firstDate, date2: $0.date) ?? 0, value: $0.double)
+        }
+        var points: [CGPoint] = []
+        // Handle x axis placement
+        let daysFromBeginningToEnd = Date.daysBetween(date1: firstDate, date2: Date()) ?? 0
+        let widthIncrement = width / CGFloat(daysFromBeginningToEnd)
+        for i in 0..<adjustedForDays.count {
+            let s = CGFloat(adjustedForDays[i].daysBetween) * widthIncrement
+            points.append(CGPoint(x: s, y: CGFloat(adjustedForDays[i].value) * height))
+        }
+        let inverted = points.map { CGPoint(x: $0.x, y: height - $0.y) }
+        return inverted
+    }
+    
+    struct DateAndDouble: Codable {
         var date: Date
         var double: Double
     }

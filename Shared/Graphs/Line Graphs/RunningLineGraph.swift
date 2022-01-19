@@ -7,68 +7,6 @@
 
 import SwiftUI
 
-struct DeficitLineGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
-    @EnvironmentObject var healthData: HealthData
-    var color: Color = .yellow
-    
-    var body: some View {
-        let expectedWeights = healthData.expectedWeights
-        let weights = fitness.weights
-        VStack {
-            GeometryReader { geometry in
-                if weights.count > 0 && expectedWeights.count > 0 {
-                    let points = weightsToGraphCoordinates(weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
-                    LineGraph(points: points, color: color, width: 2)
-                }
-            }
-        }
-    }
-    
-    func weightsToGraphCoordinates(weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
-        weightValues = weightValues.reversed()
-        let weightMax = weightValues.map { $0.double }.max() ?? 1
-        let weightMin = weightValues.map { $0.double }.min() ?? 0
-        let expectedWeightMax = expectedWeights.map { $0.double }.max() ?? 1
-        let expectedWeightMin = expectedWeights.map { $0.double }.min() ?? 0
-        let max = max(weightMax, expectedWeightMax)
-        let min = min(weightMin, expectedWeightMin)
-        return LineGraph.numbersToPoints(points: expectedWeights, max: max, min: min, width: width, height: height)
-    }
-}
-
-struct WeightLossGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
-    @EnvironmentObject var healthData: HealthData
-    var color: Color = .green
-    
-    var body: some View {
-        let expectedWeights = healthData.expectedWeights
-        let weights = fitness.weights
-        VStack {
-            GeometryReader { geometry in
-                if weights.count > 0 && expectedWeights.count > 0 {
-                    let points = weightsToGraphCoordinates(weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
-                    LineGraph(points: points, color: color, width: 2)
-                }
-            }
-        }
-    }
-    
-    func weightsToGraphCoordinates(weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
-        weightValues = weightValues.reversed()
-        let weightMax = weightValues.map { $0.double }.max() ?? 1
-        let weightMin = weightValues.map { $0.double }.min() ?? 0
-        let expectedWeightMax = expectedWeights.map { $0.double }.max() ?? 1
-        let expectedWeightMin = expectedWeights.map { $0.double }.min() ?? 0
-        let max = max(weightMax, expectedWeightMax)
-        let min = min(weightMin, expectedWeightMin)
-        return LineGraph.numbersToPoints(points: weightValues, max: max, min: min, width: width, height: height)
-    }
-}
-
 struct RunningLineGraph: View {
     @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData
@@ -163,7 +101,8 @@ struct RunningLineGraph: View {
             min = rounded
         }
         runViewModel.min = min
-        return LineGraph.numbersToPoints(points: averages, max: max, min: min, width: width, height: height)
+        return LineGraph.numbersToPoints(points: averages, firstDate: runs.map{$0.date}.min() ?? Date(), max: max, min: min, width: width, height: height)
+//        return LineGraph.numbersToPoints(points: averages, max: max, min: min, width: width, height: height)
     }
 }
 

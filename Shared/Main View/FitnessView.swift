@@ -15,6 +15,7 @@ struct FitnessView: View {
     var lineWidth: CGFloat = 10
     var widget: Bool = false
     @State var isDisplayingOverlay = false
+    @State var deficitLineGraphDaysToShow: Double = 30.0
     
     var body: some View {
         ScrollView {
@@ -95,21 +96,24 @@ struct FitnessView: View {
                                 await healthData.setValues(nil)
                             }
                         }
+                    
                     ZStack {
-                    WeightLossGraph()
-                        .environmentObject(healthData)
-                        .environmentObject(healthData.fitness)
-                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
-                        .padding()
-                        .background(Color.myGray)
-                        .cornerRadius(20)
-                        DeficitLineGraph()
+                        DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
                             .environmentObject(healthData)
                             .environmentObject(healthData.fitness)
+                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                             .padding()
-
-                        
+                            .background(Color.myGray)
+                            .cornerRadius(20)
                     }
+                    Slider(
+                        value: $deficitLineGraphDaysToShow,
+                        in: 0...Double(healthData.daysBetweenStartAndNow),
+                        step: 5
+                    )
+                        .tint(.green)
+                    Text("past \(Int(deficitLineGraphDaysToShow)) days")
+                        .foregroundColor(.green)
                 }
                 Group {
                     StatsTitle(title: "Lifts")

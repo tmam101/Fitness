@@ -18,6 +18,26 @@ class CalorieManager {
     let minimumActiveCalories: Double = 200
     let minimumRestingCalories: Double = 2200
     
+    func getExpectedWeights() async -> [LineGraph.DateAndDouble] {
+        let deficits = await self.getIndividualDeficits(forPastDays: daysBetweenStartAndNow)
+        var datesAndValues: [LineGraph.DateAndDouble] = []
+        for i in 0..<deficits.count {
+            let dateIndex = deficits.count - 1 - i
+            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -dateIndex), to: Date())!)
+            let thisDaysDeficit = deficits[dateIndex] ?? 0
+            if i == 0 {
+                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit))
+            } else {
+                let previousCumulative = datesAndValues[i-1].double
+                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit + previousCumulative))
+            }
+            print("cumulative deficit: \(datesAndValues.last)")
+        }
+        var expectedWeights: [LineGraph.DateAndDouble] = datesAndValues.map { LineGraph.DateAndDouble(date: $0.date, double: (fitness?.startingWeight ?? 300) - ($0.double / 3500)) }
+        expectedWeights = expectedWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: $0.double)}
+        return expectedWeights
+    }
+    
     func setup(fitness: FitnessCalculations, daysBetweenStartAndNow: Int) async {
         self.fitness = fitness
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
