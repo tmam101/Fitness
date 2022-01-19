@@ -44,7 +44,7 @@ struct LineGraph: View {
         return inverted
     }
     
-    static func numbersToPoints(points: [DateAndDouble], firstDate: Date, max: Double, min: Double, width: CGFloat, height: CGFloat) -> [CGPoint] {
+    static func numbersToPoints(points: [DateAndDouble], endDate: Date = Date(), firstDate: Date, max: Double, min: Double, width: CGFloat, height: CGFloat) -> [CGPoint] {
         let diff = max - min
         let adjusted = points.map { DateAndDouble(date: $0.date, double: ($0.double - min) / diff) }
 //        let totalDays = Date.daysBetween(date1: firstDate, date2: Date())
@@ -54,7 +54,7 @@ struct LineGraph: View {
         }
         var points: [CGPoint] = []
         // Handle x axis placement
-        let daysFromBeginningToEnd = Date.daysBetween(date1: firstDate, date2: Date()) ?? 0
+        let daysFromBeginningToEnd = Date.daysBetween(date1: firstDate, date2: endDate) ?? 0
         let widthIncrement = width / CGFloat(daysFromBeginningToEnd)
         for i in 0..<adjustedForDays.count {
             let s = CGFloat(adjustedForDays[i].daysBetween) * widthIncrement

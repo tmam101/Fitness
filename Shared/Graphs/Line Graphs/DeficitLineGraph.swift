@@ -1,3 +1,5 @@
+import SwiftUI
+
 enum LineGraphType {
     case deficit
     case weightLoss
@@ -52,7 +54,7 @@ struct DeficitAndWeightLossGraph: View {
             let firstDate = [firstWeightDate, firstDeficitDate].min() else {
                 return LineGraph.numbersToPoints(points: pointsToUse, max: max, min: min, width: width, height: height)
             }
-        return LineGraph.numbersToPoints(points: pointsToUse, firstDate: firstDate, max: max, min: min, width: width, height: height)
+        return LineGraph.numbersToPoints(points: pointsToUse, endDate: Date.subtract(days: -1, from: Date()), firstDate: firstDate, max: max, min: min, width: width, height: height)
     }
 }
 
