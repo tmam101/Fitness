@@ -84,6 +84,11 @@ struct FitnessView: View {
 //                            view.unredacted()
 //                        }
                 }
+                DeficitLineGraph()
+                    .environmentObject(healthData)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+                    .background(Color.myGray)
+                    .cornerRadius(20)
                 Group {
                     StatsTitle(title: "Weight Loss")
                     StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
@@ -175,5 +180,15 @@ struct FitnessView: View {
                 }
             }
         }
+    }
+}
+
+struct FitnessView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        AppView()
+            .environmentObject(HealthData(environment: .debug))
+            .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
+//            .environmentObject(WatchConnectivityIphone())
     }
 }

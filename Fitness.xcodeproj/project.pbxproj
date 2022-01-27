@@ -147,6 +147,14 @@
 		48BD6F5E274B17C20007AC15 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
 		48BD6F63274B191A0007AC15 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48BD6F62274B191A0007AC15 /* HealthKit.framework */; };
 		48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
+		48DE1DE127A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE027A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift */; };
+		48DE1DE227A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE027A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift */; };
+		48DE1DE327A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE027A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift */; };
+		48DE1DE427A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE027A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift */; };
+		48DE1DE627A086E700F2EE5B /* WeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE527A086E700F2EE5B /* WeightLossGraph.swift */; };
+		48DE1DE727A086E700F2EE5B /* WeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE527A086E700F2EE5B /* WeightLossGraph.swift */; };
+		48DE1DE827A086E700F2EE5B /* WeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE527A086E700F2EE5B /* WeightLossGraph.swift */; };
+		48DE1DE927A086E700F2EE5B /* WeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE527A086E700F2EE5B /* WeightLossGraph.swift */; };
 		48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
 		48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
 		48E0E1E12603C47F0037EEAF /* GenericCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1CE2603C3490037EEAF /* GenericCircles.swift */; };
@@ -341,6 +349,8 @@
 		48BD6F61274B191A0007AC15 /* Watch WatchKit ExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Watch WatchKit ExtensionDebug.entitlements"; sourceTree = "<group>"; };
 		48BD6F62274B191A0007AC15 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS8.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		48D7995C25B8C7950047C8E0 /* Progress Rings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Progress Rings.swift"; sourceTree = "<group>"; };
+		48DE1DE027A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeficitAndWeightLossGraph.swift; sourceTree = "<group>"; };
+		48DE1DE527A086E700F2EE5B /* WeightLossGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightLossGraph.swift; sourceTree = "<group>"; };
 		48E0E1CE2603C3490037EEAF /* GenericCircles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericCircles.swift; sourceTree = "<group>"; };
 		48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ring (unused).swift"; sourceTree = "<group>"; };
 		48E0E1F626041DE50037EEAF /* RingCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingCollections.swift; sourceTree = "<group>"; };
@@ -608,6 +618,8 @@
 				48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */,
 				48199FB62628D045000247E8 /* LiftingLineGraph.swift */,
 				48813F582798A9BF0045859C /* DeficitLineGraph.swift */,
+				48DE1DE027A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift */,
+				48DE1DE527A086E700F2EE5B /* WeightLossGraph.swift */,
 			);
 			path = "Line Graphs";
 			sourceTree = "<group>";
@@ -1078,6 +1090,8 @@
 				48755A76267A70AC00F7680E /* Ring (unused).swift in Sources */,
 				4802D49927875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				48755A75267A70AC00F7680E /* Progress Rings.swift in Sources */,
+				48DE1DE827A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
+				48DE1DE327A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				48755A7E267A70AC00F7680E /* Stats.swift in Sources */,
 				48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */,
 				48755A74267A70AC00F7680E /* Lines.swift in Sources */,
@@ -1130,10 +1144,12 @@
 				48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */,
 				48E0E1F726041DE50037EEAF /* RingCollections.swift in Sources */,
+				48DE1DE127A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */,
 				48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */,
 				48A0D45325BB6605007C40ED /* FitnessView.swift in Sources */,
 				4802D48F278581CB0001BE9D /* RunManager.swift in Sources */,
+				48DE1DE627A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
 				48EE132A2738C3E700128623 /* Run.swift in Sources */,
 				4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */,
 				48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */,
@@ -1186,10 +1202,12 @@
 				48A0D48D25BB72F8007C40ED /* FitnessCalculations.swift in Sources */,
 				48BD6E6C274AFAC50007AC15 /* LineGraph.swift in Sources */,
 				485B72802631EBB40070E096 /* Ring (unused).swift in Sources */,
+				48DE1DE227A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
 				486388E3261F9099005B1227 /* BarChart.swift in Sources */,
 				48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				4802D490278582AD0001BE9D /* RunManager.swift in Sources */,
+				48DE1DE727A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
 				48EE13292738C3E600128623 /* Run.swift in Sources */,
 				48A0D49325BB72FC007C40ED /* Progress Rings.swift in Sources */,
 				4845B7A425C0B2AA003BF999 /* HealthData.swift in Sources */,
@@ -1217,6 +1235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48DE1DE427A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				48BD6F53274B162A0007AC15 /* Stats.swift in Sources */,
 				48BD6F5A274B169D0007AC15 /* Environment.swift in Sources */,
 				48BD6F4B274B16190007AC15 /* DateExtension.swift in Sources */,
@@ -1229,6 +1248,7 @@
 				4802D491278582AE0001BE9D /* RunManager.swift in Sources */,
 				4802D49A27875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */,
+				48DE1DE927A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
 				484BB68C2776AE8200E24B1C /* Network.swift in Sources */,
 				48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */,
 				48BD6F46274B16060007AC15 /* BarChart.swift in Sources */,

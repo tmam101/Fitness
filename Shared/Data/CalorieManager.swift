@@ -10,7 +10,7 @@ import HealthKit
 
 class CalorieManager {
     var activeCalorieModifier: Double = 1
-    var adjustActiveCalorieModifier: Bool = true
+    var adjustActiveCalorieModifier: Bool = false
     var daysBetweenStartAndNow: Int = 0
     var fitness: FitnessCalculations? = nil
     private let healthStore = HKHealthStore()
@@ -43,8 +43,9 @@ class CalorieManager {
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         if adjustActiveCalorieModifier {
             await setActiveCalorieModifier(1)
-            let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
-            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
+//            let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
+//            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
+            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow)
             await setActiveCalorieModifier(activeCalorieModifier)
         }
     }
@@ -85,11 +86,15 @@ class CalorieManager {
     
     func getIndividualStatistics(forPastDays days: Int) async -> [Int:Day] {
         var dayInformation: [Int:Day] = [:]
-        for i in 0...days {
+        for i in 0...days { // todo real active here???????
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
-            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
+            let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
-            let day = Day(deficit: deficit, activeCalories: active, consumedCalories: eaten)
+            
+            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
+            let realActive = max(self.minimumActiveCalories, active)
+            let realResting = max(self.minimumRestingCalories, resting)
+            let day = Day(deficit: deficit, activeCalories: realActive, consumedCalories: eaten)
             dayInformation[i] = day
             if dayInformation.count == days + 1 {
                 return dayInformation
@@ -157,6 +162,23 @@ class CalorieManager {
             return 1
         }
         return Double(modifier)
+    }
+    
+    func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int) async -> Double {
+        let weightLost = fitness?.weightLost ?? 0
+        let caloriesLost = weightLost * 3500
+        let active = await getActiveCaloriesBurned(forPast: daysBetweenStartAndNow)
+        let resting = await sumValue(forPast: daysBetweenStartAndNow, forType: .basalEnergyBurned)
+        let eaten = await sumValue(forPast: daysBetweenStartAndNow, forType: .dietaryEnergyConsumed)
+        let realResting = max(Double(minimumRestingCalories) * Double(daysBetweenStartAndNow), resting) // It's probably because I'm not checking every day for < 200 active cals, I'm just making sure the average is above it
+        let realActive = max(Double(minimumActiveCalories) * Double(daysBetweenStartAndNow), active)
+        // todo have to account for minimum values here
+//        (active * x) + resting - eaten = caloriesLost
+//        caloriesLost + eaten = activeX + resting
+//        caloriesLost + eaten - resting = activeX
+//        x = (caloriesLost + eaten - resting) / active
+        let modifier = (caloriesLost + eaten - realResting) / realActive
+        return modifier
     }
     
     func getDeficit(resting: Double, active: Double, eaten: Double) -> Double {

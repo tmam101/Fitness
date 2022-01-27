@@ -71,7 +71,7 @@ class HealthData: ObservableObject {
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     private var calorieManager: CalorieManager?
-    @Published public var fitness = FitnessCalculations(environment: GlobalEnvironment.environment)
+    @Published public var fitness = FitnessCalculations()
     
     // Deficits
     @Published public var deficitToday: Double = 0
@@ -92,7 +92,7 @@ class HealthData: ObservableObject {
 
     // Days
     @Published public var daysBetweenStartAndEnd: Int = 0
-    @Published public var daysBetweenStartAndNow: Int = 0
+    @Published public var daysBetweenStartAndNow: Int = 350
     @Published public var daysBetweenNowAndEnd: Int = 0
     
     // Workouts

@@ -33,18 +33,22 @@ class FitnessCalculations: ObservableObject {
 
     
     init(environment: AppEnvironmentConfig) {
-        authorizeHealthKit { _, _ in
-
-        }
         self.environment = environment
         switch environment {
 //        case .release:
+//            authorizeHealthKit { _, _ in
+//
+//            }
 //            getAllStats()
         case .debug:
             getAllStatsDebug(completion: nil)
         default:
             return
         }
+    }
+    
+    init() {
+        
     }
     
     init(environment: AppEnvironmentConfig, completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {

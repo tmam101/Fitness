@@ -218,3 +218,35 @@ struct RunTextView: View {
             .foregroundColor(color)
     }
 }
+
+//struct RunningLineGraph_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        x()
+////        RunningLineGraph()
+////            .environmentObject(HealthData(environment: .debug))
+////            .environmentObject(HealthData(environment: .debug).fitness)
+////            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 400)
+////            .padding()
+////            .background(Color.myGray)
+////            .cornerRadius(20)
+////            .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
+////            .environmentObject(WatchConnectivityIphone())
+//    }
+//
+//    static func x() async -> RunningLineGraph {
+//        return await withUnsafeContinuation { continuation in
+//            HealthData(environment: .debug) { s in
+//                continuation.resume(returning: RunningLineGraph()
+//                    .environmentObject(s)
+//                    .environmentObject(s.fitness)
+//                    .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 400)
+//                    .padding()
+//                    .background(Color.myGray)
+//                    .cornerRadius(20)
+//                )
+//                //                .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
+//            }
+//        } as! RunningLineGraph
+//    }
+//}

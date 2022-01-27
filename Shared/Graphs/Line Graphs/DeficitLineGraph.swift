@@ -5,141 +5,55 @@ enum LineGraphType {
     case weightLoss
 }
 
-struct DeficitAndWeightLossGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
-    @EnvironmentObject var healthData: HealthData
-    @Binding var daysAgoToReach: Double
-    
-    var body: some View {
-        let expectedWeights = healthData.expectedWeights
-        let weights = fitness.weights
-        VStack {
-            GeometryReader { geometry in
-                if weights.count > 0 && expectedWeights.count > 0 {
-                    let deficitPoints = weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .deficit, weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
-                    LineGraph(points: deficitPoints, color: .yellow, width: 2)
-                    let weightLossPoints = weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .weightLoss, weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
-                    LineGraph(points: weightLossPoints, color: .green, width: 2)
-                }
-            }
-        }
-    }
-
-
-    func weightsToGraphCoordinates(daysAgoToReach: Double, graphType: LineGraphType, weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
-        weightValues = weightValues.reversed()
-        let startDate = Date.subtract(days: Int(daysAgoToReach), from: Date())
-        let weightsSuffix = weightValues.filter { $0.date >= startDate }
-        var expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
-        let deficitOnDayOfFirstWeight = expectedWeightsSuffix.first(where: {Date.sameDay(date1: $0.date, date2: weightsSuffix.first?.date ?? Date())})
-        let differenceBetweenFirstWeightAndDeficit = (weightsSuffix.first?.double ?? 0) - (deficitOnDayOfFirstWeight?.double ?? 0)
-        expectedWeightsSuffix = expectedWeightsSuffix.map { LineGraph.DateAndDouble(date: $0.date, double: $0.double + differenceBetweenFirstWeightAndDeficit)}
-        let weightMax = weightsSuffix.map { $0.double }.max() ?? 1
-        let weightMin = weightsSuffix.map { $0.double }.min() ?? 0
-        let expectedWeightMax = expectedWeightsSuffix.map { $0.double }.max() ?? 1
-        let expectedWeightMin = expectedWeightsSuffix.map { $0.double }.min() ?? 0
-        let max = max(weightMax, expectedWeightMax)
-        let min = min(weightMin, expectedWeightMin)
-        var pointsToUse: [LineGraph.DateAndDouble] = []
-        switch graphType {
-        case .deficit:
-            pointsToUse = expectedWeightsSuffix
-        case .weightLoss:
-            pointsToUse = weightsSuffix
-        }
-        guard
-            let firstWeightDate = weightsSuffix.map({ $0.date }).min(),
-            let firstDeficitDate = expectedWeightsSuffix.map({ $0.date }).min(),
-            let firstDate = [firstWeightDate, firstDeficitDate].min() else {
-                return LineGraph.numbersToPoints(points: pointsToUse, max: max, min: min, width: width, height: height)
-            }
-        return LineGraph.numbersToPoints(points: pointsToUse, endDate: Date.subtract(days: -1, from: Date()), firstDate: firstDate, max: max, min: min, width: width, height: height)
-    }
-}
-
 struct DeficitLineGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData
     var color: Color = .yellow
     
     var body: some View {
         let expectedWeights = healthData.expectedWeights
-        let weights = fitness.weights
         VStack {
             GeometryReader { geometry in
-                if weights.count > 0 && expectedWeights.count > 0 {
-                    let points = weightsToGraphCoordinates(weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
+                if expectedWeights.count > 0 {
+                    let startDate = Date.subtract(days: 6, from: Date())
+                    let expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
+                    let maxWeight = expectedWeightsSuffix.map { $0.double }.max() ?? 1
+                    let minWeight = expectedWeightsSuffix.map { $0.double }.min() ?? 0
+                    let firstWeightMinusTwoPounds = (expectedWeightsSuffix.first?.double ?? 1) - 2
+                    let minValue = min(firstWeightMinusTwoPounds, minWeight)
+                    LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(Int(maxWeight))")
+                    LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: "middle")
+                    LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Int(minValue))")
+                    let points = weightsToGraphCoordinates(expectedWeights: expectedWeightsSuffix, width: geometry.size.width - 40, height: geometry.size.height)
                     LineGraph(points: points, color: color, width: 2)
                 }
             }
-        }
+        }.padding()
     }
     
-    func weightsToGraphCoordinates(weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
-        weightValues = weightValues.reversed()
-        let startDate = Date.subtract(days: 350, from: Date())
-        let weightsSuffix = weightValues.filter { $0.date >= startDate }
-        var expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
-        let deficitOnDayOfFirstWeight = expectedWeightsSuffix.first(where: {Date.sameDay(date1: $0.date, date2: weightsSuffix.first?.date ?? Date())})
-        let differenceBetweenFirstWeightAndDeficit = (weightsSuffix.first?.double ?? 0) - (deficitOnDayOfFirstWeight?.double ?? 0)
-        expectedWeightsSuffix = expectedWeightsSuffix.map { LineGraph.DateAndDouble(date: $0.date, double: $0.double + differenceBetweenFirstWeightAndDeficit)}
-        let weightMax = weightsSuffix.map { $0.double }.max() ?? 1
-        let weightMin = weightsSuffix.map { $0.double }.min() ?? 0
-        let expectedWeightMax = expectedWeightsSuffix.map { $0.double }.max() ?? 1
-        let expectedWeightMin = expectedWeightsSuffix.map { $0.double }.min() ?? 0
-        let max = max(weightMax, expectedWeightMax)
-        let min = min(weightMin, expectedWeightMin)
+    func weightsToGraphCoordinates(expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
+//        let startDate = Date.subtract(days: 6, from: Date())
+//        let expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
+        let expectedWeightMax = expectedWeights.map { $0.double }.max() ?? 1
+        var expectedWeightMin = expectedWeights.map { $0.double }.min() ?? 0
+        let firstWeightMinusTwoPounds = (expectedWeights.first?.double ?? 1) - 2
+        expectedWeightMin = min(firstWeightMinusTwoPounds, expectedWeightMin)
         guard
-            let firstWeightDate = weightsSuffix.map({ $0.date }).min(),
-            let firstDeficitDate = expectedWeightsSuffix.map({ $0.date }).min(),
-            let firstDate = [firstWeightDate, firstDeficitDate].min() else {
-                return LineGraph.numbersToPoints(points: expectedWeightsSuffix, max: max, min: min, width: width, height: height)
+            let firstDate = expectedWeights.map({ $0.date }).min(),
+            let endDate = expectedWeights.map({ $0.date }).max() else {
+                return LineGraph.numbersToPoints(points: expectedWeights, max: expectedWeightMax, min: expectedWeightMin, width: width, height: height)
             }
-        return LineGraph.numbersToPoints(points: expectedWeightsSuffix, firstDate: firstDate, max: max, min: min, width: width, height: height)
+        return LineGraph.numbersToPoints(points: expectedWeights, endDate: endDate, firstDate: firstDate, max: expectedWeightMax, min: expectedWeightMin, width: width, height: height)
     }
 }
 
-struct WeightLossGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
-    @EnvironmentObject var healthData: HealthData
-    var color: Color = .green
-    
-    var body: some View {
-        let expectedWeights = healthData.expectedWeights
-        let weights = fitness.weights
-        VStack {
-            GeometryReader { geometry in
-                if weights.count > 0 && expectedWeights.count > 0 {
-                    let points = weightsToGraphCoordinates(weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
-                    LineGraph(points: points, color: color, width: 2)
-                }
-            }
-        }
-    }
-    
-    func weightsToGraphCoordinates(weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
-        weightValues = weightValues.reversed()
-        let startDate = Date.subtract(days: 350, from: Date())
-        let weightsSuffix = weightValues.filter { $0.date >= startDate }
-        var expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
-        let deficitOnDayOfFirstWeight = expectedWeightsSuffix.first(where: {Date.sameDay(date1: $0.date, date2: weightsSuffix.first?.date ?? Date())})
-        let differenceBetweenFirstWeightAndDeficit = (weightsSuffix.first?.double ?? 0) - (deficitOnDayOfFirstWeight?.double ?? 0)
-        expectedWeightsSuffix = expectedWeightsSuffix.map { LineGraph.DateAndDouble(date: $0.date, double: $0.double + differenceBetweenFirstWeightAndDeficit)}
-        let weightMax = weightsSuffix.map { $0.double }.max() ?? 1
-        let weightMin = weightsSuffix.map { $0.double }.min() ?? 0
-        let expectedWeightMax = expectedWeightsSuffix.map { $0.double }.max() ?? 1
-        let expectedWeightMin = expectedWeightsSuffix.map { $0.double }.min() ?? 0
-        let max = max(weightMax, expectedWeightMax)
-        let min = min(weightMin, expectedWeightMin)
-        guard
-            let firstWeightDate = weightsSuffix.map({ $0.date }).min(),
-            let firstDeficitDate = expectedWeightsSuffix.map({ $0.date }).min(),
-            let firstDate = [firstWeightDate, firstDeficitDate].min() else {
-                return LineGraph.numbersToPoints(points: weightsSuffix, max: max, min: min, width: width, height: height)
-            }
-        return LineGraph.numbersToPoints(points: weightsSuffix, firstDate: firstDate, max: max, min: min, width: width, height: height)
+struct DeficitLineGraph_Previews: PreviewProvider {
+    static var previews: some View {
+        DeficitLineGraph()
+            .environmentObject(HealthData(environment: .debug))
+            .frame(minWidth: 0, maxWidth: .infinity, maxHeight: 200)
+            .padding()
+            .background(Color.myGray)
+            .cornerRadius(20)
+            .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
     }
 }
