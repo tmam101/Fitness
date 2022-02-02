@@ -10,7 +10,7 @@ import HealthKit
 
 class CalorieManager {
     var activeCalorieModifier: Double = 1
-    var adjustActiveCalorieModifier: Bool = false
+    var adjustActiveCalorieModifier: Bool = true
     var daysBetweenStartAndNow: Int = 0
     var fitness: FitnessCalculations? = nil
     private let healthStore = HKHealthStore()
@@ -89,19 +89,20 @@ class CalorieManager {
         for i in 0...days { // todo real active here???????
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
             let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
-            let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
-            
-            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let realActive = max(self.minimumActiveCalories, active)
             let realResting = max(self.minimumRestingCalories, resting)
-            let day = Day(deficit: deficit, activeCalories: realActive, consumedCalories: eaten)
+            
+            let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
+            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
+            
+            let day = Day(deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten)
             dayInformation[i] = day
+            print("day \(i): \(day)")
             if dayInformation.count == days + 1 {
                 return dayInformation
             }
         }
         return [:]
-
     }
     
     //MARK: PRIVATE
@@ -166,18 +167,32 @@ class CalorieManager {
     
     func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int) async -> Double {
         let weightLost = fitness?.weightLost ?? 0
+//        let lastWeight = fitness?.weights.last
         let caloriesLost = weightLost * 3500
-        let active = await getActiveCaloriesBurned(forPast: daysBetweenStartAndNow)
-        let resting = await sumValue(forPast: daysBetweenStartAndNow, forType: .basalEnergyBurned)
-        let eaten = await sumValue(forPast: daysBetweenStartAndNow, forType: .dietaryEnergyConsumed)
-        let realResting = max(Double(minimumRestingCalories) * Double(daysBetweenStartAndNow), resting) // It's probably because I'm not checking every day for < 200 active cals, I'm just making sure the average is above it
-        let realActive = max(Double(minimumActiveCalories) * Double(daysBetweenStartAndNow), active)
+        let individualStatistics = await self.getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
+        let active = Array(individualStatistics.values)
+            .map { $0.activeCalories }
+            .reduce(0, { x, y in x + y })
+        let deficits = Array(individualStatistics.values)
+            .map { $0.deficit }
+            .reduce(0, { x, y in x + y })
+        let resting = Array(individualStatistics.values)
+            .map { $0.restingCalories }
+            .reduce(0, { x, y in x + y })
+        let eaten = Array(individualStatistics.values)
+            .map { $0.consumedCalories }
+            .reduce(0, { x, y in x + y })
+//        let active = await getActiveCaloriesBurned(forPast: daysBetweenStartAndNow)
+//        let resting = await sumValue(forPast: daysBetweenStartAndNow, forType: .basalEnergyBurned)
+//        let eaten = await sumValue(forPast: daysBetweenStartAndNow, forType: .dietaryEnergyConsumed)
+//        let realResting = max(Double(minimumRestingCalories) * Double(daysBetweenStartAndNow), resting) // It's probably because I'm not checking every day for < 200 active cals, I'm just making sure the average is above it
+//        let realActive = max(Double(minimumActiveCalories) * Double(daysBetweenStartAndNow), active)
         // todo have to account for minimum values here
 //        (active * x) + resting - eaten = caloriesLost
 //        caloriesLost + eaten = activeX + resting
 //        caloriesLost + eaten - resting = activeX
 //        x = (caloriesLost + eaten - resting) / active
-        let modifier = (caloriesLost + eaten - realResting) / realActive
+        let modifier = (caloriesLost + eaten - resting) / active
         return modifier
     }
     

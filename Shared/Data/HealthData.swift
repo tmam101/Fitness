@@ -260,7 +260,7 @@ class HealthData: ObservableObject {
 //            return
 //        }
         let network = Network()
-        let getResponse = await network.get()
+        guard let getResponse = await network.get() else { return }
 //        let activeToday = await calorieManager.sumValueForDay(daysAgo: 0, forType: .activeEnergyBurned)
         return await withUnsafeContinuation { continuation in
             DispatchQueue.main.async { [self] in

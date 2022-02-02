@@ -10,7 +10,7 @@ import Foundation
 class Network {
     let urlString = "https://tommys-fitness.herokuapp.com/api/fitness/"
     
-    func get() async -> HealthDataGetRequestModel {
+    func get() async -> HealthDataGetRequestModel? {
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else { return }
             var request = URLRequest(url: url)
@@ -20,6 +20,8 @@ class Network {
                 guard error == nil, let data = data else { return }
                 if let dataReceived = try? JSONDecoder().decode(HealthDataGetRequestModel.self, from: data) {
                     continuation.resume(returning: dataReceived)
+                } else {
+                    continuation.resume(returning: nil)
                 }
             })
             task.resume()
