@@ -11,19 +11,25 @@ struct DeficitLineGraph: View {
     
     var body: some View {
         let expectedWeights = healthData.expectedWeights
+        let startDate = Date.subtract(days: 6, from: Date())
+        let expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
+//                    let maxWeight = expectedWeightsSuffix.map { $0.double }.max() ?? 1
+        let firstWeight: Double = expectedWeightsSuffix.first?.double ?? 1
+        let minWeight: Double = expectedWeightsSuffix.map { $0.double }.min() ?? 0
+        let firstWeightMinusTwoPounds: Double = firstWeight - 2
+        let minValue: Double = min(firstWeightMinusTwoPounds, minWeight)
+        let middleValue: Double = firstWeight - ((firstWeight - minValue) / 2)
+        
         VStack {
             GeometryReader { geometry in
                 if expectedWeights.count > 0 {
-                    let startDate = Date.subtract(days: 6, from: Date())
-                    let expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
-                    let maxWeight = expectedWeightsSuffix.map { $0.double }.max() ?? 1
-                    let minWeight = expectedWeightsSuffix.map { $0.double }.min() ?? 0
-                    let firstWeightMinusTwoPounds = (expectedWeightsSuffix.first?.double ?? 1) - 2
-                    let minValue = min(firstWeightMinusTwoPounds, minWeight)
-                    LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(Int(maxWeight))")
-                    LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: "middle")
-                    LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Int(minValue))")
+                    
                     let points = weightsToGraphCoordinates(expectedWeights: expectedWeightsSuffix, width: geometry.size.width - 40, height: geometry.size.height)
+                    let topLineHeight = points.first?.y ?? 0.0
+                    let middleLineHeight = topLineHeight + (geometry.size.height - topLineHeight) / 2
+                    LineAndLabel(width: geometry.size.width, height: topLineHeight, text: String(format: "%.2f", Double(firstWeight)))
+                    LineAndLabel(width: geometry.size.width, height: middleLineHeight, text: String(format: "%.2f", Double(middleValue)))
+                    LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: String(format: "%.2f", Double(minValue)))
                     LineGraph(points: points, color: color, width: 2)
                 }
             }

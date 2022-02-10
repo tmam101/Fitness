@@ -34,7 +34,7 @@ struct DeficitAndWeightLossGraph: View {
         let startDate = Date.subtract(days: Int(daysAgoToReach), from: Date())
         let weightsSuffix = weightValues.filter { $0.date >= startDate }
         var expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
-        let deficitOnDayOfFirstWeight = expectedWeightsSuffix.first(where: {Date.sameDay(date1: $0.date, date2: weightsSuffix.first?.date ?? Date())})
+//        let deficitOnDayOfFirstWeight = expectedWeightsSuffix.first(where: {Date.sameDay(date1: $0.date, date2: weightsSuffix.first?.date ?? Date())})
 //        let differenceBetweenFirstWeightAndDeficit = (weightsSuffix.first?.double ?? 0) - (deficitOnDayOfFirstWeight?.double ?? 0)
 //        expectedWeightsSuffix = expectedWeightsSuffix.map { LineGraph.DateAndDouble(date: $0.date, double: $0.double + differenceBetweenFirstWeightAndDeficit)}
         let weightMax = weightsSuffix.map { $0.double }.max() ?? 1

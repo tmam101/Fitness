@@ -167,9 +167,15 @@ class CalorieManager {
     
     func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int) async -> Double {
         let weightLost = fitness?.weightLost ?? 0
-//        let lastWeight = fitness?.weights.last
+        let lastWeight = fitness?.weights.first
         let caloriesLost = weightLost * 3500
-        let individualStatistics = await self.getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
+        var individualStatistics = await self.getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
+        individualStatistics = individualStatistics.filter {
+            let days = $0.key - 1
+            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
+            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
+            return startDate <= lastWeight?.date ?? Date()
+        }
         let active = Array(individualStatistics.values)
             .map { $0.activeCalories }
             .reduce(0, { x, y in x + y })
