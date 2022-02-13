@@ -159,6 +159,7 @@ class HealthData: ObservableObject {
     
     /// Set all values of health data critifal for the app. Returns a reference to itself.
     func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
+        hasLoaded = false
         setupDates()
 #if os(iOS)
         await setValuesFromNetwork()

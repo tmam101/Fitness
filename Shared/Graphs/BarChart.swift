@@ -263,7 +263,7 @@ struct BarChart: View {
     
     
     class BarViewModel: ObservableObject {
-        @Published var barClicked: Day = Day(deficit: 0, activeCalories: 0, consumedCalories: 0)
+        @Published var barClicked: Day = Day(date: Date(), deficit: 0, activeCalories: 0, consumedCalories: 0)
     }
     
     struct BarView: View {

@@ -94,8 +94,8 @@ class CalorieManager {
             
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let deficit = await getDeficitForDay(daysAgo: i) ?? 0
-            
-            let day = Day(deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten)
+            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
+            let day = Day(date: date, deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten)
             dayInformation[i] = day
             print("day \(i): \(day)")
             if dayInformation.count == days + 1 {
@@ -165,27 +165,44 @@ class CalorieManager {
         return Double(modifier)
     }
     
-    func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int) async -> Double {
-        let weightLost = fitness?.weightLost ?? 0
+    func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Double {
+        let individualStatisticsData = UserDefaults.standard.value(forKey: "individualStatistics") as? Data
+        var individualStatistics: [Int:Day]? = nil
+        if individualStatisticsData == nil || forceLoad {
+            individualStatistics = await self.getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
+        } else {
+            if let unencoded = try? JSONDecoder().decode([Int:Day].self, from: individualStatisticsData!) {
+                print(unencoded)
+                individualStatistics = unencoded
+                if individualStatistics![0]?.date != Calendar.current.startOfDay(for: Date()) {
+                    individualStatistics = await self.getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
+                }
+            }
+        }
+                
+//        let weightLost = fitness?.weightLost ?? 0
         let lastWeight = fitness?.weights.first
         let caloriesLost = weightLost * 3500
-        var individualStatistics = await self.getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
-        individualStatistics = individualStatistics.filter {
+        do {
+            let encodedData = try JSONEncoder().encode(individualStatistics!)
+            UserDefaults.standard.set(encodedData, forKey: "individualStatistics")
+        } catch { }
+        individualStatistics = individualStatistics!.filter {
             let days = $0.key - 1
             let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
             let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
             return startDate <= lastWeight?.date ?? Date()
         }
-        let active = Array(individualStatistics.values)
+        let active = Array(individualStatistics!.values)
             .map { $0.activeCalories }
             .reduce(0, { x, y in x + y })
-        let deficits = Array(individualStatistics.values)
+        let deficits = Array(individualStatistics!.values)
             .map { $0.deficit }
             .reduce(0, { x, y in x + y })
-        let resting = Array(individualStatistics.values)
+        let resting = Array(individualStatistics!.values)
             .map { $0.restingCalories }
             .reduce(0, { x, y in x + y })
-        let eaten = Array(individualStatistics.values)
+        let eaten = Array(individualStatistics!.values)
             .map { $0.consumedCalories }
             .reduce(0, { x, y in x + y })
 //        let active = await getActiveCaloriesBurned(forPast: daysBetweenStartAndNow)
@@ -194,11 +211,16 @@ class CalorieManager {
 //        let realResting = max(Double(minimumRestingCalories) * Double(daysBetweenStartAndNow), resting) // It's probably because I'm not checking every day for < 200 active cals, I'm just making sure the average is above it
 //        let realActive = max(Double(minimumActiveCalories) * Double(daysBetweenStartAndNow), active)
         // todo have to account for minimum values here
-//        (active * x) + resting - eaten = caloriesLost
-//        caloriesLost + eaten = activeX + resting
-//        caloriesLost + eaten - resting = activeX
-//        x = (caloriesLost + eaten - resting) / active
-        let modifier = (caloriesLost + eaten - resting) / active
+        //        (active * x) + resting - eaten = caloriesLost
+        //        caloriesLost + eaten = activeX + resting
+        //        caloriesLost + eaten - resting = activeX
+        //        x = (caloriesLost + eaten - resting) / active
+        var modifier = (caloriesLost + eaten - resting) / active
+        if !forceLoad {
+            if modifier < 0 {
+                modifier = await getActiveCalorieModifier(weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: true)
+            }
+        }
         return modifier
     }
     

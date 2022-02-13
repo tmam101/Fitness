@@ -21,48 +21,17 @@ struct FitnessView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 let sectionHeight: CGFloat = 400
-//                Text("watch message: \(watchConnectivityIphone.messageString)")
-//                    .foregroundColor(.white)
-                
-                // Add calories eaten
-//                if isWatch {
-//                    HStack {
-//                        Group {
-//                            Text("+")
-//                                .foregroundColor(.black)
-//                        }
-//                        .frame(minWidth: 50, minHeight: 50)
-//                        .background(Color.white)
-//                        .cornerRadius(20)
-//
-//                        Text("Add calories eaten")
-//                            .foregroundColor(.white)
-//                    }
-//                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 75)
-//                    .background(Color.myGray)
-//                    .cornerRadius(20)
-//                    .onTapGesture {
-//                        // TODO
-//                        print("clicked")
-//                        NavigationLink(destination: Text("H")) {
-//                            Label("Title", systemImage: "folder")
-//                        }
-//                    }
-//                }
-                
-                    NavigationLink(destination: {
-                        NumberInput()
-                            .environmentObject(healthData)
-                    }) {
-                        Text("Add calories eaten")
-//                            .foregroundColor(.white)
-//                            .frame(minWidth: 50, minHeight: 50)
-//                            .background(.gray)
-//                            .cornerRadius(20)
-                    }
                 
                 Group {
-                    StatsTitle(title: "Deficits")
+                    HStack {
+                        StatsTitle(title: "Deficits")
+                        if !healthData.hasLoaded {
+                        Circle()
+                            .fill()
+                            .foregroundColor(.red)
+                            .frame(width: 20)
+                        }
+                    }
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)

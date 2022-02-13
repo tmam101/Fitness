@@ -8,6 +8,7 @@
 import Foundation
 
 struct Day: Codable {
+    var date: Date = Date()
     var deficit: Double = 0
     var activeCalories: Double = 0
     var restingCalories: Double = 0
