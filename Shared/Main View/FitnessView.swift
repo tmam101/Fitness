@@ -53,6 +53,9 @@ struct FitnessView: View {
 //                            view.unredacted()
 //                        }
                 }
+                Text("Expected Weight This Week")
+                    .foregroundColor(.white)
+                    .font(.title2)
                 DeficitLineGraph()
                     .environmentObject(healthData)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
