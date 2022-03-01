@@ -15,9 +15,7 @@ struct GlobalEnvironment {
     #endif
         return isWatch
     }
-    
-    static var environment = AppEnvironmentConfig.release
-    
+        
 }
 
 enum AppEnvironmentConfig {

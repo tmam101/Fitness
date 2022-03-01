@@ -10,7 +10,7 @@ import ClockKit
 
 @main
 struct FitnessAppWatch: App {
-    @State var healthData = HealthData(environment: GlobalEnvironment.environment)
+    @State var healthData = HealthData(environment: AppEnvironmentConfig.release)
     @State var watchConnectivityWatch = WatchConnectivityWatch()
     
     @Environment(\.scenePhase) private var scenePhase

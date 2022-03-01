@@ -52,7 +52,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         //            handler(nil)
         //            return
         //        }
-        let _ = HealthData(environment: GlobalEnvironment.environment) { health in
+        let _ = HealthData(environment: AppEnvironmentConfig.release) { health in
             //        health.setValues(from: unencoded)
             guard let cTemplate = self.makeTemplate(for: health, complication: complication) else {
                 handler(nil)

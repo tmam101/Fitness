@@ -10,7 +10,7 @@ import SwiftUI
 import HealthKit
 
 struct Provider: TimelineProvider {
-    var healthData: HealthData = HealthData(environment: GlobalEnvironment.environment)
+    var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.release)
     
     func placeholder(in context: Context) -> SimpleEntry {
         return SimpleEntry(date: Date(), healthData: healthData)
@@ -22,7 +22,7 @@ struct Provider: TimelineProvider {
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let _ = HealthData(environment: GlobalEnvironment.environment) { health in
+        let _ = HealthData(environment: AppEnvironmentConfig.release) { health in
             let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
             let entry = SimpleEntry(date: entryDate, healthData: health)
             let timeline = Timeline(entries: [entry], policy: .atEnd)
