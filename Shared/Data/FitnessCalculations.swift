@@ -19,8 +19,6 @@ class FitnessCalculations: ObservableObject {
     @Published var currentWeight: Double = 231.8
     @Published var endingWeight: Double = 190
     @Published var progressToWeight: Double = 0
-    @Published var progressToDate: Double = 0
-    @Published var successPercentage: Double = 0
     @Published var weightLost: Double = 0
     @Published public var percentWeightLost: Int = 0
     @Published public var weightToLose: Double = 0
@@ -70,27 +68,6 @@ class FitnessCalculations: ObservableObject {
 #if !os(watchOS)
             WidgetCenter.shared.reloadAllTimelines()
             #endif
-            self.getSuccess()
-        }
-    }
-    
-    private func getProgressToDate() {
-        guard
-            let endDate = Date.dateFromString(endDateString),
-            let startDate = Date.dateFromString(startDateString)
-        else { return }
-        
-        guard
-            let daysBetweenStartAndEnd = Date.daysBetween(date1: startDate, date2: endDate),
-            let daysBetweenNowAndEnd = Date.daysBetween(date1: Date(), date2: endDate)
-        else { return }
-        
-        let progress = Double(daysBetweenStartAndEnd - daysBetweenNowAndEnd) / Double(daysBetweenStartAndEnd)
-        DispatchQueue.main.async {
-            self.progressToDate = progress
-#if !os(watchOS)
-            WidgetCenter.shared.reloadAllTimelines()
-            #endif
         }
     }
     
@@ -98,18 +75,8 @@ class FitnessCalculations: ObservableObject {
         return String(format: "%.2f", float * 100)
     }
     
-    private func getSuccess() {
-        DispatchQueue.main.async {
-            self.successPercentage = self.progressToWeight - self.progressToDate
-#if !os(watchOS)
-            WidgetCenter.shared.reloadAllTimelines()
-            #endif
-        }
-    }
-    
     func getAllStatsDebug(completion: ((_ fitness: FitnessCalculations) -> Void)?) {
         self.progressToWeight = 0.65
-        self.successPercentage = 0.75
         self.weightLost = 12
         self.weightToLose = 20
         self.percentWeightLost = 60
@@ -123,8 +90,6 @@ class FitnessCalculations: ObservableObject {
         return await withUnsafeContinuation { continuation in
             getCurrentWeightFromHealthKit { success in
                 self.getProgressToWeight()
-                self.getProgressToDate()
-                self.getSuccess()
                 self.weightLost = self.startingWeight - self.currentWeight
                 self.weightToLose = self.startingWeight - self.endingWeight
                 self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
@@ -217,8 +182,6 @@ class FitnessCalculations: ObservableObject {
     func getAllStats(completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
         getCurrentWeightFromHealthKit { success in
             self.getProgressToWeight()
-            self.getProgressToDate()
-            self.getSuccess()
             self.weightLost = self.startingWeight - self.currentWeight
             self.weightToLose = self.startingWeight - self.endingWeight
             self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
