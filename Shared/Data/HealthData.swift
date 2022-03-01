@@ -112,7 +112,6 @@ class HealthData: ObservableObject {
     let caloriesInPound: Double = 3500
     let startDateString = "01.23.2021"
     var startDate: Date?
-    let endDateString = "05.01.2021"
     let formatter = DateFormatter()
     
     //MARK: INITIALIZATION

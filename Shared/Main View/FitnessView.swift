@@ -16,6 +16,7 @@ struct FitnessView: View {
     var widget: Bool = false
     @State var isDisplayingOverlay = false
     @State var deficitLineGraphDaysToShow: Double = 30.0
+    @State var showLifts = false
     
     var body: some View {
         ScrollView {
@@ -92,28 +93,30 @@ struct FitnessView: View {
                     Text("past \(Int(deficitLineGraphDaysToShow)) days")
                         .foregroundColor(.green)
                 }
-                Group {
-                    StatsTitle(title: "Lifts")
-                    StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-                        .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .onTapGesture {
-                            healthData.workouts.smithMachine.toggle()
-                            healthData.workouts.calculate()
-                        }
-                }
-                ZStack {
-                    BenchGraph()
-                        .environmentObject(healthData.workouts)
-                        .environmentObject(healthData.fitness)
-                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
-                        .padding()
-                        .background(Color.myGray)
-                        .cornerRadius(20)
-                    SquatGraph()
-                        .environmentObject(healthData.workouts)
-                        .environmentObject(healthData.fitness)
-                        .padding()
+                if showLifts {
+                    Group {
+                        StatsTitle(title: "Lifts")
+                        StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
+                            .environmentObject(healthData)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .onTapGesture {
+                                healthData.workouts.smithMachine.toggle()
+                                healthData.workouts.calculate()
+                            }
+                    }
+                    ZStack {
+                        BenchGraph()
+                            .environmentObject(healthData.workouts)
+                            .environmentObject(healthData.fitness)
+                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                            .padding()
+                            .background(Color.myGray)
+                            .cornerRadius(20)
+                        SquatGraph()
+                            .environmentObject(healthData.workouts)
+                            .environmentObject(healthData.fitness)
+                            .padding()
+                    }
                 }
                 Group {
                     StatsTitle(title: "Mile Time")
