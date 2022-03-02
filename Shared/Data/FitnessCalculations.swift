@@ -152,17 +152,19 @@ class FitnessCalculations: ObservableObject {
     }
     
     func weight(at date: Date) -> Double {
+        var d = Date.startOfDay(date)
         var weight1: Weight?
         var weight2: Weight?
         
         for i in stride(from: 0, to: self.weights.count, by: 1) {
-            if weights[i].date == date {
+            let w = Date.startOfDay(weights[i].date)
+            if w == d {
                 return weights[i].weight
             }
-            if weights[0].date < date {
+            if Date.startOfDay(weights[0].date) < d {
                 return weights[0].weight
             }
-            if weights[i].date < date {
+            if w < d {
                 weight1 = weights[i]
                 weight2 = weights[i-1]
                 break

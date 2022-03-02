@@ -27,25 +27,11 @@ struct AppView: View {
     }
 }
 
-struct Defaults {
-    enum UserDefaultsKey: String {
-        case resting
-        case active
-        case startDate
-    }
-    static func set(key: UserDefaultsKey, value: Any) {
-        UserDefaults.standard.set(value, forKey: key.rawValue)
-    }
-    static func get(key: UserDefaultsKey) -> Any? {
-        UserDefaults.standard.value(forKey: key.rawValue)
-    }
-}
-
 struct SettingsView: View {
     @EnvironmentObject var healthData: HealthData
     @State var resting = "2200"
     @State var active = "200"
-    @State var startDate = "12-12-12"
+    @State var startDate = "1.23.2021"
     
     var body: some View {
         VStack {
@@ -83,9 +69,7 @@ struct SettingsView: View {
                 TextField("2200", text: $startDate)
                     .onSubmit {
                         print(startDate)
-                        if let activeValue = Double(active) {
-                            Defaults.set(key: .active, value: activeValue)
-                        }
+                        Defaults.set(key: .startDate, value: startDate)
                     }
                     .foregroundColor(.white)
             }
@@ -97,8 +81,8 @@ struct SettingsView: View {
             if let a = Defaults.get(key: .active) as? Double {
                 resting = String(a)
             }
-            if let r = Defaults.get(key: .resting) as? Double {
-                resting = String(r)
+            if let s = Defaults.get(key: .startDate) as? String {
+                startDate = s
             }
         }
     }

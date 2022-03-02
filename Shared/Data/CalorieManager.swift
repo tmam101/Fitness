@@ -38,14 +38,17 @@ class CalorieManager {
         return expectedWeights
     }
     
-    func setup(fitness: FitnessCalculations, daysBetweenStartAndNow: Int) async {
+    func setup(fitness: FitnessCalculations, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         self.fitness = fitness
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         if adjustActiveCalorieModifier {
             await setActiveCalorieModifier(1)
 //            let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
 //            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
-            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow)
+            let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
+            let startingWeight = fitness.weight(at: startDate)
+            let weightLost = startingWeight - (fitness.weights.first?.weight ?? 0)
+            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: forceLoad)
             await setActiveCalorieModifier(activeCalorieModifier)
         }
     }

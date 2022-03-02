@@ -49,4 +49,8 @@ extension Date {
     static func sameDay(date1: Date, date2: Date) -> Bool {
         return Calendar.current.startOfDay(for: date1) == Calendar.current.startOfDay(for: date2)
     }
+    
+    static func startOfDay(_ date: Date) -> Date {
+        Calendar.current.startOfDay(for: date)
+    }
 }

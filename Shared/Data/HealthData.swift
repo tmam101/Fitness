@@ -110,7 +110,7 @@ class HealthData: ObservableObject {
     let goalDeficit: Double = 1000
     let goalEaten: Double = 1500
     let caloriesInPound: Double = 3500
-    let startDateString = "01.23.2021"
+    var startDateString = "01.23.2021"
     var startDate: Date?
     let formatter = DateFormatter()
     
@@ -120,7 +120,10 @@ class HealthData: ObservableObject {
             self.environment = environment
             switch environment {
             case .release:
-                await setValues(nil)
+                if let start = Defaults.get(key: .startDate) as? String {
+                    startDateString = start
+                }
+                await setValues(forceLoad: true, nil)
             case .debug:
                 await setValuesDebug(nil)
             }
@@ -153,7 +156,7 @@ class HealthData: ObservableObject {
     }
     
     /// Set all values of health data critifal for the app. Returns a reference to itself.
-    func setValues(_ completion: ((_ health: HealthData) -> Void)?) async {
+    func setValues(forceLoad: Bool = false, _ completion: ((_ health: HealthData) -> Void)?) async {
         hasLoaded = false
         setupDates()
 #if os(iOS)
@@ -166,7 +169,7 @@ class HealthData: ObservableObject {
         // Calories
         let calorieManager = CalorieManager()
         self.calorieManager = calorieManager
-        await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow)
+        await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: forceLoad)
         // Workouts
         await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
         // Gather all information from calorie manager
