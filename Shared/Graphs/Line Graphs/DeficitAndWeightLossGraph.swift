@@ -15,12 +15,36 @@ struct DeficitAndWeightLossGraph: View {
     var body: some View {
         let expectedWeights = healthData.expectedWeights
         let weights = fitness.weights
+        let dateToReach = Date.subtract(days: Int(daysAgoToReach), from: Date())
+        let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
+        let expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
         VStack {
             GeometryReader { geometry in
                 if weights.count > 0 && expectedWeights.count > 0 {
+                    if Settings.get(key: .showLinesOnWeightGraph) as? Bool ?? false {
+                        let maxWeight = weightsFiltered.max()
+                        let maxExpecteWeight = expectedWeightsFiltered.max()
+                        let minWeight = weightsFiltered.min()
+                        let minExpecteWeight = expectedWeightsFiltered.min()
+                        let realMax = [maxWeight ?? 0, maxExpecteWeight ?? 0].max() ?? 1
+                        let realMin = [minWeight ?? 0, minExpecteWeight ?? 0].min() ?? 0
+                        let roundedMax = Int(realMax.rounded(.down))
+                        let roundedMin = Int(realMin.rounded(.up))
+                        ForEach(roundedMin..<roundedMax, id: \.self) { i in
+                            //todo this isnt quite right
+                            let diff = realMax - realMin
+                            let y = 100.0 / diff
+                            let thisDiff = realMax - Double(i)
+                            let x = thisDiff * y
+                            let heightPercentage = x / 100.0
+                            //                        LineAndLabel(width: geometry.size.width, height: geometry.size.height - ((Double(i) / realMax) * geometry.size.height), text: "\(i)")
+                            LineAndLabel(width: geometry.size.width, height: geometry.size.height * heightPercentage, text: "\(i)")
+                            
+                        }
+                    }
                     let deficitPoints = weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .deficit, weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
-                    LineGraph(points: deficitPoints, color: .yellow, width: 2)
                     let weightLossPoints = weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .weightLoss, weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
+                    LineGraph(points: deficitPoints, color: .yellow, width: 2)
                     LineGraph(points: weightLossPoints, color: .green, width: 2)
                 }
             }

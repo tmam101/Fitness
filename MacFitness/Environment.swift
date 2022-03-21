@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct GlobalEnvironment {
-    static var environment = AppEnvironmentConfig.debug
-}
+//struct GlobalEnvironment {
+//    static var environment = AppEnvironmentConfig.debug
+//}
 
 enum AppEnvironmentConfig {
     case debug

@@ -18,6 +18,7 @@ class CalorieManager {
     let minimumActiveCalories: Double = 200
     let minimumRestingCalories: Double = 2200
     
+    //TODO Should this just return weights?
     func getExpectedWeights() async -> [LineGraph.DateAndDouble] {
         let deficits = await self.getIndividualDeficits(forPastDays: daysBetweenStartAndNow)
         var datesAndValues: [LineGraph.DateAndDouble] = []
