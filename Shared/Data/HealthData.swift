@@ -100,7 +100,7 @@ class HealthData: ObservableObject {
     
     // Runs
     @Published public var runs: [Run] = []
-    @Published public var numberOfRuns: Int = UserDefaults.standard.value(forKey: "numberOfRuns") as? Int ?? 0
+    @Published public var numberOfRuns: Int = Settings.get(key: .numberOfRuns) as? Int ?? 0
         
     @Published public var hasLoaded: Bool = false
     @Published public var dataToSend: HealthDataPostRequestModel = HealthDataPostRequestModel()
@@ -120,7 +120,7 @@ class HealthData: ObservableObject {
             self.environment = environment
             switch environment {
             case .release:
-                if let start = Defaults.get(key: .startDate) as? String {
+                if let start = Settings.get(key: .startDate) as? String {
                     startDateString = start
                 }
                 await setValues(forceLoad: true, nil)
@@ -301,7 +301,6 @@ class HealthData: ObservableObject {
                 self.activeCalorieModifier = getResponse.activeCalorieModifier
                 self.expectedWeights = getResponse.expectedWeights
                 self.fitness.weights = getResponse.weights
-//                UserDefaults.standard.set(getre, forKey: "healthData")
                 continuation.resume()
             }
         }

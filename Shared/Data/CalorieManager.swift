@@ -169,7 +169,7 @@ class CalorieManager {
     }
     
     func getActiveCalorieModifier(weightLost: Double, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Double {
-        let individualStatisticsData = UserDefaults.standard.value(forKey: "individualStatistics") as? Data
+        let individualStatisticsData = Settings.get(key: .individualStatisticsData) as? Data
         var individualStatistics: [Int:Day]? = nil
         if individualStatisticsData == nil || forceLoad {
             individualStatistics = await self.getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
@@ -188,7 +188,7 @@ class CalorieManager {
         let caloriesLost = weightLost * 3500
         do {
             let encodedData = try JSONEncoder().encode(individualStatistics!)
-            UserDefaults.standard.set(encodedData, forKey: "individualStatistics")
+            Settings.set(key: .individualStatisticsData, value: encodedData)
         } catch { }
         individualStatistics = individualStatistics!.filter {
             let days = $0.key - 1

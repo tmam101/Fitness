@@ -7,11 +7,13 @@
 
 import Foundation
 
-struct Defaults {
+struct Settings {
     enum UserDefaultsKey: String {
         case resting
         case active
         case startDate
+        case numberOfRuns
+        case individualStatisticsData
     }
     static func set(key: UserDefaultsKey, value: Any) {
         UserDefaults.standard.set(value, forKey: key.rawValue)

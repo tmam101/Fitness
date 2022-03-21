@@ -60,7 +60,7 @@ struct MileSettings: View {
                     Button("-") {
                         if healthData.numberOfRuns > 2 {
                             healthData.numberOfRuns -= 1
-                            UserDefaults.standard.set(healthData.numberOfRuns, forKey: "numberOfRuns")
+                            Settings.set(key: .numberOfRuns, value: healthData.numberOfRuns)
                         }
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))
@@ -72,7 +72,7 @@ struct MileSettings: View {
                         if healthData.numberOfRuns <= healthData.runs.count {
                         healthData.numberOfRuns += 1
                         }
-                        UserDefaults.standard.set(healthData.numberOfRuns, forKey: "numberOfRuns")
+                        Settings.set(key: .numberOfRuns, value: healthData.numberOfRuns)
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))
                         .foregroundColor(.white)

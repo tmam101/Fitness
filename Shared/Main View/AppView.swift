@@ -44,7 +44,7 @@ struct SettingsView: View {
                     .onSubmit {
                         print(resting)
                         if let restingValue = Double(resting) {
-                            Defaults.set(key: .resting, value: restingValue)
+                            Settings.set(key: .resting, value: restingValue)
                         }
                     }
                     .foregroundColor(.white)
@@ -57,7 +57,7 @@ struct SettingsView: View {
                     .onSubmit {
                         print(active)
                         if let activeValue = Double(active) {
-                            Defaults.set(key: .active, value: activeValue)
+                            Settings.set(key: .active, value: activeValue)
                         }
                     }
                     .foregroundColor(.white)
@@ -69,19 +69,19 @@ struct SettingsView: View {
                 TextField("2200", text: $startDate)
                     .onSubmit {
                         print(startDate)
-                        Defaults.set(key: .startDate, value: startDate)
+                        Settings.set(key: .startDate, value: startDate)
                     }
                     .foregroundColor(.white)
             }
         }.onAppear {
             //TOdo I think accessing empty key here causes a crash
-            if let r = Defaults.get(key: .resting) as? Double {
+            if let r = Settings.get(key: .resting) as? Double {
                 resting = String(r)
             }
-            if let a = Defaults.get(key: .active) as? Double {
+            if let a = Settings.get(key: .active) as? Double {
                 resting = String(a)
             }
-            if let s = Defaults.get(key: .startDate) as? String {
+            if let s = Settings.get(key: .startDate) as? String {
                 startDate = s
             }
         }
