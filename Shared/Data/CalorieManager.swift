@@ -31,7 +31,11 @@ class CalorieManager {
                 let previousCumulative = datesAndValues[i-1].double
                 datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit + previousCumulative))
             }
-            print("cumulative deficit: \(datesAndValues.last)")
+            if let value = datesAndValues.last {
+                print("cumulative deficit: \(value)")
+            } else {
+                print("cumulative deficit error")
+            }
         }
         var expectedWeights: [LineGraph.DateAndDouble] = datesAndValues.map { LineGraph.DateAndDouble(date: $0.date, double: (fitness?.startingWeight ?? 300) - ($0.double / 3500)) }
         expectedWeights = expectedWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: $0.double)}
@@ -199,9 +203,9 @@ class CalorieManager {
         let active = Array(individualStatistics!.values)
             .map { $0.activeCalories }
             .reduce(0, { x, y in x + y })
-        let deficits = Array(individualStatistics!.values)
-            .map { $0.deficit }
-            .reduce(0, { x, y in x + y })
+//        let deficits = Array(individualStatistics!.values)
+//            .map { $0.deficit }
+//            .reduce(0, { x, y in x + y })
         let resting = Array(individualStatistics!.values)
             .map { $0.restingCalories }
             .reduce(0, { x, y in x + y })

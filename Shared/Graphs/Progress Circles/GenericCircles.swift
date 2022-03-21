@@ -21,7 +21,7 @@ struct GenericCircle: View {
             .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
             .foregroundColor(color.opacity(opacity))
             .rotationEffect(Angle(degrees: 270.0))
-            .animation(.easeOut(duration: 1))
+            .animation(.easeOut(duration: 1), value: ending)
     }
 }
 

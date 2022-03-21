@@ -152,7 +152,7 @@ class FitnessCalculations: ObservableObject {
     }
     
     func weight(at date: Date) -> Double {
-        var d = Date.startOfDay(date)
+        let d = Date.startOfDay(date)
         var weight1: Weight?
         var weight2: Weight?
         
