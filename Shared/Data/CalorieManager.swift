@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if !os(macOS)
 import HealthKit
+#endif
 
 class CalorieManager {
     var activeCalorieModifier: Double = 1

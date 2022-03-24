@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if !os(macOS)
 struct NumberInput: View {
     @State var num: String = "0"
     @EnvironmentObject var healthData: HealthData
@@ -26,6 +27,7 @@ struct NumberInput: View {
         }
     }
 }
+#endif
 
 struct MileTimeStats: View {
     @EnvironmentObject var healthData: HealthData

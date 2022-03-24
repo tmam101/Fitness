@@ -6,12 +6,14 @@
 //
 
 import Foundation
+#if !os(macOS)
 import HealthKit
+import WatchConnectivity
+#endif
 #if !os(watchOS)
 import WidgetKit
 #endif
 import SwiftUI
-import WatchConnectivity
 //import WatchConnectivity
 
 // MARK: Network Models
@@ -66,9 +68,11 @@ class HealthData: ObservableObject {
     
     //MARK: PROPERTIES
     var environment: AppEnvironmentConfig?
+    #if !os(macOS)
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     private var calorieManager: CalorieManager?
+    #endif
     @Published public var fitness = FitnessCalculations()
     
     // Deficits
@@ -219,6 +223,7 @@ class HealthData: ObservableObject {
             activeCalorieModifier: self.activeCalorieModifier,
             expectedWeights: expectedWeights,
             weights: fitness.weights)
+        // if any expected weights are < 130, disregard?
         let n = Network()
         let _ = await n.post(object: dataToSend)
         
@@ -250,6 +255,11 @@ class HealthData: ObservableObject {
         await setValuesFromNetwork()
         completion?(self)
 #endif
+#if os(macOS)
+        // On watch, receive relevant data
+        await setValuesFromNetwork()
+        completion?(self)
+#endif
     }
     
     private func setValuesFromNetwork() async {
@@ -257,7 +267,7 @@ class HealthData: ObservableObject {
 //            return
 //        }
         let network = Network()
-        guard let getResponse = await network.get() else { return }
+        guard let getResponse = await network.getResponse() else { return }
 //        let activeToday = await calorieManager.sumValueForDay(daysAgo: 0, forType: .activeEnergyBurned)
         return await withUnsafeContinuation { continuation in
             DispatchQueue.main.async { [self] in
@@ -354,11 +364,13 @@ class HealthData: ObservableObject {
         activeCalorieModifier = 0
     }
     
+    #if  !os(macOS)
     func saveCaloriesEaten(calories: Double) async -> Bool {
 //        guard let calorieManager = self.calorieManager else { return false }
         let r = await CalorieManager().saveCaloriesEaten(calories: calories)
         return r
     }
+    #endif
     
     private func setupDates() {
         guard let startDate = Date.dateFromString(startDateString),

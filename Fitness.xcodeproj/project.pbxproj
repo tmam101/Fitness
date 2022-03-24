@@ -52,7 +52,17 @@
 		485B992927CEC29C00C70C81 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485B992527CEC29C00C70C81 /* Settings.swift */; };
 		486388E1261F9099005B1227 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
 		486388E3261F9099005B1227 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
-		48755A4B267A707800F7680E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A4A267A707800F7680E /* ContentView.swift */; };
+		486C072127EB918F00713480 /* FitnessAppMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C072027EB918F00713480 /* FitnessAppMac.swift */; };
+		486C072327EB919E00713480 /* AppViewMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C072227EB919E00713480 /* AppViewMac.swift */; };
+		486C072527EB91A800713480 /* FitnessViewMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C072427EB91A800713480 /* FitnessViewMac.swift */; };
+		486C072827EB926900713480 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
+		486C072927EB927300713480 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
+		486C072B27EB928E00713480 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
+		486C072E27EB929900713480 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
+		486C072F27EB92B600713480 /* FitnessViewViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48108135278A3609008E9AE6 /* FitnessViewViews.swift */; };
+		486C073027EB92BD00713480 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
+		486C073427EB948C00713480 /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
+		486C073527EB957100713480 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		48755A4D267A707900F7680E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48755A4C267A707900F7680E /* Assets.xcassets */; };
 		48755A50267A707900F7680E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48755A4F267A707900F7680E /* Preview Assets.xcassets */; };
 		48755A5C267A707900F7680E /* MacFitnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A5B267A707900F7680E /* MacFitnessTests.swift */; };
@@ -66,13 +76,8 @@
 		48755A79267A70AC00F7680E /* LiftingLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LiftingLineGraph.swift */; };
 		48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1F626041DE50037EEAF /* RingCollections.swift */; };
-		48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48821CB025B8BF3600C9F58A /* FitnessApp.swift */; };
 		48755A7E267A70AC00F7680E /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E20A26041E700037EEAF /* Stats.swift */; };
 		48755A7F267A70AC00F7680E /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
-		48755A82267A70DD00F7680E /* MyHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A81267A70DD00F7680E /* MyHealthKit.swift */; };
-		48755A84267A715700F7680E /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A83267A715700F7680E /* FitnessCalculations.swift */; };
-		48755A86267A8F5300F7680E /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A85267A8F5300F7680E /* FitnessView.swift */; };
-		48755A88267A8FDA00F7680E /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A87267A8FDA00F7680E /* Environment.swift */; };
 		48755A8A267AF13200F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
 		48755A8C267AF13200F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
 		48755A8D267AF1BF00F7680E /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48755A89267AF13200F7680E /* Weight.swift */; };
@@ -289,8 +294,11 @@
 		484BB6872776AAB900E24B1C /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		485B992527CEC29C00C70C81 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		486388E0261F9099005B1227 /* BarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChart.swift; sourceTree = "<group>"; };
+		486C072027EB918F00713480 /* FitnessAppMac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessAppMac.swift; sourceTree = "<group>"; };
+		486C072227EB919E00713480 /* AppViewMac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewMac.swift; sourceTree = "<group>"; };
+		486C072427EB91A800713480 /* FitnessViewMac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessViewMac.swift; sourceTree = "<group>"; };
+		486C073627EB981A00713480 /* MacFitnessDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacFitnessDebug.entitlements; sourceTree = "<group>"; };
 		48755A46267A707800F7680E /* MacFitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacFitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		48755A4A267A707800F7680E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		48755A4C267A707900F7680E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48755A4F267A707900F7680E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		48755A51267A707900F7680E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -301,10 +309,6 @@
 		48755A62267A707900F7680E /* MacFitnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacFitnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		48755A66267A707900F7680E /* MacFitnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFitnessUITests.swift; sourceTree = "<group>"; };
 		48755A68267A707A00F7680E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		48755A81267A70DD00F7680E /* MyHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHealthKit.swift; sourceTree = "<group>"; };
-		48755A83267A715700F7680E /* FitnessCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessCalculations.swift; sourceTree = "<group>"; };
-		48755A85267A8F5300F7680E /* FitnessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessView.swift; sourceTree = "<group>"; };
-		48755A87267A8FDA00F7680E /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		48755A89267AF13200F7680E /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
 		487A95182640F97500627BA3 /* strong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strong.json; sourceTree = "<group>"; };
 		48813F582798A9BF0045859C /* DeficitLineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeficitLineGraph.swift; sourceTree = "<group>"; };
@@ -465,18 +469,25 @@
 			path = Graphs;
 			sourceTree = "<group>";
 		};
+		486C072627EB91AD00713480 /* Main View */ = {
+			isa = PBXGroup;
+			children = (
+				486C072027EB918F00713480 /* FitnessAppMac.swift */,
+				486C072227EB919E00713480 /* AppViewMac.swift */,
+				486C072427EB91A800713480 /* FitnessViewMac.swift */,
+			);
+			path = "Main View";
+			sourceTree = "<group>";
+		};
 		48755A47267A707800F7680E /* MacFitness */ = {
 			isa = PBXGroup;
 			children = (
-				48755A4A267A707800F7680E /* ContentView.swift */,
+				486C073627EB981A00713480 /* MacFitnessDebug.entitlements */,
+				486C072627EB91AD00713480 /* Main View */,
 				48755A4C267A707900F7680E /* Assets.xcassets */,
 				48755A51267A707900F7680E /* Info.plist */,
 				48755A52267A707900F7680E /* MacFitness.entitlements */,
 				48755A4E267A707900F7680E /* Preview Content */,
-				48755A81267A70DD00F7680E /* MyHealthKit.swift */,
-				48755A83267A715700F7680E /* FitnessCalculations.swift */,
-				48755A85267A8F5300F7680E /* FitnessView.swift */,
-				48755A87267A8FDA00F7680E /* Environment.swift */,
 			);
 			path = MacFitness;
 			sourceTree = "<group>";
@@ -1092,20 +1103,30 @@
 			files = (
 				4827C99F26828BEF006700A1 /* DateExtension.swift in Sources */,
 				485B992827CEC29C00C70C81 /* Settings.swift in Sources */,
+				486C072927EB927300713480 /* Environment.swift in Sources */,
+				486C072327EB919E00713480 /* AppViewMac.swift in Sources */,
+				486C073027EB92BD00713480 /* Network.swift in Sources */,
 				48BD6E6D274AFAC50007AC15 /* LineGraph.swift in Sources */,
-				48755A4B267A707800F7680E /* ContentView.swift in Sources */,
 				48755A76267A70AC00F7680E /* Ring (unused).swift in Sources */,
 				4802D49927875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				48755A75267A70AC00F7680E /* Progress Rings.swift in Sources */,
+				486C073527EB957100713480 /* HealthData.swift in Sources */,
 				48DE1DE827A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
 				48DE1DE327A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				48755A7E267A70AC00F7680E /* Stats.swift in Sources */,
+				486C072527EB91A800713480 /* FitnessViewMac.swift in Sources */,
+				486C072B27EB928E00713480 /* Day.swift in Sources */,
+				486C072E27EB929900713480 /* Run.swift in Sources */,
+				486C072827EB926900713480 /* BarChart.swift in Sources */,
 				48755A7C267A70AC00F7680E /* RingCollections.swift in Sources */,
 				48755A74267A70AC00F7680E /* Lines.swift in Sources */,
+				486C072F27EB92B600713480 /* FitnessViewViews.swift in Sources */,
 				48755A73267A70AC00F7680E /* GenericCircles.swift in Sources */,
 				48BD6E75274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				48755A8C267AF13200F7680E /* Weight.swift in Sources */,
 				48755A7F267A70AC00F7680E /* Workout.swift in Sources */,
+				486C072127EB918F00713480 /* FitnessAppMac.swift in Sources */,
+				486C073427EB948C00713480 /* FitnessCalculations.swift in Sources */,
 				48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */,
 				4827C9A326828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48813F5B2798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
@@ -1113,11 +1134,6 @@
 				48755A77267A70AC00F7680E /* TextCollections.swift in Sources */,
 				48755A7B267A70AC00F7680E /* ColorExtension.swift in Sources */,
 				48BD6E71274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
-				48755A7D267A70AC00F7680E /* FitnessApp.swift in Sources */,
-				48755A86267A8F5300F7680E /* FitnessView.swift in Sources */,
-				48755A88267A8FDA00F7680E /* Environment.swift in Sources */,
-				48755A82267A70DD00F7680E /* MyHealthKit.swift in Sources */,
-				48755A84267A715700F7680E /* FitnessCalculations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1357,7 +1373,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MacFitness/MacFitness.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MacFitness/MacFitnessDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MacFitness/Preview Content\"";

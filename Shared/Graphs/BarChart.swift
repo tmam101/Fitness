@@ -156,7 +156,7 @@ struct BarChart: View {
                         .font(.title)
                 }.padding(1)
             }
-            .background(.white)
+//            .background(.white)
             .cornerRadius(5)
         }
     }
@@ -208,7 +208,7 @@ struct BarChart: View {
                             Bar(cornerRadius: cornerRadius, color: color, height: height, activeCalories: activeCalories, totalDeficit: totalDeficit)
                                 .opacity(isToday ? 0.5 : 1)
                                 .onTapGesture {
-#if !os(watchOS)
+#if os(iOS)
                                     let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                                     impactHeavy.impactOccurred()
 #endif

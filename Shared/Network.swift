@@ -10,7 +10,7 @@ import Foundation
 class Network {
     let urlString = "https://tommys-fitness.herokuapp.com/api/fitness/"
     
-    func get() async -> HealthDataGetRequestModel? {
+    func getResponse() async -> HealthDataGetRequestModel? {
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else { return }
             var request = URLRequest(url: url)

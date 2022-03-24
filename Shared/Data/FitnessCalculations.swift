@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if !os(macOS)
 import HealthKit
+#endif
 #if !os(watchOS)
 import WidgetKit
 #endif
@@ -192,6 +194,7 @@ class FitnessCalculations: ObservableObject {
     }
     
     // MARK - weight
+    #if !os(macOS)
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
@@ -216,8 +219,6 @@ class FitnessCalculations: ObservableObject {
         }
 
     }
-    
-    
     //returns the weight entry in pounds or nil if no data
     private func bodyMass(completion: @escaping ((_ bodyMass: Double?, _ date: Date?) -> Void)) {
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
@@ -241,6 +242,7 @@ class FitnessCalculations: ObservableObject {
         }
         healthStore.execute(query)
     }
+    #endif
     
 //    func getWeights(_ weights: [HKSample]?, _ offset: Int, amount: Int, completion: @escaping ((_ weights: [HKSample]?) -> Void)) {
 //    func getWeights(amount: Int, completion: @escaping ((_ weights: [HKSample]?) -> Void)) {
@@ -268,6 +270,7 @@ class FitnessCalculations: ObservableObject {
     private func getWeight(completion: @escaping ((_ weight: Double?, _ date: Date?) -> Void)) {
 //        authorizeHealthKit { (success, error) in
 //            if success {
+        #if !os(macOS)
                 self.bodyMass(completion: { (weight, weightDate) in
                     if weight != nil {
                         completion(weight, weightDate)
@@ -275,6 +278,9 @@ class FitnessCalculations: ObservableObject {
                     }
                     completion(nil, nil)
                 })
+        #else
+        completion(210, Date())
+        #endif
 //            }
 //            completion(nil, nil)
 //        }
