@@ -21,7 +21,7 @@ struct DeficitAndWeightLossGraph: View {
         VStack {
             GeometryReader { geometry in
                 if weights.count > 0 && expectedWeights.count > 0 {
-                    if Settings.get(key: .showLinesOnWeightGraph) as? Bool ?? false {
+                    if Settings.get(key: .showLinesOnWeightGraph) as? Bool ?? true {
                         let maxWeight = weightsFiltered.max()
                         let maxExpecteWeight = expectedWeightsFiltered.max()
                         let minWeight = weightsFiltered.min()
@@ -30,7 +30,7 @@ struct DeficitAndWeightLossGraph: View {
                         let realMin = [minWeight ?? 0, minExpecteWeight ?? 0].min() ?? 0
                         let roundedMax = Int(realMax.rounded(.down))
                         let roundedMin = Int(realMin.rounded(.up))
-                        ForEach(roundedMin..<roundedMax, id: \.self) { i in
+                        ForEach(roundedMin...roundedMax, id: \.self) { i in
                             //todo this isnt quite right
                             let diff = realMax - realMin
                             let y = 100.0 / diff
@@ -52,6 +52,7 @@ struct DeficitAndWeightLossGraph: View {
     }
 
 
+    //todo this reloads everytime we change the day amount, which is expensive. but it can change based on changing health data. maybe call this manually somewhere?
     func weightsToGraphCoordinates(daysAgoToReach: Double, graphType: LineGraphType, weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
         var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
         weightValues = weightValues.reversed()

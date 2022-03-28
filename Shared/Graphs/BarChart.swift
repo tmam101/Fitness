@@ -272,16 +272,24 @@ struct BarChart: View {
             ZStack {
                 Color.myGray.edgesIgnoringSafeArea(.all)
             VStack {
+                Text("Resting")
+                    .foregroundColor(.white)
+                Text(String(Int(barViewModel.barClicked.restingCalories)))
+                    .font(.title)
+                    .foregroundColor(.white)
+                
                 Text("Active")
                     .foregroundColor(.white)
                 Text(String(Int(barViewModel.barClicked.activeCalories)))
                     .font(.title)
                     .foregroundColor(.white)
+                
                 Text("Consumed")
                     .foregroundColor(.white)
                 Text(String(Int(barViewModel.barClicked.consumedCalories)))
                     .font(.title)
                     .foregroundColor(.white)
+                
                 Text("Deficit")
                     .foregroundColor(.white)
                 Text(String(Int(barViewModel.barClicked.deficit)))

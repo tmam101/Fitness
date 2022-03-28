@@ -7,60 +7,61 @@
 
 import SwiftUI
 
-struct DeficitsView: View {
-    @EnvironmentObject var healthData: HealthData
-
-    var body: some View {
-        VStack {
-            HStack {
-                Text("\(Int(healthData.averageDeficitThisMonth))")
-                    .foregroundColor(.orange)
-                    .frame(maxWidth: .infinity)
-                Text("\(Int(healthData.averageDeficitThisWeek))")
-                    .foregroundColor(.yellow)
-                    .frame(maxWidth: .infinity)
-                Text("\(Int(healthData.deficitToday))")
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity)
-            }
-            DeficitRings()
-                .environmentObject(healthData)
-        }
-    }
-}
-
 struct FitnessViewMac: View {
     @EnvironmentObject var healthData: HealthData
-//    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
+//    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
+    @Environment(\.scenePhase) private var scenePhase
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
     var widget: Bool = false
     @State var isDisplayingOverlay = false
-    @State var itWorked: String = "nothing"
+    @State var deficitLineGraphDaysToShow: Double = 30.0
+    @State var showLifts = false
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                let sectionHeight: CGFloat = 150
-            
-                Group {
-                    StatsTitle(title: "Deficits")
-                    DeficitsView()
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
-                        .environmentObject(healthData)
-                        .background(Color.myGray)
-                        .cornerRadius(20)
-                }
+                let sectionHeight: CGFloat = 400
                 
                 Group {
-                    StatsTitle(title: "Deficits This Week")
-                    BarChart(cornerRadius: 2, showCalories: false)
+                    HStack {
+                        StatsTitle(title: "Deficits")
+                        if !healthData.hasLoaded {
+                        Circle()
+                            .fill()
+                            .foregroundColor(.red)
+                            .frame(width: 20)
+                        }
+                    }
+                    StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
+                        .environmentObject(healthData)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                }
+                Group {
+                    Text("Deficits This Week")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                    BarChart(showCalories: true)
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+//                        .if(!healthData.hasLoaded) { view in
+//                            view.redacted(reason: .placeholder)
+//                        }
+//                        .if(healthData.hasLoaded) { view in
+//                            view.unredacted()
+//                        }
                 }
+                Text("Expected Weight This Week")
+                    .foregroundColor(.white)
+                    .font(.title2)
+                DeficitLineGraph()
+                    .environmentObject(healthData)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+                    .background(Color.myGray)
+                    .cornerRadius(20)
                 Group {
                     StatsTitle(title: "Weight Loss")
                     StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
@@ -73,35 +74,53 @@ struct FitnessViewMac: View {
                                 await healthData.setValues(nil)
                             }
                         }
+                    
+                    ZStack {
+                        DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
+                            .environmentObject(healthData)
+                            .environmentObject(healthData.fitness)
+                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
+                            .padding()
+                            .background(Color.myGray)
+                            .cornerRadius(20)
+                    }
+                    Slider(
+                        value: $deficitLineGraphDaysToShow,
+                        in: 0...Double(healthData.daysBetweenStartAndNow),
+                        step: 5
+                    )
+//                        .tint(.green)
+                    Text("past \(Int(deficitLineGraphDaysToShow)) days")
+                        .foregroundColor(.green)
                 }
-                Group {
-                    StatsTitle(title: "Lifts")
-                    StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-                        .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .onTapGesture {
-                            healthData.workouts.smithMachine.toggle()
-                            healthData.workouts.calculate()
-                        }
-                }
-                ZStack {
-                    BenchGraph()
-                        .environmentObject(healthData.workouts)
-                        .environmentObject(healthData.fitness)
-                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
-                        .padding()
-                        .background(Color.myGray)
-                        .cornerRadius(20)
-                    SquatGraph()
-                        .environmentObject(healthData.workouts)
-                        .environmentObject(healthData.fitness)
-                        .padding()
+                if showLifts {
+                    Group {
+                        StatsTitle(title: "Lifts")
+                        StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
+                            .environmentObject(healthData)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .onTapGesture {
+                                healthData.workouts.smithMachine.toggle()
+                                healthData.workouts.calculate()
+                            }
+                    }
+                    ZStack {
+                        BenchGraph()
+                            .environmentObject(healthData.workouts)
+                            .environmentObject(healthData.fitness)
+                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                            .padding()
+                            .background(Color.myGray)
+                            .cornerRadius(20)
+                        SquatGraph()
+                            .environmentObject(healthData.workouts)
+                            .environmentObject(healthData.fitness)
+                            .padding()
+                    }
                 }
                 Group {
                     StatsTitle(title: "Mile Time")
-                        .onTapGesture {
-                            isDisplayingOverlay = true
-                        }
+                        
                         .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
                             self.isDisplayingOverlay = false
                         }) {
@@ -110,6 +129,7 @@ struct FitnessViewMac: View {
                         }
                     MileTimeStats()
                         .environmentObject(healthData)
+//                        .padding([.top, .leading, .trailing])
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)
@@ -124,5 +144,22 @@ struct FitnessViewMac: View {
             }
             .padding()
         }
+        .onChange(of: scenePhase) { _ in
+            if scenePhase == .background {
+                Task {
+                    await healthData.setValues(nil)
+                }
+            }
+        }
     }
 }
+
+//struct FitnessView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        AppView()
+//            .environmentObject(HealthData(environment: .debug))
+//            .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
+////            .environmentObject(WatchConnectivityIphone())
+//    }
+//}

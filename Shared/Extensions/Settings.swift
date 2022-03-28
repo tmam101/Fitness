@@ -15,6 +15,7 @@ struct Settings {
         case numberOfRuns
         case individualStatisticsData
         case showLinesOnWeightGraph
+        case healthData
     }
     static func set(key: UserDefaultsKey, value: Any) {
         UserDefaults.standard.set(value, forKey: key.rawValue)

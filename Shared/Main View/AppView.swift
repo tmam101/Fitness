@@ -41,7 +41,7 @@ struct SettingsView: View {
             HStack {
                 Text("Minimum resting calories burned")
                     .foregroundColor(.white)
-                TextField("2200", text: $resting)
+                TextField("", text: $resting)
                     .onSubmit {
                         print(resting)
                         if let restingValue = Double(resting) {
@@ -54,7 +54,7 @@ struct SettingsView: View {
             HStack {
                 Text("Minimum active calories burned")
                     .foregroundColor(.white)
-                TextField("2200", text: $active)
+                TextField("", text: $active)
                     .onSubmit {
                         print(active)
                         if let activeValue = Double(active) {
@@ -67,7 +67,7 @@ struct SettingsView: View {
             HStack {
                 Text("Start Date")
                     .foregroundColor(.white)
-                TextField("2200", text: $startDate)
+                TextField("", text: $startDate)
                     .onSubmit {
                         print(startDate)
                         Settings.set(key: .startDate, value: startDate)

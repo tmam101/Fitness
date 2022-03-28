@@ -38,19 +38,21 @@ struct FitnessViewWatch: View {
     var widget: Bool = false
     @State var isDisplayingOverlay = false
     @State var itWorked: String = "nothing"
+    @State var deficitLineGraphDaysToShow: Double = 30.0
+
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                let sectionHeight: CGFloat = 150
+                let sectionHeight: CGFloat = 75
                 
                 // Add calories eaten
-                    NavigationLink(destination: {
-                        NumberInput()
-                            .environmentObject(healthData)
-                    }) {
-                        Text("Add calories eaten")
-                    }
+//                    NavigationLink(destination: {
+//                        NumberInput()
+//                            .environmentObject(healthData)
+//                    }) {
+//                        Text("Add calories eaten")
+//                    }
                 Group {
                     StatsTitle(title: "Deficits")
                     DeficitsView()
@@ -70,41 +72,66 @@ struct FitnessViewWatch: View {
                         .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 }
                 Group {
-                    StatsTitle(title: "Weight Loss")
-                    StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
+                    StatsTitle(title: "Expected Weight This Week")
+                    DeficitLineGraph()
                         .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .onTapGesture {
-                            Task {
-                                healthData.activeCalorieModifier = 0.8
-                                healthData.adjustActiveCalorieModifier.toggle()
-                                await healthData.setValues(nil)
-                            }
-                        }
-                }
-                Group {
-                    StatsTitle(title: "Lifts")
-                    StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-                        .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .onTapGesture {
-                            healthData.workouts.smithMachine.toggle()
-                            healthData.workouts.calculate()
-                        }
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
+                        .background(Color.myGray)
+                        .cornerRadius(20)
                 }
                 ZStack {
-                    BenchGraph()
-                        .environmentObject(healthData.workouts)
+                    DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
+                        .environmentObject(healthData)
                         .environmentObject(healthData.fitness)
-                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
-                    SquatGraph()
-                        .environmentObject(healthData.workouts)
-                        .environmentObject(healthData.fitness)
-                        .padding()
                 }
+                Slider(
+                    value: $deficitLineGraphDaysToShow,
+                    in: 0...Double(healthData.daysBetweenStartAndNow),
+                    step: 5
+                )
+                    .tint(.green)
+                Text("past \(Int(deficitLineGraphDaysToShow)) days")
+                    .foregroundColor(.green)
+//                Group {
+//                    StatsTitle(title: "Weight Loss")
+//                    StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
+//                        .environmentObject(healthData)
+//                        .frame(minWidth: 0, maxWidth: .infinity)
+//                        .onTapGesture {
+//                            Task {
+//                                healthData.activeCalorieModifier = 0.8
+//                                healthData.adjustActiveCalorieModifier.toggle()
+//                                await healthData.setValues(nil)
+//                            }
+//                        }
+//                }
+//                Group {
+//                    StatsTitle(title: "Lifts")
+//                    StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
+//                        .environmentObject(healthData)
+//                        .frame(minWidth: 0, maxWidth: .infinity)
+//                        .onTapGesture {
+//                            healthData.workouts.smithMachine.toggle()
+//                            healthData.workouts.calculate()
+//                        }
+//                }
+//                ZStack {
+//                    BenchGraph()
+//                        .environmentObject(healthData.workouts)
+//                        .environmentObject(healthData.fitness)
+//                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+//                        .padding()
+//                        .background(Color.myGray)
+//                        .cornerRadius(20)
+//                    SquatGraph()
+//                        .environmentObject(healthData.workouts)
+//                        .environmentObject(healthData.fitness)
+//                        .padding()
+//                }
                 Group {
                     StatsTitle(title: "Mile Time")
                         .onTapGesture {

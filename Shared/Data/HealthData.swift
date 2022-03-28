@@ -164,7 +164,8 @@ class HealthData: ObservableObject {
         hasLoaded = false
         setupDates()
 #if os(iOS)
-        await setValuesFromNetwork()
+//        await setValuesFromNetwork()
+        let _ = await getValuesFromSettings()
         // Fitness
         await fitness.getAllStats()
         // Runs
@@ -226,6 +227,7 @@ class HealthData: ObservableObject {
         // if any expected weights are < 130, disregard?
         let n = Network()
         let _ = await n.post(object: dataToSend)
+        self.setValuesToSettings(model: dataToSend)
         
         // Set self values
         DispatchQueue.main.async { [self] in
@@ -253,13 +255,35 @@ class HealthData: ObservableObject {
 #if os(watchOS)
         // On watch, receive relevant data
         await setValuesFromNetwork()
+        self.hasLoaded = true
         completion?(self)
 #endif
 #if os(macOS)
         // On watch, receive relevant data
         await setValuesFromNetwork()
+        self.hasLoaded = true
         completion?(self)
 #endif
+    }
+    
+    private func getValuesFromSettings() async -> Bool {
+        if let data = Settings.get(key: .healthData) as? Data {
+            do {
+                let unencoded = try JSONDecoder().decode(HealthDataPostRequestModel.self, from: data)
+                setValues(from: unencoded)
+                return true
+            } catch {
+                return false
+            }
+        }
+        return false
+    }
+    
+    private func setValuesToSettings(model: HealthDataPostRequestModel) {
+        do {
+            let encodedData = try JSONEncoder().encode(model)
+            Settings.set(key: .healthData, value: encodedData)
+        } catch { }
     }
     
     private func setValuesFromNetwork() async {
@@ -341,6 +365,8 @@ class HealthData: ObservableObject {
         self.runs = model.runs
         self.numberOfRuns = model.numberOfRuns
         self.activeCalorieModifier = model.activeCalorieModifier
+        self.expectedWeights = model.expectedWeights
+        self.fitness.weights = model.weights
     }
     
     func eraseValues() {

@@ -11,7 +11,7 @@ struct WeightLossText: View {
     @EnvironmentObject var healthData: HealthData
     
     var body: some View {
-        let weightLostString = String(format: "%.2f", healthData.fitness.weightLost)
+        let weightLostString = String(format: "%.2f", healthData.fitness.weightLost) //todo these arent in the model
         let averageWeeklyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeek) + " / week"
         let averageMonthlyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeekThisMonth) + " / week"
         

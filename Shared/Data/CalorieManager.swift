@@ -17,8 +17,8 @@ class CalorieManager {
     var fitness: FitnessCalculations? = nil
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    let minimumActiveCalories: Double = 200
-    let minimumRestingCalories: Double = 2200
+    var minimumActiveCalories: Double = 200
+    var minimumRestingCalories: Double = 2200
     
     //TODO Should this just return weights?
     func getExpectedWeights() async -> [LineGraph.DateAndDouble] {
@@ -46,6 +46,12 @@ class CalorieManager {
     }
     
     func setup(fitness: FitnessCalculations, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+        if let r = Settings.get(key: .resting) as? Double {
+            self.minimumRestingCalories = r
+        }
+        if let active = Settings.get(key: .active) as? Double {
+            self.minimumActiveCalories = active
+        }
         self.fitness = fitness
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         if adjustActiveCalorieModifier {
