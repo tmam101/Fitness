@@ -33,6 +33,7 @@ struct SettingsView: View {
     @State var active = "200"
     @State var startDate = "1.23.2021"
     @State var showLinesOnWeightGraph = true
+    @State var useActiveCalorieModifier = true
 
     var body: some View {
         VStack {
@@ -83,6 +84,15 @@ struct SettingsView: View {
                     Settings.set(key: .showLinesOnWeightGraph, value: v)
                 }
             }
+            HStack {
+                Toggle(isOn: $useActiveCalorieModifier) {
+                    Text("Use active calorie modifier")
+                        .foregroundColor(.white)
+                }
+                .onChange(of: useActiveCalorieModifier) { v in
+                    Settings.set(key: .useActiveCalorieModifier, value: v)
+                }
+            }
         }
         .onAppear {
             //TOdo I think accessing empty key here causes a crash
@@ -97,6 +107,9 @@ struct SettingsView: View {
             }
             if let w = Settings.get(key: .showLinesOnWeightGraph) as? Bool {
                 showLinesOnWeightGraph = w
+            }
+            if let m = Settings.get(key: .useActiveCalorieModifier) as? Bool {
+                useActiveCalorieModifier = m
             }
         }
     }

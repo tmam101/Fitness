@@ -52,6 +52,9 @@ class CalorieManager {
         if let active = Settings.get(key: .active) as? Double {
             self.minimumActiveCalories = active
         }
+        if let useActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool {
+            self.adjustActiveCalorieModifier = useActiveCalorieModifier
+        }
         self.fitness = fitness
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         if adjustActiveCalorieModifier {
