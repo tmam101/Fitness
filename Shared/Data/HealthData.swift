@@ -28,7 +28,7 @@ struct HealthDataPostRequestModel: Codable {
     var percentDailyDeficit: Int = 0
     var projectedAverageWeeklyDeficitForTomorrow: Double = 0
     var projectedAverageTotalDeficitForTomorrow: Double = 0
-    var expectedWeightLossSinceStart: Double = 0
+//    var expectedWeightLossSinceStart: Double = 0
     var daysBetweenStartAndNow: Int = 0
     var deficitsThisWeek: [Int:Double] = [:]
     var dailyActiveCalories: [Int:Double] = [:]
@@ -46,7 +46,7 @@ struct HealthDataGetRequestModel: Codable {
     let dailyActiveCalories: [String: Double]
     let averageDeficitSinceStart, projectedAverageWeeklyDeficitForTomorrow, averageDeficitThisWeek: Double
     let percentWeeklyDeficit: Int
-    let expectedWeightLossSinceStart: Double
+//    let expectedWeightLossSinceStart: Double
     let deficitsThisWeek: [String: Double]
     let projectedAverageMonthlyDeficitTomorrow, deficitToGetCorrectDeficit: Double
     let percentDailyDeficit: Int
@@ -60,7 +60,7 @@ struct HealthDataGetRequestModel: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
-        case daysBetweenStartAndNow, dailyActiveCalories, averageDeficitSinceStart, projectedAverageWeeklyDeficitForTomorrow, averageDeficitThisWeek, percentWeeklyDeficit, expectedWeightLossSinceStart, deficitsThisWeek, projectedAverageMonthlyDeficitTomorrow, deficitToGetCorrectDeficit, percentDailyDeficit, deficitToday, projectedAverageTotalDeficitForTomorrow, averageDeficitThisMonth, individualStatistics, runs, numberOfRuns, activeCalorieModifier, expectedWeights, weights
+        case daysBetweenStartAndNow, dailyActiveCalories, averageDeficitSinceStart, projectedAverageWeeklyDeficitForTomorrow, averageDeficitThisWeek, percentWeeklyDeficit, deficitsThisWeek, projectedAverageMonthlyDeficitTomorrow, deficitToGetCorrectDeficit, percentDailyDeficit, deficitToday, projectedAverageTotalDeficitForTomorrow, averageDeficitThisMonth, individualStatistics, runs, numberOfRuns, activeCalorieModifier, expectedWeights, weights
     }
 }
 
@@ -89,7 +89,7 @@ class HealthData: ObservableObject {
     @Published public var deficitsThisWeek: [Int:Double] = [:]
     @Published public var dailyActiveCalories: [Int:Double] = [:]
     
-    @Published public var expectedWeightLossSinceStart: Double = 0
+//    @Published public var expectedWeightLossSinceStart: Double = 0
     @Published public var individualStatistics: [Int:Day] = [:]
 
     // Days
@@ -191,7 +191,7 @@ class HealthData: ObservableObject {
         let individualStatistics = await calorieManager.getIndividualStatistics(forPastDays: 7)
         let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
         let percentDailyDeficit = Int((deficitToday / deficitToGetCorrectDeficit) * 100)
-        let expectedWeightLossSinceStart = (averageDeficitSinceStart * Double(self.daysBetweenStartAndNow)) / Double(3500) //todo maybe dont use the average but the real
+//        let expectedWeightLossSinceStart = (averageDeficitSinceStart * Double(self.daysBetweenStartAndNow)) / Double(3500) //todo maybe dont use the average but the real
 //        let statsEveryDay = await calorieManager.getIndividualDeficits(forPastDays: daysBetweenStartAndNow)
         let expectedWeights = await calorieManager.getExpectedWeights()
         
@@ -214,7 +214,7 @@ class HealthData: ObservableObject {
             percentDailyDeficit: percentDailyDeficit,
             projectedAverageWeeklyDeficitForTomorrow: projectedAverageWeeklyDeficitForTomorrow,
             projectedAverageTotalDeficitForTomorrow: projectedAverageTotalDeficitForTomorrow,
-            expectedWeightLossSinceStart: expectedWeightLossSinceStart,
+//            expectedWeightLossSinceStart: expectedWeightLossSinceStart,
             daysBetweenStartAndNow: daysBetweenStartAndNow,
             deficitsThisWeek: deficitsThisWeek,
             dailyActiveCalories: dailyActiveCalories,
@@ -243,7 +243,7 @@ class HealthData: ObservableObject {
             self.projectedAverageWeeklyDeficitForTomorrow = projectedAverageWeeklyDeficitForTomorrow
             self.projectedAverageTotalDeficitForTomorrow = projectedAverageTotalDeficitForTomorrow
             self.averageDeficitSinceStart = averageDeficitSinceStart
-            self.expectedWeightLossSinceStart = expectedWeightLossSinceStart
+//            self.expectedWeightLossSinceStart = expectedWeightLossSinceStart
             self.projectedAverageMonthlyDeficitTomorrow = projectedAverageMonthlyDeficitTomorrow
             self.individualStatistics = individualStatistics
             self.runs = runs
@@ -327,7 +327,7 @@ class HealthData: ObservableObject {
                 self.projectedAverageWeeklyDeficitForTomorrow = getResponse.projectedAverageWeeklyDeficitForTomorrow
                 self.projectedAverageTotalDeficitForTomorrow = getResponse.projectedAverageTotalDeficitForTomorrow
                 self.averageDeficitSinceStart = getResponse.averageDeficitSinceStart
-                self.expectedWeightLossSinceStart = getResponse.expectedWeightLossSinceStart
+//                self.expectedWeightLossSinceStart = getResponse.expectedWeightLossSinceStart
                 self.projectedAverageMonthlyDeficitTomorrow = getResponse.projectedAverageMonthlyDeficitTomorrow
                 self.individualStatistics = individualStatisticsFixed
                 self.runs = getResponse.runs
@@ -357,7 +357,7 @@ class HealthData: ObservableObject {
         self.percentDailyDeficit = model.percentDailyDeficit
         self.projectedAverageWeeklyDeficitForTomorrow = model.projectedAverageWeeklyDeficitForTomorrow
         self.projectedAverageTotalDeficitForTomorrow = model.projectedAverageTotalDeficitForTomorrow
-        self.expectedWeightLossSinceStart = model.expectedWeightLossSinceStart
+//        self.expectedWeightLossSinceStart = model.expectedWeightLossSinceStart
         self.daysBetweenStartAndNow = model.daysBetweenStartAndNow
         self.deficitsThisWeek = model.deficitsThisWeek
         self.dailyActiveCalories = model.dailyActiveCalories
@@ -380,7 +380,7 @@ class HealthData: ObservableObject {
         percentDailyDeficit = 0
         projectedAverageWeeklyDeficitForTomorrow = 0
         projectedAverageTotalDeficitForTomorrow = 0
-        expectedWeightLossSinceStart = 0
+//        expectedWeightLossSinceStart = 0
         daysBetweenStartAndNow = 0
         deficitsThisWeek = [:]
         dailyActiveCalories = [:]

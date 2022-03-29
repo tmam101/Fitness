@@ -12,8 +12,8 @@ struct WeightLossText: View {
     
     var body: some View {
         let weightLostString = String(format: "%.2f", healthData.fitness.weightLost) //todo these arent in the model
-        let averageWeeklyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeek) + " / week"
-        let averageMonthlyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeekThisMonth) + " / week"
+        let averageWeeklyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeek) + " avg"
+        let averageMonthlyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeekThisMonth) + " wkly avg"
         
 //        let averageDeficit = healthData.averageDeficitSinceStart / 1000
 //        let averageWeightLoss = healthData.fitness.averageWeightLostPerWeek / 2
@@ -21,9 +21,9 @@ struct WeightLossText: View {
         
         VStack(alignment: .leading) {
 //            StatsText(color: .green3, title: "Compared to Deficit", stat: String(ratio) + "%")
-            StatsText(color: .green3, title: "Total", title2: "vs " + String(format: "%.2f", healthData.expectedWeightLossSinceStart), stat: weightLostString)
-            StatsText(color: .green2, title: "Average", stat: averageWeeklyLostString)
-            StatsText(color: .green1, title: "This Month", stat: averageMonthlyLostString)
+            StatsText(color: .green3, title: "Total", stat: weightLostString)
+            StatsText(color: .green2, title: "Week", stat: averageWeeklyLostString)
+            StatsText(color: .green1, title: "Month", stat: averageMonthlyLostString)
         }
     }
 }
