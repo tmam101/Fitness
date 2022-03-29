@@ -113,7 +113,7 @@
             startingLineNumber = "373"
             endingLineNumber = "373"
             landmarkName = "saveCaloriesEaten(calories:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -129,7 +129,7 @@
             startingLineNumber = "376"
             endingLineNumber = "376"
             landmarkName = "saveCaloriesEaten(calories:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -273,7 +273,7 @@
             startingLineNumber = "307"
             endingLineNumber = "307"
             landmarkName = "getCumulativeDeficit(forPast:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -481,7 +481,7 @@
             startingLineNumber = "212"
             endingLineNumber = "212"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "8E61E489-2A95-457A-8498-7D6284480C66 - e93864c6694a8d36"
@@ -544,7 +544,7 @@
             startingLineNumber = "199"
             endingLineNumber = "199"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "2EE62F63-B157-4698-8045-22A631896270 - 98bdfeb5c8fac7ec"
@@ -607,7 +607,7 @@
             startingLineNumber = "203"
             endingLineNumber = "203"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "B2BF37B4-EECB-4025-B132-2B0184EE1F99 - 98bdfeb5c8fac768"
@@ -926,7 +926,7 @@
             startingLineNumber = "237"
             endingLineNumber = "237"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "2BDF07A5-2DB5-42F9-9341-FF6104183C9B - e93864c6694a8f07"
@@ -1084,7 +1084,7 @@
             startingLineNumber = "185"
             endingLineNumber = "185"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1100,7 +1100,7 @@
             startingLineNumber = "200"
             endingLineNumber = "200"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "A74EA5FB-4BB9-4824-B230-B368AFD7C1B0 - e93864c6694a83c2"
@@ -1163,7 +1163,7 @@
             startingLineNumber = "207"
             endingLineNumber = "207"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1179,7 +1179,7 @@
             startingLineNumber = "234"
             endingLineNumber = "234"
             landmarkName = "getActiveCalorieModifier(weightLost:daysBetweenStartAndNow:forceLoad:)"
-            landmarkType = "9">
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "D7258BE9-2E52-4943-B80E-6F4C20ECBC01 - e93864c6694a8860"
@@ -1820,7 +1820,7 @@
             startingLineNumber = "255"
             endingLineNumber = "255"
             landmarkName = "getDeficitForDay(daysAgo:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

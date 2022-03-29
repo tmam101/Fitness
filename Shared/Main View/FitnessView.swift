@@ -86,7 +86,7 @@ struct FitnessView: View {
                     }
                     Slider(
                         value: $deficitLineGraphDaysToShow,
-                        in: 0...Double(healthData.daysBetweenStartAndNow),
+                        in: 5...Double(healthData.daysBetweenStartAndNow),
                         step: 5
                     )
                         .tint(.green)
