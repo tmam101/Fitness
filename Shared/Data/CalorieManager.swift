@@ -12,7 +12,7 @@ import HealthKit
 
 class CalorieManager {
     var activeCalorieModifier: Double = 1
-    var adjustActiveCalorieModifier: Bool = true
+    var adjustActiveCalorieModifier: Bool = false
     var daysBetweenStartAndNow: Int = 0
     var fitness: FitnessCalculations? = nil
     private let healthStore = HKHealthStore()
