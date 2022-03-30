@@ -34,8 +34,9 @@ struct RunningLineGraph: View {
                 LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Time.doubleToString(double: min))")
                 
                 LineGraph(points: points, color: color, width: 2)
-                
-                if healthData.runs.count > 0 {
+#if os(iOS)
+
+                if healthData.runs.count > 0 { // todo broken
                     ForEach(0..<points.count, id: \.self) { index in
                         let width = (geometry.size.width / CGFloat(points.count)) - 2
                         Text("")
@@ -44,10 +45,8 @@ struct RunningLineGraph: View {
                             .opacity(0.00001)
                             .position(x: points[index].x, y: geometry.size.height / 2)
                             .onTapGesture {
-#if os(iOS)
                                 let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                                 impactHeavy.impactOccurred()
-#endif
                                 self.presentingTest = true
                                 runViewModel.runClicked = runs[index]
                             }
@@ -60,6 +59,8 @@ struct RunningLineGraph: View {
                             }
                     }
                 }
+#endif
+
             }
             HStack {
                 Text(Date.stringFromDate(date: runs.first?.date ?? Date()))

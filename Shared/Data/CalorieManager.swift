@@ -18,7 +18,7 @@ class CalorieManager {
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     var minimumActiveCalories: Double = 200
-    var minimumRestingCalories: Double = 2200
+    var minimumRestingCalories: Double = 2150
     
     //TODO Should this just return weights?
     func getExpectedWeights() async -> [LineGraph.DateAndDouble] {
@@ -46,7 +46,7 @@ class CalorieManager {
     }
     
     func setup(fitness: FitnessCalculations, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
-        if let r = Settings.get(key: .resting) as? Double {
+        if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
             self.minimumRestingCalories = r
         }
         if let active = Settings.get(key: .active) as? Double {

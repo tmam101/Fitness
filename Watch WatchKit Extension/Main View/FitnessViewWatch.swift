@@ -79,6 +79,17 @@ struct FitnessViewWatch: View {
                         .background(Color.myGray)
                         .cornerRadius(20)
                 }
+                
+                Text("Expected Weight vs Weight Over Time")
+                    .foregroundColor(.white)
+                
+                DeficitAndWeightStats(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
+                    .environmentObject(healthData)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .background(Color.myGray)
+                    .cornerRadius(20)
+                
                 ZStack {
                     DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
                         .environmentObject(healthData)
@@ -90,7 +101,7 @@ struct FitnessViewWatch: View {
                 }
                 Slider(
                     value: $deficitLineGraphDaysToShow,
-                    in: 0...Double(healthData.daysBetweenStartAndNow),
+                    in: 5...Double(healthData.daysBetweenStartAndNow),
                     step: 5
                 )
                     .tint(.green)

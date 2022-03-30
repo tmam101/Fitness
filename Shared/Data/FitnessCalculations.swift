@@ -91,6 +91,8 @@ class FitnessCalculations: ObservableObject {
     func getAllStats() async {
         return await withUnsafeContinuation { continuation in
             getCurrentWeightFromHealthKit { success in
+                self.startingWeight = self.weights.last?.weight ?? self.startingWeight
+                
                 self.getProgressToWeight()
                 self.weightLost = self.startingWeight - self.currentWeight
                 self.weightToLose = self.startingWeight - self.endingWeight
@@ -185,6 +187,8 @@ class FitnessCalculations: ObservableObject {
     
     func getAllStats(completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
         getCurrentWeightFromHealthKit { success in
+//            self.startingWeight = self.weights.last?.weight ?? self.startingWeight
+            
             self.getProgressToWeight()
             self.weightLost = self.startingWeight - self.currentWeight
             self.weightToLose = self.startingWeight - self.endingWeight

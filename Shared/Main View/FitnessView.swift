@@ -67,47 +67,23 @@ struct FitnessView: View {
                     StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .onTapGesture {
-                            Task {
-                                healthData.activeCalorieModifier = 0.8
-                                healthData.adjustActiveCalorieModifier.toggle()
-                                await healthData.setValues(nil)
-                            }
-                        }
+//                        .onTapGesture {
+//                            Task {
+//                                healthData.activeCalorieModifier = 0.8
+//                                healthData.adjustActiveCalorieModifier.toggle()
+//                                await healthData.setValues(nil)
+//                            }
+//                        }
                     Text("Expected Weight vs Weight Over Time")
                         .foregroundColor(.white)
                         .font(.title2)
-
-                    HStack {
-                        let expectedWeights = healthData.expectedWeights
-                        let weights = healthData.fitness.weights
-                        let dateToReach = Date.subtract(days: Int(deficitLineGraphDaysToShow), from: Date())
-                        let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
-                        let expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
-                        let expectedWeightChange = (expectedWeightsFiltered[expectedWeightsFiltered.count - 2]) - (expectedWeightsFiltered.first ?? 0)
-                        let weightChange = (weightsFiltered.first ?? 0) - (weightsFiltered.last ?? 0)
-                        let expectedWeightString = String(format: "%.2f", expectedWeightChange)
-                        let weightString = String(format: "%.2f", weightChange)
-
-                        VStack (alignment: .leading) {
-                            Text("Expected weight")
-                                .foregroundColor(.yellow)
-                            Text((expectedWeightChange >= 0 ? "+" : "") + "\(expectedWeightString)")
-                                .foregroundColor(.white)
-                        }
-                        .frame(maxWidth: .infinity)
-                        VStack (alignment: .leading) {
-                            Text("Weight")
-                                .foregroundColor(.green)
-                            Text((weightChange >= 0 ? "+" : "") + "\(weightString)")
-                                .foregroundColor(.white)
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding()
-                    .background(Color.myGray)
-                    .cornerRadius(20)
+                    
+                    DeficitAndWeightStats(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
+                        .environmentObject(healthData)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .padding()
+                        .background(Color.myGray)
+                        .cornerRadius(20)
                     
                     ZStack {
                         DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
@@ -120,8 +96,8 @@ struct FitnessView: View {
                     }
                     Slider(
                         value: $deficitLineGraphDaysToShow,
-                        in: 5...Double(healthData.daysBetweenStartAndNow),
-                        step: 5
+                        in: 1...Double(healthData.daysBetweenStartAndNow),
+                        step: (deficitLineGraphDaysToShow < 100 ? 1 : 5) //todo this doesnt reach the first point. need to make sure it does
                     )
                         .tint(.green)
                     Text("past \(Int(deficitLineGraphDaysToShow)) days")

@@ -143,7 +143,10 @@ class HealthData: ObservableObject {
             self.environment = environment
             switch environment {
             case .release:
-                await setValues(completion)
+                if let start = Settings.get(key: .startDate) as? String {
+                    startDateString = start
+                }
+                await setValues(forceLoad: true, completion)
             case .debug:
                 await setValuesDebug(completion)
             }
@@ -225,7 +228,11 @@ class HealthData: ObservableObject {
             expectedWeights: expectedWeights,
             weights: fitness.weights)
         // if any expected weights are < 130, disregard?
-        let n = Network()
+        let n = Network() //todo expected weights are wrong when calculated by the widget
+        print("Expected weight: \(expectedWeights.last?.double ?? 0)")
+        if expectedWeights.last?.double ?? 300 < 197 {
+            print("Expected weight error")
+        }
         let _ = await n.post(object: dataToSend)
         self.setValuesToSettings(model: dataToSend)
         
