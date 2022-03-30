@@ -39,6 +39,8 @@ struct FitnessViewWatch: View {
     @State var isDisplayingOverlay = false
     @State var itWorked: String = "nothing"
     @State var deficitLineGraphDaysToShow: Double = 30.0
+    @State var runsToShow: Double = 5.0
+
 
     
     var body: some View {
@@ -159,13 +161,21 @@ struct FitnessViewWatch: View {
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)
-                    RunningLineGraph()
+                    RunningLineGraph(runsToShow: $runsToShow)
                         .environmentObject(healthData)
                         .environmentObject(healthData.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
+                    Slider(
+                        value: $runsToShow,
+                        in: 1...Double(healthData.runs.count),
+                        step: 1 //todo this doesnt reach the first point. need to make sure it does
+                    )
+                        .tint(.blue)
+                    Text("past \(Int(runsToShow)) days")
+                        .foregroundColor(.green)
                 }
             }
             .padding()

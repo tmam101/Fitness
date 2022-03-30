@@ -71,23 +71,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D61B049B-F14A-4E7A-A1C4-9E3D7C4049B0"
-            shouldBeEnabled = "Yes"
-            condition = "(expectedWeights.last?.double ?? 300) &lt; 197"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/HealthData.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
-            landmarkName = "setValues(forceLoad:_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "FA96C011-04AF-4D77-A59B-A2A12021D535"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"

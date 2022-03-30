@@ -16,6 +16,7 @@ struct FitnessView: View {
     var widget: Bool = false
     @State var isDisplayingOverlay = false
     @State var deficitLineGraphDaysToShow: Double = 30.0
+    @State var runsToShow: Double = 5.0
     @State var showLifts = false
     
     var body: some View {
@@ -130,30 +131,38 @@ struct FitnessView: View {
                 }
                 Group {
                     StatsTitle(title: "Mile Time")
-                        .onTapGesture {
-                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
-                            impactHeavy.impactOccurred()
-                            isDisplayingOverlay = true
-                        }
-                        .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
-                            self.isDisplayingOverlay = false
-                        }) {
-                            MileSettings()
-                                .environmentObject(healthData)
-                        }
+//                        .onTapGesture {
+//                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+//                            impactHeavy.impactOccurred()
+//                            isDisplayingOverlay = true
+//                        }
+//                        .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
+//                            self.isDisplayingOverlay = false
+//                        }) {
+//                            MileSettings()
+//                                .environmentObject(healthData)
+//                        }
                     MileTimeStats()
                         .environmentObject(healthData)
 //                        .padding([.top, .leading, .trailing])
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)
-                    RunningLineGraph()
+                    RunningLineGraph(runsToShow: $runsToShow)
                         .environmentObject(healthData)
                         .environmentObject(healthData.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
+                    Slider(
+                        value: $runsToShow,
+                        in: 1...Double(healthData.runs.count),
+                        step: 1 //todo this doesnt reach the first point. need to make sure it does
+                    )
+                        .tint(.blue)
+                    Text("past \(Int(runsToShow)) runs")
+                        .foregroundColor(.blue)
                 }
             }
             .padding()
@@ -161,7 +170,7 @@ struct FitnessView: View {
         .onChange(of: scenePhase) { _ in
             if scenePhase == .background {
                 Task {
-                    await healthData.setValues(nil)
+                    await healthData.setValues(nil) //todo add force load here?
                 }
             }
         }

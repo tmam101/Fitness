@@ -11,15 +11,15 @@ struct RunningLineGraph: View {
     @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData
     @State var presentingTest = false
-    
+    @Binding var runsToShow: Double
     @State var runViewModel = RunViewModel()
     
     var color: Color = .blue
     
     var body: some View {
         
-        let numberOfRuns = healthData.numberOfRuns
-        let runs = Array(healthData.runs.suffix(numberOfRuns))
+//        let numberOfRuns = healthData.numberOfRuns
+        let runs = Array(healthData.runs.suffix(Int(runsToShow)))
         let max = runViewModel.max
         let min = runViewModel.min
         let x = (Double(max)-Double(min)) / 2
