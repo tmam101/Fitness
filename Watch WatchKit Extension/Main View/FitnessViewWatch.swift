@@ -156,7 +156,8 @@ struct FitnessViewWatch: View {
                             MileSettings()
                                 .environmentObject(healthData)
                         }
-                    MileTimeStats()
+                    
+                    MileTimeStats(runsToShow: $runsToShow)
                         .environmentObject(healthData)
                         .background(Color.myGray)
                         .cornerRadius(20)
@@ -174,8 +175,8 @@ struct FitnessViewWatch: View {
                         step: 1 //todo this doesnt reach the first point. need to make sure it does
                     )
                         .tint(.blue)
-                    Text("past \(Int(runsToShow)) days")
-                        .foregroundColor(.green)
+                    Text("past \(Int(runsToShow)) runs")
+                        .foregroundColor(.blue)
                 }
             }
             .padding()

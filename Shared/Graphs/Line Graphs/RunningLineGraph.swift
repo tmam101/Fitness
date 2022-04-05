@@ -20,28 +20,27 @@ struct RunningLineGraph: View {
         
 //        let numberOfRuns = healthData.numberOfRuns
         let runs = Array(healthData.runs.suffix(Int(runsToShow)))
-        let max = runViewModel.max
-        let min = runViewModel.min
-        let x = (Double(max)-Double(min)) / 2
-        let middle = Double(min) + x
-        
+
         VStack {
             GeometryReader { geometry in
                 let points = averagesToGraphCoordinates(runs: runs, width: geometry.size.width - 40, height: geometry.size.height)
-                
+                let max = runViewModel.max
+                let min = runViewModel.min
+                let x = (Double(max)-Double(min)) / 2
+                let middle = Double(min) + x
                 LineAndLabel(width: geometry.size.width, height: 0.0, text: "\(Time.doubleToString(double: max))")
                 LineAndLabel(width: geometry.size.width, height: geometry.size.height * (1/2), text: Time.doubleToString(double: middle))
                 LineAndLabel(width: geometry.size.width, height: geometry.size.height, text: "\(Time.doubleToString(double: min))")
                 
                 LineGraph(points: points, color: color, width: 2)
 #if os(iOS)
-
+                
                 if healthData.runs.count > 0 { // todo broken
                     ForEach(0..<points.count, id: \.self) { index in
                         let width = (geometry.size.width / CGFloat(points.count)) - 2
                         Text("")
                             .frame(maxWidth: width, maxHeight: geometry.size.height)
-//                            .background(.white)
+                        //                            .background(.white)
                             .opacity(0.00001)
                             .position(x: points[index].x, y: geometry.size.height / 2)
                             .onTapGesture {
@@ -60,7 +59,7 @@ struct RunningLineGraph: View {
                     }
                 }
 #endif
-
+                
             }
             HStack {
                 Text(Date.stringFromDate(date: runs.first?.date ?? Date()))

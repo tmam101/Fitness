@@ -63,20 +63,23 @@ struct DeficitAndWeightStats: View {
     }
 }
 
+//todo this isnt displaying correctly
 struct MileTimeStats: View {
     @EnvironmentObject var healthData: HealthData
-
+    @Binding var runsToShow: Double
     var body: some View {
-        let runs = Array(healthData.runs.suffix(healthData.numberOfRuns))
+        let runs = Array(healthData.runs.suffix(Int(runsToShow)))
         let decrease = (runs.first?.averageMileTime ?? 0.0) - (runs.last?.averageMileTime ?? 0.0)
         let timeDecrease = Time.doubleToString(double: decrease)
         VStack(alignment: .leading) {
         Text("Decrease")
-            .foregroundColor(.white)
-//            .frame(maxWidth: .infinity)
-        Text("\(timeDecrease)")
-            .foregroundColor(.blue)
-            .font(.title2)
+                .foregroundColor(.white)
+            //            .frame(maxWidth: .infinity)
+            Text("\(timeDecrease)")
+                .foregroundColor(.blue)
+#if os(iOS)
+                .font(.title2)
+#endif
         }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding()
     }

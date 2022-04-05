@@ -183,6 +183,7 @@ class HealthData: ObservableObject {
         // Gather all information from calorie manager
         let averageDeficitSinceStart = await calorieManager.getAverageDeficit(forPast: self.daysBetweenStartAndNow) ?? 0
         let deficitToGetCorrectDeficit = await calorieManager.getDeficitToReachIdeal() ?? 0
+        //todo critical: the projected weekly deficit isn't updating during the day as calories are changed
         let projectedAverageWeeklyDeficitForTomorrow = await calorieManager.getProjectedAverageDeficitForTomorrow(forPast: 6) ?? 0
         let projectedAverageTotalDeficitForTomorrow = await calorieManager.getProjectedAverageDeficitForTomorrow(forPast: self.daysBetweenStartAndNow) ?? 0
         let averageDeficitThisWeek = await calorieManager.getAverageDeficit(forPast: 7) ?? 0
@@ -229,10 +230,6 @@ class HealthData: ObservableObject {
             weights: fitness.weights)
         // if any expected weights are < 130, disregard?
         let n = Network() //todo expected weights are wrong when calculated by the widget
-        print("Expected weight: \(expectedWeights.last?.double ?? 0)")
-        if expectedWeights.last?.double ?? 300 < 197 {
-            print("Expected weight error")
-        }
         let _ = await n.post(object: dataToSend)
         self.setValuesToSettings(model: dataToSend)
         

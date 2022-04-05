@@ -142,7 +142,7 @@ struct FitnessView: View {
 //                            MileSettings()
 //                                .environmentObject(healthData)
 //                        }
-                    MileTimeStats()
+                    MileTimeStats(runsToShow: $runsToShow)
                         .environmentObject(healthData)
 //                        .padding([.top, .leading, .trailing])
                         .background(Color.myGray)
