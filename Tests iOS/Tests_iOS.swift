@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Fitness
 
 class Tests_iOS: XCTestCase {
 
@@ -29,6 +30,12 @@ class Tests_iOS: XCTestCase {
 
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
+    func testHealth() async throws {
+        let health = HealthData()
+        health.environment = .release
+        await health.setValues(forceLoad: true, nil)
     }
 
     func testLaunchPerformance() throws {

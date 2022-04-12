@@ -155,14 +155,17 @@ struct FitnessView: View {
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
-                    Slider(
-                        value: $runsToShow,
-                        in: 1...Double(healthData.runs.count),
-                        step: 1 //todo this doesnt reach the first point. need to make sure it does
-                    )
-                        .tint(.blue)
-                    Text("past \(Int(runsToShow)) runs")
-                        .foregroundColor(.blue)
+                    if healthData.runs.count > 1 {
+                        Slider(
+                            value: $runsToShow,
+                            in: 1...Double(healthData.runs.count),
+                            step: 1 //todo this doesnt reach the first point. need to make sure it does
+                        )
+                            .tint(.blue)
+                        
+                        Text("past \(Int(runsToShow)) runs")
+                            .foregroundColor(.blue)
+                    }
                 }
             }
             .padding()

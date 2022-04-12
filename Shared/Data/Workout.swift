@@ -158,6 +158,8 @@ class WorkoutInformation: ObservableObject {
                 } catch {
                     print("error failed getting workouts")
                 }
+            } else {
+                print("error failed getting workouts")
             }
         case .debug:
             self.firstBenchORM = 100

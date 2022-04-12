@@ -34,32 +34,34 @@ struct DeficitAndWeightStats: View {
     @Binding var deficitLineGraphDaysToShow: Double
     
     var body: some View {
-    HStack {
-        let expectedWeights = healthData.expectedWeights
-        let weights = healthData.fitness.weights
-        let dateToReach = Date.subtract(days: Int(deficitLineGraphDaysToShow), from: Date())
-        let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
-        let expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
-        let expectedWeightChange = (expectedWeightsFiltered[expectedWeightsFiltered.count - 2]) - (expectedWeightsFiltered.first ?? 0)
-        let weightChange = (weightsFiltered.first ?? 0) - (weightsFiltered.last ?? 0)
-        let expectedWeightString = String(format: "%.2f", expectedWeightChange)
-        let weightString = String(format: "%.2f", weightChange)
-
-        VStack (alignment: .leading) {
-            Text("Expected weight")
-                .foregroundColor(.yellow)
-            Text((expectedWeightChange >= 0 ? "+" : "") + "\(expectedWeightString)")
-                .foregroundColor(.white)
+        HStack {
+            let expectedWeights = healthData.expectedWeights
+            let weights = healthData.fitness.weights
+            let dateToReach = Date.subtract(days: Int(deficitLineGraphDaysToShow), from: Date())
+            let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
+            let expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
+            if expectedWeightsFiltered.count > 1 {
+                let expectedWeightChange = (expectedWeightsFiltered[expectedWeightsFiltered.count - 2]) - (expectedWeightsFiltered.first ?? 0)
+                let weightChange = (weightsFiltered.first ?? 0) - (weightsFiltered.last ?? 0)
+                let expectedWeightString = String(format: "%.2f", expectedWeightChange)
+                let weightString = String(format: "%.2f", weightChange)
+                
+                VStack (alignment: .leading) {
+                    Text("Expected weight")
+                        .foregroundColor(.yellow)
+                    Text((expectedWeightChange >= 0 ? "+" : "") + "\(expectedWeightString)")
+                        .foregroundColor(.white)
+                }
+                .frame(maxWidth: .infinity)
+                VStack (alignment: .leading) {
+                    Text("Weight")
+                        .foregroundColor(.green)
+                    Text((weightChange >= 0 ? "+" : "") + "\(weightString)")
+                        .foregroundColor(.white)
+                }
+                .frame(maxWidth: .infinity)
+            }
         }
-        .frame(maxWidth: .infinity)
-        VStack (alignment: .leading) {
-            Text("Weight")
-                .foregroundColor(.green)
-            Text((weightChange >= 0 ? "+" : "") + "\(weightString)")
-                .foregroundColor(.white)
-        }
-        .frame(maxWidth: .infinity)
-    }
     }
 }
 

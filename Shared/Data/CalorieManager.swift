@@ -19,6 +19,7 @@ class CalorieManager {
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     var minimumActiveCalories: Double = 200
     var minimumRestingCalories: Double = 2150
+    var daysWithTotalDeficits: [Int: Day]? = [:]
     
     //TODO Should this just return weights?
     func getExpectedWeights() async -> [LineGraph.DateAndDouble] {
@@ -44,6 +45,34 @@ class CalorieManager {
         expectedWeights = expectedWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: $0.double)}
         return expectedWeights
     }
+    
+//    func getdaysWithTotalDeficits() async -> [Int: Day] {
+//        let days = await getIndividualStatistics(forPastDays: daysBetweenStartAndNow)
+//    }
+//
+//    func getTotalDeficitByDay(days: [Int:Day]) async -> [Int:Double] {
+//        let deficits = days.mapValues { $0.deficit }
+//        var datesAndValues: [LineGraph.DateAndDouble] = []
+//        for i in 0..<deficits.count {
+//            let dateIndex = deficits.count - 1 - i
+//            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -dateIndex), to: Date())!)
+//            let thisDaysDeficit = deficits[dateIndex] ?? 0
+//            if i == 0 {
+//                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit))
+//            } else {
+//                let previousCumulative = datesAndValues[i-1].double
+//                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit + previousCumulative))
+//            }
+//            if let value = datesAndValues.last {
+//                print("cumulative deficit: \(value)")
+//            } else {
+//                print("cumulative deficit error")
+//            }
+//        }
+//        var expectedWeights: [LineGraph.DateAndDouble] = datesAndValues.map { LineGraph.DateAndDouble(date: $0.date, double: (fitness?.startingWeight ?? 300) - ($0.double / 3500)) }
+//        expectedWeights = expectedWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: $0.double)}
+//        return expectedWeights
+//    }
     
     func setup(fitness: FitnessCalculations, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
@@ -103,8 +132,40 @@ class CalorieManager {
         return [0:0]
     }
     
+    func getEveryDay() async -> [Int:Day] {
+        var dayInformation: [Int:Day] = [:]
+        // todo running total deficit is accumulating backwards
+        for i in stride(from: daysBetweenStartAndNow, through: 0, by: -1) { // todo real active here???????
+            let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
+            let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
+            let realActive = max(self.minimumActiveCalories, active)
+            let realResting = max(self.minimumRestingCalories, resting)
+            
+            let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
+            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
+            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
+            let runningTotalDeficit = i == daysBetweenStartAndNow ? deficit : dayInformation[i+1]!.runningTotalDeficit! + deficit
+            let expectedWeight = (fitness?.startingWeight ?? 0) - (i == daysBetweenStartAndNow ? 0 : (dayInformation[i+1]!.runningTotalDeficit! / 3500)) //todo delete?
+            
+            let day = Day(date: date,
+                          deficit: deficit,
+                          activeCalories: realActive,
+                          restingCalories: realResting,
+                          consumedCalories: eaten,
+                          runningTotalDeficit: runningTotalDeficit,
+            expectedWeight: expectedWeight)
+            dayInformation[i] = day
+            print("day \(i): \(day)")
+            if dayInformation.count == daysBetweenStartAndNow + 1 {
+                return dayInformation
+            }
+        }
+        return [:]
+    }
+    
     func getIndividualStatistics(forPastDays days: Int) async -> [Int:Day] {
         var dayInformation: [Int:Day] = [:]
+        // todo running total deficit is accumulating backwards
         for i in 0...days { // todo real active here???????
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
             let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
@@ -114,7 +175,8 @@ class CalorieManager {
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-            let day = Day(date: date, deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten)
+            let runningTotalDeficit = i == 0 ? deficit : dayInformation[i-1]!.runningTotalDeficit! + deficit // TODO: make sure these deficits are correct
+            let day = Day(date: date, deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten, runningTotalDeficit: runningTotalDeficit)
             dayInformation[i] = day
             print("day \(i): \(day)")
             if dayInformation.count == days + 1 {
