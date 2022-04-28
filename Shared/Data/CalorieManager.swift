@@ -144,8 +144,8 @@ class CalorieManager {
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-            let runningTotalDeficit = i == daysBetweenStartAndNow ? deficit : dayInformation[i+1]!.runningTotalDeficit! + deficit
-            let expectedWeight = (fitness?.startingWeight ?? 0) - (i == daysBetweenStartAndNow ? 0 : (dayInformation[i+1]!.runningTotalDeficit! / 3500)) //todo delete?
+            let runningTotalDeficit = i == daysBetweenStartAndNow ? deficit : dayInformation[i+1]!.runningTotalDeficit + deficit
+            let expectedWeight = (fitness?.startingWeight ?? 0) - (i == daysBetweenStartAndNow ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500)) //todo delete?
             
             let day = Day(date: date,
                           deficit: deficit,
@@ -175,7 +175,7 @@ class CalorieManager {
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-            let runningTotalDeficit = i == 0 ? deficit : dayInformation[i-1]!.runningTotalDeficit! + deficit // TODO: make sure these deficits are correct
+            let runningTotalDeficit = i == 0 ? deficit : dayInformation[i-1]!.runningTotalDeficit + deficit // TODO: make sure these deficits are correct
             let day = Day(date: date, deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten, runningTotalDeficit: runningTotalDeficit)
             dayInformation[i] = day
             print("day \(i): \(day)")
