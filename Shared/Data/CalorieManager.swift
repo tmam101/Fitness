@@ -134,8 +134,7 @@ class CalorieManager {
     
     func getEveryDay() async -> [Int:Day] {
         var dayInformation: [Int:Day] = [:]
-        // todo running total deficit is accumulating backwards
-        for i in stride(from: daysBetweenStartAndNow, through: 0, by: -1) { // todo real active here???????
+        for i in stride(from: daysBetweenStartAndNow, through: 0, by: -1) {
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
             let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
             let realActive = max(self.minimumActiveCalories, active)
@@ -153,7 +152,16 @@ class CalorieManager {
                           restingCalories: realResting,
                           consumedCalories: eaten,
                           runningTotalDeficit: runningTotalDeficit,
-            expectedWeight: expectedWeight)
+                          expectedWeight: expectedWeight)
+            
+            //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
+            if i < daysBetweenStartAndNow - 1 {
+                if dayInformation[i]?.consumedCalories == 0 &&
+                    dayInformation[i+1]?.consumedCalories == 0 &&
+                    dayInformation[i+2]?.consumedCalories == 0 {
+                    return [:]
+                }
+            }
             dayInformation[i] = day
             print("day \(i): \(day)")
             if dayInformation.count == daysBetweenStartAndNow + 1 {

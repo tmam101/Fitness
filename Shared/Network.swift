@@ -46,7 +46,7 @@ class Network {
         }
     }
     
-    func post<T: Codable>(object: T) async -> HealthDataGetRequestModel { // todo change to put
+    func post<T: Codable>(object: T) async -> HealthDataGetRequestModel? { // todo change to put
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else {
                 print("error post url")
@@ -72,13 +72,15 @@ class Network {
                 }
                 if let networkPostResponse = try? JSONDecoder().decode(HealthDataGetRequestModel.self, from: data) {
                     continuation.resume(returning: networkPostResponse)
+                } else {
+                    continuation.resume(returning: nil)
                 }
             })
             task.resume()
         }
     }
     
-    func postWithDays<T: Codable>(object: T) async -> HealthDataGetRequestModelWithDays { // todo change to put
+    func postWithDays<T: Codable>(object: T) async -> HealthDataGetRequestModelWithDays? { // todo change to put
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else {
                 print("error post url")
@@ -105,6 +107,8 @@ class Network {
 //                let y = JSONDecoder().decode(String.self, from: data)
                 if let networkPostResponse = try? JSONDecoder().decode(HealthDataGetRequestModelWithDays.self, from: data) {
                     continuation.resume(returning: networkPostResponse)
+                } else {
+                    continuation.resume(returning: nil)
                 }
             })
             task.resume()

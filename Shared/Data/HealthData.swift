@@ -61,13 +61,13 @@ struct HealthDataGetRequestModel: Codable {
 }
 
 struct HealthDataPostRequestModelWithDays: Codable {
-    var days: [Int: Day] = [:]
+    var days: [Int:Day] = [:]
 }
 
 // MARK: - DataToReceive
 struct HealthDataGetRequestModelWithDays: Codable {
     let id: String
-    let days: [String: DayModel] //TODO: Try this
+    let days: [String: Day] //TODO: Try this
     let createdAt: String
 
     enum CodingKeys: String, CodingKey {
@@ -224,14 +224,20 @@ class HealthData: ObservableObject {
         
         // If we've saved all days' info today, only reload today's data
         var days = self.getDaysFromSettings() ?? [:]
-        let haveLoadedDaysToday = Date.sameDay(date1: Date(), date2: days[0]?.date ?? Date.distantPast)
+        var haveLoadedDaysToday = Date.sameDay(date1: Date(), date2: days[0]?.date ?? Date.distantPast)
+        
+        //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
+        for i in 0..<days.count {
+            if days[i]?.consumedCalories == 0 && i < days.count - 2 {
+                if days[i+1]?.consumedCalories == 0 &&
+                    days[i+2]?.consumedCalories == 0 {
+                    haveLoadedDaysToday = false
+                    break
+                }
+            }
+        }
+        
         if haveLoadedDaysToday && days.count > 5 {
-//            self.days = days TODO: need to save days?
-//            var today = await calorieManager.getIndividualStatistics(forPastDays: 0)
-//            let d = (days[1]?.runningTotalDeficit ?? 0) + (today[0]?.deficit ?? 0)
-//            today[0]?.runningTotalDeficit = d
-//            days[0] = today[0]
-            
             // Reload this week's calories
             var thisWeek = await calorieManager.getIndividualStatistics(forPastDays: 7)
             let earliestDeficit = (days[8]?.runningTotalDeficit ?? 0) + (thisWeek[7]?.deficit ?? 0)
@@ -244,6 +250,7 @@ class HealthData: ObservableObject {
                 days[i] = thisWeek[i]
             }
         } else {
+            // Reload all days if we haven't loaded any days yet today
             days = await calorieManager.getEveryDay()
         }
         
@@ -251,7 +258,7 @@ class HealthData: ObservableObject {
 //            let dataToSend = self.getModel()
             let dataToSend = self.getDaysModel(from: days)
             let n = Network()
-            let r = await n.post(object: dataToSend)
+            let r = await n.postWithDays(object: days)
 //            self.setValuesToSettings(model: dataToSend)
             self.setDaysToSettings(days: days)
         }
