@@ -132,7 +132,55 @@ class CalorieManager {
         return [0:0]
     }
     
-    func getEveryDay() async -> [Int:Day] {
+    private func getDaysFromSettings() -> [Int:Day]? {
+        if let data = Settings.get(key: .days) as? Data {
+            do {
+                let unencoded = try JSONDecoder().decode([Int:Day].self, from: data)
+                return unencoded
+            } catch {
+                print("error getDaysFromSettings")
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    func getDays() async -> [Int:Day] {
+        // If we've saved all days' info today, only reload today's data
+        var days = self.getDaysFromSettings() ?? [:]
+        var haveLoadedDaysToday = Date.sameDay(date1: Date(), date2: days[0]?.date ?? Date.distantPast)
+        
+        // Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
+        for i in 0..<days.count {
+            if days[i]?.consumedCalories == 0 && i < days.count - 2 {
+                if days[i+1]?.consumedCalories == 0 &&
+                    days[i+2]?.consumedCalories == 0 {
+                    haveLoadedDaysToday = false
+                    break
+                }
+            }
+        }
+        
+        if haveLoadedDaysToday && days.count > 5 {
+            // Reload this week's calories
+            var thisWeek = await getIndividualStatistics(forPastDays: 7)
+            let earliestDeficit = (days[8]?.runningTotalDeficit ?? 0) + (thisWeek[7]?.deficit ?? 0)
+            thisWeek[7]?.runningTotalDeficit = earliestDeficit
+            for i in stride(from: 6, through: 0, by: -1) {
+                let deficit = (thisWeek[i+1]?.runningTotalDeficit ?? 0) + (thisWeek[i]?.deficit ?? 0)
+                thisWeek[i]?.runningTotalDeficit = deficit
+            }
+            for i in 0...7 {
+                days[i] = thisWeek[i]
+            }
+        } else {
+            // Reload all days if we haven't loaded any days yet today
+            days = await getEveryDay()
+        }
+        return days
+    }
+    
+    private func getEveryDay() async -> [Int:Day] {
         var dayInformation: [Int:Day] = [:]
         for i in stride(from: daysBetweenStartAndNow, through: 0, by: -1) {
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier

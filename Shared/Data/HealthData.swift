@@ -200,65 +200,25 @@ class HealthData: ObservableObject {
     func setValues(forceLoad: Bool = false, _ completion: ((_ health: HealthData) -> Void)?) async {
         hasLoaded = false
         setupDates()
+        
 #if os(iOS)
-        
         let _ = await getValuesFromSettings()
-        
-        // Fitness
         await fitness.getAllStats()
-        
-        // Runs
         let runManager = RunManager(fitness: self.fitness, startDate: self.startDate ?? Date())
         let runs = await runManager.getRunningWorkouts()
         await setRuns(runs)
-        
-        // Calories
         let calorieManager = CalorieManager()
         self.calorieManager = calorieManager
-        
         await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: forceLoad)
-        // Workouts
         await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
-        
-        // Gather all information from calorie manager
-        
-        // If we've saved all days' info today, only reload today's data
-        var days = self.getDaysFromSettings() ?? [:]
-        var haveLoadedDaysToday = Date.sameDay(date1: Date(), date2: days[0]?.date ?? Date.distantPast)
-        
-        //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
-        for i in 0..<days.count {
-            if days[i]?.consumedCalories == 0 && i < days.count - 2 {
-                if days[i+1]?.consumedCalories == 0 &&
-                    days[i+2]?.consumedCalories == 0 {
-                    haveLoadedDaysToday = false
-                    break
-                }
-            }
-        }
-        
-        if haveLoadedDaysToday && days.count > 5 {
-            // Reload this week's calories
-            var thisWeek = await calorieManager.getIndividualStatistics(forPastDays: 7)
-            let earliestDeficit = (days[8]?.runningTotalDeficit ?? 0) + (thisWeek[7]?.deficit ?? 0)
-            thisWeek[7]?.runningTotalDeficit = earliestDeficit
-            for i in stride(from: 6, through: 0, by: -1) {
-                let deficit = (thisWeek[i+1]?.runningTotalDeficit ?? 0) + (thisWeek[i]?.deficit ?? 0)
-                thisWeek[i]?.runningTotalDeficit = deficit
-            }
-            for i in 0...7 {
-                days[i] = thisWeek[i]
-            }
-        } else {
-            // Reload all days if we haven't loaded any days yet today
-            days = await calorieManager.getEveryDay()
-        }
+        let days = await calorieManager.getDays()
         
         if await self.setValues(from: days) {
+            // TODO: Fix the post
 //            let dataToSend = self.getModel()
-            let dataToSend = self.getDaysModel(from: days)
+            let x = days.filter { $0.key < 31 }
             let n = Network()
-            let r = await n.postWithDays(object: days)
+            let r = await n.postWithDays(object: x) //TODO: days[1] works to send. days.filter { $0.key < 31 } works. We have to limit the size I guess.
 //            self.setValuesToSettings(model: dataToSend)
             self.setDaysToSettings(days: days)
         }
@@ -341,19 +301,6 @@ class HealthData: ObservableObject {
         }
     }
     
-    private func getDaysFromSettings() -> [Int:Day]? {
-        if let data = Settings.get(key: .days) as? Data {
-            do {
-                let unencoded = try JSONDecoder().decode([Int:Day].self, from: data)
-                return unencoded
-            } catch {
-                print("error getDaysFromSettings")
-                return nil
-            }
-        }
-        return nil
-    }
-    
     func setValues(from days: [Int: Day]) async -> Bool {
         return await withUnsafeContinuation { continuation in
             if days.count < 30 { continuation.resume(returning: false) }
@@ -368,7 +315,7 @@ class HealthData: ObservableObject {
             let dailyActiveCalories = daysThisWeek.mapValues{ $0.activeCalories }
             let individualStatistics = daysThisWeek
             let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
-            let expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: fitness.startingWeight - (($0.runningTotalDeficit ?? 0) / 3500)) }.sorted { $0.date < $1.date }
+            let expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: fitness.startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
             DispatchQueue.main.async { [self] in
                 self.deficitsThisWeek = deficitsThisWeek
                 self.dailyActiveCalories = dailyActiveCalories
