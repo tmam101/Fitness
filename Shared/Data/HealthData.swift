@@ -150,17 +150,13 @@ class HealthData: ObservableObject {
             days[day.daysAgo] = day
         }
         
-        //TODO: loading active calories from the watch doesn't work
         if reloadToday {
-//            fitness.authorizeHealthKit { success,error in }
             let calorieManager = CalorieManager()
             self.calorieManager = calorieManager
             await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getIndividualStatistics(forPastDays: 0)[0]!
             today.runningTotalDeficit = days[1]!.runningTotalDeficit + today.deficit
-//            print("active today: \(active)")
             print("today: \(today)")
-//            days[0]!.activeCalories = active
             days[0]! = today
         }
         let _ = await setValues(from: days)
