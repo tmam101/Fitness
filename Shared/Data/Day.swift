@@ -9,7 +9,7 @@ import Foundation
 
 struct Day: Codable {
     var date: Date = Date()
-    var daysAgo: Int = 0
+    var daysAgo: Int = -1
     var deficit: Double = 0
     var activeCalories: Double = 0
     var restingCalories: Double = 0

@@ -35,11 +35,11 @@ class FitnessCalculations: ObservableObject {
     init(environment: AppEnvironmentConfig) {
         self.environment = environment
         switch environment {
-//        case .release:
-//            authorizeHealthKit { _, _ in
-//
-//            }
-//            getAllStats()
+            //        case .release:
+            //            authorizeHealthKit { _, _ in
+            //
+            //            }
+            //            getAllStats()
         case .debug:
             getAllStatsDebug(completion: nil)
         default:
@@ -48,7 +48,9 @@ class FitnessCalculations: ObservableObject {
     }
     
     init() {
-        
+        authorizeHealthKit { _, _ in
+            //
+        }
     }
     
     init(environment: AppEnvironmentConfig, completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
@@ -202,7 +204,7 @@ class FitnessCalculations: ObservableObject {
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
-    private func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
+    func authorizeHealthKit(completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
         if !HKHealthStore.isHealthDataAvailable() {
             return
         }

@@ -36,7 +36,7 @@ class Network {
             
             let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
                 guard error == nil, let data = data else { return }
-                if let dataReceived = try? JSONDecoder().decode(HealthDataGetRequestModelWithDays.self, from: data) {
+                if let dataReceived = try? JSONDecoder().decode(HealthDataGetRequestModelWithDays?.self, from: data) {
                     continuation.resume(returning: dataReceived)
                 } else {
                     continuation.resume(returning: nil)

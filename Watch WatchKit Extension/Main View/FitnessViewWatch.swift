@@ -186,7 +186,7 @@ struct FitnessViewWatch: View {
         .onChange(of: scenePhase) { _ in
             if scenePhase == .background {
                 Task {
-                    await healthData.setValues(nil)
+                    await healthData.setValues(completion: nil)
                 }
             }
         }

@@ -20,7 +20,7 @@ struct NumberInput: View {
                     guard let double = Double(num) else { return }
                     let savedCalories = await healthData.saveCaloriesEaten(calories: double)
                     if savedCalories {
-                        await healthData.setValues(nil)
+                        await healthData.setValues(completion: nil)
                     }
                 }
             }.background(.blue)

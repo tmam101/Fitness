@@ -173,7 +173,7 @@ struct FitnessView: View {
         .onChange(of: scenePhase) { _ in
             if scenePhase == .background {
                 Task {
-                    await healthData.setValues(nil) //todo add force load here?
+                    await healthData.setValues(completion: nil) //todo add force load here?
                 }
             }
         }

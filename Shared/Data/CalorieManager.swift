@@ -145,10 +145,11 @@ class CalorieManager {
         return nil
     }
     
-    func getDays() async -> [Int:Day] {
+    func getDays(forceReload: Bool) async -> [Int:Day] {
         // If we've saved all days' info today, only reload today's data
         var days = self.getDaysFromSettings() ?? [:]
         var haveLoadedDaysToday = Date.sameDay(date1: Date(), date2: days[0]?.date ?? Date.distantPast)
+        if forceReload { haveLoadedDaysToday = false }
         
         // Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
         for i in 0..<days.count {
@@ -195,6 +196,7 @@ class CalorieManager {
             let expectedWeight = (fitness?.startingWeight ?? 0) - (i == daysBetweenStartAndNow ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500)) //todo delete?
             
             let day = Day(date: date,
+                          daysAgo: i,
                           deficit: deficit,
                           activeCalories: realActive,
                           restingCalories: realResting,
@@ -232,7 +234,7 @@ class CalorieManager {
             let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
             let runningTotalDeficit = i == 0 ? deficit : dayInformation[i-1]!.runningTotalDeficit + deficit // TODO: make sure these deficits are correct
-            let day = Day(date: date, deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten, runningTotalDeficit: runningTotalDeficit)
+            let day = Day(date: date, daysAgo: i, deficit: deficit, activeCalories: realActive, restingCalories: realResting, consumedCalories: eaten, runningTotalDeficit: runningTotalDeficit)
             dayInformation[i] = day
             print("day \(i): \(day)")
             if dayInformation.count == days + 1 {
