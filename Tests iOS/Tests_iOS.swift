@@ -32,11 +32,11 @@ class Tests_iOS: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-    func testHealth() async throws {
-        let health = HealthData()
-        health.environment = .release
-        await health.setValues(forceLoad: true, nil)
-    }
+//    func testHealth() async throws {
+//        let health = HealthData()
+//        health.environment = .release
+//        await health.setValues(forceLoad: true, nil)
+//    }
 
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {

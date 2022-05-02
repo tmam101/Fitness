@@ -156,8 +156,9 @@ class CalorieManager {
             if days[i]?.consumedCalories == 0 && i < days.count - 2 {
                 if days[i+1]?.consumedCalories == 0 &&
                     days[i+2]?.consumedCalories == 0 {
-                    haveLoadedDaysToday = false
-                    break
+//                    haveLoadedDaysToday = false
+//                    break
+                    return [:]
                 }
             }
         }

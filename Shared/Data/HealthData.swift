@@ -116,7 +116,10 @@ class HealthData: ObservableObject {
             await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: forceLoad)
             await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
             let days = await calorieManager.getDays(forceReload: false)
-            
+            guard !days.isEmpty else {
+                completion?(self)
+                return
+            }
             if await self.setValues(from: days) {
                 // Post the last thirty days. Larger amounts seem to be too much for the network.
                 let daysToRetrieve = 31
@@ -124,6 +127,7 @@ class HealthData: ObservableObject {
                 let _ = await network.postWithDays(object: model)
                 self.setDaysToSettings(days: days)
             }
+            completion?(self)
             
 #endif
 #if os(watchOS)
@@ -140,6 +144,7 @@ class HealthData: ObservableObject {
 #endif
         case .debug:
             await self.setValuesFromNetworkWithDays()
+            completion?(self)
         }
     }
     

@@ -10,7 +10,7 @@ import SwiftUI
 import HealthKit
 
 struct Provider: TimelineProvider {
-    var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.release)
+    var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.debug)
     
     func placeholder(in context: Context) -> SimpleEntry {
         return SimpleEntry(date: Date(), healthData: healthData)

@@ -8,6 +8,33 @@
 import Foundation
 import SwiftUI
 
+struct TodayRing: View {
+    @EnvironmentObject var healthData: HealthData
+    var lineWidth: CGFloat = 10
+    
+    var body: some View {
+        let paddingSize = lineWidth + 2
+        
+        ZStack() {
+            Text("\(Int(healthData.deficitToday))")
+                .foregroundColor(.white)
+            MonthlyDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthData)
+                .padding(paddingSize)
+            WeeklyAverageDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthData)
+                .padding(paddingSize)
+                .padding(paddingSize)
+            DailyDeficitCircle(lineWidth: lineWidth)
+                .environmentObject(healthData)
+                .padding(paddingSize)
+                .padding(paddingSize)
+                .padding(paddingSize)
+
+        }
+    }
+}
+
 struct DeficitRings: View {
     @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10
@@ -117,5 +144,18 @@ struct AllRings: View {
                 .padding(paddingSize)
                 .padding(paddingSize)
         }
+    }
+}
+
+struct RingCollections_Previews: PreviewProvider {
+    static var previews: some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            
+            TodayRing()
+                .environmentObject(HealthData(environment: .debug))
+        }
+        .previewDevice(PreviewDevice(rawValue: "Apple Watch Series 7 - 45 mm"))
+
     }
 }
