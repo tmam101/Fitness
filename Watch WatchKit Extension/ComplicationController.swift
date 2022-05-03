@@ -92,7 +92,11 @@ extension ComplicationController {
 //        )
     case .graphicCircular:
         return CLKComplicationTemplateGraphicCircularView(
-            DeficitRings(lineWidth: 5)
+//            DeficitRings(lineWidth: 5)
+//                .environmentObject(healthData)
+//            TodayRing(lineWidth: 5)
+//                .environmentObject(healthData)
+            TodayRingWithMonthly(lineWidth: 5)
                 .environmentObject(healthData)
         )
     case .graphicRectangular, .modularLarge, .modularSmall, .graphicExtraLarge:

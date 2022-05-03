@@ -156,9 +156,8 @@ class CalorieManager {
             if days[i]?.consumedCalories == 0 && i < days.count - 2 {
                 if days[i+1]?.consumedCalories == 0 &&
                     days[i+2]?.consumedCalories == 0 {
-//                    haveLoadedDaysToday = false
-//                    break
-                    return [:]
+                    haveLoadedDaysToday = false
+                    break
                 }
             }
         }
@@ -178,6 +177,17 @@ class CalorieManager {
         } else {
             // Reload all days if we haven't loaded any days yet today
             days = await getEveryDay()
+        }
+        // Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
+        for i in 0..<days.count {
+            if days[i]?.consumedCalories == 0 && i < days.count - 2 {
+                if days[i+1]?.consumedCalories == 0 &&
+                    days[i+2]?.consumedCalories == 0 {
+//                    haveLoadedDaysToday = false
+//                    break
+                    return [:]
+                }
+            }
         }
         return days
     }

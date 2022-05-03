@@ -42,6 +42,28 @@ struct WeeklyAverageDeficitCircle: View {
     }
 }
 
+struct TodayCircle: View {
+    @EnvironmentObject var healthData: HealthData
+    var lineWidth: CGFloat = 10
+    var color = Color.yellow
+    
+    var body: some View {
+        let deficit = healthData.deficitToday
+        let active = healthData.days[0]?.activeCalories ?? 200
+        let percentActive: CGFloat = CGFloat(active / deficit)
+        let idealDeficit = healthData.deficitToGetCorrectDeficit
+        let unadjustedPercent: CGFloat = CGFloat((deficit / (idealDeficit == 0 ? 1 : idealDeficit)))
+        let percent = unadjustedPercent > 1 ? 1 : unadjustedPercent
+        let percentOverGoal = idealDeficit / deficit
+        BackgroundCircle(color: color, lineWidth: lineWidth)
+        GenericCircle(color: color, starting: 0.0, ending: percent, opacity: 1, lineWidth: lineWidth)
+        GenericCircle(color: .orange, starting: percent - percentActive, ending: percent, opacity: 1, lineWidth: lineWidth)
+//        if percentOverGoal < 1 {
+//            GenericCircle(color: .gray, starting: percentOverGoal - 0.005, ending: percentOverGoal + 0.005, opacity: 1, lineWidth: lineWidth + 2)
+//        }
+    }
+}
+
 struct DailyDeficitCircle: View {
     @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10

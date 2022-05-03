@@ -244,6 +244,7 @@ class HealthData: ObservableObject {
                 self.dailyActiveCalories = dailyActiveCalories
                 self.deficitToday = deficitToday
                 self.deficitToGetCorrectDeficit = 1000 //todo
+                self.days = days
                 self.averageDeficitThisWeek = averageDeficitThisWeek
                 self.percentWeeklyDeficit = percentWeeklyDeficit
                 self.averageDeficitThisMonth = averageDeficitThisMonth

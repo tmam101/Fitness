@@ -48,9 +48,9 @@ class FitnessCalculations: ObservableObject {
     }
     
     init() {
-        authorizeHealthKit { _, _ in
-            //
-        }
+//        authorizeHealthKit { _, _ in
+//            //
+//        }
     }
     
     init(environment: AppEnvironmentConfig, completion: @escaping((_ fitness: FitnessCalculations) -> Void)) {
