@@ -22,7 +22,6 @@ class HealthData: ObservableObject {
     //MARK: PROPERTIES
     var environment: AppEnvironmentConfig = .debug
 #if !os(macOS)
-    private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     private var calorieManager: CalorieManager?
     private let network = Network()
@@ -30,6 +29,8 @@ class HealthData: ObservableObject {
     @Published public var fitness = FitnessCalculations()
     
     // Deficits
+//    @State var watchConnectivityIphone = WatchConnectivityIphone()
+
     @Published public var days: [Int:Day] = [:]
     @Published public var deficitToday: Double = 0
     @Published public var averageDeficitThisWeek: Double = 0
@@ -102,10 +103,16 @@ class HealthData: ObservableObject {
     func setValues(forceLoad: Bool = false, completion: ((_ health: HealthData) -> Void)?) async {
         hasLoaded = false
         setupDates()
+//        watchConnectivityIphone = WatchConnectivityIphone()
         
         switch self.environment {
         case .release:
 #if os(iOS)
+//            WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in
+//                print("watch connectivity iphone received \(response)")
+//            }, errorHandler: { error in
+//                print("watch connectivity iphone error \(error)")
+//            })
             let _ = await getValuesFromSettings()
             await fitness.getAllStats()
             let runManager = RunManager(fitness: self.fitness, startDate: self.startDate ?? Date())

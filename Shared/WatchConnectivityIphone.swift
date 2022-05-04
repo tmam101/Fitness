@@ -20,8 +20,14 @@ class WatchConnectivityIphone: NSObject, WCSessionDelegate, ObservableObject {
         session.activate()
     }
     
+        
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         print("watch connectivity iphone activationDidComplete")
+        session.sendMessage(["started":"absolutely"], replyHandler: { response in
+            print("watch connectivity iphone received \(response)")
+        }, errorHandler: { error in
+            print("watch connectivity iphone error \(error)")
+        })
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {

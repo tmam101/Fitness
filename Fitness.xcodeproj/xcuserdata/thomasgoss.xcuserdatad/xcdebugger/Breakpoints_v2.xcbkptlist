@@ -30,8 +30,8 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
             landmarkName = "setValuesFromNetworkWithDays(reloadToday:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -72,14 +72,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "73F533F2-CC88-483C-9720-5428882B93E6"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "setValues(forceLoad:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,13 +94,13 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "setValuesFromNetworkWithDays(reloadToday:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "E1F55653-5EE9-4F0E-9935-555C5CC8DDAA - a956e115f9eeb78e"
+                  uuid = "E1F55653-5EE9-4F0E-9935-555C5CC8DDAA - a956e115f9eeb4e7"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -110,12 +110,12 @@
                   urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/HealthData.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "167"
-                  endingLineNumber = "167"
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
                   offsetFromSymbolStart = "1128">
                </Location>
                <Location
-                  uuid = "E1F55653-5EE9-4F0E-9935-555C5CC8DDAA - e3274a3a9bc9eb8c"
+                  uuid = "E1F55653-5EE9-4F0E-9935-555C5CC8DDAA - e3274a3a9bc9e8e5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -125,8 +125,8 @@
                   urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/HealthData.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "167"
-                  endingLineNumber = "167"
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
                   offsetFromSymbolStart = "1940">
                </Location>
             </Locations>
@@ -136,16 +136,32 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "26157577-C651-47BC-91A5-6BDC065C372D"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "setValues(forceLoad:completion:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "96FEFB6D-EC2D-48FD-83FB-748B6FD9DBC1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Main View/FitnessApp.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

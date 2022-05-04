@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import WatchConnectivity
 
 @main
 struct FitnessApp: App {
     @State var healthData = HealthData(environment: AppEnvironmentConfig.release)
     @State var watchConnectivityIphone = WatchConnectivityIphone()
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some Scene {
         WindowGroup {
 //            AppView()
@@ -19,6 +22,17 @@ struct FitnessApp: App {
             AppView()
                 .environmentObject(healthData)
 //                .environmentObject(WatchConnectivityIphone())
+        }.onChange(of: scenePhase) { _ in
+            if scenePhase == .background {
+                Task {
+                    WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in
+                        print("watch connectivity iphone received \(response)")
+                    }, errorHandler: { error in
+                        print("watch connectivity iphone error \(error)")
+                    })
+//                    watchConnectivityIphone = WatchConnectivityIphone()
+                }
+            }
         }
     }
 }

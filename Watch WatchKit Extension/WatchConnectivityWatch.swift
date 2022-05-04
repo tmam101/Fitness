@@ -32,24 +32,29 @@ class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
-        replyHandler(["watch connectivity: watch sending this" : message])
-        
-        print("watch connectivity: watchOS has received a message")
-        
-        // Receive health data from iOS
-        let data = message["healthData"]
-        UserDefaults.standard.set(data, forKey: "healthData")
-        guard let unencoded = try? JSONDecoder().decode(HealthDataPostRequestModel.self, from: data as! Data) else { return }
-        
-        print("watch connectivity unencoded \(unencoded)")
-        print("watch connectivity deficit today \(unencoded.deficitToday)")
-        
-        // Set health data, refresh complication
-        self.healthData?.setValues(from: unencoded)
+//        replyHandler(["watch connectivity: watch sending this" : message])
+//
+//        print("watch connectivity: watchOS has received a message")
+//
+//        // Receive health data from iOS
+//        let data = message["healthData"]
+//        UserDefaults.standard.set(data, forKey: "healthData")
+//        guard let unencoded = try? JSONDecoder().decode(HealthDataPostRequestModel.self, from: data as! Data) else { return }
+//
+//        print("watch connectivity unencoded \(unencoded)")
+//        print("watch connectivity deficit today \(unencoded.deficitToday)")
+//
+//        // Set health data, refresh complication
+//        self.healthData?.setValues(from: unencoded)
+//        let server = CLKComplicationServer.sharedInstance()
+//        server.activeComplications?.forEach { complication in
+//            server.reloadTimeline(for: complication)
+//        }
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach { complication in
             server.reloadTimeline(for: complication)
         }
+        replyHandler(["watch connectivity watch received": "yes"])
     }
     
     func requestHealthData() {

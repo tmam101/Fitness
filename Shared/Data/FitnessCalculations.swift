@@ -12,6 +12,7 @@ import HealthKit
 #if !os(watchOS)
 import WidgetKit
 #endif
+import ClockKit
 
 class FitnessCalculations: ObservableObject {
     var environment: AppEnvironmentConfig?
@@ -57,6 +58,7 @@ class FitnessCalculations: ObservableObject {
         self.environment = environment
         switch environment {
         case .release:
+            observeCalories()
             getAllStats(completion: completion)
         case .debug:
             getAllStatsDebug(completion: completion)
@@ -225,6 +227,39 @@ class FitnessCalculations: ObservableObject {
         }
 
     }
+    
+    private func observeCalories() {
+#if os(watchOS)
+        // Create the calorie type.
+        let calorie = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
+
+        // Set up the background delivery rate.
+        healthStore.enableBackgroundDelivery(for: calorie,
+                                          frequency: .immediate) { success, error in
+            if !success {
+                print("Unable to set up background delivery from HealthKit: \(error!.localizedDescription)")
+            } else {
+                print("observing calories")
+            }
+        }
+        // Set up the observer query.
+        let backgroundObserver =
+        HKObserverQuery(sampleType: calorie, predicate: nil)
+        { (query: HKObserverQuery, completionHandler: @escaping () -> Void, error: Error?) in
+            // Query for actual updates here.
+            // When you're done processing the changes, be sure to call the completion handler.
+            let server = CLKComplicationServer.sharedInstance()
+            server.activeComplications?.forEach { complication in
+                server.reloadTimeline(for: complication)
+            }
+            completionHandler()
+        }
+        
+        // If you successfully created the query,  execute it.
+        healthStore.execute(backgroundObserver)
+#endif
+    }
+    
     //returns the weight entry in pounds or nil if no data
     private func bodyMass(completion: @escaping ((_ bodyMass: Double?, _ date: Date?) -> Void)) {
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
