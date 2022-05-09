@@ -67,7 +67,7 @@ class HealthData: ObservableObject {
     @Published public var expectedWeights: [LineGraph.DateAndDouble] = []
     
     // Constants
-    let goalDeficit: Double = 1000
+    @State var goalDeficit: Double = 500
     let goalEaten: Double = 1500
     let caloriesInPound: Double = 3500
     var startDateString = "01.23.2021"
@@ -120,7 +120,7 @@ class HealthData: ObservableObject {
             await setRuns(runs)
             let calorieManager = CalorieManager()
             self.calorieManager = calorieManager
-            await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: forceLoad)
+            await calorieManager.setup(goalDeficit: goalDeficit, fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: forceLoad)
             await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
             let days = await calorieManager.getDays(forceReload: false)
             guard !days.isEmpty else {
@@ -165,7 +165,7 @@ class HealthData: ObservableObject {
         if reloadToday {
             let calorieManager = CalorieManager()
             self.calorieManager = calorieManager
-            await calorieManager.setup(fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(goalDeficit: goalDeficit, fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getIndividualStatistics(forPastDays: 0)[0]!
             today.runningTotalDeficit = days[1]!.runningTotalDeficit + today.deficit
             print("today: \(today)")
@@ -250,7 +250,7 @@ class HealthData: ObservableObject {
                 self.deficitsThisWeek = deficitsThisWeek
                 self.dailyActiveCalories = dailyActiveCalories
                 self.deficitToday = deficitToday
-                self.deficitToGetCorrectDeficit = 1000 //todo
+                self.deficitToGetCorrectDeficit = self.goalDeficit //todo
                 self.days = days
                 self.averageDeficitThisWeek = averageDeficitThisWeek
                 self.percentWeeklyDeficit = percentWeeklyDeficit

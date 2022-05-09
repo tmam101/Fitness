@@ -14,11 +14,12 @@ struct GenericCircle: View {
     var ending: CGFloat
     var opacity: Double
     var lineWidth: CGFloat = 10.0
+    var lineCap: CGLineCap = .round
     
     var body: some View {
         Circle()
             .trim(from: starting, to: ending)
-            .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
+            .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: lineCap, lineJoin: .round))
             .foregroundColor(color.opacity(opacity))
             .rotationEffect(Angle(degrees: 270.0))
             .animation(.easeOut(duration: 1), value: ending)

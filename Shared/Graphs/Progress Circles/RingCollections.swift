@@ -50,7 +50,7 @@ struct TodayRing: View {
             VStack {
             Text("\(Int(healthData.deficitToday))")
                 .foregroundColor(.white)
-                .font(.system(size: 12))
+                .font(.system(size: 11))
             }
             TodayCircle(lineWidth: lineWidth)
                 .environmentObject(healthData)
@@ -63,7 +63,7 @@ struct TodayRing: View {
 struct DeficitRings: View {
     @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10
-    
+    var useNewDailyCircle = false
     var body: some View {
         let paddingSize = lineWidth + 2
         ZStack() {
@@ -74,11 +74,18 @@ struct DeficitRings: View {
                 .environmentObject(healthData)
                 .padding(paddingSize)
                 .padding(paddingSize)
-            DailyDeficitCircle(lineWidth: lineWidth)
-                .environmentObject(healthData)
-                .padding(paddingSize)
-                .padding(paddingSize)
-                .padding(paddingSize)
+            if useNewDailyCircle {
+                TodayRing().environmentObject(healthData)
+                    .padding(paddingSize)
+                    .padding(paddingSize)
+                    .padding(paddingSize)
+            } else {
+                DailyDeficitCircle(lineWidth: lineWidth)
+                    .environmentObject(healthData)
+                    .padding(paddingSize)
+                    .padding(paddingSize)
+                    .padding(paddingSize)
+            }
         }
     }
 }

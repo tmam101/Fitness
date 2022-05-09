@@ -19,7 +19,33 @@ class CalorieManager {
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     var minimumActiveCalories: Double = 200
     var minimumRestingCalories: Double = 2150
+    var goalDeficit: Double = 1000
     var daysWithTotalDeficits: [Int: Day]? = [:]
+    
+    func setup(goalDeficit: Double, fitness: FitnessCalculations, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+        if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
+            self.minimumRestingCalories = r
+        }
+        if let active = Settings.get(key: .active) as? Double {
+            self.minimumActiveCalories = active
+        }
+        if let useActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool {
+            self.adjustActiveCalorieModifier = useActiveCalorieModifier
+        }
+        self.fitness = fitness
+        self.goalDeficit = goalDeficit
+        self.daysBetweenStartAndNow = daysBetweenStartAndNow
+        if adjustActiveCalorieModifier {
+            await setActiveCalorieModifier(1)
+//            let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
+//            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
+            let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
+            let startingWeight = fitness.weight(at: startDate)
+            let weightLost = startingWeight - (fitness.weights.first?.weight ?? 0)
+            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: forceLoad)
+            await setActiveCalorieModifier(activeCalorieModifier)
+        }
+    }
     
     //TODO Should this just return weights?
     func getExpectedWeights() async -> [LineGraph.DateAndDouble] {
@@ -73,30 +99,6 @@ class CalorieManager {
 //        expectedWeights = expectedWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: $0.double)}
 //        return expectedWeights
 //    }
-    
-    func setup(fitness: FitnessCalculations, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
-        if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
-            self.minimumRestingCalories = r
-        }
-        if let active = Settings.get(key: .active) as? Double {
-            self.minimumActiveCalories = active
-        }
-        if let useActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool {
-            self.adjustActiveCalorieModifier = useActiveCalorieModifier
-        }
-        self.fitness = fitness
-        self.daysBetweenStartAndNow = daysBetweenStartAndNow
-        if adjustActiveCalorieModifier {
-            await setActiveCalorieModifier(1)
-//            let tempAverageDeficitSinceStart = await getAverageDeficit(forPast: self.daysBetweenStartAndNow)
-//            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: fitness.weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, averageDeficitSinceStart: tempAverageDeficitSinceStart ?? 0.0)
-            let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
-            let startingWeight = fitness.weight(at: startDate)
-            let weightLost = startingWeight - (fitness.weights.first?.weight ?? 0)
-            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: forceLoad)
-            await setActiveCalorieModifier(activeCalorieModifier)
-        }
-    }
    
     func setActiveCalorieModifier(_ modifier: Double) async {
         return await withUnsafeContinuation { continuation in
@@ -419,7 +421,7 @@ class CalorieManager {
     
     func getDeficitToReachIdeal() async -> Double? {
         let averageDeficitForPast6Days = await getAverageDeficit(forPast: 6)
-        let plan = (1000*7) - ((averageDeficitForPast6Days ?? 1) * 6)
+        let plan = (goalDeficit*7) - ((averageDeficitForPast6Days ?? 1) * 6)
         return plan
     }
     

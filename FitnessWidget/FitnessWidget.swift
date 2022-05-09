@@ -60,7 +60,7 @@ struct FitnessWidgetEntryView : View {
                     case WidgetFamily.systemMedium:
                         HStack {
                             VStack {
-                                DeficitRings()
+                                DeficitRings(useNewDailyCircle: true)
                                     .environmentObject(entry.healthData)
                                     .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                                     .frame(maxWidth: 125)
@@ -78,7 +78,7 @@ struct FitnessWidgetEntryView : View {
                         
                     default:
                         VStack {
-                        DeficitRings()
+                            DeficitRings(useNewDailyCircle: true)
                             .environmentObject(entry.healthData)
                             .padding([.top, .leading, .trailing])
                             Text("Last updated \(hour):\(minuteString)")

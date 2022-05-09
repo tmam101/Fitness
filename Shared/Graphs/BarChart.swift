@@ -183,10 +183,10 @@ struct BarChart: View {
         var isComplication = false
         
         var body: some View {
-            let results = BarChart.deficitsToPercents(daysAndDeficits: healthData.deficitsThisWeek)
+            let results = BarChart.deficitsToPercents(goalDeficit: healthData.goalDeficit, daysAndDeficits: healthData.deficitsThisWeek)
             let percents = results.0
             let top = results.1
-            let horizontalRatio = top / 1000
+            let horizontalRatio = top / healthData.goalDeficit
             let avgRatio = top / (healthData.averageDeficitThisWeek == 0 ? 1 : healthData.averageDeficitThisWeek)
                         
 //            let tmrwRatio = top / (healthData.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthData.projectedAverageWeeklyDeficitForTomorrow)
@@ -233,7 +233,7 @@ struct BarChart: View {
                             .offset(x: 0.0, y: heightOffset - 2.5)
                             .foregroundColor(.white)
                             .opacity(0.5)
-                        Text("1000")
+                        Text("\(Int(healthData.goalDeficit))")
                             .font(.system(size: 8))
                             .frame(maxWidth: 50)
                             .position(x: geometry.size.width - 20, y: 0.0)
@@ -307,7 +307,7 @@ struct BarChart: View {
     }
     
     // Here, I need to know the date of each, so that I can get the active calories burned and
-    static func deficitsToPercents(daysAndDeficits: [Int:Double]) -> ([IndexAndPercent]?, Double) {
+    static func deficitsToPercents(goalDeficit: Double, daysAndDeficits: [Int:Double]) -> ([IndexAndPercent]?, Double) {
         // I think I'm ordering these because they come in backwards by default?
         var orderedDeficits: [Double] = []
         if daysAndDeficits.count > 0 {
@@ -318,7 +318,7 @@ struct BarChart: View {
         // Get the top deficit, and account for if its a surplus
         guard var topDeficit = orderedDeficits.max() else { return (nil, 0) }
         topDeficit = max(orderedDeficits.max() ?? 0, abs(orderedDeficits.min() ?? 0))
-        topDeficit = topDeficit >= 1000 ? topDeficit : 1000
+        topDeficit = topDeficit >= goalDeficit ? topDeficit : goalDeficit
         // Size the rest in relation to the top deficit
         let percents = orderedDeficits.map { CGFloat($0 / topDeficit) }
         var indicesAndPercents: [IndexAndPercent]? = []
