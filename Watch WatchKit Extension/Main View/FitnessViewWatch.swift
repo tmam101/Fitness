@@ -29,6 +29,16 @@ struct DeficitsView: View {
     }
 }
 
+struct Rings: View {
+    @EnvironmentObject var healthData: HealthData
+
+    var body: some View {
+        TodayRingWithMonthly()
+            .environmentObject(healthData)
+            .padding()
+    }
+}
+
 struct FitnessViewWatch: View {
     @EnvironmentObject var healthData: HealthData
 //    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
@@ -47,18 +57,10 @@ struct FitnessViewWatch: View {
         ScrollView {
             VStack(alignment: .leading) {
                 let sectionHeight: CGFloat = 75
-                
-                // Add calories eaten
-//                    NavigationLink(destination: {
-//                        NumberInput()
-//                            .environmentObject(healthData)
-//                    }) {
-//                        Text("Add calories eaten")
-//                    }
                 Group {
                     StatsTitle(title: "Deficits")
-                    DeficitsView()
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
+                    Rings()
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 150)
                         .environmentObject(healthData)
                         .background(Color.myGray)
                         .cornerRadius(20)
@@ -109,42 +111,6 @@ struct FitnessViewWatch: View {
                     .tint(.green)
                 Text("past \(Int(deficitLineGraphDaysToShow)) days")
                     .foregroundColor(.green)
-//                Group {
-//                    StatsTitle(title: "Weight Loss")
-//                    StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
-//                        .environmentObject(healthData)
-//                        .frame(minWidth: 0, maxWidth: .infinity)
-//                        .onTapGesture {
-//                            Task {
-//                                healthData.activeCalorieModifier = 0.8
-//                                healthData.adjustActiveCalorieModifier.toggle()
-//                                await healthData.setValues(nil)
-//                            }
-//                        }
-//                }
-//                Group {
-//                    StatsTitle(title: "Lifts")
-//                    StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-//                        .environmentObject(healthData)
-//                        .frame(minWidth: 0, maxWidth: .infinity)
-//                        .onTapGesture {
-//                            healthData.workouts.smithMachine.toggle()
-//                            healthData.workouts.calculate()
-//                        }
-//                }
-//                ZStack {
-//                    BenchGraph()
-//                        .environmentObject(healthData.workouts)
-//                        .environmentObject(healthData.fitness)
-//                        .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
-//                        .padding()
-//                        .background(Color.myGray)
-//                        .cornerRadius(20)
-//                    SquatGraph()
-//                        .environmentObject(healthData.workouts)
-//                        .environmentObject(healthData.fitness)
-//                        .padding()
-//                }
                 Group {
                     StatsTitle(title: "Mile Time")
                         .onTapGesture {

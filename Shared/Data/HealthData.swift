@@ -108,11 +108,6 @@ class HealthData: ObservableObject {
         switch self.environment {
         case .release:
 #if os(iOS)
-//            WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in
-//                print("watch connectivity iphone received \(response)")
-//            }, errorHandler: { error in
-//                print("watch connectivity iphone error \(error)")
-//            })
             let _ = await getValuesFromSettings()
             await fitness.getAllStats()
             let runManager = RunManager(fitness: self.fitness, startDate: self.startDate ?? Date())
@@ -120,9 +115,11 @@ class HealthData: ObservableObject {
             await setRuns(runs)
             let calorieManager = CalorieManager()
             self.calorieManager = calorieManager
-            await calorieManager.setup(goalDeficit: goalDeficit, fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: forceLoad)
+//            let reload = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? false
+//            calorieManager.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? false
+            await calorieManager.setup(goalDeficit: goalDeficit, fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
-            let days = await calorieManager.getDays(forceReload: false)
+            let days = await calorieManager.getDays(forceReload: true)
             guard !days.isEmpty else {
                 completion?(self)
                 return
@@ -166,7 +163,7 @@ class HealthData: ObservableObject {
             let calorieManager = CalorieManager()
             self.calorieManager = calorieManager
             await calorieManager.setup(goalDeficit: goalDeficit, fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
-            var today = await calorieManager.getIndividualStatistics(forPastDays: 0)[0]!
+            var today = await calorieManager.getDays(forPastDays: 0)[0]!
             today.runningTotalDeficit = days[1]!.runningTotalDeficit + today.deficit
             print("today: \(today)")
             days[0]! = today

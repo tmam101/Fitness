@@ -30,8 +30,8 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
             landmarkName = "setValuesFromNetworkWithDays(reloadToday:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,58 +78,10 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
             landmarkName = "setValues(forceLoad:completion:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E1F55653-5EE9-4F0E-9935-555C5CC8DDAA"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Data/HealthData.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "setValuesFromNetworkWithDays(reloadToday:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E1F55653-5EE9-4F0E-9935-555C5CC8DDAA - a956e115f9eeb4e7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) await resume partial function for Fitness.HealthData.setValuesFromNetworkWithDays(reloadToday: Swift.Bool) async -&gt; ()"
-                  moduleName = "Fitness"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "1128">
-               </Location>
-               <Location
-                  uuid = "E1F55653-5EE9-4F0E-9935-555C5CC8DDAA - e3274a3a9bc9e8e5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) await resume partial function for Fitness.HealthData.setValuesFromNetworkWithDays(reloadToday: Swift.Bool) async -&gt; ()"
-                  moduleName = "Fitness"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "1940">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -142,8 +94,8 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "setValues(forceLoad:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -162,6 +114,54 @@
             endingLineNumber = "33"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AFA6A343-4CF4-4592-BD4E-D7D2B4C4B1AE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Data/CalorieManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "setup(goalDeficit:fitness:daysBetweenStartAndNow:forceLoad:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AFA6A343-4CF4-4592-BD4E-D7D2B4C4B1AE - f67963b46ae8fcbc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for Fitness.CalorieManager.setup(goalDeficit: Swift.Double, fitness: Fitness.FitnessCalculations, daysBetweenStartAndNow: Swift.Int, forceLoad: Swift.Bool) async -&gt; ()"
+                  moduleName = "Fitness"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "100">
+               </Location>
+               <Location
+                  uuid = "AFA6A343-4CF4-4592-BD4E-D7D2B4C4B1AE - 5559dcd85d3b9cbf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) await resume partial function for Fitness.CalorieManager.setup(goalDeficit: Swift.Double, fitness: Fitness.FitnessCalculations, daysBetweenStartAndNow: Swift.Int, forceLoad: Swift.Bool) async -&gt; ()"
+                  moduleName = "Fitness"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Desktop/Personal/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "148">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
