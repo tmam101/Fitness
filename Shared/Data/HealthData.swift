@@ -119,7 +119,7 @@ class HealthData: ObservableObject {
 //            calorieManager.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? false
             await calorieManager.setup(goalDeficit: goalDeficit, fitness: self.fitness, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             await self.setWorkouts(WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release))
-            let days = await calorieManager.getDays(forceReload: true)
+            let days = await calorieManager.getDays()
             guard !days.isEmpty else {
                 completion?(self)
                 return
@@ -129,7 +129,7 @@ class HealthData: ObservableObject {
                 let daysToRetrieve = 31
                 let model = getDaysModel(from: days.filter { $0.key <= daysToRetrieve })
                 let _ = await network.postWithDays(object: model)
-                self.setDaysToSettings(days: days)
+//                self.setDaysToSettings(days: days)
             }
             completion?(self)
             
@@ -217,15 +217,6 @@ class HealthData: ObservableObject {
             let encodedData = try JSONEncoder().encode(model)
             Settings.set(key: .healthData, value: encodedData)
         } catch { }
-    }
-    
-    private func setDaysToSettings(days: [Int:Day]) {
-        do {
-            let encodedData = try JSONEncoder().encode(days)
-            Settings.set(key: .days, value: encodedData)
-        } catch {
-            print("error setDaysToSettings")
-        }
     }
     
     func setValues(from days: [Int: Day]) async -> Bool {
