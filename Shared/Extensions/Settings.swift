@@ -7,6 +7,7 @@
 
 import Foundation
 
+//TODO Send this to backend so watch or widget can access
 struct Settings {
     enum UserDefaultsKey: String {
         case resting
@@ -18,6 +19,7 @@ struct Settings {
         case healthData
         case useActiveCalorieModifier
         case days
+        case activeCalorieModifier
     }
     static func set(key: UserDefaultsKey, value: Any) {
         UserDefaults.standard.set(value, forKey: key.rawValue)

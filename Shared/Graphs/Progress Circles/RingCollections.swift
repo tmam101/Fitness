@@ -17,10 +17,14 @@ struct TodayRingWithMonthly: View {
         
         ZStack() {
             VStack {
-            Text("\(Int(healthData.deficitToday))")
-                .foregroundColor(.white)
-                .font(.system(size: 10))
-                .fontWeight(.bold)
+                Text("\(Int(healthData.deficitToday))")
+                    .foregroundColor(.white)
+                    .font(.system(size: 9))
+                    .fontWeight(.bold)
+                Text("\(Int(healthData.days[0]?.realActiveCalories ?? 200))")
+                    .foregroundColor(.orange)
+                    .font(.system(size: 8))
+                    .fontWeight(.bold)
             }
             MonthlyDeficitCircle(lineWidth: lineWidth / 2)
                 .environmentObject(healthData)

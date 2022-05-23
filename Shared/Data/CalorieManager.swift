@@ -39,14 +39,6 @@ class CalorieManager {
         self.fitness = fitness
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
-//        if adjustActiveCalorieModifier {
-//            await setActiveCalorieModifier(1)
-//            let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
-//            let startingWeight = fitness.weight(at: startDate)
-//            let weightLost = startingWeight - (fitness.weights.first?.weight ?? 0)
-//            let activeCalorieModifier = await getActiveCalorieModifier(weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: forceLoad)
-//            await setActiveCalorieModifier(activeCalorieModifier)
-//        }
     }
     
     //MARK: EXPECTED WEIGHTS
@@ -98,6 +90,7 @@ class CalorieManager {
             let startingWeight = fitness?.weight(at: startDate) ?? 0
             let weightLost = startingWeight - (fitness?.weights.first?.weight ?? 0)
             let activeCalorieModifier = await getActiveCalorieModifier(days: days, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: false)
+            Settings.set(key: .activeCalorieModifier, value: activeCalorieModifier)
             for i in stride(from: days.count - 1, through: 0, by: -1) {
                 let newActive = (days[i]?.activeCalories ?? 0) * activeCalorieModifier
                 let difference = (days[i]?.activeCalories ?? 0) - newActive
@@ -141,7 +134,9 @@ class CalorieManager {
                           daysAgo: i,
                           deficit: deficit,
                           activeCalories: realActive,
+                          realActiveCalories: active,
                           restingCalories: realResting,
+                          realRestingCalories: resting,
                           consumedCalories: eaten,
                           runningTotalDeficit: runningTotalDeficit,
                           expectedWeight: expectedWeight)

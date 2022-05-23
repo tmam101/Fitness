@@ -12,7 +12,9 @@ struct Day: Codable {
     var daysAgo: Int = -1
     var deficit: Double = 0
     var activeCalories: Double = 0
+    var realActiveCalories: Double = 0
     var restingCalories: Double = 0
+    var realRestingCalories: Double = 0
     var consumedCalories: Double = 0
     var runningTotalDeficit: Double = 0
     var expectedWeight: Double = 0
