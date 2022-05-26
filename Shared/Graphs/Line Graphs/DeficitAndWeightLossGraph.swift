@@ -36,7 +36,7 @@ struct DeficitAndWeightLossGraph: View {
         @Binding var daysAgoToReach: Double
         
         var body: some View {
-            let expectedWeights = healthData.expectedWeights
+            let expectedWeights = healthData.calorieManager.expectedWeights
             let weights = healthData.weightManager.weights
             let dateToReach = Date.subtract(days: Int(daysAgoToReach), from: Date())
             let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }

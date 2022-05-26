@@ -33,13 +33,13 @@ struct LiftingText: View {
     
     var body: some View {
         LiftingTextInterior()
-            .environmentObject(healthData.workouts)
+            .environmentObject(healthData.workoutManager)
     }
 }
 
 private struct LiftingTextInterior: View {
     @EnvironmentObject var fitness: WeightManager
-    @EnvironmentObject var workouts: WorkoutInformation
+    @EnvironmentObject var workouts: WorkoutManager
     
     var body: some View {
         let currentWeight = fitness.currentWeight
@@ -50,8 +50,8 @@ private struct LiftingTextInterior: View {
         let benchORM = workouts.benchORM
         let benchRatio = CGFloat(benchORM / currentWeight)
         
-        let benchString = String(Int(benchRatio * 100)) + "/\(Int(WorkoutInformation.benchBodyweightRatio * 100)) % bw"
-        let squatString = String(Int(squatRatio * 100)) + "/\(Int(WorkoutInformation.squatBodyweightRatio * 100)) % bw"
+        let benchString = String(Int(benchRatio * 100)) + "/\(Int(WorkoutManager.benchBodyweightRatio * 100)) % bw"
+        let squatString = String(Int(squatRatio * 100)) + "/\(Int(WorkoutManager.squatBodyweightRatio * 100)) % bw"
         
         let benchTitle = "Bench" + (workouts.smithMachine ? " (Smith)" : "")
         let squatTitle = "Squat" + (workouts.smithMachine ? " (Smith)" : "")
@@ -68,11 +68,11 @@ struct DeficitText: View {
     var percentages: Bool = false
     
     var body: some View {
-        let deficitToday: Int = Int(healthData.deficitToday)
-        let idealDeficit: Int = Int(healthData.deficitToGetCorrectDeficit)
-        let averageDeficit: Int = Int(healthData.averageDeficitThisWeek)
+        let deficitToday: Int = Int(healthData.calorieManager.deficitToday)
+        let idealDeficit: Int = Int(healthData.calorieManager.deficitToGetCorrectDeficit)
+        let averageDeficit: Int = Int(healthData.calorieManager.averageDeficitThisWeek)
 //        let totalDeficit: Int = Int(healthData.averageDeficitSinceStart)
-         let monthlyDeficit: Int = Int(healthData.averageDeficitThisMonth)
+        let monthlyDeficit: Int = Int(healthData.calorieManager.averageDeficitThisMonth)
         
         // Non-percentages
         let averageDeficitString = String(averageDeficit) + "/\(Int(healthData.goalDeficit))"
@@ -81,8 +81,8 @@ struct DeficitText: View {
         let monthDeficitString = String(monthlyDeficit) + "/\(Int(healthData.goalDeficit))"
         // Percentages
         let weightLostPercentString = String(healthData.weightManager.percentWeightLost) + "% lost"
-        let averageDeficitPercentString = String(healthData.percentWeeklyDeficit) + "% dfct"
-        let deficitTodayPercentString = String(healthData.percentDailyDeficit) + "% dfct tdy"
+        let averageDeficitPercentString = String(healthData.calorieManager.percentWeeklyDeficit) + "% dfct"
+        let deficitTodayPercentString = String(healthData.calorieManager.percentDailyDeficit) + "% dfct tdy"
         
         if !self.percentages {
             VStack(alignment: .leading) {

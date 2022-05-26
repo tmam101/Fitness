@@ -13,13 +13,13 @@ struct DeficitsView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("\(Int(healthData.averageDeficitThisMonth))")
+                Text("\(Int(healthData.calorieManager.averageDeficitThisMonth))")
                     .foregroundColor(.orange)
                     .frame(maxWidth: .infinity)
-                Text("\(Int(healthData.averageDeficitThisWeek))")
+                Text("\(Int(healthData.calorieManager.averageDeficitThisWeek))")
                     .foregroundColor(.yellow)
                     .frame(maxWidth: .infinity)
-                Text("\(Int(healthData.deficitToday))")
+                Text("\(Int(healthData.calorieManager.deficitToday))")
                     .foregroundColor(.blue)
                     .frame(maxWidth: .infinity)
             }
@@ -122,7 +122,7 @@ struct FitnessViewWatch: View {
                                 .environmentObject(healthData)
                         }
                     
-                    if healthData.runs.count > 1 {
+                    if healthData.runManager.runs.count > 1 {
                         MileTimeStats(runsToShow: $runsToShow)
                             .environmentObject(healthData)
                             .background(Color.myGray)
@@ -136,7 +136,7 @@ struct FitnessViewWatch: View {
                             .cornerRadius(20)
                         Slider(
                             value: $runsToShow,
-                            in: 1...Double(healthData.runs.count),
+                            in: 1...Double(healthData.runManager.runs.count),
                             step: 1 //todo this doesnt reach the first point. need to make sure it does
                         )
                             .tint(.blue)

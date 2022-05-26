@@ -10,8 +10,7 @@ import Foundation
 import HealthKit
 #endif
 
-@MainActor
-class CalorieManager {
+class CalorieManager: ObservableObject {
     
     //MARK: PROPERTIES
     var activeCalorieModifier: Double = 1
@@ -24,10 +23,26 @@ class CalorieManager {
     var minimumRestingCalories: Double = 2150
     var goalDeficit: Double = 1000
     var days: [Int: Day] = [:]
+    var startingWeight: Double = 0
+    
+    @Published public var deficitToday: Double = 0
+    @Published public var averageDeficitThisWeek: Double = 0
+    @Published public var averageDeficitThisMonth: Double = 0
+    @Published public var projectedAverageMonthlyDeficitTomorrow: Double = 0
+    @Published public var averageDeficitSinceStart: Double = 0
+    @Published public var deficitToGetCorrectDeficit: Double = 0
+    @Published public var percentWeeklyDeficit: Int = 0
+    @Published public var percentDailyDeficit: Int = 0
+    @Published public var projectedAverageWeeklyDeficitForTomorrow: Double = 0
+    @Published public var projectedAverageTotalDeficitForTomorrow: Double = 0
+    @Published public var deficitsThisWeek: [Int:Double] = [:]
+    @Published public var dailyActiveCalories: [Int:Double] = [:]
+    @Published public var expectedWeights: [LineGraph.DateAndDouble] = []
+
     
     //MARK: SETUP
     
-    func setup(goalDeficit: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+    func setup(startingWeight: Double, goalDeficit: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
             self.minimumRestingCalories = r
         }
@@ -40,6 +55,25 @@ class CalorieManager {
         self.fitness = fitness
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
+        self.startingWeight = startingWeight
+        self.days = await getDays(forceReload: forceLoad, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
+    
+        await setValues(from: days)
+    }
+    
+    func setValues(from days: [Int:Day]) async {
+        if days.count < 30 { return }
+        self.deficitsThisWeek = days.filter { $0.key < 8 }.mapValues{ $0.deficit }
+        self.deficitToday = days[0]?.deficit ?? 0
+        self.deficitToGetCorrectDeficit = self.goalDeficit //todo
+        self.averageDeficitThisWeek = ((days[1]?.runningTotalDeficit ?? 0) - (days[8]?.runningTotalDeficit ?? 0)) / 7
+        self.percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
+        self.averageDeficitThisMonth = ((days[1]?.runningTotalDeficit ?? 0) - (days[31]?.runningTotalDeficit ?? 0)) / 30
+        self.percentDailyDeficit = percentDailyDeficit
+        self.projectedAverageWeeklyDeficitForTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[7]?.runningTotalDeficit ?? 0)) / 7
+        self.averageDeficitSinceStart = (days[0]?.runningTotalDeficit ?? 0) / Double(daysBetweenStartAndNow)
+        self.projectedAverageMonthlyDeficitTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[30]?.runningTotalDeficit ?? 0)) / 30
+        self.expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
     }
     
     //MARK: EXPECTED WEIGHTS
@@ -107,7 +141,6 @@ class CalorieManager {
                 }
             }
         }
-        self.days = days
         return days
     }
     

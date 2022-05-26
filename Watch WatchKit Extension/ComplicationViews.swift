@@ -18,7 +18,7 @@ struct ComplicationViewCircular: View {
     @EnvironmentObject var healthData: HealthData
 
   var body: some View {
-      let percent: Double = Double(healthData.percentWeeklyDeficit) / 100
+      let percent: Double = Double(healthData.calorieManager.percentWeeklyDeficit) / 100
     ZStack {
       ProgressView(
         "\(percent)",
@@ -53,7 +53,7 @@ struct ComplicationViewCornerCircular: View {
               Circle()
                 .fill(Color.white)
             }
-            Text("\(healthData.percentWeeklyDeficit)")
+            Text("\(healthData.calorieManager.percentWeeklyDeficit)")
                 .foregroundColor(Color.black)
                 .complicationForeground()
             Circle()

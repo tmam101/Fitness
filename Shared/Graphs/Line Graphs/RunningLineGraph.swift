@@ -18,7 +18,7 @@ struct RunningLineGraph: View {
     var body: some View {
         
 //        let numberOfRuns = healthData.numberOfRuns
-        let runs = Array(healthData.runs.suffix(Int(runsToShow)))
+        let runs = Array(healthData.runManager.runs.suffix(Int(runsToShow)))
 
         VStack {
             GeometryReader { geometry in
@@ -34,7 +34,7 @@ struct RunningLineGraph: View {
                 LineGraph(points: points, color: color, width: 2)
 #if os(iOS)
                 
-                if healthData.runs.count > 0 { // todo broken
+                if healthData.runManager.runs.count > 0 { // todo broken
                     ForEach(0..<points.count, id: \.self) { index in
                         let width = (geometry.size.width / CGFloat(points.count)) - 2
                         Text("")

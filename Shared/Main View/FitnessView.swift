@@ -151,10 +151,10 @@ struct FitnessView: View {
                         .padding()
                         .background(Color.myGray)
                         .cornerRadius(20)
-                    if healthData.runs.count > 1 {
+                    if healthData.runManager.runs.count > 1 {
                         Slider(
                             value: $runsToShow,
-                            in: 1...Double(healthData.runs.count),
+                            in: 1...Double(healthData.runManager.runs.count),
                             step: 1 //todo this doesnt reach the first point. need to make sure it does
                         )
                             .tint(.blue)

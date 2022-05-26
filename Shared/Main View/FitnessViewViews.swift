@@ -35,7 +35,7 @@ struct DeficitAndWeightStats: View {
     
     var body: some View {
         HStack {
-            let expectedWeights = healthData.expectedWeights
+            let expectedWeights = healthData.calorieManager.expectedWeights
             let weights = healthData.weightManager.weights
             let dateToReach = Date.subtract(days: Int(deficitLineGraphDaysToShow), from: Date())
             let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
@@ -70,7 +70,7 @@ struct MileTimeStats: View {
     @EnvironmentObject var healthData: HealthData
     @Binding var runsToShow: Double
     var body: some View {
-        let runs = Array(healthData.runs.suffix(Int(runsToShow)))
+        let runs = Array(healthData.runManager.runs.suffix(Int(runsToShow)))
         let decrease = (runs.first?.averageMileTime ?? 0.0) - (runs.last?.averageMileTime ?? 0.0)
         let timeDecrease = Time.doubleToString(double: decrease)
         VStack(alignment: .leading) {
@@ -99,21 +99,21 @@ struct MileSettings: View {
                     .foregroundColor(.white)
                 HStack {
                     Button("-") {
-                        if healthData.numberOfRuns > 2 {
-                            healthData.numberOfRuns -= 1
-                            Settings.set(key: .numberOfRuns, value: healthData.numberOfRuns)
+                        if healthData.runManager.numberOfRuns > 2 {
+                            healthData.runManager.numberOfRuns -= 1
+                            Settings.set(key: .numberOfRuns, value: healthData.runManager.numberOfRuns)
                         }
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))
                         .foregroundColor(.white)
-                    Text("\(healthData.numberOfRuns)")
+                    Text("\(healthData.runManager.numberOfRuns)")
                         .foregroundColor(.white)
                         .font(.system(size: 70))
                     Button("+") {
-                        if healthData.numberOfRuns <= healthData.runs.count {
-                        healthData.numberOfRuns += 1
+                        if healthData.runManager.numberOfRuns <= healthData.runManager.runs.count {
+                            healthData.runManager.numberOfRuns += 1
                         }
-                        Settings.set(key: .numberOfRuns, value: healthData.numberOfRuns)
+                        Settings.set(key: .numberOfRuns, value: healthData.runManager.numberOfRuns)
                     }.frame(width: 100, height: 100)
                         .font(.system(size: 70))
                         .foregroundColor(.white)
@@ -131,7 +131,7 @@ struct MileSettings: View {
 }
 
 struct BenchGraph: View {
-    @EnvironmentObject var workouts: WorkoutInformation
+    @EnvironmentObject var workouts: WorkoutManager
     @EnvironmentObject var fitness: WeightManager
     
     var body: some View {
@@ -141,7 +141,7 @@ struct BenchGraph: View {
 }
 
 struct SquatGraph: View {
-    @EnvironmentObject var workouts: WorkoutInformation
+    @EnvironmentObject var workouts: WorkoutManager
     @EnvironmentObject var fitness: WeightManager
     
     var body: some View {

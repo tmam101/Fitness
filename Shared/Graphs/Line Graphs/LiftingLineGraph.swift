@@ -38,9 +38,9 @@ struct LiftingLineGraph: View {
         
         // Normalize ORMS according to desired bodyweight ratio
         if first.exerciseName.contains("Squat") {
-            percentages = adjustedOneRepMaxes.map{ LineGraph.DateAndDouble(date: $0.date, double: $0.percentage / WorkoutInformation.squatBodyweightRatio) }
+            percentages = adjustedOneRepMaxes.map{ LineGraph.DateAndDouble(date: $0.date, double: $0.percentage / WorkoutManager.squatBodyweightRatio) }
         } else if first.exerciseName.contains("Bench") {
-            percentages = adjustedOneRepMaxes.map{ LineGraph.DateAndDouble(date: $0.date, double: $0.percentage / WorkoutInformation.benchBodyweightRatio) }
+            percentages = adjustedOneRepMaxes.map{ LineGraph.DateAndDouble(date: $0.date, double: $0.percentage / WorkoutManager.benchBodyweightRatio) }
         }
         
         // Create line graph

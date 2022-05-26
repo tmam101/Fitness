@@ -26,8 +26,8 @@ struct WeeklyAverageDeficitCircle: View {
     var lineWidth: CGFloat = 10.0
     var color = Color.yellow
     var body: some View {
-        let deficit = healthData.averageDeficitThisWeek
-        let projectedTomorrow = healthData.projectedAverageWeeklyDeficitForTomorrow
+        let deficit = healthData.calorieManager.averageDeficitThisWeek
+        let projectedTomorrow = healthData.calorieManager.projectedAverageWeeklyDeficitForTomorrow
         let percent: CGFloat = CGFloat(deficit / healthData.goalDeficit)
         let projected: CGFloat = CGFloat(projectedTomorrow / healthData.goalDeficit)
         
@@ -48,10 +48,10 @@ struct TodayCircle: View {
     var color = Color.yellow
     
     var body: some View {
-        let deficit = healthData.deficitToday
+        let deficit = healthData.calorieManager.deficitToday
         let active = healthData.days[0]?.activeCalories ?? 200
         let percentActive: CGFloat = CGFloat(active / deficit)
-        let idealDeficit = healthData.deficitToGetCorrectDeficit
+        let idealDeficit = healthData.calorieManager.deficitToGetCorrectDeficit
         let unadjustedPercent: CGFloat = CGFloat((deficit / (idealDeficit == 0 ? 1 : idealDeficit)))
         let percent = unadjustedPercent > 1 ? 1 : unadjustedPercent
         let percentOverGoal = idealDeficit / deficit
@@ -70,8 +70,8 @@ struct DailyDeficitCircle: View {
     var color = Color.blue
     
     var body: some View {
-        let deficit = healthData.deficitToday
-        let idealDeficit = healthData.deficitToGetCorrectDeficit
+        let deficit = healthData.calorieManager.deficitToday
+        let idealDeficit = healthData.calorieManager.deficitToGetCorrectDeficit
         let percent: CGFloat = CGFloat((deficit / (idealDeficit == 0 ? 1 : idealDeficit)))
         
         BackgroundCircle(color: color, lineWidth: lineWidth)
@@ -103,8 +103,8 @@ struct MonthlyDeficitCircle: View {
     var color = Color.orange
 
     var body: some View {
-        let avg = healthData.averageDeficitThisMonth
-        let projectedTomorrow = healthData.projectedAverageMonthlyDeficitTomorrow
+        let avg = healthData.calorieManager.averageDeficitThisMonth
+        let projectedTomorrow = healthData.calorieManager.projectedAverageMonthlyDeficitTomorrow
         let percent = CGFloat(avg / healthData.goalDeficit)
         let projected: CGFloat = CGFloat(projectedTomorrow / healthData.goalDeficit)
 
@@ -125,8 +125,8 @@ struct AverageTotalDeficitCircle: View {
     var color = Color.orange
 
     var body: some View {
-        let avg = healthData.averageDeficitSinceStart
-        let projectedTomorrow = healthData.projectedAverageTotalDeficitForTomorrow
+        let avg = healthData.calorieManager.averageDeficitSinceStart
+        let projectedTomorrow = healthData.calorieManager.projectedAverageTotalDeficitForTomorrow
         let percent = CGFloat(avg / healthData.goalDeficit)
         let projected: CGFloat = CGFloat(projectedTomorrow / healthData.goalDeficit)
 
@@ -147,7 +147,7 @@ struct WeightLossAccuracyCircle: View {
     var color = Color.green3
     
     var body: some View {
-        let averageDeficit = healthData.averageDeficitSinceStart / healthData.goalDeficit
+        let averageDeficit = healthData.calorieManager.averageDeficitSinceStart / healthData.goalDeficit
         let averageWeightLoss = healthData.weightManager.averageWeightLostPerWeek / 2
         let ratio = CGFloat(averageWeightLoss / averageDeficit).corrected()
         BackgroundCircle(color: color, lineWidth: lineWidth)

@@ -23,43 +23,23 @@ class HealthData: ObservableObject {
     var environment: AppEnvironmentConfig = .debug
 #if !os(macOS)
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    private var calorieManager: CalorieManager?
+    @Published var calorieManager: CalorieManager = CalorieManager()
+    @Published var runManager: RunManager = RunManager()
     private let network = Network()
 #endif
     @Published public var weightManager: WeightManager = WeightManager()
+    @Published public var workoutManager: WorkoutManager = WorkoutManager()
     
     // Deficits
 //    @State var watchConnectivityIphone = WatchConnectivityIphone()
 
     @Published public var days: [Int:Day] = [:]
-    @Published public var deficitToday: Double = 0
-    @Published public var averageDeficitThisWeek: Double = 0
-    @Published public var averageDeficitThisMonth: Double = 0
-    @Published public var projectedAverageMonthlyDeficitTomorrow: Double = 0
-    @Published public var averageDeficitSinceStart: Double = 0
-    @Published public var deficitToGetCorrectDeficit: Double = 0
-    @Published public var percentWeeklyDeficit: Int = 0
-    @Published public var percentDailyDeficit: Int = 0
-    @Published public var projectedAverageWeeklyDeficitForTomorrow: Double = 0
-    @Published public var projectedAverageTotalDeficitForTomorrow: Double = 0
-    @Published public var deficitsThisWeek: [Int:Double] = [:]
-    @Published public var dailyActiveCalories: [Int:Double] = [:]
-    
-    @Published public var individualStatistics: [Int:Day] = [:]
-    
+        
     // Days
     @Published public var daysBetweenStartAndNow: Int = 350
     @Published public var dateSaved: Date = Date.distantPast
     
-    // Workouts
-    @Published public var workouts: WorkoutInformation = WorkoutInformation(afterDate: "01.23.2021", environment: .debug)
-    
-    // Runs
-    @Published public var runs: [Run] = []
-    @Published public var numberOfRuns: Int = Settings.get(key: .numberOfRuns) as? Int ?? 0
-    
     @Published public var hasLoaded: Bool = false
-    @Published public var expectedWeights: [LineGraph.DateAndDouble] = []
         
     // Constants
     @State var goalDeficit: Double = 500
@@ -103,46 +83,27 @@ class HealthData: ObservableObject {
         switch self.environment {
         case .release:
 #if os(iOS)
+            // Setup managers
             await weightManager.setup()
-//            self.startingWeight = await weightManager.startingWeight
-//            self.currentWeight = await weightManager.currentWeight
-//            self.endingWeight = await weightManager.endingWeight
-//            self.progressToWeight = await weightManager.progressToWeight
-//            self.weightLost = await weightManager.weightLost
-//            self.percentWeightLost = await weightManager.percentWeightLost
-//            self.weightToLose = await weightManager.weightToLose
-//            self.averageWeightLostPerWeek = await weightManager.averageWeightLostPerWeek
-//            self.weights = await weightManager.weights
-//            self.averageWeightLostPerWeekThisMonth = await weightManager.averageWeightLostPerWeekThisMonth
+            await runManager.setup(fitness: weightManager, startDate: self.startDate ?? Date())
+            await calorieManager.setup(startingWeight: weightManager.startingWeight, goalDeficit: goalDeficit, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
             
-            let runManager = RunManager(fitness: weightManager, startDate: self.startDate ?? Date())
-            let runs = await runManager.getRunningWorkouts()
-            self.runs = runs
-            let calorieManager = await CalorieManager()
-            self.calorieManager = calorieManager
-            await calorieManager.setup(goalDeficit: goalDeficit, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
-            let workouts = WorkoutInformation(afterDate: self.startDate ?? Date(), environment: environment ?? .release)
-            self.workouts = workouts
-            let days = await calorieManager.getDays()
-            guard !days.isEmpty else {
+            guard !calorieManager.days.isEmpty else {
                 completion?(self)
                 return
             }
             
-            //TODO: Finish creating realisticWeights
-            // Start on first weight
-            // Loop through each subsequent day, finding expected weight loss
-            // Find next weight's actual loss
-            // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
-            var realisticWeights: [Int: Double] = [:]
-            var currentWeight = weightManager.weights.last
-            
-            for i in stride(from: days.count - 1, through: 0, by: -1) {
-                await abc(i, days)
+            // Set self values
+            DispatchQueue.main.async { [self] in
+                self.days = calorieManager.days
+                self.hasLoaded = true
             }
             
-            if await self.setValues(from: days) {
-                // Post the last thirty days. Larger amounts seem to be too much for the network.
+//            createRealisticWeights()
+            
+            // Post the last thirty days. Larger amounts seem to be too much for the network.
+            if calorieManager.days.count > 30 {
                 let daysToRetrieve = 31
                 let model = getDaysModel(from: days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
                 let _ = await network.postWithDays(object: model)
@@ -168,19 +129,34 @@ class HealthData: ObservableObject {
         }
     }
     
-    func abc(_ i: Int, _ days: [Int:Day]) async {
-        let day = days[i]!
-        let date = day.date
-        let nextWeight = await weightManager.weights.last(where: { $0.date < date })
-        let nextWeightDate = Date.startOfDay(nextWeight?.date ?? Date())
-        if await date < Date.startOfDay(weightManager.weights.last!.date) {
-            return
+    func createRealisticWeights() async {
+        //TODO: Finish creating realisticWeights
+        // Start on first weight
+        // Loop through each subsequent day, finding expected weight loss
+        // Find next weight's actual loss
+        // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
+        var realisticWeights: [Int: Double] = [:]
+        var currentWeight = weightManager.weights.last
+        
+        for i in stride(from: days.count - 1, through: 0, by: -1) {
+            await abc(i, days)
         }
-        let expectedWeightLoss = day.deficit / 3500
-        if i == days.count - 1 {
-//                    realisticWeights[i] = fitness.weights
+        
+        func abc(_ i: Int, _ days: [Int:Day]) async {
+            let day = days[i]!
+            let date = day.date
+            let nextWeight = await weightManager.weights.last(where: { $0.date < date })
+            let nextWeightDate = Date.startOfDay(nextWeight?.date ?? Date())
+            if await date < Date.startOfDay(weightManager.weights.last!.date) {
+                return
+            }
+            let expectedWeightLoss = day.deficit / 3500
+            if i == days.count - 1 {
+                //                    realisticWeights[i] = fitness.weights
+            }
         }
     }
+    
     
     func setValuesFromNetworkWithDays(reloadToday: Bool = false) async {
         guard let getResponse = await network.getResponseWithDays() else { return }
@@ -190,9 +166,9 @@ class HealthData: ObservableObject {
         }
         
         if reloadToday {
-            let calorieManager = await CalorieManager()
+            let calorieManager = CalorieManager()
             self.calorieManager = calorieManager
-            await calorieManager.setup(goalDeficit: goalDeficit, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(startingWeight: weightManager.startingWeight, goalDeficit: goalDeficit, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
             let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
             today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
@@ -201,74 +177,13 @@ class HealthData: ObservableObject {
             print("today: \(today)")
             days[0]! = today
         }
-        let _ = await setValues(from: days)
+        let _ = await calorieManager.setValues(from: days)
     }
     
     func getDaysModel(from days: [Int: Day], activeCalorieModifier: Double) -> HealthDataPostRequestModelWithDays {
         let d: [Day] = Array(days.values)
         return HealthDataPostRequestModelWithDays(days: d, activeCalorieModifier: activeCalorieModifier)
     }
-    
-    func setValues(from days: [Int: Day]) async -> Bool {
-        if days.count < 30 { return false }
-        let averageDeficitSinceStart = (days[0]?.runningTotalDeficit ?? 0) / Double(daysBetweenStartAndNow)
-        let projectedAverageWeeklyDeficitForTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[7]?.runningTotalDeficit ?? 0)) / 7
-        let averageDeficitThisWeek = ((days[1]?.runningTotalDeficit ?? 0) - (days[8]?.runningTotalDeficit ?? 0)) / 7
-        let averageDeficitThisMonth = ((days[1]?.runningTotalDeficit ?? 0) - (days[31]?.runningTotalDeficit ?? 0)) / 30
-        let projectedAverageMonthlyDeficitForTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[30]?.runningTotalDeficit ?? 0)) / 30
-        let deficitToday = days[0]?.deficit ?? 0
-        let daysThisWeek = days.filter { $0.key < 8 }
-        let deficitsThisWeek = daysThisWeek.mapValues{ $0.deficit }
-        let dailyActiveCalories = daysThisWeek.mapValues{ $0.activeCalories }
-        let individualStatistics = daysThisWeek
-        let percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
-        let startingWeight = self.weightManager.startingWeight
-        let expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
-        
-        self.deficitsThisWeek = deficitsThisWeek
-        self.dailyActiveCalories = dailyActiveCalories
-        self.deficitToday = deficitToday
-        self.deficitToGetCorrectDeficit = self.goalDeficit //todo
-        self.days = days
-        self.averageDeficitThisWeek = averageDeficitThisWeek
-        self.percentWeeklyDeficit = percentWeeklyDeficit
-        self.averageDeficitThisMonth = averageDeficitThisMonth
-        self.percentDailyDeficit = percentDailyDeficit
-        self.projectedAverageWeeklyDeficitForTomorrow = projectedAverageWeeklyDeficitForTomorrow
-        self.averageDeficitSinceStart = averageDeficitSinceStart
-        self.projectedAverageMonthlyDeficitTomorrow = projectedAverageMonthlyDeficitForTomorrow
-        self.individualStatistics = individualStatistics
-        self.runs = runs
-        self.expectedWeights = expectedWeights
-        self.hasLoaded = true //todo want this?
-        return true
-    }
-    
-//    private func setWorkouts(_ workouts: WorkoutInformation) async {
-//        return await withUnsafeContinuation { continuation in
-//            DispatchQueue.main.async { [self] in
-//                self.workouts = workouts
-//                continuation.resume()
-//            }
-//        }
-//    }
-//
-//    private func setRuns(_ runs: [Run]) async {
-//        return await withUnsafeContinuation { continuation in
-//            DispatchQueue.main.async { [self] in
-//                self.runs = runs
-//                continuation.resume()
-//            }
-//        }
-//    }
-    
-//    func s(_ completion: @escaping () -> ()) async {
-//        return await withUnsafeContinuation { continuation in
-//            DispatchQueue.main.async {
-//                completion()
-//            }
-//        }
-//    }
     
 #if  !os(macOS)
     func saveCaloriesEaten(calories: Double) async -> Bool {

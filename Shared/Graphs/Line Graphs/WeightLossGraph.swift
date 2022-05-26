@@ -12,7 +12,7 @@ struct WeightLossGraph: View {
     var color: Color = .green
     
     var body: some View {
-        let expectedWeights = healthData.expectedWeights
+        let expectedWeights = healthData.calorieManager.expectedWeights
         let weights = healthData.weightManager.weights
         VStack {
             GeometryReader { geometry in

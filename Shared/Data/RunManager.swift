@@ -9,13 +9,18 @@ import Foundation
 import HealthKit
 import SwiftUI
 
-class RunManager {
-    var fitness: WeightManager
-    var startDate: Date
+class RunManager: ObservableObject {
+    var fitness: WeightManager?
+    var startDate: Date?
     
-    init(fitness: WeightManager, startDate: Date) {
+    @Published public var runs: [Run] = []
+    @Published public var numberOfRuns: Int = Settings.get(key: .numberOfRuns) as? Int ?? 0
+    
+    
+    func setup(fitness: WeightManager, startDate: Date) async {
         self.fitness = fitness
         self.startDate = startDate
+        self.runs = await getRunningWorkouts()
     }
     
     func loadRunningWorkouts() async -> [HKWorkout]? {
@@ -49,7 +54,7 @@ class RunManager {
         let average = duration / distance
         let indoor = item.metadata?["HKIndoorWorkout"] as! Bool
         let burned = item.totalEnergyBurned?.doubleValue(for: .kilocalorie())
-        let weightAtTime = await fitness.weight(at: item.startDate)
+        let weightAtTime = await fitness?.weight(at: item.startDate) ?? 1
         let run = Run(date: item.startDate, totalDistance: distance, totalTime: duration, averageMileTime: average, indoor: indoor, caloriesBurned: burned ?? 0, weightAtTime: weightAtTime)
         return run
     }
@@ -79,7 +84,7 @@ class RunManager {
         
         // Handle date
         runs = runs.filter { item in
-            return item.date > self.startDate
+            return item.date > self.startDate ?? Date()
         }
         runs = runs.reversed()
         return runs

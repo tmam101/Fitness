@@ -83,7 +83,7 @@ struct CalorieTexts: View {
     var body: some View {
         HStack {
             ForEach((0...7).reversed(), id: \.self) {
-                Text(String(Int(healthData.deficitsThisWeek[$0] ?? 0.0)))
+                Text(String(Int(healthData.calorieManager.deficitsThisWeek[$0] ?? 0.0)))
                     .font(.system(size: 8))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -183,11 +183,11 @@ struct BarChart: View {
         var isComplication = false
         
         var body: some View {
-            let results = BarChart.deficitsToPercents(goalDeficit: healthData.goalDeficit, daysAndDeficits: healthData.deficitsThisWeek)
+            let results = BarChart.deficitsToPercents(goalDeficit: healthData.calorieManager.goalDeficit, daysAndDeficits: healthData.calorieManager.deficitsThisWeek)
             let percents = results.0
             let top = results.1
             let horizontalRatio = top / healthData.goalDeficit
-            let avgRatio = top / (healthData.averageDeficitThisWeek == 0 ? 1 : healthData.averageDeficitThisWeek)
+            let avgRatio = top / (healthData.calorieManager.averageDeficitThisWeek == 0 ? 1 : healthData.calorieManager.averageDeficitThisWeek)
                         
 //            let tmrwRatio = top / (healthData.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthData.projectedAverageWeeklyDeficitForTomorrow)
             
@@ -200,7 +200,7 @@ struct BarChart: View {
                             let isPositive = indexAndPercent.percent >= 0
                             let color: Color = isPositive ? (isToday ? .yellow : .yellow) : .red
                             
-                            let day = healthData.individualStatistics[7 - indexAndPercent.index] ?? Day()
+                            let day = healthData.days[7 - indexAndPercent.index] ?? Day()
                             let activeCalories = day.activeCalories
                             let totalDeficit = day.deficit
 //                            let consumed = day.consumedCalories
@@ -247,7 +247,7 @@ struct BarChart: View {
                             .offset(x: 0.0, y: heightOffset - 1.25)
                             .foregroundColor(.yellow)
                             .opacity(0.5)
-                        Text("Avg \n\(String(Int(healthData.averageDeficitThisWeek)))")
+                        Text("Avg \n\(String(Int(healthData.calorieManager.averageDeficitThisWeek)))")
                             .font(.system(size: 8))
                             .frame(maxWidth: 50)
                             .position(x: geometry.size.width - 20, y: 0.0)

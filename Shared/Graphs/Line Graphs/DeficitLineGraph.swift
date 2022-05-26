@@ -10,13 +10,13 @@ struct DeficitLineGraph: View {
     var color: Color = .yellow
     
     var body: some View {
-        let expectedWeights = healthData.expectedWeights
+        let expectedWeights = healthData.calorieManager.expectedWeights
         let startDate = Date.subtract(days: 6, from: Date())
         let expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
         let expectedWeightsSuffix2 = expectedWeights.filter { $0.date >= Date.subtract(days: 1, from: startDate) }
 //                    let maxWeight = expectedWeightsSuffix.map { $0.double }.max() ?? 1
 //        let firstWeight: Double = expectedWeightsSuffix.first?.double ?? 1
-        let firstWeight: Double = healthData.expectedWeights.filter { $0.date >= Date.subtract(days: 1, from: startDate)}.first?.double ?? 1
+        let firstWeight: Double = healthData.calorieManager.expectedWeights.filter { $0.date >= Date.subtract(days: 1, from: startDate)}.first?.double ?? 1
         let minWeight: Double = expectedWeightsSuffix.map { $0.double }.min() ?? 0
         let firstWeightMinusTwoPounds: Double = firstWeight - 2
         let minValue: Double = min(firstWeightMinusTwoPounds, minWeight)

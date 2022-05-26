@@ -17,7 +17,7 @@ struct TodayRingWithMonthly: View {
         
         ZStack() {
             VStack {
-                Text("\(Int(healthData.deficitToday))")
+                Text("\(Int(healthData.calorieManager.deficitToday))")
                     .foregroundColor(.white)
                     .font(.system(size: 9))
                     .fontWeight(.bold)
@@ -52,7 +52,7 @@ struct TodayRing: View {
         
         ZStack() {
             VStack {
-            Text("\(Int(healthData.deficitToday))")
+                Text("\(Int(healthData.calorieManager.deficitToday))")
                 .foregroundColor(.white)
                 .font(.system(size: 11))
             }

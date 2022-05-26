@@ -108,8 +108,8 @@ struct Set: Codable {
 
 typealias Workout = [Set]
 
-class WorkoutInformation: ObservableObject {
-    var environment: AppEnvironmentConfig
+class WorkoutManager: ObservableObject {
+    var environment: AppEnvironmentConfig = .debug
     @Published var workouts: Workout = []
     @Published var workoutsGroupedByDay: [Workout] = []
     @Published public var firstBenchORM: Double = 0.0
@@ -139,7 +139,39 @@ class WorkoutInformation: ObservableObject {
 //        }
 //    }
     
+    init() { }
+    
     init(afterDate: Date, environment: AppEnvironmentConfig) {
+        self.environment = environment
+        switch environment {
+        case .release:
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            if let filepath = Bundle.main.path(forResource: "strong", ofType: "json") {
+                do {
+                    let data = try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
+                    let decoded = try JSONDecoder().decode(Workout.self, from: data)
+                    self.workouts = decoded
+                    self.workouts = workouts.filter {
+                        formatter.date(from: $0.date)! > afterDate
+                    }
+                    
+                    calculate()
+                } catch {
+                    print("error failed getting workouts")
+                }
+            } else {
+                print("error failed getting workouts")
+            }
+        case .debug:
+            self.firstBenchORM = 100
+            self.firstSquatORM = 100
+            self.benchORM = 150
+            self.squatORM = 150
+        }
+    }
+    
+    func setup(afterDate: Date, environment: AppEnvironmentConfig) async {
         self.environment = environment
         switch environment {
         case .release:
