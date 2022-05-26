@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
-//    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
+    //    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
     @Environment(\.scenePhase) private var scenePhase
     var shouldShowText: Bool = true
     var lineWidth: CGFloat = 10
@@ -28,10 +28,10 @@ struct FitnessView: View {
                     HStack {
                         StatsTitle(title: "Deficits")
                         if !healthData.hasLoaded {
-                        Circle()
-                            .fill()
-                            .foregroundColor(.red)
-                            .frame(width: 20)
+                            Circle()
+                                .fill()
+                                .foregroundColor(.red)
+                                .frame(width: 20)
                         }
                     }
                     StatsRow(text: { DeficitText() }, rings: { DeficitRings()})
@@ -134,6 +134,6 @@ struct FitnessView_Previews: PreviewProvider {
         AppView()
             .environmentObject(HealthData(environment: .debug))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
-//            .environmentObject(WatchConnectivityIphone())
+        //            .environmentObject(WatchConnectivityIphone())
     }
 }

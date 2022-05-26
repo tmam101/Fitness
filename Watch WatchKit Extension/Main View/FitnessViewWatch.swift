@@ -112,15 +112,6 @@ struct FitnessViewWatch: View {
                     .foregroundColor(.green)
                 Group {
                     StatsTitle(title: "Mile Time")
-                        .onTapGesture {
-                            isDisplayingOverlay = true
-                        }
-                        .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
-                            self.isDisplayingOverlay = false
-                        }) {
-                            MileSettings()
-                                .environmentObject(healthData)
-                        }
                     
                     if healthData.runManager.runs.count > 1 {
                         MileTimeStats(runsToShow: $runsToShow)
