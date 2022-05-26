@@ -48,12 +48,6 @@ struct FitnessView: View {
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-//                        .if(!healthData.hasLoaded) { view in
-//                            view.redacted(reason: .placeholder)
-//                        }
-//                        .if(healthData.hasLoaded) { view in
-//                            view.unredacted()
-//                        }
                 }
                 Text("Expected Weight This Week")
                     .foregroundColor(.white)
@@ -68,13 +62,6 @@ struct FitnessView: View {
                     StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
-//                        .onTapGesture {
-//                            Task {
-//                                healthData.activeCalorieModifier = 0.8
-//                                healthData.adjustActiveCalorieModifier.toggle()
-//                                await healthData.setValues(nil)
-//                            }
-//                        }
                     Text("Expected Weight vs Weight Over Time")
                         .foregroundColor(.white)
                         .font(.title2)
@@ -103,45 +90,10 @@ struct FitnessView: View {
                     Text("past \(Int(deficitLineGraphDaysToShow)) days")
                         .foregroundColor(.green)
                 }
-                if showLifts {
-//                    Group {
-//                        StatsTitle(title: "Lifts")
-//                        StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-//                            .environmentObject(healthData)
-//                            .frame(minWidth: 0, maxWidth: .infinity)
-//                            .onTapGesture {
-//                                healthData.workouts.smithMachine.toggle()
-//                                healthData.workouts.calculate()
-//                            }
-//                    }
-//                    ZStack {
-//                        BenchGraph()
-//                            .environmentObject(healthData.workouts)
-//                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
-//                            .padding()
-//                            .background(Color.myGray)
-//                            .cornerRadius(20)
-//                        SquatGraph()
-//                            .environmentObject(healthData.workouts)
-//                            .padding()
-//                    }
-                }
                 Group {
                     StatsTitle(title: "Mile Time")
-//                        .onTapGesture {
-//                            let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
-//                            impactHeavy.impactOccurred()
-//                            isDisplayingOverlay = true
-//                        }
-//                        .sheet(isPresented: $isDisplayingOverlay, onDismiss: {
-//                            self.isDisplayingOverlay = false
-//                        }) {
-//                            MileSettings()
-//                                .environmentObject(healthData)
-//                        }
                     MileTimeStats(runsToShow: $runsToShow)
                         .environmentObject(healthData)
-//                        .padding([.top, .leading, .trailing])
                         .background(Color.myGray)
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)

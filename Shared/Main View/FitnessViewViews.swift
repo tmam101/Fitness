@@ -87,49 +87,6 @@ struct MileTimeStats: View {
     }
 }
 
-struct MileSettings: View {
-    @EnvironmentObject var healthData: HealthData
-    
-    var body: some View {
-        ZStack {
-            Color.myGray.edgesIgnoringSafeArea(.all)
-            VStack {
-                Text("Runs to Display")
-                    .font(.system(size: 50))
-                    .foregroundColor(.white)
-                HStack {
-                    Button("-") {
-                        if healthData.runManager.numberOfRuns > 2 {
-                            healthData.runManager.numberOfRuns -= 1
-                            Settings.set(key: .numberOfRuns, value: healthData.runManager.numberOfRuns)
-                        }
-                    }.frame(width: 100, height: 100)
-                        .font(.system(size: 70))
-                        .foregroundColor(.white)
-                    Text("\(healthData.runManager.numberOfRuns)")
-                        .foregroundColor(.white)
-                        .font(.system(size: 70))
-                    Button("+") {
-                        if healthData.runManager.numberOfRuns <= healthData.runManager.runs.count {
-                            healthData.runManager.numberOfRuns += 1
-                        }
-                        Settings.set(key: .numberOfRuns, value: healthData.runManager.numberOfRuns)
-                    }.frame(width: 100, height: 100)
-                        .font(.system(size: 70))
-                        .foregroundColor(.white)
-                }
-//                NavigationView {
-//                    ScrollView {
-//                        ForEach(healthData.runs, id: \.date) { run in
-//                            NavigationLink("\(run.averageMileTime)", destination: Text("\(run.averageMileTime)"))
-//                        }
-//                    }
-//                }
-            }
-        }
-    }
-}
-
 struct BenchGraph: View {
     @EnvironmentObject var workouts: WorkoutManager
     @EnvironmentObject var fitness: WeightManager
