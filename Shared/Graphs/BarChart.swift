@@ -61,17 +61,13 @@ struct Bar: View {
     }
 }
 
-struct CalorieTexts: View {
-    @EnvironmentObject var healthData: HealthData
-    
-    var body: some View {
-        HStack {
-            ForEach((0...7).reversed(), id: \.self) {
-                Text(String(Int(healthData.calorieManager.deficitsThisWeek[$0] ?? 0.0)))
-                    .font(.system(size: 8))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-            }
+func CalorieTexts(deficitsThisWeek: [Int:Double]) -> some View {
+    HStack {
+        ForEach((0...7).reversed(), id: \.self) {
+            Text(String(Int(deficitsThisWeek[$0] ?? 0.0)))
+                .font(.system(size: 8))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
         }
     }
 }
@@ -86,7 +82,7 @@ struct BarChart: View {
         if !isComplication {
             VStack {
                 if showCalories {
-                    CalorieTexts()
+                    CalorieTexts(deficitsThisWeek: healthData.calorieManager.deficitsThisWeek)
                         .padding([.trailing], 50)
                         .padding([.leading], 10)
                 }
@@ -105,7 +101,7 @@ struct BarChart: View {
         } else {
             VStack {
                 if showCalories {
-                    CalorieTexts()
+                    CalorieTexts(deficitsThisWeek: healthData.calorieManager.deficitsThisWeek)
                         .padding([.trailing], 50)
                         .padding([.leading], 10)
                 }
