@@ -122,9 +122,7 @@ class HealthData: ObservableObject {
         }
         
         if reloadToday {
-            let calorieManager = CalorieManager()
-            self.calorieManager = calorieManager
-            await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
             let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
             today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier

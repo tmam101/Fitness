@@ -42,7 +42,7 @@ class CalorieManager: ObservableObject {
     
     //MARK: SETUP
     
-    func setup(startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+    func setup(shouldGetDays: Bool = true, startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
             self.minimumRestingCalories = r
         }
@@ -56,9 +56,10 @@ class CalorieManager: ObservableObject {
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         self.startingWeight = startingWeight
-        self.days = await getDays(forceReload: forceLoad, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
-    
-        await setValues(from: days)
+        if shouldGetDays {
+            self.days = await getDays(forceReload: forceLoad, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
+            await setValues(from: days)
+        }
     }
     
     func setValues(from days: [Int:Day]) async {
