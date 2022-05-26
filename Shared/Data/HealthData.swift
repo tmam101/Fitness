@@ -14,7 +14,6 @@ import WatchConnectivity
 import WidgetKit
 #endif
 import SwiftUI
-//import WatchConnectivity
 
 //TODO: Should I make this @MainActor? It would resolve some async issues, like dispatch.
 class HealthData: ObservableObject {
@@ -38,6 +37,7 @@ class HealthData: ObservableObject {
     var startDate: Date?
     
     //MARK: INIT
+    
     init(environment: AppEnvironmentConfig) {
         Task {
             if await authorizeHealthKit() {
@@ -58,15 +58,12 @@ class HealthData: ObservableObject {
         }
     }
     
-    
-    
     //MARK: SET VALUES
     
     /// Set all values of health data critifal for the app. Returns a reference to itself.
     func setValues(forceLoad: Bool = false, completion: ((_ health: HealthData) -> Void)?) async {
         hasLoaded = false
         setupDates()
-//        watchConnectivityIphone = WatchConnectivityIphone()
         
         switch self.environment {
         case .release:
@@ -93,7 +90,7 @@ class HealthData: ObservableObject {
             // Post the last thirty days. Larger amounts seem to be too much for the network.
             if calorieManager.days.count > 30 {
                 let daysToRetrieve = 31
-                let model = getDaysModel(from: days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+                let model = getDaysModel(from: calorieManager.days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
                 let _ = await network.postWithDays(object: model)
             }
             completion?(self)
@@ -117,35 +114,6 @@ class HealthData: ObservableObject {
         }
     }
     
-//    func createRealisticWeights() async {
-//        //TODO: Finish creating realisticWeights
-//        // Start on first weight
-//        // Loop through each subsequent day, finding expected weight loss
-//        // Find next weight's actual loss
-//        // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
-//        var realisticWeights: [Int: Double] = [:]
-//        var currentWeight = weightManager.weights.last
-//        
-//        for i in stride(from: days.count - 1, through: 0, by: -1) {
-//            await abc(i, days)
-//        }
-//        
-//        func abc(_ i: Int, _ days: [Int:Day]) async {
-//            let day = days[i]!
-//            let date = day.date
-//            let nextWeight = await weightManager.weights.last(where: { $0.date < date })
-//            let nextWeightDate = Date.startOfDay(nextWeight?.date ?? Date())
-//            if await date < Date.startOfDay(weightManager.weights.last!.date) {
-//                return
-//            }
-//            let expectedWeightLoss = day.deficit / 3500
-//            if i == days.count - 1 {
-//                //                    realisticWeights[i] = fitness.weights
-//            }
-//        }
-//    }
-    
-    
     func setValuesFromNetworkWithDays(reloadToday: Bool = false) async {
         guard let getResponse = await network.getResponseWithDays() else { return }
         var days: [Int:Day] = [:]
@@ -167,6 +135,38 @@ class HealthData: ObservableObject {
         }
         let _ = await calorieManager.setValues(from: days)
     }
+    
+    //MARK: REALISTIC WEIGHTS
+    
+    func createRealisticWeights() async {
+//        //TODO: Finish creating realisticWeights
+//        // Start on first weight
+//        // Loop through each subsequent day, finding expected weight loss
+//        // Find next weight's actual loss
+//        // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
+//        var realisticWeights: [Int: Double] = [:]
+//        var currentWeight = weightManager.weights.last
+//
+//        for i in stride(from: days.count - 1, through: 0, by: -1) {
+//            await abc(i, days)
+//        }
+//
+//        func abc(_ i: Int, _ days: [Int:Day]) async {
+//            let day = days[i]!
+//            let date = day.date
+//            let nextWeight = await weightManager.weights.last(where: { $0.date < date })
+//            let nextWeightDate = Date.startOfDay(nextWeight?.date ?? Date())
+//            if await date < Date.startOfDay(weightManager.weights.last!.date) {
+//                return
+//            }
+//            let expectedWeightLoss = day.deficit / 3500
+//            if i == days.count - 1 {
+//                //                    realisticWeights[i] = fitness.weights
+//            }
+//        }
+    }
+    
+    //MARK: MISC
     
     func getDaysModel(from days: [Int: Day], activeCalorieModifier: Double) -> HealthDataPostRequestModelWithDays {
         let d: [Day] = Array(days.values)

@@ -750,9 +750,9 @@
 				4845B7A125C0B2AA003BF999 /* HealthData.swift */,
 				48EC266925B8D1280003B455 /* WeightManager.swift */,
 				48AF60EA2640F65C00C6CC11 /* WorkoutManager.swift */,
-				4803BE9E271F035C00882BCC /* Day.swift */,
 				4802D48E278581CB0001BE9D /* RunManager.swift */,
 				4802D492278584750001BE9D /* CalorieManager.swift */,
+				4803BE9E271F035C00882BCC /* Day.swift */,
 				48EE13282738C3AB00128623 /* Run.swift */,
 				48755A89267AF13200F7680E /* Weight.swift */,
 			);
