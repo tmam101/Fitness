@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct RunningLineGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData
     @State var presentingTest = false
     @Binding var runsToShow: Double

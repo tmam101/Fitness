@@ -78,7 +78,6 @@ struct FitnessViewMac: View {
                     ZStack {
                         DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
                             .environmentObject(healthData)
-                            .environmentObject(healthData.fitness)
                             .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                             .padding()
                             .background(Color.myGray)
@@ -107,14 +106,12 @@ struct FitnessViewMac: View {
                     ZStack {
                         BenchGraph()
                             .environmentObject(healthData.workouts)
-                            .environmentObject(healthData.fitness)
                             .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
                             .padding()
                             .background(Color.myGray)
                             .cornerRadius(20)
                         SquatGraph()
                             .environmentObject(healthData.workouts)
-                            .environmentObject(healthData.fitness)
                             .padding()
                     }
                 }
@@ -135,7 +132,6 @@ struct FitnessViewMac: View {
                         .frame(maxWidth: .infinity)
                     RunningLineGraph()
                         .environmentObject(healthData)
-                        .environmentObject(healthData.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
                         .background(Color.myGray)

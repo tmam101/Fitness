@@ -36,7 +36,7 @@ struct DeficitAndWeightStats: View {
     var body: some View {
         HStack {
             let expectedWeights = healthData.expectedWeights
-            let weights = healthData.fitness.weights
+            let weights = healthData.weightManager.weights
             let dateToReach = Date.subtract(days: Int(deficitLineGraphDaysToShow), from: Date())
             let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
             let expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
@@ -132,7 +132,7 @@ struct MileSettings: View {
 
 struct BenchGraph: View {
     @EnvironmentObject var workouts: WorkoutInformation
-    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var fitness: WeightManager
     
     var body: some View {
         LiftingLineGraph(oneRepMaxes: workouts.benchORMs, color: .purple)
@@ -142,7 +142,7 @@ struct BenchGraph: View {
 
 struct SquatGraph: View {
     @EnvironmentObject var workouts: WorkoutInformation
-    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var fitness: WeightManager
     
     var body: some View {
         LiftingLineGraph(oneRepMaxes: workouts.squatORMs, color: .pink)

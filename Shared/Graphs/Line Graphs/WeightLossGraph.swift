@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct WeightLossGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData
     var color: Color = .green
     
     var body: some View {
         let expectedWeights = healthData.expectedWeights
-        let weights = fitness.weights
+        let weights = healthData.weightManager.weights
         VStack {
             GeometryReader { geometry in
                 if weights.count > 0 && expectedWeights.count > 0 {

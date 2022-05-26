@@ -118,25 +118,23 @@ struct WeightLossRings: View {
     }
 }
 
-struct LiftingRings: View {
-    @EnvironmentObject var healthData: HealthData
-
-    var lineWidth: CGFloat = 10
-    
-    var body: some View {
-        let paddingSize = lineWidth + 2
-        
-        ZStack {
-            BenchPressRing(lineWidth: lineWidth, color: .purple)
-                .environmentObject(healthData.fitness)
-                .environmentObject(healthData.workouts)
-            SquatRing(lineWidth: lineWidth, color: .pink)
-                .environmentObject(healthData.fitness)
-                .environmentObject(healthData.workouts)
-                .padding(paddingSize)
-        }
-    }
-}
+//struct LiftingRings: View {
+//    @EnvironmentObject var healthData: HealthData
+//
+//    var lineWidth: CGFloat = 10
+//    
+//    var body: some View {
+//        let paddingSize = lineWidth + 2
+//        
+//        ZStack {
+//            BenchPressRing(lineWidth: lineWidth, color: .purple)
+//                .environmentObject(healthData.workouts)
+//            SquatRing(lineWidth: lineWidth, color: .pink)
+//                .environmentObject(healthData.workouts)
+//                .padding(paddingSize)
+//        }
+//    }
+//}
 
 struct AllRings: View {
     @EnvironmentObject var healthData: HealthData

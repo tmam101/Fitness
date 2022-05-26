@@ -61,7 +61,7 @@
 		486C072E27EB929900713480 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
 		486C072F27EB92B600713480 /* FitnessViewViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48108135278A3609008E9AE6 /* FitnessViewViews.swift */; };
 		486C073027EB92BD00713480 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
-		486C073427EB948C00713480 /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
+		486C073427EB948C00713480 /* WeightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* WeightManager.swift */; };
 		486C073527EB957100713480 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		48755A4D267A707900F7680E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48755A4C267A707900F7680E /* Assets.xcassets */; };
 		48755A50267A707900F7680E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48755A4F267A707900F7680E /* Preview Assets.xcassets */; };
@@ -96,7 +96,7 @@
 		48A0D46F25BB71CC007C40ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48A0D46E25BB71CC007C40ED /* Assets.xcassets */; };
 		48A0D47325BB71CD007C40ED /* FitnessWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 48A0D46525BB71CB007C40ED /* FitnessWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		48A0D48725BB72E3007C40ED /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D45225BB6605007C40ED /* FitnessView.swift */; };
-		48A0D48D25BB72F8007C40ED /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
+		48A0D48D25BB72F8007C40ED /* WeightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* WeightManager.swift */; };
 		48A0D49325BB72FC007C40ED /* Progress Rings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D7995C25B8C7950047C8E0 /* Progress Rings.swift */; };
 		48A0D49B25BB8703007C40ED /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A0D49A25BB8703007C40ED /* HealthKit.framework */; };
 		48A0D4A225BB92DE007C40ED /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A0D49A25BB8703007C40ED /* HealthKit.framework */; };
@@ -145,7 +145,7 @@
 		48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48BD6F53274B162A0007AC15 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E20A26041E700037EEAF /* Stats.swift */; };
 		48BD6F54274B162A0007AC15 /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
-		48BD6F55274B162E0007AC15 /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
+		48BD6F55274B162E0007AC15 /* WeightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* WeightManager.swift */; };
 		48BD6F56274B162E0007AC15 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		48BD6F57274B162E0007AC15 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
 		48BD6F58274B16350007AC15 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
@@ -159,7 +159,7 @@
 		48D9C7AA27FCB08C003BE84D /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		48D9C7AB27FCB0AA003BE84D /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		48D9C7AC27FCB0B3003BE84D /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
-		48D9C7AD27FCB0BD003BE84D /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
+		48D9C7AD27FCB0BD003BE84D /* WeightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* WeightManager.swift */; };
 		48D9C7AE27FCB0C2003BE84D /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* Workout.swift */; };
 		48D9C7AF27FCB0CB003BE84D /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D48E278581CB0001BE9D /* RunManager.swift */; };
 		48D9C7B027FCB0CE003BE84D /* CalorieManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D492278584750001BE9D /* CalorieManager.swift */; };
@@ -203,7 +203,7 @@
 		48E0E21926041F3D0037EEAF /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
 		48E4B44D262619DE002321B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
 		48E4B44F262619DE002321B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4B44C262619DE002321B5 /* Environment.swift */; };
-		48EC266A25B8D1280003B455 /* FitnessCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* FitnessCalculations.swift */; };
+		48EC266A25B8D1280003B455 /* WeightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC266925B8D1280003B455 /* WeightManager.swift */; };
 		48EE13292738C3E600128623 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
 		48EE132A2738C3E700128623 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EE13282738C3AB00128623 /* Run.swift */; };
 /* End PBXBuildFile section */
@@ -394,7 +394,7 @@
 		48E0E20A26041E700037EEAF /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		48E0E21726041F3D0037EEAF /* TextCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCollections.swift; sourceTree = "<group>"; };
 		48E4B44C262619DE002321B5 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
-		48EC266925B8D1280003B455 /* FitnessCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessCalculations.swift; sourceTree = "<group>"; };
+		48EC266925B8D1280003B455 /* WeightManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightManager.swift; sourceTree = "<group>"; };
 		48EE13282738C3AB00128623 /* Run.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -748,7 +748,7 @@
 			isa = PBXGroup;
 			children = (
 				4845B7A125C0B2AA003BF999 /* HealthData.swift */,
-				48EC266925B8D1280003B455 /* FitnessCalculations.swift */,
+				48EC266925B8D1280003B455 /* WeightManager.swift */,
 				48AF60EA2640F65C00C6CC11 /* Workout.swift */,
 				4803BE9E271F035C00882BCC /* Day.swift */,
 				4802D48E278581CB0001BE9D /* RunManager.swift */,
@@ -1154,7 +1154,7 @@
 				48755A8C267AF13200F7680E /* Weight.swift in Sources */,
 				48755A7F267A70AC00F7680E /* Workout.swift in Sources */,
 				486C072127EB918F00713480 /* FitnessAppMac.swift in Sources */,
-				486C073427EB948C00713480 /* FitnessCalculations.swift in Sources */,
+				486C073427EB948C00713480 /* WeightManager.swift in Sources */,
 				48755A78267A70AC00F7680E /* FloatingPointExtensions.swift in Sources */,
 				4827C9A326828C18006700A1 /* DoubleExtension.swift in Sources */,
 				48813F5B2798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
@@ -1204,7 +1204,7 @@
 				48EE132A2738C3E700128623 /* Run.swift in Sources */,
 				4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */,
 				48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */,
-				48EC266A25B8D1280003B455 /* FitnessCalculations.swift in Sources */,
+				48EC266A25B8D1280003B455 /* WeightManager.swift in Sources */,
 				485B992627CEC29C00C70C81 /* Settings.swift in Sources */,
 				48108136278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
 				48813F592798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
@@ -1243,7 +1243,7 @@
 				48D9C7AF27FCB0CB003BE84D /* RunManager.swift in Sources */,
 				48D9C7BA27FCB11E003BE84D /* Progress Rings.swift in Sources */,
 				48D9C7B527FCB110003BE84D /* DeficitLineGraph.swift in Sources */,
-				48D9C7AD27FCB0BD003BE84D /* FitnessCalculations.swift in Sources */,
+				48D9C7AD27FCB0BD003BE84D /* WeightManager.swift in Sources */,
 				48D9C7BE27FCB129003BE84D /* ColorExtension.swift in Sources */,
 				48D9C7AC27FCB0B3003BE84D /* Run.swift in Sources */,
 				48D9C7BD27FCB125003BE84D /* Environment.swift in Sources */,
@@ -1279,7 +1279,7 @@
 				48A7706D260529C3002E5853 /* ColorExtension.swift in Sources */,
 				4832D11827835D3400414573 /* WatchManager.swift in Sources */,
 				48E0E1E12603C47F0037EEAF /* GenericCircles.swift in Sources */,
-				48A0D48D25BB72F8007C40ED /* FitnessCalculations.swift in Sources */,
+				48A0D48D25BB72F8007C40ED /* WeightManager.swift in Sources */,
 				48BD6E6C274AFAC50007AC15 /* LineGraph.swift in Sources */,
 				485B72802631EBB40070E096 /* Ring (unused).swift in Sources */,
 				48DE1DE227A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
@@ -1335,7 +1335,7 @@
 				48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */,
 				48BD6F46274B16060007AC15 /* BarChart.swift in Sources */,
 				48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */,
-				48BD6F55274B162E0007AC15 /* FitnessCalculations.swift in Sources */,
+				48BD6F55274B162E0007AC15 /* WeightManager.swift in Sources */,
 				48108138278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
 				4802D495278585CF0001BE9D /* CalorieManager.swift in Sources */,
 				48BD6F5B274B16B50007AC15 /* Run.swift in Sources */,

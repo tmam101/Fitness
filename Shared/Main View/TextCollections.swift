@@ -11,9 +11,9 @@ struct WeightLossText: View {
     @EnvironmentObject var healthData: HealthData
     
     var body: some View {
-        let weightLostString = String(format: "%.2f", healthData.fitness.weightLost) //todo these arent in the model
-        let averageWeeklyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeek) + " avg"
-        let averageMonthlyLostString = String(format: "%.2f", healthData.fitness.averageWeightLostPerWeekThisMonth) + " wkly avg"
+        let weightLostString = String(format: "%.2f", healthData.weightManager.weightLost) //todo these arent in the model
+        let averageWeeklyLostString = String(format: "%.2f", healthData.weightManager.averageWeightLostPerWeek) + " avg"
+        let averageMonthlyLostString = String(format: "%.2f", healthData.weightManager.averageWeightLostPerWeekThisMonth) + " wkly avg"
         
 //        let averageDeficit = healthData.averageDeficitSinceStart / 1000
 //        let averageWeightLoss = healthData.fitness.averageWeightLostPerWeek / 2
@@ -33,13 +33,12 @@ struct LiftingText: View {
     
     var body: some View {
         LiftingTextInterior()
-            .environmentObject(healthData.fitness)
             .environmentObject(healthData.workouts)
     }
 }
 
 private struct LiftingTextInterior: View {
-    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var fitness: WeightManager
     @EnvironmentObject var workouts: WorkoutInformation
     
     var body: some View {
@@ -81,7 +80,7 @@ struct DeficitText: View {
 //        let totalDeficitString = String(totalDeficit) + "/1000"
         let monthDeficitString = String(monthlyDeficit) + "/\(Int(healthData.goalDeficit))"
         // Percentages
-        let weightLostPercentString = String(healthData.fitness.percentWeightLost) + "% lost"
+        let weightLostPercentString = String(healthData.weightManager.percentWeightLost) + "% lost"
         let averageDeficitPercentString = String(healthData.percentWeeklyDeficit) + "% dfct"
         let deficitTodayPercentString = String(healthData.percentDailyDeficit) + "% dfct tdy"
         

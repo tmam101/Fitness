@@ -10,10 +10,10 @@ import HealthKit
 import SwiftUI
 
 class RunManager {
-    var fitness: FitnessCalculations
+    var fitness: WeightManager
     var startDate: Date
     
-    init(fitness: FitnessCalculations, startDate: Date) {
+    init(fitness: WeightManager, startDate: Date) {
         self.fitness = fitness
         self.startDate = startDate
     }
@@ -43,20 +43,25 @@ class RunManager {
         }
     }
     
+    func workoutToRun(_ item: HKWorkout) async -> Run {
+        let duration = Double(item.duration) / 60
+        let distance = item.totalDistance?.doubleValue(for: .mile()) ?? 1
+        let average = duration / distance
+        let indoor = item.metadata?["HKIndoorWorkout"] as! Bool
+        let burned = item.totalEnergyBurned?.doubleValue(for: .kilocalorie())
+        let weightAtTime = await fitness.weight(at: item.startDate)
+        let run = Run(date: item.startDate, totalDistance: distance, totalTime: duration, averageMileTime: average, indoor: indoor, caloriesBurned: burned ?? 0, weightAtTime: weightAtTime)
+        return run
+    }
+    
     func getRunningWorkouts() async -> [Run] {
         let runningWorkouts = await loadRunningWorkouts()
         guard let runningWorkouts = runningWorkouts else {
             return []
         }
-        var runs = runningWorkouts.map { item -> Run in
-            let duration = Double(item.duration) / 60
-            let distance = item.totalDistance?.doubleValue(for: .mile()) ?? 1
-            let average = duration / distance
-            let indoor = item.metadata?["HKIndoorWorkout"] as! Bool
-            let burned = item.totalEnergyBurned?.doubleValue(for: .kilocalorie())
-            let weightAtTime = fitness.weight(at: item.startDate)
-            let run = Run(date: item.startDate, totalDistance: distance, totalTime: duration, averageMileTime: average, indoor: indoor, caloriesBurned: burned ?? 0, weightAtTime: weightAtTime)
-            return run
+        var runs: [Run] = []
+        for item in runningWorkouts {
+            await runs.append(workoutToRun(item))
         }
         
         // Handle exceptions

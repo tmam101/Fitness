@@ -97,7 +97,6 @@ struct FitnessViewWatch: View {
                 ZStack {
                     DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
                         .environmentObject(healthData)
-                        .environmentObject(healthData.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
                         .background(Color.myGray)
@@ -131,7 +130,6 @@ struct FitnessViewWatch: View {
                             .frame(maxWidth: .infinity)
                         RunningLineGraph(runsToShow: $runsToShow)
                             .environmentObject(healthData)
-                            .environmentObject(healthData.fitness)
                             .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                             .padding()
                             .background(Color.myGray)

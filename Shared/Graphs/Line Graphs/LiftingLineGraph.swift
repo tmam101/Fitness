@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct LiftingLineGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
+    @EnvironmentObject var healthData: HealthData
+    
     var oneRepMaxes: [OneRepMax] = [OneRepMax(exerciseName: "Test", date: Date(), weight: 150)]
     var color: Color = .black
     
@@ -30,7 +31,7 @@ struct LiftingLineGraph: View {
         
         // Compare ORMs to bodyweight and create a ratio
         let adjustedOneRepMaxes = oneRepMaxes // one rep maxes
-            .map { (name: $0.exerciseName, weights: Weight.closestTwoWeightsToDate(weights: fitness.weights, date: $0.date), date: $0.date, orm: $0.weight) } // get the body weights that each is between and the date
+            .map { (name: $0.exerciseName, weights: Weight.closestTwoWeightsToDate(weights: healthData.weightManager.weights, date: $0.date), date: $0.date, orm: $0.weight) } // get the body weights that each is between and the date
             .map { (name: $0.name, bodyweight: Weight.weightBetweenTwoWeights(date: $0.date, weight1: $0.weights?.first, weight2: $0.weights?.last), date: $0.date, orm: $0.orm) } // get the average body weight
             .map { (name: $0.name, bodyweight: $0.bodyweight, date: $0.date, orm: $0.orm, percentage: $0.orm / $0.bodyweight) }
         guard let first = oneRepMaxes.first else { return [CGPoint(x: 0, y: 0)] }

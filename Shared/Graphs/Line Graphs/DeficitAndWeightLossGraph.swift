@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct DeficitAndWeightLossGraph: View {
-    @EnvironmentObject var fitness: FitnessCalculations
     @EnvironmentObject var healthData: HealthData
     @Binding var daysAgoToReach: Double
     
@@ -16,7 +15,6 @@ struct DeficitAndWeightLossGraph: View {
         VStack {
             MainView(daysAgoToReach: $daysAgoToReach)
                 .environmentObject(healthData)
-                .environmentObject(fitness)
             HStack {
                 let dateToReach = Date.subtract(days: Int(daysAgoToReach), from: Date())
                 
@@ -34,13 +32,12 @@ struct DeficitAndWeightLossGraph: View {
     }
     
     struct MainView: View {
-        @EnvironmentObject var fitness: FitnessCalculations
         @EnvironmentObject var healthData: HealthData
         @Binding var daysAgoToReach: Double
         
         var body: some View {
             let expectedWeights = healthData.expectedWeights
-            let weights = fitness.weights
+            let weights = healthData.weightManager.weights
             let dateToReach = Date.subtract(days: Int(daysAgoToReach), from: Date())
             let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
             let expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
@@ -115,7 +112,6 @@ struct DeficitAndWeightLossGraph: View {
         var body: some View {
             DeficitAndWeightLossGraph(daysAgoToReach: $days)
                 .environmentObject(health)
-                .environmentObject(health.fitness)
                 .frame(minWidth: 0, maxWidth: .infinity, maxHeight: 400)
                 .padding()
                 .background(Color.myGray)

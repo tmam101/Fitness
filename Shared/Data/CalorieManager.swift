@@ -10,13 +10,14 @@ import Foundation
 import HealthKit
 #endif
 
+@MainActor
 class CalorieManager {
     
     //MARK: PROPERTIES
     var activeCalorieModifier: Double = 1
     var adjustActiveCalorieModifier: Bool = false
     var daysBetweenStartAndNow: Int = 0
-    var fitness: FitnessCalculations? = nil
+    var fitness: WeightManager? = nil
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     var minimumActiveCalories: Double = 200
@@ -26,7 +27,7 @@ class CalorieManager {
     
     //MARK: SETUP
     
-    func setup(goalDeficit: Double, fitness: FitnessCalculations, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+    func setup(goalDeficit: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
             self.minimumRestingCalories = r
         }

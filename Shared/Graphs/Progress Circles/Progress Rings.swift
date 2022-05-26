@@ -15,7 +15,7 @@ struct MonthlyAverageWeightLossCircle: View {
     var color = Color.green1
     
     var body: some View {
-        let average = CGFloat(healthData.fitness.averageWeightLostPerWeekThisMonth / 2)
+        let average = CGFloat(healthData.weightManager.averageWeightLostPerWeekThisMonth / 2)
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: average, opacity: 1, lineWidth: lineWidth)
 
@@ -91,7 +91,7 @@ struct TotalWeightLossCircle: View {
                 BackgroundCircle(color: color, lineWidth: lineWidth)
                             
                 // Progress
-                GenericCircle(color: color, starting: 0.0, ending: CGFloat(min(healthData.fitness.progressToWeight, 1.0)), opacity: 1, lineWidth: lineWidth)
+                GenericCircle(color: color, starting: 0.0, ending: CGFloat(min(healthData.weightManager.progressToWeight, 1.0)), opacity: 1, lineWidth: lineWidth)
             }
         }
     }
@@ -148,7 +148,7 @@ struct WeightLossAccuracyCircle: View {
     
     var body: some View {
         let averageDeficit = healthData.averageDeficitSinceStart / healthData.goalDeficit
-        let averageWeightLoss = healthData.fitness.averageWeightLostPerWeek / 2
+        let averageWeightLoss = healthData.weightManager.averageWeightLostPerWeek / 2
         let ratio = CGFloat(averageWeightLoss / averageDeficit).corrected()
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: ratio, opacity: 1, lineWidth: lineWidth)
@@ -161,57 +161,55 @@ struct AverageTotalWeightLossCircle: View {
     var color = Color.green1
     
     var body: some View {
-        let averageWeightLoss = CGFloat(healthData.fitness.averageWeightLostPerWeek / 2)
+        let averageWeightLoss = CGFloat(healthData.weightManager.averageWeightLostPerWeek / 2)
         BackgroundCircle(color: color, lineWidth: lineWidth)
         GenericCircle(color: color, starting: 0.0, ending: averageWeightLoss, opacity: 1, lineWidth: lineWidth)
     }
 }
 
-struct BenchPressRing: View {
-    @EnvironmentObject var fitness: FitnessCalculations
-    @EnvironmentObject var workouts: WorkoutInformation
-
-    var lineWidth: CGFloat = 10.0
-    var color = Color.green1
-    
-    var body: some View {
-        let startingBench = workouts.firstBenchORM 
-        let startingWeight = fitness.startingWeight
-        let startingRatio = CGFloat(startingBench / startingWeight) / CGFloat(WorkoutInformation.benchBodyweightRatio) // 80
-        
-        let benchORM = workouts.benchORM 
-        let currentWeight = fitness.currentWeight
-        let ratio = CGFloat(benchORM / currentWeight) / CGFloat(WorkoutInformation.benchBodyweightRatio) // 90
-        
-        let corrected = (ratio - startingRatio) / (1 - startingRatio)
-        let c2 = corrected < 0 ? 0 : corrected
-        
-        BackgroundCircle(color: color, lineWidth: lineWidth)
-        GenericCircle(color: color, starting: 0.0, ending: c2, opacity: 1, lineWidth: lineWidth)
-    }
-}
-
-struct SquatRing: View {
-    @EnvironmentObject var fitness: FitnessCalculations
-    @EnvironmentObject var workouts: WorkoutInformation
-
-
-    var lineWidth: CGFloat = 10.0
-    var color = Color.green1
-    
-    var body: some View {
-        let startingSquat = workouts.firstSquatORM
-        let startingWeight = fitness.startingWeight
-        let startingRatio = CGFloat(startingSquat / startingWeight) / CGFloat(WorkoutInformation.squatBodyweightRatio)
-        
-        let squatORM = workouts.squatORM
-        let currentWeight = fitness.currentWeight
-        let ratio = CGFloat(squatORM / currentWeight) / CGFloat(WorkoutInformation.squatBodyweightRatio)
-        
-        let corrected = (ratio - startingRatio) / (1 - startingRatio)
-        let c2 = corrected < 0 ? 0 : corrected
-
-        BackgroundCircle(color: color, lineWidth: lineWidth)
-        GenericCircle(color: color, starting: 0.0, ending: c2, opacity: 1, lineWidth: lineWidth)
-    }
-}
+//struct BenchPressRing: View {
+//    @EnvironmentObject var workouts: WorkoutInformation
+//
+//    var lineWidth: CGFloat = 10.0
+//    var color = Color.green1
+//
+//    var body: some View {
+//        let startingBench = workouts.firstBenchORM
+//        let startingWeight = healthData.startingWeight
+//        let startingRatio = CGFloat(startingBench / startingWeight) / CGFloat(WorkoutInformation.benchBodyweightRatio) // 80
+//
+//        let benchORM = workouts.benchORM
+//        let currentWeight = fitness.currentWeight
+//        let ratio = CGFloat(benchORM / currentWeight) / CGFloat(WorkoutInformation.benchBodyweightRatio) // 90
+//
+//        let corrected = (ratio - startingRatio) / (1 - startingRatio)
+//        let c2 = corrected < 0 ? 0 : corrected
+//
+//        BackgroundCircle(color: color, lineWidth: lineWidth)
+//        GenericCircle(color: color, starting: 0.0, ending: c2, opacity: 1, lineWidth: lineWidth)
+//    }
+//}
+//
+//struct SquatRing: View {
+//    @EnvironmentObject var workouts: WorkoutInformation
+//
+//
+//    var lineWidth: CGFloat = 10.0
+//    var color = Color.green1
+//
+//    var body: some View {
+//        let startingSquat = workouts.firstSquatORM
+//        let startingWeight = fitness.startingWeight
+//        let startingRatio = CGFloat(startingSquat / startingWeight) / CGFloat(WorkoutInformation.squatBodyweightRatio)
+//
+//        let squatORM = workouts.squatORM
+//        let currentWeight = fitness.currentWeight
+//        let ratio = CGFloat(squatORM / currentWeight) / CGFloat(WorkoutInformation.squatBodyweightRatio)
+//
+//        let corrected = (ratio - startingRatio) / (1 - startingRatio)
+//        let c2 = corrected < 0 ? 0 : corrected
+//
+//        BackgroundCircle(color: color, lineWidth: lineWidth)
+//        GenericCircle(color: color, starting: 0.0, ending: c2, opacity: 1, lineWidth: lineWidth)
+//    }
+//}

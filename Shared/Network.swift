@@ -7,6 +7,7 @@
 
 import Foundation
 
+//TODO: Combine?
 class Network {
     let urlString = "https://tommys-fitness.herokuapp.com/api/fitness/"
     

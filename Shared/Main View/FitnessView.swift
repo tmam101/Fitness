@@ -89,7 +89,6 @@ struct FitnessView: View {
                     ZStack {
                         DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
                             .environmentObject(healthData)
-                            .environmentObject(healthData.fitness)
                             .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                             .padding()
                             .background(Color.myGray)
@@ -105,29 +104,27 @@ struct FitnessView: View {
                         .foregroundColor(.green)
                 }
                 if showLifts {
-                    Group {
-                        StatsTitle(title: "Lifts")
-                        StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
-                            .environmentObject(healthData)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .onTapGesture {
-                                healthData.workouts.smithMachine.toggle()
-                                healthData.workouts.calculate()
-                            }
-                    }
-                    ZStack {
-                        BenchGraph()
-                            .environmentObject(healthData.workouts)
-                            .environmentObject(healthData.fitness)
-                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
-                            .padding()
-                            .background(Color.myGray)
-                            .cornerRadius(20)
-                        SquatGraph()
-                            .environmentObject(healthData.workouts)
-                            .environmentObject(healthData.fitness)
-                            .padding()
-                    }
+//                    Group {
+//                        StatsTitle(title: "Lifts")
+//                        StatsRow(text: { LiftingText() }, rings: { LiftingRings() })
+//                            .environmentObject(healthData)
+//                            .frame(minWidth: 0, maxWidth: .infinity)
+//                            .onTapGesture {
+//                                healthData.workouts.smithMachine.toggle()
+//                                healthData.workouts.calculate()
+//                            }
+//                    }
+//                    ZStack {
+//                        BenchGraph()
+//                            .environmentObject(healthData.workouts)
+//                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: 200)
+//                            .padding()
+//                            .background(Color.myGray)
+//                            .cornerRadius(20)
+//                        SquatGraph()
+//                            .environmentObject(healthData.workouts)
+//                            .padding()
+//                    }
                 }
                 Group {
                     StatsTitle(title: "Mile Time")
@@ -150,7 +147,6 @@ struct FitnessView: View {
                         .frame(maxWidth: .infinity)
                     RunningLineGraph(runsToShow: $runsToShow)
                         .environmentObject(healthData)
-                        .environmentObject(healthData.fitness)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
                         .background(Color.myGray)
