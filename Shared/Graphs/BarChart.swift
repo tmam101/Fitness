@@ -7,37 +7,21 @@
 
 import SwiftUI
 
-struct TodaysDate {
-    var fullDayName: String = ""
-    var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    
-    func day(subtracting: Int) -> String {
-        var index = days.firstIndex(of: fullDayName) ?? 0
-        index = index - subtracting
-        while index < 0 {
-            index = days.count + index
-        }
-        return days[index]
-    }
-    
-    init() {
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        fullDayName = dateFormatter.string(from: date)
-    }
-}
-
 struct DaysLetters: View {
+    @EnvironmentObject var healthData: HealthData
     var isComplication = false
-    let day = TodaysDate()
+    
     var body: some View {
-        HStack {
-            ForEach((0...7).reversed(), id: \.self) {
-                Text(String(day.day(subtracting: $0).first ?? "?"))
-                    .frame(maxWidth: .infinity)
-                    .foregroundColor(.white)
-                    .font((isComplication || GlobalEnvironment.isWatch) ? .system(size: 8) : .caption)
+        if healthData.days.count > 8 {
+            HStack {
+                ForEach((0...7).reversed(), id: \.self) {
+                    let day = healthData.days[$0]!
+                    let dayOfWeek: String = String(day.date.dayOfWeek().first ?? "?")
+                    Text(dayOfWeek)
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(.white)
+                        .font((isComplication || GlobalEnvironment.isWatch) ? .system(size: 8) : .caption)
+                }
             }
         }
     }
@@ -112,6 +96,7 @@ struct BarChart: View {
                     .frame(maxHeight: .infinity)
                 
                 DaysLetters()
+                    .environmentObject(healthData)
                     .padding([.trailing], 50)
                     .padding([.leading], 10)
                 
