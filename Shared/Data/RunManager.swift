@@ -54,7 +54,7 @@ class RunManager: ObservableObject {
         let average = duration / distance
         let indoor = item.metadata?["HKIndoorWorkout"] as! Bool
         let burned = item.totalEnergyBurned?.doubleValue(for: .kilocalorie())
-        let weightAtTime = await fitness?.weight(at: item.startDate) ?? 1
+        let weightAtTime = fitness?.weight(at: item.startDate) ?? 1
         let run = Run(date: item.startDate, totalDistance: distance, totalTime: duration, averageMileTime: average, indoor: indoor, caloriesBurned: burned ?? 0, weightAtTime: weightAtTime)
         return run
     }

@@ -48,7 +48,6 @@ struct TodayRing: View {
     var lineWidth: CGFloat = 10
     
     var body: some View {
-        let paddingSize = lineWidth + 2
         
         ZStack() {
             VStack {

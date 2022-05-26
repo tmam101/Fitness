@@ -75,10 +75,10 @@ struct DeficitText: View {
         let monthlyDeficit: Int = Int(healthData.calorieManager.averageDeficitThisMonth)
         
         // Non-percentages
-        let averageDeficitString = String(averageDeficit) + "/\(Int(healthData.goalDeficit))"
+        let averageDeficitString = String(averageDeficit) + "/\(Int(healthData.calorieManager.goalDeficit))"
         let deficitTodayString = String(deficitToday) + "/" + String(idealDeficit) + ""
 //        let totalDeficitString = String(totalDeficit) + "/1000"
-        let monthDeficitString = String(monthlyDeficit) + "/\(Int(healthData.goalDeficit))"
+        let monthDeficitString = String(monthlyDeficit) + "/\(Int(healthData.calorieManager.goalDeficit))"
         // Percentages
         let weightLostPercentString = String(healthData.weightManager.percentWeightLost) + "% lost"
         let averageDeficitPercentString = String(healthData.calorieManager.percentWeeklyDeficit) + "% dfct"

@@ -21,7 +21,7 @@ class CalorieManager: ObservableObject {
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     var minimumActiveCalories: Double = 200
     var minimumRestingCalories: Double = 2150
-    var goalDeficit: Double = 1000
+    @Published var goalDeficit: Double = 500
     var days: [Int: Day] = [:]
     var startingWeight: Double = 0
     
@@ -42,7 +42,7 @@ class CalorieManager: ObservableObject {
     
     //MARK: SETUP
     
-    func setup(startingWeight: Double, goalDeficit: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+    func setup(startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
             self.minimumRestingCalories = r
         }

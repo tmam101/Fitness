@@ -22,32 +22,20 @@ class HealthData: ObservableObject {
     //MARK: PROPERTIES
     var environment: AppEnvironmentConfig = .debug
 #if !os(macOS)
-    private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     @Published var calorieManager: CalorieManager = CalorieManager()
     @Published var runManager: RunManager = RunManager()
     private let network = Network()
 #endif
     @Published public var weightManager: WeightManager = WeightManager()
     @Published public var workoutManager: WorkoutManager = WorkoutManager()
-    
-    // Deficits
-//    @State var watchConnectivityIphone = WatchConnectivityIphone()
 
     @Published public var days: [Int:Day] = [:]
-        
-    // Days
     @Published public var daysBetweenStartAndNow: Int = 350
-    @Published public var dateSaved: Date = Date.distantPast
-    
     @Published public var hasLoaded: Bool = false
         
     // Constants
-    @State var goalDeficit: Double = 500
-    let goalEaten: Double = 1500
-    let caloriesInPound: Double = 3500
     var startDateString = "01.23.2021"
     var startDate: Date?
-    let formatter = DateFormatter()
     
     //MARK: INIT
     init(environment: AppEnvironmentConfig) {
@@ -86,7 +74,7 @@ class HealthData: ObservableObject {
             // Setup managers
             await weightManager.setup()
             await runManager.setup(fitness: weightManager, startDate: self.startDate ?? Date())
-            await calorieManager.setup(startingWeight: weightManager.startingWeight, goalDeficit: goalDeficit, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
             
             guard !calorieManager.days.isEmpty else {
@@ -129,33 +117,33 @@ class HealthData: ObservableObject {
         }
     }
     
-    func createRealisticWeights() async {
-        //TODO: Finish creating realisticWeights
-        // Start on first weight
-        // Loop through each subsequent day, finding expected weight loss
-        // Find next weight's actual loss
-        // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
-        var realisticWeights: [Int: Double] = [:]
-        var currentWeight = weightManager.weights.last
-        
-        for i in stride(from: days.count - 1, through: 0, by: -1) {
-            await abc(i, days)
-        }
-        
-        func abc(_ i: Int, _ days: [Int:Day]) async {
-            let day = days[i]!
-            let date = day.date
-            let nextWeight = await weightManager.weights.last(where: { $0.date < date })
-            let nextWeightDate = Date.startOfDay(nextWeight?.date ?? Date())
-            if await date < Date.startOfDay(weightManager.weights.last!.date) {
-                return
-            }
-            let expectedWeightLoss = day.deficit / 3500
-            if i == days.count - 1 {
-                //                    realisticWeights[i] = fitness.weights
-            }
-        }
-    }
+//    func createRealisticWeights() async {
+//        //TODO: Finish creating realisticWeights
+//        // Start on first weight
+//        // Loop through each subsequent day, finding expected weight loss
+//        // Find next weight's actual loss
+//        // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
+//        var realisticWeights: [Int: Double] = [:]
+//        var currentWeight = weightManager.weights.last
+//        
+//        for i in stride(from: days.count - 1, through: 0, by: -1) {
+//            await abc(i, days)
+//        }
+//        
+//        func abc(_ i: Int, _ days: [Int:Day]) async {
+//            let day = days[i]!
+//            let date = day.date
+//            let nextWeight = await weightManager.weights.last(where: { $0.date < date })
+//            let nextWeightDate = Date.startOfDay(nextWeight?.date ?? Date())
+//            if await date < Date.startOfDay(weightManager.weights.last!.date) {
+//                return
+//            }
+//            let expectedWeightLoss = day.deficit / 3500
+//            if i == days.count - 1 {
+//                //                    realisticWeights[i] = fitness.weights
+//            }
+//        }
+//    }
     
     
     func setValuesFromNetworkWithDays(reloadToday: Bool = false) async {
@@ -168,7 +156,7 @@ class HealthData: ObservableObject {
         if reloadToday {
             let calorieManager = CalorieManager()
             self.calorieManager = calorieManager
-            await calorieManager.setup(startingWeight: weightManager.startingWeight, goalDeficit: goalDeficit, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
             let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
             today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier

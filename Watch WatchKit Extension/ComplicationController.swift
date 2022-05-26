@@ -61,7 +61,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             let entry = CLKComplicationTimelineEntry(
                 date: Date(),
                 complicationTemplate: cTemplate)
-            DispatchQueue.main.async { [self] in
+            DispatchQueue.main.async {
                 handler(entry)
             }
         }

@@ -186,7 +186,7 @@ struct BarChart: View {
             let results = BarChart.deficitsToPercents(goalDeficit: healthData.calorieManager.goalDeficit, daysAndDeficits: healthData.calorieManager.deficitsThisWeek)
             let percents = results.0
             let top = results.1
-            let horizontalRatio = top / healthData.goalDeficit
+            let horizontalRatio = top / healthData.calorieManager.goalDeficit
             let avgRatio = top / (healthData.calorieManager.averageDeficitThisWeek == 0 ? 1 : healthData.calorieManager.averageDeficitThisWeek)
                         
 //            let tmrwRatio = top / (healthData.projectedAverageWeeklyDeficitForTomorrow == 0 ? 1 : healthData.projectedAverageWeeklyDeficitForTomorrow)
@@ -233,7 +233,7 @@ struct BarChart: View {
                             .offset(x: 0.0, y: heightOffset - 2.5)
                             .foregroundColor(.white)
                             .opacity(0.5)
-                        Text("\(Int(healthData.goalDeficit))")
+                        Text("\(Int(healthData.calorieManager.goalDeficit))")
                             .font(.system(size: 8))
                             .frame(maxWidth: 50)
                             .position(x: geometry.size.width - 20, y: 0.0)
