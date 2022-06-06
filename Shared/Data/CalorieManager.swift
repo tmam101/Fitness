@@ -126,7 +126,7 @@ class CalorieManager: ObservableObject {
             let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
             let startingWeight = fitness?.weight(at: startDate) ?? 0
             let weightLost = startingWeight - (fitness?.weights.first?.weight ?? 0)
-            let activeCalorieModifier = await getActiveCalorieModifier(days: days, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: false)
+            let activeCalorieModifier = min(1.0, await getActiveCalorieModifier(days: days, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: false))
             Settings.set(key: .activeCalorieModifier, value: activeCalorieModifier)
             for i in stride(from: days.count - 1, through: 0, by: -1) {
                 let newActive = (days[i]?.activeCalories ?? 0) * activeCalorieModifier
