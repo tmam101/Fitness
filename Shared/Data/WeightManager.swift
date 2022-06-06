@@ -17,7 +17,7 @@ import ClockKit
 class WeightManager: ObservableObject {
     var environment: AppEnvironmentConfig?
     
-    let startDateString = "01.23.2021"
+    var startDateString = "01.23.2021"
     let endDateString = "05.01.2021"
     @Published var startingWeight: Double = 231.8
     @Published var currentWeight: Double = 231.8
@@ -59,6 +59,7 @@ class WeightManager: ObservableObject {
     }
     
     func setup() async {
+        self.startDateString = Settings.get(key: .startDate) as? String ?? self.startDateString
         self.weights = await getWeights()
         self.currentWeight = self.weights.first?.weight ?? 1
         self.startingWeight = self.weights.last?.weight ?? self.startingWeight
