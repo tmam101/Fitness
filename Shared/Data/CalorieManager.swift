@@ -15,6 +15,7 @@ class CalorieManager: ObservableObject {
     //MARK: PROPERTIES
     var activeCalorieModifier: Double = 1
     var adjustActiveCalorieModifier: Bool = false
+    var allowThreeDaysOfFasting = false
     var daysBetweenStartAndNow: Int = 0
     var fitness: WeightManager? = nil
     private let healthStore = HKHealthStore()
@@ -177,11 +178,13 @@ class CalorieManager: ObservableObject {
                           expectedWeight: expectedWeight)
             
             //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
-            if i < daysBetweenStartAndNow - 1 {
-                if dayInformation[i]?.consumedCalories == 0 &&
-                    dayInformation[i+1]?.consumedCalories == 0 &&
-                    dayInformation[i+2]?.consumedCalories == 0 {
-                    return [:]
+            if !allowThreeDaysOfFasting {
+                if i < daysBetweenStartAndNow - 1 {
+                    if dayInformation[i]?.consumedCalories == 0 &&
+                        dayInformation[i+1]?.consumedCalories == 0 &&
+                        dayInformation[i+2]?.consumedCalories == 0 {
+                        return [:]
+                    }
                 }
             }
             dayInformation[i] = day
@@ -212,11 +215,13 @@ class CalorieManager: ObservableObject {
     //TODO: Prevent this error from occurring
     /// Catch error where sometimes days will be loaded with empty information.
     func catchError(in days: [Int:Day]) -> Bool {
-        for i in 0..<days.count {
-            if days[i]?.consumedCalories == 0 && i < days.count - 2 {
-                if days[i+1]?.consumedCalories == 0 &&
-                    days[i+2]?.consumedCalories == 0 {
-                    return true
+        if !allowThreeDaysOfFasting {
+            for i in 0..<days.count {
+                if days[i]?.consumedCalories == 0 && i < days.count - 2 {
+                    if days[i+1]?.consumedCalories == 0 &&
+                        days[i+2]?.consumedCalories == 0 {
+                        return true
+                    }
                 }
             }
         }
