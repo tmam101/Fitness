@@ -39,22 +39,15 @@ class CalorieManager: ObservableObject {
     @Published public var deficitsThisWeek: [Int:Double] = [:]
     @Published public var dailyActiveCalories: [Int:Double] = [:]
     @Published public var expectedWeights: [LineGraph.DateAndDouble] = []
-
     
     //MARK: SETUP
     
     func setup(overrideMinimumRestingCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
-        if let m = overrideMinimumRestingCalories {
-            self.minimumRestingCalories = m
-        } else if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
-            self.minimumRestingCalories = r
-        }
-        if let active = Settings.get(key: .active) as? Double {
-            self.minimumActiveCalories = active
-        }
-        if let useActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool {
-            self.adjustActiveCalorieModifier = useActiveCalorieModifier
-        }
+        // Set values from settings
+        self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Double ?? self.minimumRestingCalories
+        self.minimumActiveCalories = Settings.get(key: .active) as? Double ?? self.minimumActiveCalories
+        self.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? self.adjustActiveCalorieModifier
+        
         self.fitness = fitness
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
