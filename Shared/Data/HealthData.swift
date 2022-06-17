@@ -122,7 +122,7 @@ class HealthData: ObservableObject {
         }
         
         if reloadToday {
-            await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
             let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
             today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
@@ -132,6 +132,16 @@ class HealthData: ObservableObject {
             days[0]! = today
         }
         let _ = await calorieManager.setValues(from: days)
+        // Set self values
+        setDaysAndFinish(days: days)
+    }
+    
+    func setDaysAndFinish(days: [Int: Day]) {
+        // Set self values
+        DispatchQueue.main.async { [self] in
+            self.days = days
+            self.hasLoaded = true
+        }
     }
     
     //MARK: REALISTIC WEIGHTS
@@ -168,7 +178,7 @@ class HealthData: ObservableObject {
     
     func getDaysModel(from days: [Int: Day], activeCalorieModifier: Double) -> HealthDataPostRequestModelWithDays {
         let d: [Day] = Array(days.values)
-        return HealthDataPostRequestModelWithDays(days: d, activeCalorieModifier: activeCalorieModifier)
+        return HealthDataPostRequestModelWithDays(days: d, activeCalorieModifier: activeCalorieModifier, minimumRestingCalories: Settings.get(key: .resting) as? Double ?? 2150)
     }
     
 #if  !os(macOS)
@@ -217,6 +227,7 @@ class HealthData: ObservableObject {
 struct HealthDataPostRequestModelWithDays: Codable {
     var days: [Day] = []
     var activeCalorieModifier: Double = 1
+    var minimumRestingCalories: Double = 2100
 }
 
 struct HealthDataGetRequestModelWithDays: Codable {
@@ -224,9 +235,10 @@ struct HealthDataGetRequestModelWithDays: Codable {
     let days: [Day]
     let createdAt: String
     let activeCalorieModifier: Double
+    let minimumRestingCalories: Double
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
-        case days, createdAt, activeCalorieModifier
+        case days, createdAt, activeCalorieModifier, minimumRestingCalories
     }
 }

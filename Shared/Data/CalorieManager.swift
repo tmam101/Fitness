@@ -43,8 +43,10 @@ class CalorieManager: ObservableObject {
     
     //MARK: SETUP
     
-    func setup(shouldGetDays: Bool = true, startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
-        if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
+    func setup(overrideMinimumRestingCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+        if let m = overrideMinimumRestingCalories {
+            self.minimumRestingCalories = m
+        } else if let r = Settings.get(key: .resting) as? Double { //todo widget cant access user defaults
             self.minimumRestingCalories = r
         }
         if let active = Settings.get(key: .active) as? Double {
@@ -65,6 +67,7 @@ class CalorieManager: ObservableObject {
     
     func setValues(from days: [Int:Day]) async {
         if days.count < 30 { return }
+        print("days: \(days)")
         self.deficitsThisWeek = days.filter { $0.key < 8 }.mapValues{ $0.deficit }
         self.deficitToday = days[0]?.deficit ?? 0
         self.deficitToGetCorrectDeficit = self.goalDeficit //todo
@@ -117,9 +120,9 @@ class CalorieManager: ObservableObject {
         let needToReloadAllDays = forceReload || catchError(in: days) || !haveLoadedDaysToday || days.count < 7
         days = needToReloadAllDays ? await getEveryDay() : await reload(days: &days, fromDay: 7)
         if catchError(in: days) { return [:] }
-        
         Settings.setDays(days: days)
-        // Active calorie modifier
+        
+        // Apply active calorie modifier if necessary
         let settingsIndicateActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? false
         if applyActiveCalorieModifier || settingsIndicateActiveCalorieModifier {
             await setActiveCalorieModifier(1)
@@ -143,6 +146,7 @@ class CalorieManager: ObservableObject {
                 }
             }
         }
+        
         return days
     }
     
