@@ -19,3 +19,6 @@ struct Day: Codable {
     var runningTotalDeficit: Double = 0
     var expectedWeight: Double = 0
 }
+
+/// A collection of days, where passing a number indicates how many days ago the returned day will be.
+typealias Days = [Int:Day]

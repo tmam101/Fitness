@@ -23,7 +23,7 @@ class CalorieManager: ObservableObject {
     var minimumActiveCalories: Double = 200
     var minimumRestingCalories: Double = 2150
     @Published var goalDeficit: Double = 500
-    var days: [Int: Day] = [:]
+    var days: Days = [:]
     var startingWeight: Double = 0
     
     @Published public var deficitToday: Double = 0
@@ -58,7 +58,7 @@ class CalorieManager: ObservableObject {
         }
     }
     
-    func setValues(from days: [Int:Day]) async {
+    func setValues(from days: Days) async {
         if days.count < 30 { return }
         print("days: \(days)")
         self.deficitsThisWeek = days.filter { $0.key < 8 }.mapValues{ $0.deficit }
@@ -104,7 +104,7 @@ class CalorieManager: ObservableObject {
     // MARK: GET DAYS
     
     /// Retrieves days in an efficient way. If we've saved all days' info today, only reload this week's days. If not, reload all days.
-    func getDays(forceReload: Bool = false, applyActiveCalorieModifier: Bool = false) async -> [Int:Day] {
+    func getDays(forceReload: Bool = false, applyActiveCalorieModifier: Bool = false) async -> Days {
         var days: [Int: Day] = self.days
         if days.isEmpty {
             days = Settings.getDays() ?? [:]
@@ -144,13 +144,13 @@ class CalorieManager: ObservableObject {
     }
     
     /// Retrieve all day information from healthkit.
-    private func getEveryDay() async -> [Int:Day] {
+    private func getEveryDay() async -> Days {
         return await getDays(forPastDays: daysBetweenStartAndNow)
     }
     
     /// Get day information for the past amount of days. Runningtotaldeficit will start from the first day here.
-    func getDays(forPastDays days: Int) async -> [Int:Day] {
-        var dayInformation: [Int:Day] = [:]
+    func getDays(forPastDays days: Int) async -> Days {
+        var dayInformation: Days = [:]
         for i in stride(from: days, through: 0, by: -1) {
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
             let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
@@ -194,7 +194,7 @@ class CalorieManager: ObservableObject {
     }
     
     /// Reload the end of the days list. This takes into account the running total deficit.
-    func reload(days: inout [Int:Day], fromDay daysAgo: Int) async -> [Int:Day] {
+    func reload(days: inout Days, fromDay daysAgo: Int) async -> Days {
         var reloadedDays = await getDays(forPastDays: daysAgo)
         let earliestDeficit = (days[daysAgo + 1]?.runningTotalDeficit ?? 0) + (reloadedDays[daysAgo]?.deficit ?? 0)
         reloadedDays[daysAgo]?.runningTotalDeficit = earliestDeficit
@@ -211,7 +211,7 @@ class CalorieManager: ObservableObject {
     // MARK: CATCH ERRORS
     //TODO: Prevent this error from occurring
     /// Catch error where sometimes days will be loaded with empty information.
-    func catchError(in days: [Int:Day]) -> Bool {
+    func catchError(in days: Days) -> Bool {
         if !allowThreeDaysOfFasting {
             for i in 0..<days.count {
                 if days[i]?.consumedCalories == 0 && i < days.count - 2 {
@@ -227,7 +227,7 @@ class CalorieManager: ObservableObject {
     
     //MARK: ACTIVE CALORIE MODFIER
     
-    func getActiveCalorieModifier(days: [Int:Day], weightLost: Double, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Double {
+    func getActiveCalorieModifier(days: Days, weightLost: Double, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Double {
         let lastWeight = fitness?.weights.first
         let caloriesLost = weightLost * 3500
         

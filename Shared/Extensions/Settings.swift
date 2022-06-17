@@ -27,10 +27,10 @@ struct Settings {
     static func get(key: UserDefaultsKey) -> Any? {
         UserDefaults.standard.value(forKey: key.rawValue)
     }
-    static func getDays() -> [Int:Day]? {
+    static func getDays() -> Days? {
         if let data = Settings.get(key: .days) as? Data {
             do {
-                let unencoded = try JSONDecoder().decode([Int:Day].self, from: data)
+                let unencoded = try JSONDecoder().decode(Days.self, from: data)
                 return unencoded
             } catch {
                 print("error getDaysFromSettings")
@@ -40,7 +40,7 @@ struct Settings {
         return nil
     }
     
-    static func setDays(days: [Int:Day]) {
+    static func setDays(days: Days) {
         do {
             let encodedData = try JSONEncoder().encode(days)
             Settings.set(key: .days, value: encodedData)

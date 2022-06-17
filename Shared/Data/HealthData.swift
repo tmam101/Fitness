@@ -28,7 +28,7 @@ class HealthData: ObservableObject {
     @Published public var weightManager: WeightManager = WeightManager()
     @Published public var workoutManager: WorkoutManager = WorkoutManager()
 
-    @Published public var days: [Int:Day] = [:]
+    @Published public var days: Days = [:]
     @Published public var daysBetweenStartAndNow: Int = 350
     @Published public var hasLoaded: Bool = false
         
@@ -116,7 +116,7 @@ class HealthData: ObservableObject {
     
     func setValuesFromNetworkWithDays(reloadToday: Bool = false) async {
         guard let getResponse = await network.getResponseWithDays() else { return }
-        var days: [Int:Day] = [:]
+        var days: Days = [:]
         for day in getResponse.days {
             days[day.daysAgo] = day
         }
