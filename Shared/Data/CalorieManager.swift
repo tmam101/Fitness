@@ -10,6 +10,7 @@ import Foundation
 import HealthKit
 #endif
 
+//TODO: Should calorie information be stored on the collection of days instead? And then we would have a day manager, which would create that day object?
 class CalorieManager: ObservableObject {
     
     //MARK: PROPERTIES
