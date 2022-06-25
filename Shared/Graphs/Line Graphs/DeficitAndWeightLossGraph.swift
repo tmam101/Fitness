@@ -65,10 +65,16 @@ struct DeficitAndWeightLossGraph: View {
                                 
                             }
                         }
-                        let deficitPoints = DeficitAndWeightLossGraph.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .deficit, weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
-                        let weightLossPoints = DeficitAndWeightLossGraph.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .weightLoss, weights: weights, expectedWeights: expectedWeights, width: geometry.size.width - 40, height: geometry.size.height)
+                        let realisticWeightDateAndDouble = healthData.realisticWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: $0.key, from: Date()), double: $0.value) }.sorted { $0.date < $1.date}
+                        let weightElements = LineGraph.GraphInformation(points: weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}.reversed(), type: .weightLoss)
+                        let deficitElements = LineGraph.GraphInformation(points: expectedWeights, type: .deficit)
+                        let realisticWeightElements = LineGraph.GraphInformation(points: realisticWeightDateAndDouble, type: .realisticWeightLoss)
+                        let deficitPoints = DeficitAndWeightLossGraph.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .deficit, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
+                        let weightLossPoints = DeficitAndWeightLossGraph.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .weightLoss, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
+                        let realisticWeightPoints = DeficitAndWeightLossGraph.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .realisticWeightLoss, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
                         LineGraph(points: deficitPoints, color: .yellow, width: 2)
                         LineGraph(points: weightLossPoints, color: .green, width: 2)
+                        LineGraph(points: realisticWeightPoints, color: .green.opacity(0.5), width: 2)
                     }
                 }
                 
@@ -76,33 +82,15 @@ struct DeficitAndWeightLossGraph: View {
         }
     }
 
-
     //todo this reloads everytime we change the day amount, which is expensive. but it can change based on changing health data. maybe call this manually somewhere?
-    static func weightsToGraphCoordinates(daysAgoToReach: Double, graphType: LineGraphType, weights: [Weight], expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        var weightValues: [LineGraph.DateAndDouble] = weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}
-        weightValues = weightValues.reversed()
+    static func weightsToGraphCoordinates(daysAgoToReach: Double, graphType: LineGraphType, elements: [LineGraph.GraphInformation], width: CGFloat, height: CGFloat) -> [CGPoint] {
         let startDate = Date.subtract(days: Int(daysAgoToReach), from: Date())
-        let weightsSuffix = weightValues.filter { $0.date >= startDate }
-        let expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
-        let weightMax = weightsSuffix.map { $0.double }.max() ?? 1
-        let weightMin = weightsSuffix.map { $0.double }.min() ?? 0
-        let expectedWeightMax = expectedWeightsSuffix.map { $0.double }.max() ?? 1
-        let expectedWeightMin = expectedWeightsSuffix.map { $0.double }.min() ?? 0
-        let max = max(weightMax, expectedWeightMax)
-        let min = min(weightMin, expectedWeightMin)
-        var pointsToUse: [LineGraph.DateAndDouble] = []
-        switch graphType {
-        case .deficit:
-            pointsToUse = expectedWeightsSuffix
-        case .weightLoss:
-            pointsToUse = weightsSuffix
-        }
-        guard
-            let firstWeightDate = weightsSuffix.map({ $0.date }).min(),
-            let firstDeficitDate = expectedWeightsSuffix.map({ $0.date }).min(),
-            let firstDate = [firstWeightDate, firstDeficitDate].min() else {
-                return LineGraph.numbersToPoints(points: pointsToUse, max: max, min: min, width: width, height: height)
-            }
+        let filteredByDate = elements.map { LineGraph.GraphInformation(points: $0.points.filter { $0.date >= startDate }, type: $0.type)}
+        let allWeights = Array(filteredByDate.map { $0.points.map { $0.double }}.joined())
+        let max = allWeights.max() ?? 1
+        let min = allWeights.min() ?? 0
+        let pointsToUse: [LineGraph.DateAndDouble] = filteredByDate.first(where: { $0.type == graphType })!.points
+        let firstDate = Array(filteredByDate.map { $0.points.map { $0.date }}.joined()).min()!
         return LineGraph.numbersToPoints(points: pointsToUse, endDate: Date.subtract(days: -1, from: Date()), firstDate: firstDate, max: max, min: min, width: width, height: height)
     }
     

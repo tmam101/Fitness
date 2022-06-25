@@ -31,6 +31,7 @@ class HealthData: ObservableObject {
     @Published public var days: Days = [:]
     @Published public var daysBetweenStartAndNow: Int = 350
     @Published public var hasLoaded: Bool = false
+    @Published public var realisticWeights: [Int: Double] = [:]
         
     // Constants
     var startDateString = "01.23.2021"
@@ -79,13 +80,15 @@ class HealthData: ObservableObject {
                 return
             }
             
+            let realisticWeights = createRealisticWeights()
+
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
                 self.hasLoaded = true
+                self.realisticWeights = realisticWeights
             }
             
-            createRealisticWeights()
             
             // Post the last thirty days. Larger amounts seem to be too much for the network.
             if calorieManager.days.count > 30 {
@@ -146,7 +149,7 @@ class HealthData: ObservableObject {
     
     //MARK: REALISTIC WEIGHTS
     
-    func createRealisticWeights() {
+    func createRealisticWeights() -> [Int: Double]{
 //        //TODO: Finish creating realisticWeights
 //        // Start on first weight
 //        // Loop through each subsequent day, finding expected weight loss
@@ -179,16 +182,18 @@ class HealthData: ObservableObject {
                 let realWeightDifference = (nextWeight.weight - realisticWeights[i+1]!) / dayDifferenceBetweenNowAndNextWeight
                 var adjustedWeightDifference = realWeightDifference
                 let expectedWeightChangedBasedOnDeficit = day.expectedWeightChangedBasedOnDeficit // todo what if one is positive the other negative
-                if adjustedWeightDifference < -0.5  {
-                    adjustedWeightDifference = min(-0.5, expectedWeightChangedBasedOnDeficit)
+                if adjustedWeightDifference < -0.2  {
+                    adjustedWeightDifference = min(-0.2, expectedWeightChangedBasedOnDeficit)
                 }
-                if adjustedWeightDifference > 0.5 {
-                    adjustedWeightDifference = max(0.5, expectedWeightChangedBasedOnDeficit)
+                if adjustedWeightDifference > 0.2 {
+                    adjustedWeightDifference = max(0.2, expectedWeightChangedBasedOnDeficit)
                 }
                 
                 realisticWeights[i] = realisticWeights[i+1]! + adjustedWeightDifference
             }
         }
+        return realisticWeights
+
     }
     
     //MARK: MISC

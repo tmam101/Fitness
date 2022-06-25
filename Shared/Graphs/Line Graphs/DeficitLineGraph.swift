@@ -1,8 +1,9 @@
 import SwiftUI
 
-enum LineGraphType {
+enum LineGraphType: Codable {
     case deficit
     case weightLoss
+    case realisticWeightLoss
 }
 
 struct DeficitLineGraph: View {

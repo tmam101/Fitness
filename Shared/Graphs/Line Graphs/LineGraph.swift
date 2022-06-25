@@ -47,8 +47,7 @@ struct LineGraph: View {
     static func numbersToPoints(points: [DateAndDouble], endDate: Date = Date(), firstDate: Date, max: Double, min: Double, width: CGFloat, height: CGFloat) -> [CGPoint] {
         let diff = max - min
         let adjusted = points.map { DateAndDouble(date: $0.date, double: ($0.double - min) / diff) }
-//        let totalDays = Date.daysBetween(date1: firstDate, date2: Date())
-//        let startDate = points.map { $0.date }.min()!
+
         let adjustedForDays = adjusted.map  {
             x(daysBetween: Date.daysBetween(date1: firstDate, date2: $0.date) ?? 0, value: $0.double)
         }
@@ -67,6 +66,11 @@ struct LineGraph: View {
     struct DateAndDouble: Codable {
         var date: Date
         var double: Double
+    }
+    
+    struct GraphInformation {
+        var points: [LineGraph.DateAndDouble]
+        var type: LineGraphType
     }
     
     struct x {
