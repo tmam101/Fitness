@@ -85,7 +85,7 @@ class HealthData: ObservableObject {
                 self.hasLoaded = true
             }
             
-//            createRealisticWeights()
+            createRealisticWeights()
             
             // Post the last thirty days. Larger amounts seem to be too much for the network.
             if calorieManager.days.count > 30 {
@@ -146,32 +146,49 @@ class HealthData: ObservableObject {
     
     //MARK: REALISTIC WEIGHTS
     
-    func createRealisticWeights() async {
+    func createRealisticWeights() {
 //        //TODO: Finish creating realisticWeights
 //        // Start on first weight
 //        // Loop through each subsequent day, finding expected weight loss
 //        // Find next weight's actual loss
 //        // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
-//        var realisticWeights: [Int: Double] = [:]
-//        var currentWeight = weightManager.weights.last
-//
-//        for i in stride(from: days.count - 1, through: 0, by: -1) {
-//            await abc(i, days)
-//        }
-//
-//        func abc(_ i: Int, _ days: [Int:Day]) async {
-//            let day = days[i]!
-//            let date = day.date
-//            let nextWeight = await weightManager.weights.last(where: { $0.date < date })
-//            let nextWeightDate = Date.startOfDay(nextWeight?.date ?? Date())
-//            if await date < Date.startOfDay(weightManager.weights.last!.date) {
-//                return
-//            }
-//            let expectedWeightLoss = day.deficit / 3500
-//            if i == days.count - 1 {
-//                //                    realisticWeights[i] = fitness.weights
-//            }
-//        }
+        let firstWeight = weightManager.weights.last
+        var realisticWeights: [Int: Double] = [:]
+
+        for i in stride(from: calorieManager.days.count-1, through: 0, by: -1) {
+            abc(i, calorieManager.days, realisticWeights: &realisticWeights)
+        }
+
+        func abc(_ i: Int, _ days: Days, realisticWeights: inout [Int: Double]) {
+
+            let day = days[i]!
+            let date = day.date
+            guard let nextWeight = weightManager.weights.last(where: { Date.startOfDay($0.date) > date }) else {
+                return
+            }
+            let nextWeightDate = Date.startOfDay(nextWeight.date)
+            
+            if date < Date.startOfDay(firstWeight!.date) {
+                return
+            }
+            let onFirstDay = i == days.count - 1
+            if onFirstDay {
+                realisticWeights[i] = firstWeight!.weight
+            } else {
+                let dayDifferenceBetweenNowAndNextWeight = Double(Date.daysBetween(date1: date, date2: nextWeightDate)!)
+                let realWeightDifference = (nextWeight.weight - realisticWeights[i+1]!) / dayDifferenceBetweenNowAndNextWeight
+                var adjustedWeightDifference = realWeightDifference
+                let expectedWeightChangedBasedOnDeficit = day.expectedWeightChangedBasedOnDeficit // todo what if one is positive the other negative
+                if adjustedWeightDifference < -0.5  {
+                    adjustedWeightDifference = min(-0.5, expectedWeightChangedBasedOnDeficit)
+                }
+                if adjustedWeightDifference > 0.5 {
+                    adjustedWeightDifference = max(0.5, expectedWeightChangedBasedOnDeficit)
+                }
+                
+                realisticWeights[i] = realisticWeights[i+1]! + adjustedWeightDifference
+            }
+        }
     }
     
     //MARK: MISC

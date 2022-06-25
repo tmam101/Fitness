@@ -123,7 +123,8 @@ class CalorieManager: ObservableObject {
             let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
             let startingWeight = fitness?.weight(at: startDate) ?? 0
             let weightLost = startingWeight - (fitness?.weights.first?.weight ?? 0)
-            let activeCalorieModifier = min(1.0, await getActiveCalorieModifier(days: days, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: false))
+            var activeCalorieModifier = await getActiveCalorieModifier(days: days, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: false)
+            activeCalorieModifier = min(1.0, activeCalorieModifier)
             Settings.set(key: .activeCalorieModifier, value: activeCalorieModifier)
             for i in stride(from: days.count - 1, through: 0, by: -1) {
                 let newActive = (days[i]?.activeCalories ?? 0) * activeCalorieModifier
@@ -163,6 +164,7 @@ class CalorieManager: ObservableObject {
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
             let runningTotalDeficit = i == days ? deficit : dayInformation[i+1]!.runningTotalDeficit + deficit
             let expectedWeight = (fitness?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500)) //todo delete?
+            let expectedWeightChangedBasedOnDeficit = 0 - (deficit / 3500)
             
             let day = Day(date: date,
                           daysAgo: i,
@@ -173,7 +175,8 @@ class CalorieManager: ObservableObject {
                           realRestingCalories: resting,
                           consumedCalories: eaten,
                           runningTotalDeficit: runningTotalDeficit,
-                          expectedWeight: expectedWeight)
+                          expectedWeight: expectedWeight,
+                          expectedWeightChangedBasedOnDeficit: expectedWeightChangedBasedOnDeficit)
             
             //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
             if !allowThreeDaysOfFasting {
