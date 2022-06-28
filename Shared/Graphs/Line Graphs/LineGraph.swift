@@ -31,7 +31,7 @@ struct LineGraph: View {
         let adjusted = points.map { DateAndDouble(date: $0.date, double: ($0.double - min) / diff) }
         let startDate = points.map { $0.date }.min()!
         let adjustedForDays = adjusted.map  {
-            x(daysBetween: Date.daysBetween(date1: startDate, date2: $0.date) ?? 0, value: $0.double)
+            (daysBetween: Date.daysBetween(date1: startDate, date2: $0.date) ?? 0, value: $0.double)
         }
         var points: [CGPoint] = []
         // Handle x axis placement
@@ -50,7 +50,7 @@ struct LineGraph: View {
         let adjusted = points.map { DateAndDouble(date: $0.date, double: ($0.double - min) / diff) }
 
         let adjustedForDays = adjusted.map  {
-            x(daysBetween: Date.daysBetween(date1: firstDate, date2: $0.date) ?? 0, value: $0.double)
+            (daysBetween: Date.daysBetween(date1: firstDate, date2: $0.date) ?? 0, value: $0.double)
         }
         var points: [CGPoint] = []
         // Handle x axis placement
@@ -72,10 +72,5 @@ struct LineGraph: View {
     struct GraphInformation {
         var points: [LineGraph.DateAndDouble]
         var type: LineGraphType
-    }
-    
-    struct x {
-        var daysBetween: Int
-        var value: Double
     }
 }

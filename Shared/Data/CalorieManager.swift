@@ -141,7 +141,6 @@ class CalorieManager: ObservableObject {
                 }
             }
         }
-        
         return days
     }
     
