@@ -65,7 +65,7 @@ struct DeficitAndWeightLossGraph: View {
                                 
                             }
                         }
-                        let realisticWeightDateAndDouble = healthData.realisticWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: $0.key, from: Date()), double: $0.value) }.sorted { $0.date < $1.date}
+                        let realisticWeightDateAndDouble = healthData.realisticWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: $0.key - 1, from: Date()), double: $0.value) }.sorted { $0.date < $1.date}
                         let weightElements = LineGraph.GraphInformation(points: weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}.reversed(), type: .weightLoss)
                         let deficitElements = LineGraph.GraphInformation(points: expectedWeights, type: .deficit)
                         let realisticWeightElements = LineGraph.GraphInformation(points: realisticWeightDateAndDouble, type: .realisticWeightLoss)
