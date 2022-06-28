@@ -74,10 +74,9 @@ struct DeficitAndWeightLossGraph: View {
                         let realisticWeightPoints = DeficitAndWeightLossGraph.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .realisticWeightLoss, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
                         LineGraph(points: deficitPoints, color: .yellow, width: 2)
                         LineGraph(points: weightLossPoints, color: .green, width: 2)
-                        LineGraph(points: realisticWeightPoints, color: .green.opacity(0.5), width: 2)
+                        LineGraph(points: realisticWeightPoints, color: .green.opacity(0.5), width: 2, dotted: true)
                     }
                 }
-                
             }
         }
     }

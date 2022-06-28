@@ -23,3 +23,37 @@ struct Day: Codable {
 
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
 typealias Days = [Int:Day]
+
+extension Days {
+    
+    //TODO: Test
+    func upTo(date: Date) -> Days {
+        return self.filter {
+            let days = $0.key - 1
+            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
+            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
+            return startDate <= date
+        }
+    }
+    
+    enum DayProperty {
+        case activeCalories
+        case restingCalories
+        case consumedCalories
+    }
+    
+    func sum(property: DayProperty) -> Double {
+        return Array(self.values)
+            .map {
+                switch property {
+                case .activeCalories:
+                    return $0.activeCalories
+                case .restingCalories:
+                   return $0.restingCalories
+                case .consumedCalories:
+                   return $0.consumedCalories
+                }
+            }
+            .reduce(0, { x, y in x + y })
+    }
+}

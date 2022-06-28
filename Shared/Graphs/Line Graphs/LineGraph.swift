@@ -11,6 +11,7 @@ struct LineGraph: View {
     var points: [CGPoint]
     var color: Color
     var width: CGFloat
+    var dotted: Bool = false
     
     var body: some View {
         Path { path in
@@ -21,7 +22,7 @@ struct LineGraph: View {
                 }
             }
         }
-        .stroke(style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round))
+        .stroke(style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round, dash: [dotted ? 5.0 : 1.0]))
         .foregroundColor(color)
     }
     

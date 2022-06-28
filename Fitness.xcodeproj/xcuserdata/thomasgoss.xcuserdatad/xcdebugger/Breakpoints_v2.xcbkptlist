@@ -253,8 +253,8 @@
             filePath = "Shared/Graphs/Line Graphs/DeficitAndWeightLossGraph.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "weightsToGraphCoordinates(daysAgoToReach:graphType:elements:width:height:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -585,8 +585,8 @@
             filePath = "Shared/Graphs/Line Graphs/DeficitAndWeightLossGraph.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "weightsToGraphCoordinates(daysAgoToReach:graphType:elements:width:height:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -605,6 +605,22 @@
             endingLineNumber = "77"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1F797B8B-AF41-4F7C-98BF-74697A93378E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Data/CalorieManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
+            landmarkName = "getActiveCalorieModifier(days:weightLost:daysBetweenStartAndNow:forceLoad:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

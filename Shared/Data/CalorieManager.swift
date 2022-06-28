@@ -235,21 +235,11 @@ class CalorieManager: ObservableObject {
         let lastWeight = fitness?.weights.first
         let caloriesLost = weightLost * 3500
         
-        let filtered = days.filter {
-            let days = $0.key - 1
-            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-            return startDate <= lastWeight?.date ?? Date()
-        }
-        let active = Array(filtered.values)
-            .map { $0.activeCalories }
-            .reduce(0, { x, y in x + y })
-        let resting = Array(filtered.values)
-            .map { $0.restingCalories }
-            .reduce(0, { x, y in x + y })
-        let eaten = Array(filtered.values)
-            .map { $0.consumedCalories }
-            .reduce(0, { x, y in x + y })
+        let filtered = days.upTo(date: lastWeight?.date ?? Date())
+        let active = filtered.sum(property: .activeCalories)
+        let resting = filtered.sum(property: .restingCalories)
+        let eaten = filtered.sum(property: .consumedCalories)
+        
         var modifier = (caloriesLost + eaten - resting) / active
         if !forceLoad {
             if modifier < 0 {
