@@ -148,52 +148,51 @@ class HealthData: ObservableObject {
     }
     
     //MARK: REALISTIC WEIGHTS
-    
-    func createRealisticWeights() -> [Int: Double]{
-//        //TODO: Finish creating realisticWeights
-//        // Start on first weight
-//        // Loop through each subsequent day, finding expected weight loss
-//        // Find next weight's actual loss
-//        // Set the realistic weight loss to: half a pound, unless the expected weight loss is greater, or the actual loss is smaller
-        let firstWeight = weightManager.weights.last
+    /**
+     Return a dictionary of realistic weights, with index 0 being today and x being x days ago. These weights represent a smoothed out version of the real weights, so large weight changes based on water or something are less impactful.
+     
+     Start on first weight
+     
+     Loop through each subsequent day, finding expected weight loss
+     
+     Find next weight's actual loss
+     
+     Set the realistic weight loss to: 0.2 pounds, unless the expected weight loss is greater, or the actual loss is smaller
+     */
+    func createRealisticWeights() -> [Int: Double] {
+        guard let firstWeight = weightManager.weights.last else { return [:] }
+        let maximumWeightChangePerDay = 0.2
         var realisticWeights: [Int: Double] = [:]
-
+        
         for i in stride(from: calorieManager.days.count-1, through: 0, by: -1) {
-            abc(i, calorieManager.days, realisticWeights: &realisticWeights)
-        }
-
-        func abc(_ i: Int, _ days: Days, realisticWeights: inout [Int: Double]) {
-
-            let day = days[i]!
-            let date = day.date
-            guard let nextWeight = weightManager.weights.last(where: { Date.startOfDay($0.date) > date }) else {
-                return
-            }
-            let nextWeightDate = Date.startOfDay(nextWeight.date)
+            let day = calorieManager.days[i]!
             
-            if date < Date.startOfDay(firstWeight!.date) {
-                return
+            guard
+                let nextWeight = weightManager.weights.last(where: { Date.startOfDay($0.date) > day.date }),
+                day.date >= Date.startOfDay(firstWeight.date)
+            else {
+                return realisticWeights
             }
-            let onFirstDay = i == days.count - 1
+
+            let onFirstDay = i == calorieManager.days.count - 1
             if onFirstDay {
-                realisticWeights[i] = firstWeight!.weight
+                realisticWeights[i] = firstWeight.weight
             } else {
-                let dayDifferenceBetweenNowAndNextWeight = Double(Date.daysBetween(date1: date, date2: nextWeightDate)!)
+                let dayDifferenceBetweenNowAndNextWeight = Double(Date.daysBetween(date1: day.date, date2: Date.startOfDay(nextWeight.date))!)
                 let realWeightDifference = (nextWeight.weight - realisticWeights[i+1]!) / dayDifferenceBetweenNowAndNextWeight
                 var adjustedWeightDifference = realWeightDifference
-                let expectedWeightChangedBasedOnDeficit = day.expectedWeightChangedBasedOnDeficit // todo what if one is positive the other negative
-                if adjustedWeightDifference < -0.2  {
-                    adjustedWeightDifference = min(-0.2, expectedWeightChangedBasedOnDeficit)
+
+                if adjustedWeightDifference < -maximumWeightChangePerDay  {
+                    adjustedWeightDifference = min(-maximumWeightChangePerDay, day.expectedWeightChangedBasedOnDeficit)
                 }
-                if adjustedWeightDifference > 0.2 {
-                    adjustedWeightDifference = max(0.2, expectedWeightChangedBasedOnDeficit)
+                if adjustedWeightDifference > maximumWeightChangePerDay {
+                    adjustedWeightDifference = max(maximumWeightChangePerDay, day.expectedWeightChangedBasedOnDeficit)
                 }
                 
                 realisticWeights[i] = realisticWeights[i+1]! + adjustedWeightDifference
             }
         }
         return realisticWeights
-
     }
     
     //MARK: MISC

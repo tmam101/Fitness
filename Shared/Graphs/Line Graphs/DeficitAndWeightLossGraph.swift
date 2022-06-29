@@ -81,6 +81,7 @@ struct DeficitAndWeightLossGraph: View {
         }
     }
 
+    //TODO: What if this accepted an array of days, and we could take the points from each day, like expected weight, real weight, realistic weight?
     //todo this reloads everytime we change the day amount, which is expensive. but it can change based on changing health data. maybe call this manually somewhere?
     static func weightsToGraphCoordinates(daysAgoToReach: Double, graphType: LineGraphType, elements: [LineGraph.GraphInformation], width: CGFloat, height: CGFloat) -> [CGPoint] {
         let startDate = Date.subtract(days: Int(daysAgoToReach), from: Date())
