@@ -94,6 +94,46 @@ struct DeficitAndWeightLossGraph: View {
         return LineGraph.numbersToPoints(points: pointsToUse, endDate: Date.subtract(days: -1, from: Date()), firstDate: firstDate, max: max, min: min, width: width, height: height)
     }
     
+//    static func weightsToGraphCoordinates(daysAgoToReach: Double, graphType: LineGraphType, days: Days, dayProperties: [Days.DayProperty], width: CGFloat, height: CGFloat) -> [CGPoint] {
+//        let startDate = Date.subtract(days: Int(daysAgoToReach), from: Date())
+//        let filteredByDate = days.filter { $0.value.date >= startDate }
+//
+//        var weights: [LineGraph.DateAndDouble] = []
+//        var expectedWeights: [LineGraph.DateAndDouble] = []
+//        var realisticWeights: [LineGraph.DateAndDouble] = []
+//
+//        for property in dayProperties {
+//            switch property {
+//            case .weight:
+//                weights = Array(filteredByDate.mapValues { LineGraph.DateAndDouble(date: $0.date, double: $0.weight) }.values).filter { $0.double != 0 }
+//            case .expectedWeight:
+//                expectedWeights = Array(filteredByDate.mapValues { LineGraph.DateAndDouble(date: $0.date, double: $0.expectedWeight) }.values)
+//            case .realisticWeight:
+//                realisticWeights = Array(filteredByDate.mapValues { LineGraph.DateAndDouble(date: $0.date, double: $0.realisticWeight) }.values)
+//            default:
+//                continue
+//            }
+//        }
+//
+////        let allWeights = Array(filteredByDate.map { $0.points.map { $0.double }}.joined())
+//        let max = [weights.values.max(), expectedWeights.values.max(), realisticWeights.values.max()]
+//        let min = [weights.values.min(), expectedWeights.values.min(), realisticWeights.values.min()]
+////        let max = allWeights.max() ?? 1
+////        let min = allWeights.min() ?? 0
+//        var pointsToUse: [LineGraph.DateAndDouble] = []
+//        switch graphType {
+//        case .deficit:
+//            pointsToUse = expectedWeights.map { LineGraph.DateAndDouble(date: $0)  $0.key }
+//        case .weightLoss:
+//            pointsToUse = weights
+//        case .realisticWeightLoss:
+//            pointsToUse = realisticWeights
+//        }
+////        let pointsToUse: [LineGraph.DateAndDouble] = filteredByDate.first(where: { $0.type == graphType })!.points
+//        let firstDate = Array(filteredByDate.map { $0.points.map { $0.date }}.joined()).min()!
+//        return LineGraph.numbersToPoints(points: pointsToUse, endDate: Date.subtract(days: -1, from: Date()), firstDate: firstDate, max: max, min: min, width: width, height: height)
+//    }
+    
     struct Preview: View {
         @State var days: Double = 20
         @State var health = HealthData(environment: .debug)

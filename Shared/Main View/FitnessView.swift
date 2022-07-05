@@ -62,33 +62,8 @@ struct FitnessView: View {
                     StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
-                    Text("Expected Weight vs Weight Over Time")
-                        .foregroundColor(.white)
-                        .font(.title2)
-                    
-                    DeficitAndWeightStats(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
+                    FitnessViewWeightLossGraph(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
                         .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .padding()
-                        .background(Color.myGray)
-                        .cornerRadius(20)
-                    
-                    ZStack {
-                        DeficitAndWeightLossGraph(daysAgoToReach: $deficitLineGraphDaysToShow)
-                            .environmentObject(healthData)
-                            .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
-                            .padding()
-                            .background(Color.myGray)
-                            .cornerRadius(20)
-                    }
-                    Slider(
-                        value: $deficitLineGraphDaysToShow,
-                        in: 1...Double(healthData.daysBetweenStartAndNow),
-                        step: (deficitLineGraphDaysToShow < 100 ? 1 : 5) //todo this doesnt reach the first point. need to make sure it does
-                    )
-                        .tint(.green)
-                    Text("past \(Int(deficitLineGraphDaysToShow)) days")
-                        .foregroundColor(.green)
                 }
                 Group {
                     StatsTitle(title: "Mile Time")

@@ -32,6 +32,7 @@ class HealthData: ObservableObject {
     @Published public var daysBetweenStartAndNow: Int = 350
     @Published public var hasLoaded: Bool = false
     @Published public var realisticWeights: [Int: Double] = [:]
+    @Published public var weights: [Double] = []
         
     // Constants
     var startDateString = "01.23.2021"
@@ -81,14 +82,28 @@ class HealthData: ObservableObject {
             }
             
             let realisticWeights = createRealisticWeights()
-
+            
+            // Set realistic weights on days
+            for i in 0..<calorieManager.days.count {
+                calorieManager.days[i]?.realisticWeight = realisticWeights[i] ?? 0.0
+            }
+            
+            // Set real weights on days
+            //TODO: Have every day have a weight, based on math
+            for i in 0..<calorieManager.days.count {
+                for weight in weightManager.weights {
+                    if Date.sameDay(date1: weight.date, date2: calorieManager.days[i]!.date) {
+                        calorieManager.days[i]!.weight = weight.weight
+                    }
+                }
+            }
+            
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
                 self.hasLoaded = true
                 self.realisticWeights = realisticWeights
             }
-            
             
             // Post the last thirty days. Larger amounts seem to be too much for the network.
             if calorieManager.days.count > 30 {
@@ -123,6 +138,14 @@ class HealthData: ObservableObject {
         for day in getResponse.days {
             days[day.daysAgo] = day
         }
+        
+        // Get weights
+        let weights: [Weight] = Array(days.values).map { Weight(weight: $0.weight, date: $0.date) }.filter { $0.weight != 0.0}
+        self.weightManager.weights = weights
+        
+        // Get expected weights
+        let expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: $0.date, double: $0.expectedWeight)}
+        calorieManager.expectedWeights = expectedWeights
         
         if reloadToday {
             await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)

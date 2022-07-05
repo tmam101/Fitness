@@ -19,6 +19,8 @@ struct Day: Codable {
     var runningTotalDeficit: Double = 0
     var expectedWeight: Double = 0
     var expectedWeightChangedBasedOnDeficit: Double = 0
+    var realisticWeight: Double = 0
+    var weight: Double = 0
 }
 
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
@@ -40,6 +42,9 @@ extension Days {
         case activeCalories
         case restingCalories
         case consumedCalories
+        case weight
+        case realisticWeight
+        case expectedWeight
     }
     
     func sum(property: DayProperty) -> Double {
@@ -52,6 +57,12 @@ extension Days {
                    return $0.restingCalories
                 case .consumedCalories:
                    return $0.consumedCalories
+                case .weight:
+                    return $0.weight
+                case .realisticWeight:
+                    return $0.realisticWeight
+                case .expectedWeight:
+                    return $0.expectedWeight
                 }
             }
             .reduce(0, { x, y in x + y })
