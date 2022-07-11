@@ -116,7 +116,7 @@ struct DeficitAndWeightLossGraph_ViewModel {
         self.expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
         
         let realisticWeightDateAndDouble = healthData.realisticWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: $0.key - 1, from: Date()), double: $0.value) }.sorted { $0.date < $1.date}
-        let weightElements = LineGraph.GraphInformation(points: self.weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}.reversed(), type: .weightLoss)
+        let weightElements = LineGraph.GraphInformation(points: self.weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}.sorted { $0.date < $1.date }, type: .weightLoss)
         let deficitElements = LineGraph.GraphInformation(points: self.expectedWeights, type: .deficit)
         let realisticWeightElements = LineGraph.GraphInformation(points: realisticWeightDateAndDouble, type: .realisticWeightLoss)
         self.deficitPoints = self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .deficit, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
