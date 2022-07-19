@@ -119,18 +119,26 @@ struct DeficitAndWeightLossGraph_ViewModel {
         let weightElements = LineGraph.GraphInformation(points: self.weights.map { LineGraph.DateAndDouble(date: $0.date, double: $0.weight)}.sorted { $0.date < $1.date }, type: .weightLoss)
         let deficitElements = LineGraph.GraphInformation(points: self.expectedWeights, type: .deficit)
         let realisticWeightElements = LineGraph.GraphInformation(points: realisticWeightDateAndDouble, type: .realisticWeightLoss)
-        self.deficitPoints = self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .deficit, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
-        self.weightLossPoints = self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .weightLoss, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
-        self.realisticWeightPoints = self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .realisticWeightLoss, elements: [weightElements, deficitElements, realisticWeightElements], width: geometry.size.width - 40, height: geometry.size.height)
+        let elements = [weightElements, deficitElements, realisticWeightElements]
+        let width = geometry.size.width - 40
+        let height = geometry.size.height
+        self.deficitPoints = self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .deficit, elements: elements, width: width, height: height)
+        self.weightLossPoints = self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .weightLoss, elements: elements, width: width, height: height)
+        self.realisticWeightPoints = self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: .realisticWeightLoss, elements: elements, width: width, height: height)
         
-        let maxWeight = weightsFiltered.max()
-        let maxExpecteWeight = expectedWeightsFiltered.max()
-        let minWeight = weightsFiltered.min()
-        let minExpecteWeight = expectedWeightsFiltered.min()
-        self.realMax = [maxWeight ?? 0, maxExpecteWeight ?? 0].max() ?? 1
-        self.realMin = [minWeight ?? 0, minExpecteWeight ?? 0].min() ?? 0
+        self.realMax = max(weightsFiltered.max() ?? 1, expectedWeightsFiltered.max() ?? 1)
+        self.realMin = min(weightsFiltered.min() ?? 0, expectedWeightsFiltered.min() ?? 0)
         self.roundedMax = Int(realMax.rounded(.down))
         self.roundedMin = Int(realMin.rounded(.up))
+    }
+    
+    typealias TypeAndPoints = (type: LineGraphType, points: [CGPoint])
+    
+    func points(elements: [LineGraph.GraphInformation], height: CGFloat, width: CGFloat, types: [LineGraphType]) -> [TypeAndPoints] {
+        let points: [TypeAndPoints] = types.map {
+            (type: $0, points: self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: $0, elements: elements, width: width, height: height))
+        }
+        return points
     }
     
     func heightPercentage(i: Int) -> Double {

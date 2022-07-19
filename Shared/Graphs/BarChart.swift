@@ -27,12 +27,12 @@ struct DaysLetters: View {
     }
 }
 
-struct BarViewModel {
-    var isNegative: Bool
-    var activeCaloriesBurned: Double
-    var restingCaloriesBurned: Double
-    var caloriesConsumed: Double
-}
+//struct BarViewModel {
+//    var isNegative: Bool
+//    var activeCaloriesBurned: Double
+//    var restingCaloriesBurned: Double
+//    var caloriesConsumed: Double
+//}
 
 struct Bar: View {
     var cornerRadius: CGFloat = 7.0
@@ -252,32 +252,65 @@ struct BarChart: View {
         var body: some View {
             ZStack {
                 Color.myGray.edgesIgnoringSafeArea(.all)
-            VStack {
-                Text("Resting")
-                    .foregroundColor(.white)
-                Text(String(Int(barViewModel.barClicked.restingCalories)))
-                    .font(.title)
-                    .foregroundColor(.white)
-                
-                Text("Active")
-                    .foregroundColor(.white)
-                Text(String(Int(barViewModel.barClicked.activeCalories)))
-                    .font(.title)
-                    .foregroundColor(.white)
-                
-                Text("Consumed")
-                    .foregroundColor(.white)
-                Text(String(Int(barViewModel.barClicked.consumedCalories)))
-                    .font(.title)
-                    .foregroundColor(.white)
-                
-                Text("Deficit")
-                    .foregroundColor(.white)
-                Text(String(Int(barViewModel.barClicked.deficit)))
-                    .font(.title)
-                    .foregroundColor(.white)
-
-            }
+                VStack(alignment: .leading) {
+                    // TODO: Add date
+//                    Text("Deficit")
+                    let date = barViewModel.barClicked.date
+                    Text(date.dayOfWeek() + ", " + Date.stringFromDate(date: date))
+                        .foregroundColor(.white)
+                        .padding([.leading])
+                    
+                    Text("Calorie Overview")
+                        .foregroundColor(.white)
+                        .padding([.leading, .bottom])
+                        .font(.largeTitle)
+                    
+                    Text("Resting")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading])
+                    
+                    Text(String(Int(barViewModel.barClicked.restingCalories)))
+                        .font(.system(size: 50))
+                        .foregroundColor(.yellow)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading])
+                    
+                    Text("Active")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading])
+                    
+                    Text("+ " + String(Int(barViewModel.barClicked.activeCalories)))
+                        .font(.system(size: 50))
+                        .foregroundColor(.orange)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading])
+                    
+                    Text("Consumed")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading])
+                    
+                    Text("- " + String(Int(barViewModel.barClicked.consumedCalories)))
+                        .font(.system(size: 50))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading, .bottom])
+                    
+                    Text("Deficit")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading])
+                    
+                    Text("= " + String(Int(barViewModel.barClicked.deficit)))
+//                        .font(.title)
+                        .font(.system(size: 100))
+                        .foregroundColor(barViewModel.barClicked.deficit > -1 ? .yellow : .red)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.leading])
+                    
+                }.frame(maxWidth: .infinity)
             }
         }
     }
@@ -311,11 +344,28 @@ struct BarChart: View {
     
 }
 
-struct BarChart_Previews: PreviewProvider {
+struct BarView_Previews: PreviewProvider {
     static var previews: some View {
-        BarChart()
-            .environmentObject(HealthData(environment: .debug))
+        BarChart.BarView()
+            .environmentObject(
+                { () -> BarChart.BarViewModel in
+                    let vm = BarChart.BarViewModel()
+                    vm.barClicked.activeCalories = 200
+                    vm.barClicked.restingCalories = 100
+                    vm.barClicked.deficit = -20
+                    return vm
+                }()
+            )
             .background(Color.myGray)
         
     }
 }
+
+//struct BarChart_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BarChart()
+//            .environmentObject(HealthData(environment: .debug))
+//            .background(Color.myGray)
+//
+//    }
+//}

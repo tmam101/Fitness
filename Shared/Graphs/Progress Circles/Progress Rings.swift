@@ -48,9 +48,8 @@ struct WeeklyAverageDeficitCircle: View {
         let percentActive: CGFloat = CGFloat(active / deficit)
         let idealDeficit = healthData.calorieManager.goalDeficit
         let unadjustedPercent: CGFloat = CGFloat((deficit / (idealDeficit == 0 ? 1 : idealDeficit)))
-        let percent = unadjustedPercent > 1 ? 1 : unadjustedPercent
-        
-        GenericCircle(color: .orange, starting: percent - percentActive, ending: percent, opacity: 1, lineWidth: lineWidth, lineCap: .butt)
+        let p = unadjustedPercent > 1 ? 1 : unadjustedPercent
+        GenericCircle(color: .orange, starting: p - percentActive, ending: p, opacity: 1, lineWidth: lineWidth, lineCap: .butt)
     }
 }
 

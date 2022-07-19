@@ -38,7 +38,7 @@ struct FitnessViewWeightLossGraph: View {
         ZStack {
             Color.black.ignoresSafeArea()
             VStack(alignment: .leading) {
-                Text("Change Over Time")
+                Text("Weight Change Over Time")
                     .foregroundColor(.white)
                     .font(.title2)
                 
@@ -148,10 +148,21 @@ struct DeficitAndWeightStats: View {
                 let weightChange = (weightsFiltered.first ?? 0) - (weightsFiltered.last ?? 0)
                 let expectedWeightString = String(format: "%.2f", expectedWeightChange)
                 let weightString = String(format: "%.2f", weightChange)
-                let realisticWeightChange = healthData.days[1]!.realisticWeight - healthData.days[count]!.realisticWeight
+                
+                let mostRecentRealisticWeight = { () -> Double in
+                    for i in 1..<count {
+                        if healthData.days[i]!.realisticWeight != 0 {
+                            return healthData.days[i]!.realisticWeight
+                        }
+                    }
+                    return 0.0
+                }()
+                
+//                let realisticWeightChange = healthData.days[1]!.realisticWeight - healthData.days[count]!.realisticWeight
+                let realisticWeightChange = mostRecentRealisticWeight - healthData.days[count]!.realisticWeight
                 let realisticWeightChangeString = String(format: "%.2f", realisticWeightChange)
                 VStack (alignment: .leading) {
-                    Text("Expected weight")
+                    Text("Expected")
                         .foregroundColor(.yellow)
                     Text((expectedWeightChange >= 0 ? "+" : "") + "\(expectedWeightString)")
                         .foregroundColor(.white)
@@ -159,7 +170,7 @@ struct DeficitAndWeightStats: View {
                 .frame(maxWidth: .infinity)
                 
                 VStack (alignment: .leading) {
-                    Text("Realistic weight")
+                    Text("Realistic")
                         .foregroundColor(.green.opacity(0.5))
                     Text((realisticWeightChange >= 0 ? "+" : "") + "\(realisticWeightChangeString)")
                         .foregroundColor(.white)
@@ -167,7 +178,7 @@ struct DeficitAndWeightStats: View {
                 .frame(maxWidth: .infinity)
                 
                 VStack (alignment: .leading) {
-                    Text("Weight")
+                    Text("Actual")
                         .foregroundColor(.green)
                     Text((weightChange >= 0 ? "+" : "") + "\(weightString)")
                         .foregroundColor(.white)
