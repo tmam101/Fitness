@@ -15,6 +15,7 @@ extension Date {
         return string
     }
     
+    //TODO: I think this can be wrong if the order of the dates is wrong. need to fix
     static func daysBetween(date1: Date, date2: Date) -> Int? {
         let components1 = Calendar.current.dateComponents([.day, .month, .year], from: date1)
         let day1String = "\(components1.month!).\(components1.day!).\(components1.year!)"

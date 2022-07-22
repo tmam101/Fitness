@@ -89,9 +89,9 @@ class HealthData: ObservableObject {
             }
             
             // Set real weights on days
-            //TODO: Have every day have a weight, based on math
+            // TODO: Have every day have a weight, based on math
             weightManager.weights.forEach {
-                let daysAgo = Date.daysBetween(date1: Date(), date2: $0.date)!
+                let daysAgo = Date.daysBetween(date1: $0.date, date2: Date())!
                 calorieManager.days[daysAgo]?.weight = $0.weight
             }
             
