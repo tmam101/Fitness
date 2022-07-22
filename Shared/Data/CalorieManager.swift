@@ -75,33 +75,6 @@ class CalorieManager: ObservableObject {
         self.expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
     }
     
-    //MARK: EXPECTED WEIGHTS
-    
-    //TODO Should this just return weights?
-    func getExpectedWeights() async -> [LineGraph.DateAndDouble] {
-        let days = await self.getDays(forceReload: false)
-        var datesAndValues: [LineGraph.DateAndDouble] = []
-        for i in 0..<days.count {
-            let dateIndex = days.count - 1 - i
-            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -dateIndex), to: Date())!)
-            let thisDaysDeficit = days[dateIndex]?.deficit ?? 0
-            if i == 0 {
-                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit))
-            } else {
-                let previousCumulative = datesAndValues[i-1].double
-                datesAndValues.append(LineGraph.DateAndDouble(date: date, double: thisDaysDeficit + previousCumulative))
-            }
-            if let value = datesAndValues.last {
-                print("cumulative deficit: \(value)")
-            } else {
-                print("cumulative deficit error")
-            }
-        }
-        var expectedWeights: [LineGraph.DateAndDouble] = datesAndValues.map { LineGraph.DateAndDouble(date: $0.date, double: (fitness?.startingWeight ?? 300) - ($0.double / 3500)) }
-        expectedWeights = expectedWeights.map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: $0.double)}
-        return expectedWeights
-    }
-    
     // MARK: GET DAYS
     
     /// Retrieves days in an efficient way. If we've saved all days' info today, only reload this week's days. If not, reload all days.
