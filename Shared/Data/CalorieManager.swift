@@ -83,9 +83,8 @@ class CalorieManager: ObservableObject {
         if days.isEmpty {
             days = Settings.getDays() ?? [:]
         }
-        let haveLoadedDaysToday = Date.sameDay(date1: Date(), date2: days[0]?.date ?? Date.distantPast)
-        let needToReloadAllDays = forceReload || catchError(in: days) || !haveLoadedDaysToday || days.count < 7
-        days = needToReloadAllDays ? await getEveryDay() : await reload(days: &days, fromDay: 7)
+        let needToReloadAllDays = forceReload || catchError(in: days) || days.count < 7
+        days = needToReloadAllDays ? await getEveryDay() : await loadNecessaryDays(days: days)
         if catchError(in: days) { return [:] }
         Settings.setDays(days: days)
         
@@ -115,6 +114,34 @@ class CalorieManager: ObservableObject {
             }
         }
         return days
+    }
+    
+    /// Only load as many new days as necessary, and push the existing days back appropriately.
+    private func loadNecessaryDays(days: Days) async -> Days {
+        var days = days
+        
+        let howManyDaysAgoWasLastRecorded: Int? = (Array(days.keys) as [Int])
+            .sorted { $0 < $1 }
+            .first
+        
+        guard let howManyDaysAgoWasLastRecorded = howManyDaysAgoWasLastRecorded else {
+            return await getDays(forPastDays: daysBetweenStartAndNow)
+        }
+
+        // If we've already loaded days today, just reload the last week
+        if howManyDaysAgoWasLastRecorded == 0 {
+            return await reload(days: &days, fromDay: 7)
+        }
+        
+        // Increment days
+        // For example, if we haven't loaded days in two days, days[0] moves to days[2], days[1] moves to days[3], and so forth.
+        var newDays: Days = [:]
+        for i in 0..<days.count {
+            newDays[i+howManyDaysAgoWasLastRecorded] = days[i]
+        }
+        
+        // Reload days until that point
+        return await reload(days: &newDays, fromDay: max(7, howManyDaysAgoWasLastRecorded))
     }
     
     /// Retrieve all day information from healthkit.
