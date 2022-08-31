@@ -70,11 +70,11 @@ struct FitnessViewWeightLossGraph: View {
                     FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 30)
                     FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 100)
                     if healthData.days.count > 1 {
-                        let weights = healthData.days
+                        let realisticWeights = healthData.days
                             .mapValues { $0.realisticWeight }
                             .filter { $0.value != 0 }
-                        let min = Double(weights.min { $0.value < $1.value }!.key) - 1
-                        let max = Double(weights.max { $0.value < $1.value }!.key) - 1
+                        let min = Double(realisticWeights.min { $0.value < $1.value }!.key)
+                        let max = Double(realisticWeights.max { $0.value < $1.value }!.key)
                         FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: min, label: "min")
                         FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: max, label: "max")
                     }
@@ -130,62 +130,88 @@ struct DeficitAndWeightStats: View {
     
     var body: some View {
         HStack {
-            let expectedWeights = healthData.calorieManager.expectedWeights
-            let weights = healthData.weightManager.weights
             let dateToReach = Date.subtract(days: Int(deficitLineGraphDaysToShow), from: Date())
-            let weightsFiltered = weights.filter { $0.date >= dateToReach }.map { $0.weight }
-            let expectedWeightsFiltered = expectedWeights.filter { $0.date >= dateToReach }.map { $0.double }
-//            let realisticWeightsFiltered: [Double] = Array(healthData.days
-//                .filter { $0.value.date >= dateToReach }
-//                .mapValues { $0.realisticWeight }
-//                .values)
+            
+            let weightsFiltered = healthData.weightManager.weights
+                .map { Weight(weight: $0.weight, date: Date.subtract(days: 1, from: $0.date)) }
+                .filter { $0.date >= dateToReach }
+
+            let expectedWeightsFiltered = healthData.calorieManager.expectedWeights
+                .map { DateAndDouble(date: Date.subtract(days: 1, from: $0.date), double: $0.double)}
+                .filter { $0.date >= dateToReach }
+            
             let count = healthData.days
                 .filter { $0.value.date >= dateToReach }
-                .count
+                .count - 1
             
             if expectedWeightsFiltered.count > 1 {
-                let expectedWeightChange = (expectedWeightsFiltered[expectedWeightsFiltered.count - 2]) - (expectedWeightsFiltered.first ?? 0)
-                let weightChange = (weightsFiltered.first ?? 0) - (weightsFiltered.last ?? 0)
-                let expectedWeightString = String(format: "%.2f", expectedWeightChange)
-                let weightString = String(format: "%.2f", weightChange)
-                
-                let mostRecentRealisticWeight = { () -> Double in
+                let mostRecentRealisticWeight = { () -> DateAndDouble in
                     for i in 1..<count {
-                        if healthData.days[i]!.realisticWeight != 0 {
-                            return healthData.days[i]!.realisticWeight
+                        if let day = healthData.days[i] {
+                            if day.realisticWeight != 0 {
+                                return DateAndDouble(date: day.date, double: day.realisticWeight)
+                            }
                         }
                     }
-                    return 0.0
+                    return DateAndDouble(date: Date(), double: 0.0)
                 }()
                 
-//                let realisticWeightChange = healthData.days[1]!.realisticWeight - healthData.days[count]!.realisticWeight
-                let realisticWeightChange = mostRecentRealisticWeight - healthData.days[count]!.realisticWeight
-                let realisticWeightChangeString = String(format: "%.2f", realisticWeightChange)
+                let expectedWeights = WeightsAndChanges(first: expectedWeightsFiltered[count], last: expectedWeightsFiltered.first!)
+                let actualWeights = WeightsAndChanges(first: DateAndDouble(date: weightsFiltered.first!.date, double: weightsFiltered.first!.weight),
+                                                last: DateAndDouble(date: weightsFiltered.last!.date, double: weightsFiltered.last!.weight))
+                let realisticWeights = WeightsAndChanges(first: mostRecentRealisticWeight, last: DateAndDouble(date: healthData.days[count]!.date, double: healthData.days[count]!.realisticWeight))
+                
                 VStack (alignment: .leading) {
-                    Text("Expected")
+                    changeTitle(title: "Expected")
+                    changeLabel(change: expectedWeights.change, color: .yellow)
+                    Text(expectedWeights.changeString)
+                        .font(.caption)
                         .foregroundColor(.yellow)
-                    Text((expectedWeightChange >= 0 ? "+" : "") + "\(expectedWeightString)")
-                        .foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity)
                 
                 VStack (alignment: .leading) {
-                    Text("Realistic")
+                    changeTitle(title: "Realistic")
+                    changeLabel(change: realisticWeights.change, color: .green.opacity(0.5))
+                    Text(realisticWeights.changeString)
+                        .font(.caption)
                         .foregroundColor(.green.opacity(0.5))
-                    Text((realisticWeightChange >= 0 ? "+" : "") + "\(realisticWeightChangeString)")
-                        .foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity)
                 
                 VStack (alignment: .leading) {
-                    Text("Actual")
+                    changeTitle(title: "Actual")
+                    changeLabel(change: actualWeights.change, color: .green)
+                    Text(actualWeights.changeString)
+                        .font(.caption)
                         .foregroundColor(.green)
-                    Text((weightChange >= 0 ? "+" : "") + "\(weightString)")
-                        .foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity)
             }
         }
+    }
+    
+    struct WeightsAndChanges {
+        var first: DateAndDouble
+        var last: DateAndDouble
+        var change: Double {
+            first.double - last.double
+        }
+        var changeString: String {
+            "\(String(format: "%.2f", last.double)) -> \(String(format: "%.2f", first.double))"
+        }
+    }
+    
+    func changeTitle(title: String) -> some View{
+        Text(title)
+            .foregroundColor(.white)
+            .font(.caption)
+    }
+    
+    func changeLabel(change: Double, color: Color) -> some View {
+        Text((change >= 0 ? "+" : "") + "\(String(format: "%.2f", change))")
+            .foregroundColor(color)
+            .font(.title)
     }
 }
 
