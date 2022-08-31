@@ -161,32 +161,9 @@ struct DeficitAndWeightStats: View {
                                                 last: DateAndDouble(date: weightsFiltered.last!.date, double: weightsFiltered.last!.weight))
                 let realisticWeights = WeightsAndChanges(first: mostRecentRealisticWeight, last: DateAndDouble(date: healthData.days[count]!.date, double: healthData.days[count]!.realisticWeight))
                 
-                VStack (alignment: .leading) {
-                    changeTitle(title: "Expected")
-                    changeLabel(change: expectedWeights.change, color: .yellow)
-                    Text(expectedWeights.changeString)
-                        .font(.caption)
-                        .foregroundColor(.yellow)
-                }
-                .frame(maxWidth: .infinity)
-                
-                VStack (alignment: .leading) {
-                    changeTitle(title: "Realistic")
-                    changeLabel(change: realisticWeights.change, color: .green.opacity(0.5))
-                    Text(realisticWeights.changeString)
-                        .font(.caption)
-                        .foregroundColor(.green.opacity(0.5))
-                }
-                .frame(maxWidth: .infinity)
-                
-                VStack (alignment: .leading) {
-                    changeTitle(title: "Actual")
-                    changeLabel(change: actualWeights.change, color: .green)
-                    Text(actualWeights.changeString)
-                        .font(.caption)
-                        .foregroundColor(.green)
-                }
-                .frame(maxWidth: .infinity)
+                changeView(title: "Expected", weightsAndChanges: expectedWeights, color: .yellow)
+                changeView(title: "Realistic", weightsAndChanges: realisticWeights, color: .green.opacity(0.5))
+                changeView(title: "Actual", weightsAndChanges: actualWeights, color: .green)
             }
         }
     }
@@ -202,16 +179,21 @@ struct DeficitAndWeightStats: View {
         }
     }
     
-    func changeTitle(title: String) -> some View{
-        Text(title)
-            .foregroundColor(.white)
-            .font(.caption)
-    }
-    
-    func changeLabel(change: Double, color: Color) -> some View {
-        Text((change >= 0 ? "+" : "") + "\(String(format: "%.2f", change))")
-            .foregroundColor(color)
-            .font(.title)
+    func changeView(title: String, weightsAndChanges: WeightsAndChanges, color: Color) -> some View {
+        VStack (alignment: .leading) {
+            Text(title)
+                .foregroundColor(.white)
+                .font(.caption)
+            
+            Text((weightsAndChanges.change >= 0 ? "+" : "") + "\(String(format: "%.2f", weightsAndChanges.change))")
+                .foregroundColor(color)
+                .font(.title)
+            
+            Text(weightsAndChanges.changeString)
+                .font(.caption)
+                .foregroundColor(color)
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
