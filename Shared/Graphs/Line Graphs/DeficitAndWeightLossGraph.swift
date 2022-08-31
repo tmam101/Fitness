@@ -39,7 +39,7 @@ struct DeficitAndWeightLossGraph: View {
             VStack {
                 GeometryReader { geometry in
                     
-                    let vm = DeficitAndWeightLossGraph_ViewModel(healthData: healthData, daysAgoToReach: daysAgoToReach, geometry: geometry)
+                    let vm = DeficitAndWeightLossGraph_ViewModel(healthData: healthData, daysAgoToReach: daysAgoToReach - 1, geometry: geometry)
 
                     if vm.weights.count > 0 && vm.expectedWeights.count > 0 {
                         if Settings.get(key: .showLinesOnWeightGraph) as? Bool ?? true {
