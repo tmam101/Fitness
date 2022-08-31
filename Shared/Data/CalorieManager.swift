@@ -43,10 +43,10 @@ class CalorieManager: ObservableObject {
     
     //MARK: SETUP
     
-    func setup(overrideMinimumRestingCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+    func setup(overrideMinimumRestingCalories: Double? = nil, overrideMinimumActiveCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         // Set values from settings
         self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Double ?? self.minimumRestingCalories
-        self.minimumActiveCalories = Settings.get(key: .active) as? Double ?? self.minimumActiveCalories
+        self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Double ?? self.minimumActiveCalories
         self.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? self.adjustActiveCalorieModifier
         
         self.fitness = fitness

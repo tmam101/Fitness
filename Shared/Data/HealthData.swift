@@ -145,7 +145,7 @@ class HealthData: ObservableObject {
         calorieManager.expectedWeights = expectedWeights
         
         if reloadToday {
-            await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, overrideMinimumActiveCalories: getResponse.minimumActiveCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
             let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
             today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
@@ -219,7 +219,7 @@ class HealthData: ObservableObject {
     
     func getDaysModel(from days: [Int: Day], activeCalorieModifier: Double) -> HealthDataPostRequestModelWithDays {
         let d: [Day] = Array(days.values)
-        return HealthDataPostRequestModelWithDays(days: d, activeCalorieModifier: activeCalorieModifier, minimumRestingCalories: Settings.get(key: .resting) as? Double ?? 2150)
+        return HealthDataPostRequestModelWithDays(days: d, activeCalorieModifier: activeCalorieModifier, minimumRestingCalories: Settings.get(key: .resting) as? Double ?? 2150, minimumActiveCalories: Settings.get(key: .active) as? Double ?? 100)
     }
     
 #if  !os(macOS)
@@ -269,6 +269,7 @@ struct HealthDataPostRequestModelWithDays: Codable {
     var days: [Day] = []
     var activeCalorieModifier: Double = 1
     var minimumRestingCalories: Double = 2100
+    var minimumActiveCalories: Double = 100
 }
 
 struct HealthDataGetRequestModelWithDays: Codable {
@@ -277,9 +278,10 @@ struct HealthDataGetRequestModelWithDays: Codable {
     let createdAt: String
     let activeCalorieModifier: Double
     let minimumRestingCalories: Double
+    let minimumActiveCalories: Double
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
-        case days, createdAt, activeCalorieModifier, minimumRestingCalories
+        case days, createdAt, activeCalorieModifier, minimumRestingCalories, minimumActiveCalories
     }
 }
