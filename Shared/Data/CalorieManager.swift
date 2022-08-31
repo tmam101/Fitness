@@ -39,7 +39,7 @@ class CalorieManager: ObservableObject {
     @Published public var projectedAverageTotalDeficitForTomorrow: Double = 0
     @Published public var deficitsThisWeek: [Int:Double] = [:]
     @Published public var dailyActiveCalories: [Int:Double] = [:]
-    @Published public var expectedWeights: [LineGraph.DateAndDouble] = []
+    @Published public var expectedWeights: [DateAndDouble] = []
     
     //MARK: SETUP
     
@@ -72,7 +72,7 @@ class CalorieManager: ObservableObject {
         self.projectedAverageWeeklyDeficitForTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[7]?.runningTotalDeficit ?? 0)) / 7
         self.averageDeficitSinceStart = (days[0]?.runningTotalDeficit ?? 0) / Double(daysBetweenStartAndNow)
         self.projectedAverageMonthlyDeficitTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[30]?.runningTotalDeficit ?? 0)) / 30
-        self.expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
+        self.expectedWeights = Array(days.values).map { DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
     }
     
     // MARK: GET DAYS

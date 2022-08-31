@@ -64,13 +64,13 @@ struct LineGraph: View {
         return inverted
     }
     
-    struct DateAndDouble: Codable {
-        var date: Date
-        var double: Double
-    }
-    
     struct GraphInformation {
-        var points: [LineGraph.DateAndDouble]
+        var points: [DateAndDouble]
         var type: LineGraphType
     }
+}
+
+struct DateAndDouble: Codable {
+    var date: Date
+    var double: Double
 }

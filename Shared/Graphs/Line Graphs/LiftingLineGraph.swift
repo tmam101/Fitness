@@ -27,7 +27,7 @@ struct LiftingLineGraph: View {
     
     func oneRepMaxesToGraphCoordinates(oneRepMaxes: [OneRepMax], width: CGFloat, height: CGFloat) -> [CGPoint] {
         guard oneRepMaxes.count != 0 else { return [CGPoint(x: 0, y: 0)] }
-        var percentages: [LineGraph.DateAndDouble] = []
+        var percentages: [DateAndDouble] = []
         
         // Compare ORMs to bodyweight and create a ratio
         let adjustedOneRepMaxes = oneRepMaxes // one rep maxes
@@ -38,9 +38,9 @@ struct LiftingLineGraph: View {
         
         // Normalize ORMS according to desired bodyweight ratio
         if first.exerciseName.contains("Squat") {
-            percentages = adjustedOneRepMaxes.map{ LineGraph.DateAndDouble(date: $0.date, double: $0.percentage / WorkoutManager.squatBodyweightRatio) }
+            percentages = adjustedOneRepMaxes.map{ DateAndDouble(date: $0.date, double: $0.percentage / WorkoutManager.squatBodyweightRatio) }
         } else if first.exerciseName.contains("Bench") {
-            percentages = adjustedOneRepMaxes.map{ LineGraph.DateAndDouble(date: $0.date, double: $0.percentage / WorkoutManager.benchBodyweightRatio) }
+            percentages = adjustedOneRepMaxes.map{ DateAndDouble(date: $0.date, double: $0.percentage / WorkoutManager.benchBodyweightRatio) }
         }
         
         // Create line graph

@@ -75,7 +75,7 @@ struct RunningLineGraph: View {
     }
     
     func averagesToGraphCoordinates(runs: [Run], width: CGFloat, height: CGFloat) -> [CGPoint] {
-        let averages: [LineGraph.DateAndDouble] = runs.map { LineGraph.DateAndDouble(date: $0.date, double: $0.averageMileTime) }
+        let averages: [DateAndDouble] = runs.map { DateAndDouble(date: $0.date, double: $0.averageMileTime) }
         guard averages.count != 0 else { return [CGPoint(x: 0, y: 0)] }
         
         // Get the highest mile time and round up to a whole number

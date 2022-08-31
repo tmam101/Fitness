@@ -51,7 +51,7 @@ struct DeficitLineGraph: View {
         return f
     }
     
-    func weightsToGraphCoordinates(expectedWeights: [LineGraph.DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
+    func weightsToGraphCoordinates(expectedWeights: [DateAndDouble], width: CGFloat, height: CGFloat) -> [CGPoint] {
 //        let startDate = Date.subtract(days: 6, from: Date())
 //        let expectedWeightsSuffix = expectedWeights.filter { $0.date >= startDate }
         let expectedWeightMax = expectedWeights.map { $0.double }.max() ?? 1

@@ -141,7 +141,7 @@ class HealthData: ObservableObject {
         self.weightManager.weights = weights
         
         // Get expected weights
-        let expectedWeights = Array(days.values).map { LineGraph.DateAndDouble(date: $0.date, double: $0.expectedWeight)}
+        let expectedWeights = Array(days.values).map { DateAndDouble(date: $0.date, double: $0.expectedWeight)}
         calorieManager.expectedWeights = expectedWeights
         
         if reloadToday {
