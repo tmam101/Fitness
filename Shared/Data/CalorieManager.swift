@@ -225,6 +225,9 @@ class CalorieManager: ObservableObject {
                 }
             }
         }
+        if days.count != self.daysBetweenStartAndNow + 1 {
+            return true
+        }
         return false
     }
     

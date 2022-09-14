@@ -161,9 +161,9 @@ struct DeficitAndWeightStats: View {
                                                 last: DateAndDouble(date: weightsFiltered.last!.date, double: weightsFiltered.last!.weight))
                 let realisticWeights = WeightsAndChanges(first: mostRecentRealisticWeight, last: DateAndDouble(date: healthData.days[count]!.date, double: healthData.days[count]!.realisticWeight))
                 
-                changeView(title: "Expected", weightsAndChanges: expectedWeights, color: .yellow)
-                changeView(title: "Realistic", weightsAndChanges: realisticWeights, color: .green.opacity(0.5))
-                changeView(title: "Actual", weightsAndChanges: actualWeights, color: .green)
+                ChangeView(title: "Expected", weightsAndChanges: expectedWeights, color: .yellow)
+                ChangeView(title: "Realistic", weightsAndChanges: realisticWeights, color: .green.opacity(0.5))
+                ChangeView(title: "Actual", weightsAndChanges: actualWeights, color: .green)
             }
         }
     }
@@ -179,21 +179,27 @@ struct DeficitAndWeightStats: View {
         }
     }
     
-    func changeView(title: String, weightsAndChanges: WeightsAndChanges, color: Color) -> some View {
-        VStack (alignment: .leading) {
-            Text(title)
-                .foregroundColor(.white)
-                .font(.caption)
-            
-            Text((weightsAndChanges.change >= 0 ? "+" : "") + "\(String(format: "%.2f", weightsAndChanges.change))")
-                .foregroundColor(color)
-                .font(.title)
-            
-            Text(weightsAndChanges.changeString)
-                .font(.caption)
-                .foregroundColor(color)
+    struct ChangeView: View {
+        var title: String
+        var weightsAndChanges: WeightsAndChanges
+        var color: Color
+        
+        var body: some View {
+            VStack (alignment: .leading) {
+                Text(title)
+                    .foregroundColor(.white)
+                    .font(.caption)
+                
+                Text((weightsAndChanges.change >= 0 ? "+" : "") + "\(String(format: "%.2f", weightsAndChanges.change))")
+                    .foregroundColor(color)
+                    .font(.title)
+                
+                Text(weightsAndChanges.changeString)
+                    .font(.caption)
+                    .foregroundColor(color)
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
 }
 

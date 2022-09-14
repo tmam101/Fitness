@@ -33,12 +33,12 @@ struct WeeklyAverageDeficitCircle: View {
         
         BackgroundCircle(color: color, lineWidth: lineWidth)
         if projected >= percent {
-            GenericCircle(color: color, starting: 0.0, ending: projected, opacity: 0.4, lineWidth: lineWidth)
+            GenericCircle(color: color, starting: 0.0, ending: projected, opacity: 0.4, lineWidth: lineWidth, lineCap: .butt)
         }
-        GenericCircle(color: color, starting: 0.0, ending: percent, opacity: 1, lineWidth: lineWidth)
-        if projected < percent {
-            GenericCircle(color: .red, starting: projected, ending: percent, opacity: 1, lineWidth: lineWidth)
-        }
+        GenericCircle(color: color, starting: 0.0, ending: percent, opacity: 1, lineWidth: lineWidth, lineCap: .butt)
+//        if projected < percent {
+//            GenericCircle(color: .red, starting: projected, ending: percent, opacity: 1, lineWidth: lineWidth)
+//        }
         let active = healthData.days
             .filter { $0.key < 8 && $0.key != 0 }
             .map { $0.value.activeCalories }
@@ -50,6 +50,9 @@ struct WeeklyAverageDeficitCircle: View {
         let unadjustedPercent: CGFloat = CGFloat((deficit / (idealDeficit == 0 ? 1 : idealDeficit)))
         let p = unadjustedPercent > 1 ? 1 : unadjustedPercent
         GenericCircle(color: .orange, starting: p - percentActive, ending: p, opacity: 1, lineWidth: lineWidth, lineCap: .butt)
+        if projected < percent {
+            GenericCircle(color: .red, starting: projected, ending: percent, opacity: 1, lineWidth: lineWidth, lineCap: .butt)
+        }
     }
 }
 
