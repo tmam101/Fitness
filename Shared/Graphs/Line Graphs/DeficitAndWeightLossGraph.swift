@@ -135,7 +135,7 @@ struct DeficitAndWeightLossGraph_ViewModel {
     typealias TypeAndPoints = (type: LineGraphType, points: [CGPoint])
     
     func points(elements: [LineGraph.GraphInformation], height: CGFloat, width: CGFloat, types: [LineGraphType]) -> [TypeAndPoints] {
-        let points: [TypeAndPoints] = types.map {
+        let points = types.map {
             (type: $0, points: self.weightsToGraphCoordinates(daysAgoToReach: daysAgoToReach, graphType: $0, elements: elements, width: width, height: height))
         }
         return points

@@ -348,7 +348,7 @@ class CalorieManager: ObservableObject {
             
             HKHealthStore().save(calorieCountSample) { (success, error) in
                 
-                if let error = error {
+                if let error {
                     continuation.resume(returning: false)
                     print("Error Saving Steps Count Sample: \(error.localizedDescription)")
                 } else {
