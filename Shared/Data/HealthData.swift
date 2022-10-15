@@ -63,7 +63,7 @@ class HealthData: ObservableObject {
     //MARK: SET VALUES
     
     /// Set all values of health data critifal for the app. Returns a reference to itself.
-    func setValues(forceLoad: Bool = false, completion: ((_ health: HealthData) -> Void)?) async {
+    func setValues(forceLoad: Bool = false, haveAlreadyRetried: Bool = false, completion: ((_ health: HealthData) -> Void)?) async {
         hasLoaded = false
         setupDates()
         
@@ -106,7 +106,13 @@ class HealthData: ObservableObject {
             if calorieManager.days.count > 30 {
                 let daysToRetrieve = 31
                 let model = getDaysModel(from: calorieManager.days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-                let _ = await network.postWithDays(object: model)
+                let response = await network.postWithDays(object: model)
+                if !haveAlreadyRetried {
+                    guard response == true else {
+                        await self.setValues(forceLoad: forceLoad, haveAlreadyRetried: true, completion: completion)
+                        return
+                    }
+                }
             }
             completion?(self)
             
@@ -126,37 +132,77 @@ class HealthData: ObservableObject {
         case .debug:
             await self.setValuesFromNetworkWithDays()
             completion?(self)
+            self.hasLoaded = true
+        case .widgetRelease:
+            await setValuesFromNetworkWithDays(reloadToday: true)
+            self.hasLoaded = true
+            completion?(self)
         }
     }
     
     func setValuesFromNetworkWithDays(reloadToday: Bool = false) async {
-        guard let getResponse = await network.getResponseWithDays() else { return }
         var days: Days = [:]
-        for day in getResponse.days {
-            days[day.daysAgo] = day
-        }
-        
-        // Get weights
-        let weights: [Weight] = Array(days.values).map { Weight(weight: $0.weight, date: $0.date) }.filter { $0.weight != 0.0}
-        self.weightManager.weights = weights
-        
-        // Get expected weights
-        let expectedWeights = Array(days.values).map { DateAndDouble(date: $0.date, double: $0.expectedWeight)}
-        calorieManager.expectedWeights = expectedWeights
         
         if reloadToday {
-            await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, overrideMinimumActiveCalories: getResponse.minimumActiveCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
-            var today = await calorieManager.getDays(forPastDays: 0)[0]!
-            let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
-            today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
-            today.deficit = today.deficit - diff
-            today.runningTotalDeficit = days[1]!.runningTotalDeficit + today.deficit
-            print("today: \(today)")
-            days[0]! = today
+            if let d = Settings.getDays() {
+                days = d
+                
+                // Get weights
+                let weights: [Weight] = Array(days.values).map { Weight(weight: $0.weight, date: $0.date) }.filter { $0.weight != 0.0}
+                self.weightManager.weights = weights
+                
+                // Get expected weights
+                let expectedWeights = Array(days.values).map { DateAndDouble(date: $0.date, double: $0.expectedWeight)}
+                calorieManager.expectedWeights = expectedWeights
+                
+                await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+                var today = await calorieManager.getDays(forPastDays: 0)[0]!
+                let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+                today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+                today.deficit = today.deficit - diff
+                if let yesterday = days[1] {
+                    today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
+                }
+                print("today: \(today)")
+                days[0] = today
+                let _ = await calorieManager.setValues(from: days)
+                setDaysAndFinish(days: days)
+            }
         }
-        let _ = await calorieManager.setValues(from: days)
-        // Set self values
-        setDaysAndFinish(days: days)
+        
+        if Settings.getDays()?[0]?.daysAgo != 0 {
+            guard let getResponse = await network.getResponseWithDays() else { return } //TODO: Some sort of validation in here that we get something good
+            for day in getResponse.days {
+                days[day.daysAgo] = day
+            }
+            
+            // Get weights
+            let weights: [Weight] = Array(days.values).map { Weight(weight: $0.weight, date: $0.date) }.filter { $0.weight != 0.0}
+            self.weightManager.weights = weights
+            
+            // Get expected weights
+            let expectedWeights = Array(days.values).map { DateAndDouble(date: $0.date, double: $0.expectedWeight)}
+            calorieManager.expectedWeights = expectedWeights
+            
+            Settings.setDays(days: days)
+            Settings.set(key: .resting, value: getResponse.minimumRestingCalories)
+            Settings.set(key: .active, value: getResponse.minimumActiveCalories)
+            Settings.set(key: .activeCalorieModifier, value: getResponse.activeCalorieModifier)
+            
+            if reloadToday {
+                await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, overrideMinimumActiveCalories: getResponse.minimumActiveCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+                var today = await calorieManager.getDays(forPastDays: 0)[0]!
+                let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
+                today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
+                today.deficit = today.deficit - diff
+                today.runningTotalDeficit = days[1]!.runningTotalDeficit + today.deficit
+                print("today: \(today)")
+                days[0]! = today
+            }
+            let _ = await calorieManager.setValues(from: days)
+            // Set self values
+            setDaysAndFinish(days: days)
+        }
     }
     
     func setDaysAndFinish(days: [Int: Day]) {
