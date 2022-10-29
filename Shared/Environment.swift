@@ -21,4 +21,5 @@ struct GlobalEnvironment {
 enum AppEnvironmentConfig {
     case debug
     case release
+    case widgetRelease
 }

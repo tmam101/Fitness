@@ -81,12 +81,14 @@ class Network {
 //        }
 //    }
     
-    func postWithDays<T: Codable>(object: T) async -> Days? { // todo change to put
+    func postWithDays<T: Codable>(object: T) async -> Bool { // todo change to put
         return await withUnsafeContinuation { continuation in
             guard let url = URLComponents(string: urlString)?.url else {
                 print("error post url")
+                continuation.resume(returning: false)
                 return
             }
+            
             var request = URLRequest(url: url)
             request.httpMethod = "POST" // todo change to put
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -97,20 +99,17 @@ class Network {
                 request.httpBody = encodedData
             } catch {
                 print("error post encodedData")
+                continuation.resume(returning: false)
                 return
             }
             
             let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-                guard error == nil, let data = data else {
+                guard error == nil, data != nil else {
                     print("error post: \(error!)")
+                    continuation.resume(returning: false)
                     return
                 }
-//                let y = JSONDecoder().decode(String.self, from: data)
-                if let networkPostResponse = try? JSONDecoder().decode(Days.self, from: data) {
-                    continuation.resume(returning: networkPostResponse)
-                } else {
-                    continuation.resume(returning: nil)
-                }
+                continuation.resume(returning: true)
             })
             task.resume()
         }

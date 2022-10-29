@@ -20,4 +20,10 @@ extension View {
             self
         }
     }
+    
+    func mainBackground() -> some View {
+        return self
+            .background(Color.myGray)
+            .cornerRadius(20)
+    }
 }

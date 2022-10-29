@@ -163,7 +163,7 @@ class WorkoutManager: ObservableObject {
             } else {
                 print("error failed getting workouts")
             }
-        case .debug:
+        case .debug, .widgetRelease:
             self.firstBenchORM = 100
             self.firstSquatORM = 100
             self.benchORM = 150
@@ -193,7 +193,7 @@ class WorkoutManager: ObservableObject {
             } else {
                 print("error failed getting workouts")
             }
-        case .debug:
+        case .debug, .widgetRelease:
             self.firstBenchORM = 100
             self.firstSquatORM = 100
             self.benchORM = 150
@@ -225,7 +225,7 @@ class WorkoutManager: ObservableObject {
                     
                 }
             }
-        case .debug:
+        case .debug, .widgetRelease:
             //            self.workouts = Workouts(arrayLiteral: [WorkoutElement(])
             self.firstBenchORM = 100
             self.firstSquatORM = 100
@@ -246,7 +246,7 @@ class WorkoutManager: ObservableObject {
             self.squatORM = oneRepMax(timeFrame: .mostRecent, exerciseName: squatType)
             self.benchORMs = allOneRepMaxes(exerciseName: benchType)
             self.squatORMs = allOneRepMaxes(exerciseName: squatType)
-        case .debug:
+        case .debug, .widgetRelease:
             self.firstBenchORM = 100
             self.firstSquatORM = 100
             self.benchORM = 150

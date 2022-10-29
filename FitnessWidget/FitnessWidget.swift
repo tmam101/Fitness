@@ -10,7 +10,7 @@ import SwiftUI
 import HealthKit
 
 struct Provider: TimelineProvider {
-    var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.debug)
+    var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.widgetRelease)
     
     func placeholder(in context: Context) -> SimpleEntry {
         return SimpleEntry(date: Date(), healthData: healthData)
@@ -106,11 +106,31 @@ struct FitnessWidget: Widget {
     }
 }
 
-//struct FitnessWidget_Previews: PreviewProvider {
-//    static var previews: some View {
+struct x: View {
+    @State var health: HealthData?
+    
+    var body: some View {
+        let x = {
+            let _ = HealthData(environment: .debug) { healthData in
+                health = healthData
+            }
+        }()
+        if health?.hasLoaded ?? false {
+            let entry = SimpleEntry(date: Date(), healthData: health!)
+            FitnessWidgetEntryView(entry: entry)
+        } else {
+            Text("Not loaded")
+        }
+    }
+}
+
+struct FitnessWidget_Previews: PreviewProvider {
+    static var previews: some View {
+        
 //        let healthData = MyHealthKit(environment: GlobalEnvironment.environment)
 //        let entry = SimpleEntry(date: Date(), healthData: healthData)
 //        FitnessWidgetEntryView(entry: entry)
-//            .previewContext(WidgetPreviewContext(family: .systemSmall))
-//    }
-//}
+        x()
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+    }
+}

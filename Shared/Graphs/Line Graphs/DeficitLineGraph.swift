@@ -2,6 +2,7 @@ import SwiftUI
 
 enum LineGraphType: Codable {
     case deficit
+    case pendingDeficit
     case weightLoss
     case realisticWeightLoss
 }

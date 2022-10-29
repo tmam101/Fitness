@@ -18,12 +18,15 @@ struct FitnessView: View {
     @State var deficitLineGraphDaysToShow: Double = 30.0
     @State var runsToShow: Double = 5.0
     @State var showLifts = false
+    @State var showWeightRings = false
+    @State var showWeeklyDeficitLine = false
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 let sectionHeight: CGFloat = 400
                 
+                //MARK: DEFICIT RINGS
                 Group {
                     HStack {
                         StatsTitle(title: "Deficits")
@@ -38,6 +41,8 @@ struct FitnessView: View {
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity)
                 }
+                
+                // MARK: DEFICIT BAR CHART
                 Group {
                     Text("Deficits This Week")
                         .foregroundColor(.white)
@@ -45,39 +50,46 @@ struct FitnessView: View {
                     BarChart(showCalories: true)
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
-                        .background(Color.myGray)
-                        .cornerRadius(20)
+                        .mainBackground()
                         .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 }
-                Text("Expected Weight This Week")
-                    .foregroundColor(.white)
-                    .font(.title2)
-                DeficitLineGraph()
-                    .environmentObject(healthData)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
-                    .background(Color.myGray)
-                    .cornerRadius(20)
+                
+                //MARK: DEFICIT LINE GRAPH
+                if showWeeklyDeficitLine {
+                    Group {
+                        Text("Expected Weight This Week")
+                            .foregroundColor(.white)
+                            .font(.title2)
+                        DeficitLineGraph()
+                            .environmentObject(healthData)
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+                            .mainBackground()
+                    }
+                }
                 Group {
-                    StatsTitle(title: "Weight Loss")
-                    StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
-                        .environmentObject(healthData)
-                        .frame(minWidth: 0, maxWidth: .infinity)
+                    if showWeightRings {
+                        //MARK: WEIGHT Loss
+                        StatsTitle(title: "Weight Loss")
+                        StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
+                            .environmentObject(healthData)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                    }
                     FitnessViewWeightLossGraph(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
                         .environmentObject(healthData)
                 }
+                
+                //MARK: MILE TIME
                 Group {
                     StatsTitle(title: "Mile Time")
                     MileTimeStats(runsToShow: $runsToShow)
                         .environmentObject(healthData)
-                        .background(Color.myGray)
-                        .cornerRadius(20)
+                        .mainBackground()
                         .frame(maxWidth: .infinity)
                     RunningLineGraph(runsToShow: $runsToShow)
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, idealHeight: sectionHeight)
                         .padding()
-                        .background(Color.myGray)
-                        .cornerRadius(20)
+                        .mainBackground()
                     if healthData.runManager.runs.count > 1 {
                         Slider(
                             value: $runsToShow,

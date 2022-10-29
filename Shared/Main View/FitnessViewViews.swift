@@ -78,7 +78,6 @@ struct FitnessViewWeightLossGraph: View {
                         FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: min, label: "min")
                         FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: max, label: "max")
                     }
-
                 }
             }
         }
@@ -156,7 +155,7 @@ struct DeficitAndWeightStats: View {
                     return DateAndDouble(date: Date(), double: 0.0)
                 }()
                 
-                let expectedWeights = WeightsAndChanges(first: expectedWeightsFiltered[count], last: expectedWeightsFiltered.first!)
+                let expectedWeights = WeightsAndChanges(first: expectedWeightsFiltered[count - 1], last: expectedWeightsFiltered.first!)
                 let actualWeights = WeightsAndChanges(first: DateAndDouble(date: weightsFiltered.first!.date, double: weightsFiltered.first!.weight),
                                                 last: DateAndDouble(date: weightsFiltered.last!.date, double: weightsFiltered.last!.weight))
                 let realisticWeights = WeightsAndChanges(first: mostRecentRealisticWeight, last: DateAndDouble(date: healthData.days[count]!.date, double: healthData.days[count]!.realisticWeight))

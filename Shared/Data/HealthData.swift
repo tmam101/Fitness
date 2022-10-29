@@ -142,35 +142,9 @@ class HealthData: ObservableObject {
     
     func setValuesFromNetworkWithDays(reloadToday: Bool = false) async {
         var days: Days = [:]
+        let haveLoadedFromNetworkToday = Settings.getDays()?[0]?.daysAgo == 0
         
-        if reloadToday {
-            if let d = Settings.getDays() {
-                days = d
-                
-                // Get weights
-                let weights: [Weight] = Array(days.values).map { Weight(weight: $0.weight, date: $0.date) }.filter { $0.weight != 0.0}
-                self.weightManager.weights = weights
-                
-                // Get expected weights
-                let expectedWeights = Array(days.values).map { DateAndDouble(date: $0.date, double: $0.expectedWeight)}
-                calorieManager.expectedWeights = expectedWeights
-                
-                await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
-                var today = await calorieManager.getDays(forPastDays: 0)[0]!
-                let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-                today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-                today.deficit = today.deficit - diff
-                if let yesterday = days[1] {
-                    today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
-                }
-                print("today: \(today)")
-                days[0] = today
-                let _ = await calorieManager.setValues(from: days)
-                setDaysAndFinish(days: days)
-            }
-        }
-        
-        if Settings.getDays()?[0]?.daysAgo != 0 {
+        if !haveLoadedFromNetworkToday {
             guard let getResponse = await network.getResponseWithDays() else { return } //TODO: Some sort of validation in here that we get something good
             for day in getResponse.days {
                 days[day.daysAgo] = day
@@ -195,12 +169,37 @@ class HealthData: ObservableObject {
                 let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
                 today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
                 today.deficit = today.deficit - diff
-                today.runningTotalDeficit = days[1]!.runningTotalDeficit + today.deficit
+                if let yesterday = days[1] {
+                    today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
+                }
                 print("today: \(today)")
-                days[0]! = today
+                days[0] = today
             }
             let _ = await calorieManager.setValues(from: days)
             // Set self values
+            setDaysAndFinish(days: days)
+        } else if reloadToday, let settingsDays = Settings.getDays() {
+            days = settingsDays
+            
+            // Get weights
+            let weights: [Weight] = Array(days.values).map { Weight(weight: $0.weight, date: $0.date) }.filter { $0.weight != 0.0}
+            self.weightManager.weights = weights
+            
+            // Get expected weights
+            let expectedWeights = Array(days.values).map { DateAndDouble(date: $0.date, double: $0.expectedWeight)}
+            calorieManager.expectedWeights = expectedWeights
+            
+            await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            var today = await calorieManager.getDays(forPastDays: 0)[0]!
+            let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+            today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+            today.deficit = today.deficit - diff
+            if let yesterday = days[1] {
+                today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
+            }
+            print("today: \(today)")
+            days[0] = today
+            let _ = await calorieManager.setValues(from: days)
             setDaysAndFinish(days: days)
         }
     }

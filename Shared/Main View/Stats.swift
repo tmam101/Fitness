@@ -41,8 +41,7 @@ struct StatsRow<Content: View, OtherContent: View>: View {
             
         }
         .padding()
-        .background(Color.myGray)
-        .cornerRadius(20)
+        .mainBackground()
 #endif
 #if os(watchOS)
         VStack(spacing: 0) {
@@ -56,8 +55,7 @@ struct StatsRow<Content: View, OtherContent: View>: View {
             
         }
         .padding()
-        .background(Color.myGray)
-        .cornerRadius(20)
+        .mainBackground()
 #endif
     }
 }
