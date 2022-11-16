@@ -150,7 +150,7 @@ class CalorieManager: ObservableObject {
     }
     
     /// Get day information for the past amount of days. Runningtotaldeficit will start from the first day here.
-    func getDays(forPastDays days: Int) async -> Days {
+    func getDays(forPastDays days: Int, dealWithWeights: Bool = true) async -> Days {
         var dayInformation: Days = [:]
         for i in stride(from: days, through: 0, by: -1) {
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
@@ -162,7 +162,7 @@ class CalorieManager: ObservableObject {
             let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
             let runningTotalDeficit = i == days ? deficit : dayInformation[i+1]!.runningTotalDeficit + deficit
-            let expectedWeight = (fitness?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500)) //todo delete?
+            let expectedWeight = dealWithWeights ? ((fitness?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
             let expectedWeightChangedBasedOnDeficit = 0 - (deficit / 3500)
             
             let day = Day(date: date,

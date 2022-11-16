@@ -13,7 +13,7 @@ struct OneRepMax {
     var weight: Double
 }
 
-struct Set: Codable {
+struct WorkoutSet: Codable {
     let date, workoutName, duration, exerciseName: String
     let setOrder: Int
     let weight: Double
@@ -106,7 +106,7 @@ struct Set: Codable {
     }
 }
 
-typealias Workout = [Set]
+typealias Workout = [WorkoutSet]
 
 class WorkoutManager: ObservableObject {
     var environment: AppEnvironmentConfig = .debug
@@ -237,8 +237,8 @@ class WorkoutManager: ObservableObject {
     func calculate() {
         switch environment {
         case .release:
-            let squatType: Set.ExerciseName = smithMachine ? .squatSmithMachine : .squatBarbell
-            let benchType: Set.ExerciseName = smithMachine ? .benchPressSmithMachine : .benchPressBarbell
+            let squatType: WorkoutSet.ExerciseName = smithMachine ? .squatSmithMachine : .squatBarbell
+            let benchType: WorkoutSet.ExerciseName = smithMachine ? .benchPressSmithMachine : .benchPressBarbell
             
             self.firstBenchORM = oneRepMax(timeFrame: .first, exerciseName: benchType)
             self.firstSquatORM = oneRepMax(timeFrame: .first, exerciseName: squatType)
@@ -259,7 +259,7 @@ class WorkoutManager: ObservableObject {
         case first
     }
     
-    func allOneRepMaxes(exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> [OneRepMax] {
+    func allOneRepMaxes(exerciseName: WorkoutSet.ExerciseName? = nil, exerciseNames: [WorkoutSet.ExerciseName]? = nil, tag: String? = nil) -> [OneRepMax] {
         var exercises: Workout = []
         if let name = exerciseName {
             exercises = workouts.filter { $0.exerciseName == name.rawValue }
@@ -291,7 +291,7 @@ class WorkoutManager: ObservableObject {
         return y
     }
     
-    func oneRepMax(timeFrame: TimeFrame, exerciseName: Set.ExerciseName? = nil, exerciseNames: [Set.ExerciseName]? = nil, tag: String? = nil) -> Double {
+    func oneRepMax(timeFrame: TimeFrame, exerciseName: WorkoutSet.ExerciseName? = nil, exerciseNames: [WorkoutSet.ExerciseName]? = nil, tag: String? = nil) -> Double {
         var exercises: Workout = []
         if let name = exerciseName {
             exercises = workouts.filter { $0.exerciseName == name.rawValue }

@@ -119,8 +119,9 @@ class HealthData: ObservableObject {
 #endif
 #if os(watchOS)
             // On watch, receive relevant data
-            await setValuesFromNetworkWithDays(reloadToday: true)
-            self.hasLoaded = true
+//            await setValuesFromNetworkWithDays(reloadToday: true)
+//            self.hasLoaded = true
+            await setValuesLocally()
             completion?(self)
 #endif
 #if os(macOS)
@@ -134,15 +135,31 @@ class HealthData: ObservableObject {
             completion?(self)
             self.hasLoaded = true
         case .widgetRelease:
-            await setValuesFromNetworkWithDays(reloadToday: true)
-            self.hasLoaded = true
+            await setValuesLocally()
+//            await setValuesFromNetworkWithDays(reloadToday: true)
+//            self.hasLoaded = true
             completion?(self)
         }
     }
     
+    func setValuesLocally() async {
+        let minimumResting = Settings.get(key: .resting) as? Double ?? 2000
+        let minimumActive = Settings.get(key: .active) as? Double ?? 100
+        let activeCalorieModifier = Settings.get(key: .activeCalorieModifier) as? Double ?? 1.0
+        
+        await calorieManager.setup(overrideMinimumRestingCalories:minimumResting, overrideMinimumActiveCalories: minimumActive, shouldGetDays: false, startingWeight: 200, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+        let days = await calorieManager.getDays(forPastDays: 40, dealWithWeights: false)
+        await setDaysAndFinish(days: days)
+    }
+    
     func setValuesFromNetworkWithDays(reloadToday: Bool = false) async {
         var days: Days = [:]
-        let haveLoadedFromNetworkToday = Settings.getDays()?[0]?.daysAgo == 0
+        let haveLoadedFromNetworkToday = {
+            if let mostRecentDate = Settings.getDays()?[0]?.date {
+                return Date.daysBetween(date1: Date(), date2: mostRecentDate) == 0
+            }
+            return false
+        }()
         
         if !haveLoadedFromNetworkToday {
             guard let getResponse = await network.getResponseWithDays() else { return } //TODO: Some sort of validation in here that we get something good
@@ -175,9 +192,8 @@ class HealthData: ObservableObject {
                 print("today: \(today)")
                 days[0] = today
             }
-            let _ = await calorieManager.setValues(from: days)
             // Set self values
-            setDaysAndFinish(days: days)
+           await setDaysAndFinish(days: days)
         } else if reloadToday, let settingsDays = Settings.getDays() {
             days = settingsDays
             
@@ -199,14 +215,14 @@ class HealthData: ObservableObject {
             }
             print("today: \(today)")
             days[0] = today
-            let _ = await calorieManager.setValues(from: days)
-            setDaysAndFinish(days: days)
+            await setDaysAndFinish(days: days)
         }
     }
     
-    func setDaysAndFinish(days: [Int: Day]) {
+    func setDaysAndFinish(days: [Int: Day]) async {
         // Set self values
-        DispatchQueue.main.async { [self] in
+        Task {
+            let _ = await calorieManager.setValues(from: days)
             self.days = days
             self.hasLoaded = true
         }
@@ -287,7 +303,7 @@ class HealthData: ObservableObject {
     private func authorizeHealthKit() async -> Bool {
             if !HKHealthStore.isHealthDataAvailable() { return false }
             
-            let readDataTypes: Swift.Set<HKSampleType>? = [
+            let readDataTypes: Swift.Set<HKSampleType> = [
                 HKSampleType.quantityType(forIdentifier: .bodyMass)!,
                 HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
                 HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
@@ -295,17 +311,25 @@ class HealthData: ObservableObject {
                 HKSampleType.workoutType(),
                 HKSampleType.quantityType(forIdentifier: .heartRate)!,
                 HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]
-            let writeDataTypes: Swift.Set<HKSampleType>? = [
+            let writeDataTypes: Swift.Set<HKSampleType> = [
                 HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
             ]
-        
-        do {
-            try await HKHealthStore().requestAuthorization(toShare: writeDataTypes!, read: readDataTypes!)
-            return true
-        } catch {
-            return false
+            
+            do {
+                let status = try await HKHealthStore().statusForAuthorizationRequest(toShare: writeDataTypes, read: readDataTypes)
+                switch status {
+                case .unknown, .unnecessary:
+                    return true
+                case .shouldRequest:
+                    try await HKHealthStore().requestAuthorization(toShare: writeDataTypes, read: readDataTypes)
+                    return true
+                @unknown default:
+                    return true
+                }
+            } catch {
+                return false
+            }
         }
-    }
 }
 
 //MARK: NETWORK MODELS

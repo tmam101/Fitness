@@ -8,21 +8,32 @@
 import WidgetKit
 import SwiftUI
 import HealthKit
+import Combine
 
 struct Provider: TimelineProvider {
-    var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.widgetRelease)
+    @ObservedObject var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.debug)
+    private var cancellables = Set<AnyCancellable>()
     
     func placeholder(in context: Context) -> SimpleEntry {
         return SimpleEntry(date: Date(), healthData: healthData)
     }
     
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), healthData: healthData)
-        completion(entry)
+//        healthData.$hasLoaded.sink(receiveCompletion: {_ in }, receiveValue: { hasLoaded in
+//            let entry = SimpleEntry(date: Date(), healthData: healthData)
+//            completion(entry)
+//        }).store(in: &cancellables)
+        let _ = HealthData(environment: AppEnvironmentConfig.widgetRelease) { health in
+            let entry = SimpleEntry(date: Date(), healthData: health)
+            completion(entry)
+            //            let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
+            //            let entry = SimpleEntry(date: entryDate, healthData: health)
+            //            let timeline = Timeline(entries: [entry], policy: .atEnd)
+        }
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let _ = HealthData(environment: AppEnvironmentConfig.debug) { health in
+        let _ = HealthData(environment: AppEnvironmentConfig.widgetRelease) { health in
             let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
             let entry = SimpleEntry(date: entryDate, healthData: health)
             let timeline = Timeline(entries: [entry], policy: .atEnd)
