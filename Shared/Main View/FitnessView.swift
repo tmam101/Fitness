@@ -47,11 +47,15 @@ struct FitnessView: View {
                     Text("Deficits This Week")
                         .foregroundColor(.white)
                         .font(.title2)
-                    BarChart(showCalories: true)
+                    SwiftUIBarChart()
                         .environmentObject(healthData)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
                         .mainBackground()
-                        .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+//                    BarChart(showCalories: true)
+//                        .environmentObject(healthData)
+//                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: sectionHeight)
+//                        .mainBackground()
+//                        .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 }
                 
                 //MARK: DEFICIT LINE GRAPH
@@ -120,7 +124,7 @@ struct FitnessView_Previews: PreviewProvider {
     static var previews: some View {
         AppView()
             .environmentObject(HealthData(environment: .debug))
-            .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
+            .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
         //            .environmentObject(WatchConnectivityIphone())
     }
 }

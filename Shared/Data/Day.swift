@@ -22,6 +22,9 @@ struct Day: Codable, Identifiable {
     var expectedWeightChangedBasedOnDeficit: Double = 0
     var realisticWeight: Double = 0
     var weight: Double = 0
+    var surplus: Double {
+        deficit * -1
+    }
 }
 
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
