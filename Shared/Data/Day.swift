@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Day: Codable {
+struct Day: Codable, Identifiable {
+    var id = UUID()
     var date: Date = Date()
     var daysAgo: Int = -1
     var deficit: Double = 0
