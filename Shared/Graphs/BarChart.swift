@@ -245,7 +245,7 @@ struct BarChart: View {
     
     
     class BarViewModel: ObservableObject {
-        @Published var barClicked: Day = Day(date: Date(), deficit: 0, activeCalories: 0, consumedCalories: 0)
+        @Published var barClicked: Day = Day()
     }
     
     struct BarView: View {
@@ -369,14 +369,14 @@ struct SwiftUIBarChart: View {
             let days: [Day] = {
                 switch health.environment {
                 case .debug:
-                    return [Day(date: Date.subtract(days: 0, from: Date()), deficit: 1000),
-                            Day(date: Date.subtract(days: 1, from: Date()), deficit: 300),
-                            Day(date: Date.subtract(days: 2, from: Date()), deficit: 200),
-                            Day(date: Date.subtract(days: 3, from: Date()), deficit: -200),
-                            Day(date: Date.subtract(days: 4, from: Date()), deficit: 1200),
-                            Day(date: Date.subtract(days: 5, from: Date()), deficit: 200),
-                            Day(date: Date.subtract(days: 6, from: Date()), deficit: 200),
-                            Day(date: Date.subtract(days: 7, from: Date()), deficit: 100)]
+                    return [Day(date: Date.subtract(days: 0, from: Date()), deficit: 1000, activeCalories: 200),
+                            Day(date: Date.subtract(days: 1, from: Date()), deficit: 300, activeCalories: 200),
+                            Day(date: Date.subtract(days: 2, from: Date()), deficit: 200, activeCalories: 200),
+                            Day(date: Date.subtract(days: 3, from: Date()), deficit: -200, activeCalories: 200),
+                            Day(date: Date.subtract(days: 4, from: Date()), deficit: 1200, activeCalories: 500),
+                            Day(date: Date.subtract(days: 5, from: Date()), deficit: 200, activeCalories: 200),
+                            Day(date: Date.subtract(days: 6, from: Date()), deficit: 200, activeCalories: 200),
+                            Day(date: Date.subtract(days: 7, from: Date()), deficit: 100, activeCalories: 200)]
                 case .release:
                     return health.days.filter { $0.key <= 7 }
                         .values
@@ -388,12 +388,38 @@ struct SwiftUIBarChart: View {
             }()
             let maxValue = Double(days.map(\.surplus).max() ?? 1.0)
             let minValue = Double(days.map(\.surplus).min() ?? 0.0)
+            let markColors: [LinearGradient] = [
+                        LinearGradient(colors: [.pink, .green], startPoint: .leading, endPoint: .trailing),
+                        LinearGradient(colors: [.blue, .green], startPoint: .leading, endPoint: .trailing),
+                        LinearGradient(colors: [.orange, .green], startPoint: .leading, endPoint: .trailing),
+                        LinearGradient(colors: [.mint, .green], startPoint: .leading, endPoint: .trailing),
+                        LinearGradient(colors: [.cyan, .green], startPoint: .leading, endPoint: .trailing),
+                        LinearGradient(colors: [.purple, .green], startPoint: .leading, endPoint: .trailing),
+                        LinearGradient(colors: [.indigo, .green], startPoint: .leading, endPoint: .trailing),
+                        LinearGradient(colors: [.indigo, .green], startPoint: .leading, endPoint: .trailing)
+                    ]
             Chart(days) { day in
-                BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
-                    .foregroundStyle(day.deficit > 0 ? .yellow : .red)
-                    .cornerRadius(5)
+                let gradientPercentage = CGFloat(day.activeCalories / day.deficit)
+                let gradientColors: [Color] = [.orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .orange, .yellow]
+                let midPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y * (1 - gradientPercentage))
+                let startPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y)
+                let gradientStyle: LinearGradient = .linearGradient(colors: gradientColors,
+                                                   startPoint: startPoint,
+                                                   endPoint: midPoint)
+                if day.surplus > 0 {
+                    BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
+                        .cornerRadius(5)
+                        .foregroundStyle(.red)
+                } else {
+                    BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
+                        .cornerRadius(5)
+                        .foregroundStyle(gradientStyle)
+                }
             }
-            .chartForegroundStyleScale()
+//            .chartForegroundStyleScale(domain:
+//                                        days.compactMap({ day in
+//                day.surplus
+//            }), range: markColors)
             .backgroundStyle(.yellow)
             .chartPlotStyle { plotContent in
                 plotContent

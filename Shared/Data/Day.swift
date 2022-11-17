@@ -6,8 +6,48 @@
 //
 
 import Foundation
+import Charts
 
-struct Day: Codable, Identifiable {
+struct Day: Codable, Identifiable, Plottable {
+    var primitivePlottable: String = "Day"
+    
+    init?(primitivePlottable: String) {
+        
+    }
+    
+    init(id: UUID = UUID(),
+         date: Date = Date(),
+         daysAgo: Int = -1,
+         deficit: Double = 0,
+         activeCalories: Double = 0,
+         realActiveCalories: Double = 0,
+         restingCalories: Double = 0,
+         realRestingCalories: Double = 0,
+         consumedCalories: Double = 0,
+         runningTotalDeficit: Double = 0,
+         expectedWeight: Double = 0,
+         expectedWeightChangedBasedOnDeficit: Double = 0,
+         realisticWeight: Double = 0,
+         weight: Double = 0
+    ) {
+        self.id = id
+        self.date = date
+        self.daysAgo = daysAgo
+        self.deficit = deficit
+        self.activeCalories = activeCalories
+        self.realActiveCalories = realActiveCalories
+        self.restingCalories = restingCalories
+        self.realRestingCalories = realRestingCalories
+        self.consumedCalories = consumedCalories
+        self.runningTotalDeficit = runningTotalDeficit
+        self.expectedWeight = expectedWeight
+        self.expectedWeightChangedBasedOnDeficit = expectedWeightChangedBasedOnDeficit
+        self.realisticWeight = realisticWeight
+        self.weight = weight
+    }
+    
+    typealias PrimitivePlottable = String
+    
     var id = UUID()
     var date: Date = Date()
     var daysAgo: Int = -1
