@@ -12,7 +12,17 @@ extension Double {
     func toRadians() -> Double {
         return self * Double.pi / 180
     }
+    
     func toCGFloat() -> CGFloat {
         return CGFloat(self)
+    }
+    
+    func rounded(toNextSignificant goal: Double) -> Double  {
+        switch self > 0 {
+        case true:
+            return self + (goal - self.truncatingRemainder(dividingBy: goal))
+        case false:
+            return self - (goal + self.truncatingRemainder(dividingBy: goal))
+        }
     }
 }

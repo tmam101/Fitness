@@ -20,7 +20,7 @@ private class ViewModel: ObservableObject {
     @Published var gradientColors: [Color] = []
     private var cancellables: [AnyCancellable] = []
     @Published var yValues: [Double] = []
-
+    
     init(health: HealthData) {
         self.health = health
         health.$hasLoaded.sink(
@@ -49,9 +49,9 @@ private class ViewModel: ObservableObject {
                     }()
                     self.days = days
                     self.maxValue = Double(days.map(\.surplus).max() ?? 1.0)
-                    self.maxValue = self.maxValue + (500 - self.maxValue.truncatingRemainder(dividingBy: 500))
+                    self.maxValue = self.maxValue.rounded(toNextSignificant: 500)
                     self.minValue = Double(days.map(\.surplus).min() ?? 0.0)
-                    self.minValue = self.minValue - (500 + self.minValue.truncatingRemainder(dividingBy: 500))
+                    self.minValue = self.minValue.rounded(toNextSignificant: 500)
                     self.gradientColors = {
                         var colors: [Color] = []
                         for _ in 0..<100 {
@@ -63,7 +63,6 @@ private class ViewModel: ObservableObject {
                     let diff = self.maxValue - self.minValue
                     let lineEvery = Double(500)
                     let number = Int(diff / lineEvery)
-//                    var first = self.minValue
                     for i in 0...number {
                         self.yValues.append(self.minValue + (lineEvery * Double(i)))
                     }
@@ -76,8 +75,8 @@ private class ViewModel: ObservableObject {
         let midPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y * (1 - gradientPercentage))
         let startPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y)
         let gradientStyle: LinearGradient = .linearGradient(colors: gradientColors,
-                                           startPoint: startPoint,
-                                           endPoint: midPoint)
+                                                            startPoint: startPoint,
+                                                            endPoint: midPoint)
         return gradientStyle
     }
 }
@@ -107,19 +106,12 @@ struct SwiftUIBarChart: View {
             .backgroundStyle(.yellow)
             .chartYAxis {
                 AxisMarks(values: vm.yValues) { value in
-//                    let showLinesOnTopAndBottom = false
-//                    if
-//                        let v = value.as(Double.self),
-//                        let last = vm.yValues.last,
-//                        let first = vm.yValues.first,
-//                        v != last,
-//                        v != first,
-//                        !showLinesOnTopAndBottom {
+                    if let _ = value.as(Double.self) {
                         AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
                             .foregroundStyle(Color.white.opacity(0.5))
-//                    }
-                    AxisValueLabel()
-                        .foregroundStyle(Color.white)
+                        AxisValueLabel()
+                            .foregroundStyle(Color.white)
+                    }
                 }
             }
             .chartXAxis {
@@ -131,7 +123,6 @@ struct SwiftUIBarChart: View {
             }
             .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: vm.minValue, upper: vm.maxValue)))
         }
-//        .padding()
         .padding()
         
     }
