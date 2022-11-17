@@ -65,6 +65,9 @@ struct Day: Codable, Identifiable, Plottable {
     var surplus: Double {
         deficit * -1
     }
+    var activeCalorieToDeficitRatio: Double {
+        activeCalories / deficit
+    }
 }
 
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
