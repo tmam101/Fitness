@@ -143,7 +143,7 @@ struct DeficitAndWeightStats: View {
                 .filter { $0.value.date >= dateToReach }
                 .count - 1
             
-            if expectedWeightsFiltered.count > 1 {
+            if expectedWeightsFiltered.count > 1, count > 1 {
                 let mostRecentRealisticWeight = { () -> DateAndDouble in
                     for i in 1..<count {
                         if let day = healthData.days[i] {

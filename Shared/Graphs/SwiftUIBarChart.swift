@@ -131,7 +131,7 @@ struct SwiftUIBarChart: View {
 struct SwiftUIBarChart_Previews: PreviewProvider {
     static var previews: some View {
         SwiftUIBarChart(health: HealthData(environment: .debug))
-            .environmentObject(HealthData(environment: .debug))
+//            .environmentObject(HealthData(environment: .debug))
             .mainBackground()
         FitnessPreviewProvider.MainPreview()
     }

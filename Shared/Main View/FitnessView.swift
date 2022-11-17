@@ -78,8 +78,10 @@ struct FitnessView: View {
                             .environmentObject(healthData)
                             .frame(minWidth: 0, maxWidth: .infinity)
                     }
-                    FitnessViewWeightLossGraph(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
-                        .environmentObject(healthData)
+                    SwiftUILineChart(health: healthData)
+                        .mainBackground()
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 200)
+
                 }
                 
                 //MARK: MILE TIME

@@ -201,9 +201,11 @@ class CalorieManager: ObservableObject {
         var reloadedDays = await getDays(forPastDays: daysAgo)
         let earliestDeficit = (days[daysAgo + 1]?.runningTotalDeficit ?? 0) + (reloadedDays[daysAgo]?.deficit ?? 0)
         reloadedDays[daysAgo]?.runningTotalDeficit = earliestDeficit
+        reloadedDays[daysAgo]?.expectedWeight = startingWeight - (earliestDeficit / 3500)
         for i in stride(from: daysAgo - 1, through: 0, by: -1) {
             let deficit = (reloadedDays[i+1]?.runningTotalDeficit ?? 0) + (reloadedDays[i]?.deficit ?? 0)
             reloadedDays[i]?.runningTotalDeficit = deficit
+            reloadedDays[i]?.expectedWeight = startingWeight - (deficit / 3500)
         }
         for i in 0...daysAgo {
             days[i] = reloadedDays[i]
