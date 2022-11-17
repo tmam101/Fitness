@@ -19,6 +19,8 @@
 		4802D49A27875B7F0001BE9D /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D49627875B7F0001BE9D /* ViewExtension.swift */; };
 		4803BE9F271F035C00882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		4803BEA3271F1AB500882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
+		4805D2982925B989009F1F47 /* SwiftUIBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* SwiftUIBarChart.swift */; };
+		4805D29A2925B989009F1F47 /* SwiftUIBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* SwiftUIBarChart.swift */; };
 		48108121278A0EDC008E9AE6 /* WatchConnectivityIphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48108120278A0EDC008E9AE6 /* WatchConnectivityIphone.swift */; };
 		48108127278A0FA8008E9AE6 /* WatchConnectivityWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48108124278A0FA8008E9AE6 /* WatchConnectivityWatch.swift */; };
 		48108128278A0FE1008E9AE6 /* WatchConnectivityIphone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48108120278A0EDC008E9AE6 /* WatchConnectivityIphone.swift */; };
@@ -308,6 +310,7 @@
 		4802D492278584750001BE9D /* CalorieManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieManager.swift; sourceTree = "<group>"; };
 		4802D49627875B7F0001BE9D /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		4803BE9E271F035C00882BCC /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
+		4805D2972925B989009F1F47 /* SwiftUIBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIBarChart.swift; sourceTree = "<group>"; };
 		48108120278A0EDC008E9AE6 /* WatchConnectivityIphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityIphone.swift; sourceTree = "<group>"; };
 		48108124278A0FA8008E9AE6 /* WatchConnectivityWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityWatch.swift; sourceTree = "<group>"; };
 		4810812B278A34A8008E9AE6 /* AppViewWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewWatch.swift; sourceTree = "<group>"; };
@@ -493,6 +496,7 @@
 				48BD6E69274AFA730007AC15 /* Line Graphs */,
 				486388E0261F9099005B1227 /* BarChart.swift */,
 				48E0E1CD2603C3370037EEAF /* Progress Circles */,
+				4805D2972925B989009F1F47 /* SwiftUIBarChart.swift */,
 			);
 			path = Graphs;
 			sourceTree = "<group>";
@@ -1211,6 +1215,7 @@
 				48A7706B260529C3002E5853 /* ColorExtension.swift in Sources */,
 				48E0E21826041F3D0037EEAF /* TextCollections.swift in Sources */,
 				4803BE9F271F035C00882BCC /* Day.swift in Sources */,
+				4805D2982925B989009F1F47 /* SwiftUIBarChart.swift in Sources */,
 				48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */,
 				48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */,
 				486388E1261F9099005B1227 /* BarChart.swift in Sources */,
@@ -1298,6 +1303,7 @@
 				485B72992631EBD70070E096 /* Lines.swift in Sources */,
 				48199FB92628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44F262619DE002321B5 /* Environment.swift in Sources */,
+				4805D29A2925B989009F1F47 /* SwiftUIBarChart.swift in Sources */,
 				4803BEA3271F1AB500882BCC /* Day.swift in Sources */,
 				48E0E21926041F3D0037EEAF /* TextCollections.swift in Sources */,
 				48E0E20C26041E700037EEAF /* Stats.swift in Sources */,

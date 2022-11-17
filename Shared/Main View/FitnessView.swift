@@ -122,9 +122,18 @@ struct FitnessView: View {
 struct FitnessView_Previews: PreviewProvider {
     
     static var previews: some View {
-        AppView()
+        FitnessPreviewProvider.MainPreview()
+//        AppView()
+//            .environmentObject(HealthData(environment: .debug))
+//            .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+//        //            .environmentObject(WatchConnectivityIphone())
+    }
+}
+
+public struct FitnessPreviewProvider {
+    static func MainPreview() -> some View {
+        return AppView()
             .environmentObject(HealthData(environment: .debug))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
-        //            .environmentObject(WatchConnectivityIphone())
     }
 }
