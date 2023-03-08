@@ -12,18 +12,17 @@ import Combine
 private class ViewModel: ObservableObject {
     var environment: AppEnvironmentConfig = .release
     @Published var day: Day?
-    @Published var maxValue: Double = 0
-    @Published var minValue: Double = 0
+    @Published var maxValue: Double = 1000
+    @Published var minValue: Double = -1000
     @Published var yValues: [Double] = []
+    var goalSurplus: Double = -1000 // TODO Cleanup
     
     init(day: Day) {
         self.day = day
-        var maxValue = day.surplus > 0 ? day.surplus : 0
-        maxValue = maxValue == 0 ? maxValue : maxValue.rounded(toNextSignificant: 500)
-        var minValue = day.surplus > 0 ? 0 : day.surplus
-        minValue = minValue == 0 ? minValue : minValue.rounded(toNextSignificant: 500)
+        let maxValue = max(day.surplus, maxValue)
+        let minValue = min(day.surplus, minValue)
         let diff = maxValue - minValue
-        let lineEvery = Double(500)
+        let lineEvery = Double(1000)
         let number = Int(diff / lineEvery)
         for i in 0...number {
             self.yValues.append(minValue + (lineEvery * Double(i)))
