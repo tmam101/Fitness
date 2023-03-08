@@ -50,6 +50,15 @@ class HealthData: ObservableObject {
         }
     }
     
+    static func getToday() async -> Day {
+        let weightManager = WeightManager()
+        let calorieManager = CalorieManager()
+        await weightManager.setup()
+        await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: 0, forceLoad: false)
+        var today = await calorieManager.getDays(forPastDays: 0)[0]!
+        return today
+    }
+    
     init() { }
     
     init(environment: AppEnvironmentConfig, _ completion: @escaping ((_ health: HealthData) -> Void)) {

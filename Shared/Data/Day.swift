@@ -7,9 +7,27 @@
 
 import Foundation
 import Charts
+import SwiftUI
 
 struct Day: Codable, Identifiable, Plottable {
     var primitivePlottable: String = "Day"
+//    private static var gradientColors = {
+//        var colors: [Color] = []
+//        for _ in 0..<100 {
+//            colors.append(.orange)
+//        }
+//        colors.append(.yellow)
+//        return colors
+//    }()
+//    var gradient: LinearGradient {
+//        let gradientPercentage = CGFloat(self.activeCalorieToDeficitRatio)
+//            let midPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y * (1 - gradientPercentage))
+//            let startPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y)
+//        let gradientStyle: LinearGradient = .linearGradient(colors: Day.gradientColors,
+//                                                                startPoint: startPoint,
+//                                                                endPoint: midPoint)
+//            return gradientStyle
+//    }
     
     init?(primitivePlottable: String) {
         

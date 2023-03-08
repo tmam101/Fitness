@@ -16,6 +16,7 @@ struct AppView: View {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
                 TabView {
+                    TodayView()
                     FitnessView()
                         .environmentObject(healthData)
                     SettingsView()
