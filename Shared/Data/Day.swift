@@ -46,7 +46,8 @@ struct Day: Codable, Identifiable, Plottable {
          expectedWeight: Double = 0,
          expectedWeightChangedBasedOnDeficit: Double = 0,
          realisticWeight: Double = 0,
-         weight: Double = 0
+         weight: Double = 0,
+         protein: Double = 0
     ) {
         self.id = id
         self.date = date
@@ -62,6 +63,7 @@ struct Day: Codable, Identifiable, Plottable {
         self.expectedWeightChangedBasedOnDeficit = expectedWeightChangedBasedOnDeficit
         self.realisticWeight = realisticWeight
         self.weight = weight
+        self.protein = protein
     }
     
     typealias PrimitivePlottable = String
@@ -86,6 +88,8 @@ struct Day: Codable, Identifiable, Plottable {
     var activeCalorieToDeficitRatio: Double {
         activeCalories / deficit
     }
+    var protein: Double = 0
+    var caloriesPerGramOfProtein: Double = 4
 }
 
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.

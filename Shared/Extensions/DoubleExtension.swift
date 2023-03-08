@@ -25,4 +25,12 @@ extension Double {
             return self - (goal + self.truncatingRemainder(dividingBy: goal))
         }
     }
+    
+    func roundedString() -> String {
+        return String(format: "%.2f", self)
+    }
+    
+    func percentageToWholeNumber() -> String {
+        return String(Int(self * 100))
+    }
 }

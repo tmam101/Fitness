@@ -56,6 +56,7 @@ class HealthData: ObservableObject {
         await weightManager.setup()
         await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: 0, forceLoad: false)
         var today = await calorieManager.getDays(forPastDays: 0)[0]!
+        today.weight = weightManager.currentWeight
         return today
     }
     
@@ -317,6 +318,7 @@ class HealthData: ObservableObject {
                 HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
                 HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
                 HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+                HKSampleType.quantityType(forIdentifier: .dietaryProtein)!,
                 HKSampleType.workoutType(),
                 HKSampleType.quantityType(forIdentifier: .heartRate)!,
                 HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]

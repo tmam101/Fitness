@@ -154,6 +154,7 @@ class CalorieManager: ObservableObject {
         var dayInformation: Days = [:]
         for i in stride(from: days, through: 0, by: -1) {
             let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
+            let protein = await sumValueForDay(daysAgo: i, forType: .dietaryProtein)
             let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
             let realActive = max(self.minimumActiveCalories, active)
             let realResting = max(self.minimumRestingCalories, resting)
@@ -175,7 +176,8 @@ class CalorieManager: ObservableObject {
                           consumedCalories: eaten,
                           runningTotalDeficit: runningTotalDeficit,
                           expectedWeight: expectedWeight,
-                          expectedWeightChangedBasedOnDeficit: expectedWeightChangedBasedOnDeficit)
+                          expectedWeightChangedBasedOnDeficit: expectedWeightChangedBasedOnDeficit,
+                          protein: protein)
             
             //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
             if !allowThreeDaysOfFasting {
@@ -324,7 +326,11 @@ class CalorieManager: ObservableObject {
                     continuation.resume(returning: 0.0)
                     return
                 }
-                continuation.resume(returning: sum.doubleValue(for: HKUnit.kilocalorie()))
+                if type == .dietaryProtein {
+                    continuation.resume(returning: sum.doubleValue(for: .gram()))
+                } else {
+                    continuation.resume(returning: sum.doubleValue(for: HKUnit.kilocalorie()))
+                }
             }
             healthStore.execute(query)
         }

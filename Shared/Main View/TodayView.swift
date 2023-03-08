@@ -135,16 +135,21 @@ struct TodayView: View {
                 Spacer()
                     .frame(width: 100)
                 VStack {
-                    Text("Protein per calorie")
+                    let proteinPercentage = (today.protein * today.caloriesPerGramOfProtein) / today.consumedCalories
+                    Text("Protein")
                         .foregroundColor(.white)
-                    GenericCircle(color: .purple, starting: 0, ending: 0.5, opacity: 1)
+                    Text(proteinPercentage.percentageToWholeNumber() + "/30% of cals")
+                        .foregroundColor(.white)
+                    GenericCircle(color: .purple, starting: 0, ending: proteinPercentage / 0.3, opacity: 1)
                     Text(String(today.activeCalories))
                         .foregroundColor(.white)
                     Text(String(today.restingCalories))
                         .foregroundColor(.white)
                     Text(String(today.consumedCalories))
                         .foregroundColor(.white)
-                }.frame(height: .infinity)
+                }
+                .frame(height: nil)
+                .padding()
             }
         }
         .onAppear {
