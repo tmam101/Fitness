@@ -99,38 +99,14 @@ struct TodayView: View {
     var body: some View {
         HStack {
             if let vm, let today {
-                Group {
-                    Chart([today]) { day in
-                        if day.surplus > 0 {
-                            BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
-                                .cornerRadius(5)
-                                .foregroundStyle(.red)
-                        }
-                        else {
-                            BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
-                                .cornerRadius(5)
-                                .foregroundStyle(vm.gradient(for: day))
-                        }
-                    }
-                    .backgroundStyle(.yellow)
-                    .chartYAxis {
-                        AxisMarks(values: vm.yValues) { value in
-                            if let _ = value.as(Double.self) {
-                                AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
-                                    .foregroundStyle(Color.white.opacity(0.5))
-                                AxisValueLabel()
-                                    .foregroundStyle(Color.white)
-                            }
-                        }
-                    }
-                    .chartXAxis {
-                        AxisMarks(values: .stride(by: .day, count: 1)) { _ in
-                            AxisGridLine()
-                            AxisValueLabel(format: .dateTime.weekday(.narrow), centered: true)
-                                .foregroundStyle(Color.white)
-                        }
-                    }
-                    .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: vm.minValue, upper: vm.maxValue)))
+                VStack {
+                    Text("You have a deficit of \(Int(today.deficit))! Try to burn \(1000 - Int(today.deficit)) more calories today.")
+//                        .frame(maxHeight: .infinity)
+                        .foregroundColor(.white)
+                        .padding(.bottom, 20)
+                    Spacer()
+                    TodayBar(today: today, vm: vm)
+                        .frame(maxHeight: .infinity)
                 }
                 Spacer()
                     .frame(width: 100)
@@ -151,7 +127,7 @@ struct TodayView: View {
                 .frame(height: nil)
                 .padding()
             }
-        }
+        }.padding()
         .onAppear {
             reloadToday()
             
