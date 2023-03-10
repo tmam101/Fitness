@@ -9,6 +9,7 @@ import SwiftUI
 import Charts
 import Combine
 
+// MARK: VIEW MODEL
 private class ViewModel: ObservableObject {
     var environment: AppEnvironmentConfig = .release
     @Published var day: Day?
@@ -50,6 +51,8 @@ private class ViewModel: ObservableObject {
     }
 }
 
+// MARK: TODAY BAR
+
 struct TodayBar: View {
     @State var today: Day
     @State fileprivate var vm: ViewModel
@@ -74,9 +77,11 @@ struct TodayBar: View {
                     AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
                         .foregroundStyle(Color.white.opacity(0.5))
                     if value.as(Double.self) == 0.0 {
-                        AxisValueLabel()
+                        AxisValueLabel("0 cal")
+//                        AxisValueLabel()
                             .foregroundStyle(Color.white)
-                            .font(.system(size: 30))
+                            .font(.title)
+//                            .font(.system(size: 20))
                     } else {
                         AxisValueLabel()
                             .foregroundStyle(Color.white)
@@ -87,45 +92,59 @@ struct TodayBar: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 1)) { _ in
                 AxisGridLine()
-                AxisValueLabel(format: .dateTime.weekday(.narrow), centered: true)
+                AxisValueLabel(format: .dateTime.weekday(), centered: true)
                     .foregroundStyle(Color.white)
             }
         }
         .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: vm.minValue, upper: vm.maxValue)))
     }
 }
-
+// MARK: TODAY VIEW
 struct TodayView: View {
     @State var today: Day? = nil
     @State fileprivate var vm: ViewModel?
     @Environment(\.scenePhase) private var scenePhase
     var environment: AppEnvironmentConfig = .release
+    let sectionHeight: CGFloat = 250.0
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             if let vm, let today {
                 VStack(alignment: .leading) {
-                    Text("Net Energy")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(.white)
-                        .padding(.bottom, 20)
-                    let sign = today.surplus > 0 ? "+" : "-"
-                    Text("\(sign)\(Int(today.surplus)) calories")
-                        .foregroundColor(.white)
+                    VStack(alignment: .leading) {
+                        Text("Net Energy")
+                            .bold()
+                            .foregroundColor(.white)
+                        let sign = today.surplus > 0 ? "+" : ""
+//                        Text("\(sign)\(Int(today.surplus)) calories")
+//                            .foregroundColor(.white)
+                        ZStack {
+                            let deficitPercentage = today.deficit / 1000
+                            let color: Color = today.surplus > 0 ? .red : .yellow
+                            VStack {
+                                Text("\(sign)\(Int(today.surplus))")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(color)
+                                Text("cals")
+                                    .foregroundColor(color)
+                            }
+                            GenericCircle(color: color, starting: 0, ending: deficitPercentage, opacity: 1)
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
+//                    .padding()
+                    .mainBackground()
 //                    Spacer()
                     TodayBar(today: today, vm: vm)
                         .frame(maxHeight: .infinity)
+                        .padding()
+                        .mainBackground()
                 }
-                .frame(maxWidth: 100)
+                .frame(maxWidth: .infinity)
                 .padding()
-                .mainBackground()
-                
-//                Spacer()
-//                    .frame(width: 100)
                 
                 VStack(alignment: .leading) {
-                    
                     VStack(alignment: .leading) {
                         let protein = (today.protein * today.caloriesPerGramOfProtein) / today.consumedCalories
                         let proteinPercentage = protein.isNaN ? 0 : protein
@@ -141,7 +160,7 @@ struct TodayView: View {
                         }
                     }
                     .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
                     .mainBackground()
                     
                     Spacer()
@@ -152,34 +171,30 @@ struct TodayView: View {
                             .foregroundColor(.white)
                         Text(String(Int(today.realActiveCalories)))
                             .foregroundColor(.orange)
-//                            .font(.title)
                             .font(.system(size: 60))
                     }
                     .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
                     .mainBackground()
                     
                     Spacer()
                         .frame(maxHeight: 40)
                     
                     VStack(alignment: .leading) {
-                        Text("Expected Weight Loss")
+                        Text("Expected Weight Change")
                             .foregroundColor(.white)
                         Text(today.expectedWeightChangedBasedOnDeficit.roundedString() + " pounds")
                             .foregroundColor(.green)
                             .font(.system(size: 60))
                     }
                     .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
                     .mainBackground()
 
                 }
-//                .padding()
-//                .frame(height: .infinity)
-//                .mainBackground()
                 .padding()
             }
-        }.padding()
+        }
         .onAppear {
             reloadToday()
         }
@@ -203,7 +218,7 @@ struct TodayView: View {
     }
 }
     
-
+// MARK: PREVIEW
 struct Previews_TodayView_Previews: PreviewProvider {
     static var previews: some View {
         TodayView(environment: .debug)
