@@ -100,7 +100,7 @@ struct TodayBar: View {
 //                        AxisValueLabel()
                             .foregroundStyle(Color.white)
 //                            .font(.title)
-//                            .font(.system(size: 20))
+                            .font(.system(size: 20))
                     } else {
                         AxisValueLabel()
                             .foregroundStyle(Color.white)
@@ -119,36 +119,79 @@ struct TodayBar: View {
     }
 }
 
-struct RingView: View {
+enum RingColor {
+    case red
+    case green
+    case purple
+    case orange
+    case white
+    case yellow
+    
+    var color: Color {
+        switch self {
+        case .red:
+            return .red
+        case .green:
+               return .green
+        case .purple:
+            return .purple
+        case .orange:
+            return .orange
+        case .white:
+            return .white
+        case .yellow:
+            return .yellow
+
+        }
+    }
+}
+
+struct RingViewModel: Hashable, Identifiable {
+    static func == (lhs: RingViewModel, rhs: RingViewModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    var id: UUID = UUID()
     var titleText: String
     var bodyText: String
     var subBodyText: String
-    var color: Color
     var percentage: Double
-    var gradient: LinearGradient?
+    var color: RingColor = .yellow
+    var bodyTextColor: RingColor = .white
+    var subBodyTextColor: RingColor = .white
+    var gradient: [RingColor]?
+}
+
+struct RingView: View {
+    var vm: RingViewModel
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(titleText)
+            Text(vm.titleText)
                 .bold()
                 .foregroundColor(.white)
             ZStack {
                 VStack {
-                    Text(bodyText)
+                    Text(vm.bodyText)
                         .font(.system(size: 40))
-                        .foregroundColor(color)
-                    Text(subBodyText)
-                        .foregroundColor(color)
+                        .foregroundColor(vm.bodyTextColor.color)
+                    Text(vm.subBodyText)
+                        .foregroundColor(vm.subBodyTextColor.color)
                 }
-                if let gradient {
+                if let g = vm.gradient {
+                    let gradient = LinearGradient(
+                        gradient: .init(colors: g.map(\.color)),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
                     Circle()
-                        .trim(from: 0, to: percentage)
+                        .trim(from: 0, to: vm.percentage)
                         .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
                         .fill(gradient)
                         .rotationEffect(Angle(degrees: 270.0))
-                        .animation(.easeOut(duration: 1), value: percentage)
+                        .animation(.easeOut(duration: 1), value: vm.percentage)
                 } else {
-                    GenericCircle(color: color, starting: 0, ending: percentage, opacity: 1)
+                    GenericCircle(color: vm.color.color, starting: 0, ending: vm.percentage, opacity: 1)
                 }
             }
         }.padding()
@@ -174,50 +217,46 @@ struct TodayView: View {
     @State var weightChangePercentage: CGFloat = 0
     
     var body: some View {
-        GeometryReader { geometry in
-            let sectionHeight = (geometry.size.height / 3) - paddingAmount
-            HStack(alignment: .top) {
+        ScrollView {
+            VStack(alignment: .leading) {
                 if let today {
-                    VStack(alignment: .leading) {
-                        let sign = today.surplus > 0 ? "+" : ""
-                        let bodyText = "\(sign)\(Int(today.surplus))"
-                        let color: Color = today.surplus > 0 ? .red : .yellow
-                        RingView(titleText: "Net Energy", bodyText: bodyText, subBodyText: "cals", color: color, percentage: deficitPercentage)
-                            .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                            .mainBackground()
-                        
+                    let overallItem = RingViewModel(titleText: "Overall Score", bodyText: String(Int(averagePercentage * 100)) + "%", subBodyText: "overall", percentage: averagePercentage, bodyTextColor: .white, gradient: [.yellow, .purple, .orange])
+                    
+                    let sign = today.surplus > 0 ? "+" : ""
+                    let bodyText = "\(sign)\(Int(today.surplus))"
+                    let color: RingColor = today.surplus > 0 ? .red : .yellow
+                    let netEnergyItem = RingViewModel(titleText: "Net Energy", bodyText: bodyText, subBodyText: "cals", percentage: deficitPercentage, color: .yellow, bodyTextColor: color, subBodyTextColor: color)
+                    
+                    let proteinItem = RingViewModel(titleText: "Protein", bodyText: proteinPercentage.percentageToWholeNumber() + "/30%", subBodyText: "cals", percentage: proteinGoalPercentage, color: .purple, bodyTextColor: .purple, subBodyTextColor: .purple)
+                    
+                    let activeCalorieItem = RingViewModel(titleText: "Active Calories", bodyText: String(Int(today.activeCalories)), subBodyText: "cals", percentage: activeCaloriePercentage, color: .orange, bodyTextColor: .orange, subBodyTextColor: .orange)
+                    
+                    let weightChangeItem = RingViewModel(titleText: "Weight Change", bodyText: today.expectedWeightChangedBasedOnDeficit.roundedString(), subBodyText: "pounds", percentage: weightChangePercentage, color: .green, bodyTextColor: .green, subBodyTextColor: .green)
+                    
+                    let vms = [overallItem, proteinItem, activeCalorieItem, weightChangeItem, netEnergyItem]
+                    
+                    let columns = [
+                        GridItem(.adaptive(minimum: 400)),
+                        GridItem(.adaptive(minimum: 400))
+                    ]
+                    Text("Fitness")
+                        .foregroundColor(.white)
+                        .font(.title)
+                        .padding([.leading])
+                        .bold()
+                    LazyVGrid(columns: columns, spacing: 20) {
+                        ForEach(vms, id: \.self) { item in
+                            RingView(vm: item)
+                                .mainBackground()
+                                .foregroundColor(.white)
+                        }
                         TodayBar(today: today, maxValue: maxValue, minValue: minValue, yValues: yValues)
-                            .frame(maxHeight: sectionHeight)
                             .padding()
                             .mainBackground()
-                        
-                        RingView(titleText: "Overall SCore", bodyText: String(Int(averagePercentage * 100)) + "%", subBodyText: "overall", color: .white, percentage: averagePercentage, gradient: LinearGradient(
-                            gradient: .init(colors: [.yellow, .purple, .orange]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        ))
-                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                        .mainBackground()
                     }
-                    .frame(maxWidth: .infinity)
-                    
-                    VStack(alignment: .leading) {
-                        RingView(titleText: "Protein", bodyText: proteinPercentage.percentageToWholeNumber() + "/30%", subBodyText: "cals", color: .purple, percentage: proteinGoalPercentage)
-                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                        .mainBackground()
-                        
-                        RingView(titleText: "ActiveCalories", bodyText: String(Int(today.activeCalories)), subBodyText: "cals", color: .orange, percentage: activeCaloriePercentage)
-                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                        .mainBackground()
-                        
-                        RingView(titleText: "ExpectedWeightChange", bodyText: today.expectedWeightChangedBasedOnDeficit.roundedString(), subBodyText: "pounds", color: .green, percentage: weightChangePercentage)
-                        
-                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                        .mainBackground()
-                    }
+                    .padding(.horizontal)
                 }
             }
-            .padding(20)
         }
         .onAppear {
             reloadToday()
@@ -229,13 +268,14 @@ struct TodayView: View {
     
     private func reloadToday() {
         Task {
+            var today: Day?
             switch environment {
             case .release:
-                self.today = await HealthData.getToday()
+                today = await HealthData.getToday()
             default:
-                self.today = TestData.today
+                today = TestData.today
             }
-            if let today = self.today {
+            if let today {
                 let maxValue = max(today.surplus, maxValue)
                 let minValue = min(today.surplus, minValue)
                 let lineEvery = Double(500)
@@ -254,6 +294,7 @@ struct TodayView: View {
                 self.activeCaloriePercentage = today.activeCalories / 900
                 self.averagePercentage = (deficitPercentage + proteinGoalPercentage + activeCaloriePercentage) / 3
                 self.weightChangePercentage = today.expectedWeightChangedBasedOnDeficit / (-2/7)
+                self.today = today
             }
         }
     }
@@ -264,7 +305,7 @@ struct Previews_TodayView_Previews: PreviewProvider {
     static var previews: some View {
         TodayView(environment: .debug)
             .background(Color.black)
-                    .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+//                    .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
 
     }
 }
