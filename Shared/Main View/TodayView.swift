@@ -105,95 +105,109 @@ struct TodayView: View {
     @State fileprivate var vm: ViewModel?
     @Environment(\.scenePhase) private var scenePhase
     var environment: AppEnvironmentConfig = .release
-    let sectionHeight: CGFloat = 250.0
+//    let sectionHeight: CGFloat = 273.0
+    let paddingAmount: CGFloat = 2 * 10
     
     var body: some View {
-        HStack(alignment: .top) {
-            if let vm, let today {
-                VStack(alignment: .leading) {
+        GeometryReader { geometry in
+            let sectionHeight = (geometry.size.height / 3) - paddingAmount
+            HStack(alignment: .top) {
+                if let vm, let today {
                     VStack(alignment: .leading) {
-                        Text("Net Energy")
-                            .bold()
-                            .foregroundColor(.white)
-                        let sign = today.surplus > 0 ? "+" : ""
-//                        Text("\(sign)\(Int(today.surplus)) calories")
-//                            .foregroundColor(.white)
-                        ZStack {
-                            let deficitPercentage = today.deficit / 1000
-                            let color: Color = today.surplus > 0 ? .red : .yellow
-                            VStack {
-                                Text("\(sign)\(Int(today.surplus))")
-                                    .font(.system(size: 40))
-                                    .foregroundColor(color)
-                                Text("cals")
-                                    .foregroundColor(color)
+                        VStack(alignment: .leading) {
+                            Text("Net Energy")
+                                .bold()
+                                .foregroundColor(.white)
+                            let sign = today.surplus > 0 ? "+" : ""
+                            ZStack {
+                                let deficitPercentage = today.deficit / 1000
+                                let color: Color = today.surplus > 0 ? .red : .yellow
+                                VStack {
+                                    Text("\(sign)\(Int(today.surplus))")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(color)
+                                    Text("cals")
+                                        .foregroundColor(color)
+                                }
+                                GenericCircle(color: color, starting: 0, ending: deficitPercentage, opacity: 1)
                             }
-                            GenericCircle(color: color, starting: 0, ending: deficitPercentage, opacity: 1)
                         }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-//                    .padding()
-                    .mainBackground()
-//                    Spacer()
-                    TodayBar(today: today, vm: vm)
-                        .frame(maxHeight: .infinity)
                         .padding()
+                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
                         .mainBackground()
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                
-                VStack(alignment: .leading) {
+                        TodayBar(today: today, vm: vm)
+                            .frame(maxHeight: (sectionHeight * 2) - paddingAmount)
+                            .padding()
+                            .mainBackground()
+                    }
+                    .frame(maxWidth: .infinity)
+                    
                     VStack(alignment: .leading) {
-                        let protein = (today.protein * today.caloriesPerGramOfProtein) / today.consumedCalories
-                        let proteinPercentage = protein.isNaN ? 0 : protein
-                        Text("Protein")
-                            .foregroundColor(.white)
-                        Text(proteinPercentage.percentageToWholeNumber() + "/30% of cals")
-                            .foregroundColor(.white)
-                        ZStack {
-                            Text(proteinPercentage.percentageToWholeNumber() + "%")
-                                .foregroundColor(.purple)
-                                .font(.system(size: 60))
-                            GenericCircle(color: .purple, starting: 0, ending: proteinPercentage / 0.3, opacity: 1)
+                        VStack(alignment: .leading) {
+                            let protein = (today.protein * today.caloriesPerGramOfProtein) / today.consumedCalories
+                            let proteinPercentage = protein.isNaN ? 0 : protein
+                            Text("Protein")
+                                .foregroundColor(.white)
+                            Text(proteinPercentage.percentageToWholeNumber() + "/30% of cals")
+                                .foregroundColor(.white)
+                            ZStack {
+                                Text(proteinPercentage.percentageToWholeNumber() + "%")
+                                    .foregroundColor(.purple)
+                                    .font(.system(size: 60))
+                                GenericCircle(color: .purple, starting: 0, ending: proteinPercentage / 0.3, opacity: 1)
+                            }
                         }
+                        .padding()
+                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
+                        .mainBackground()
+                        
+                        VStack(alignment: .leading) {
+                            Text("Active Calories")
+                                .foregroundColor(.white)
+                            ZStack {
+                                let caloriePercentage = today.activeCalories / 900
+                                let color: Color = .orange
+                                VStack {
+                                    Text(String(Int(today.activeCalories)))
+                                        .font(.system(size: 40))
+                                        .foregroundColor(color)
+                                    Text("cals")
+                                        .foregroundColor(color)
+                                }
+                                GenericCircle(color: color, starting: 0, ending: caloriePercentage, opacity: 1)
+                            }
+//                            Text(String(Int(today.realActiveCalories)))
+//                                .foregroundColor(.orange)
+//                                .font(.system(size: 60))
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
+                        .mainBackground()
+                        
+                        VStack(alignment: .leading) {
+                            Text("Expected Weight Change")
+                                .foregroundColor(.white)
+                            ZStack {
+                                let deficitPercentage = today.expectedWeightChangedBasedOnDeficit / (-2/7)
+                                let color: Color = .green
+                                VStack {
+                                    Text(today.expectedWeightChangedBasedOnDeficit.roundedString())
+                                        .font(.system(size: 40))
+                                        .foregroundColor(color)
+                                    Text("pounds")
+                                        .foregroundColor(color)
+                                }
+                                GenericCircle(color: color, starting: 0, ending: deficitPercentage, opacity: 1)
+                            }
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, maxHeight: sectionHeight)
+                        .mainBackground()
+                        
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                    .mainBackground()
-                    
-                    Spacer()
-                        .frame(maxHeight: 40)
-                    
-                    VStack(alignment: .leading) {
-                        Text("Active Calories")
-                            .foregroundColor(.white)
-                        Text(String(Int(today.realActiveCalories)))
-                            .foregroundColor(.orange)
-                            .font(.system(size: 60))
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                    .mainBackground()
-                    
-                    Spacer()
-                        .frame(maxHeight: 40)
-                    
-                    VStack(alignment: .leading) {
-                        Text("Expected Weight Change")
-                            .foregroundColor(.white)
-                        Text(today.expectedWeightChangedBasedOnDeficit.roundedString() + " pounds")
-                            .foregroundColor(.green)
-                            .font(.system(size: 60))
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: sectionHeight)
-                    .mainBackground()
-
                 }
-                .padding()
             }
+            .padding(20)
         }
         .onAppear {
             reloadToday()
