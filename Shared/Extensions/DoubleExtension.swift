@@ -31,6 +31,7 @@ extension Double {
     }
     
     func percentageToWholeNumber() -> String {
+        if self.isNaN { return "0" }
         return String(Int(self * 100))
     }
 }

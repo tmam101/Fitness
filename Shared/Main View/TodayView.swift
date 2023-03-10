@@ -21,11 +21,11 @@ private class ViewModel: ObservableObject {
         self.day = day
         let maxValue = max(day.surplus, maxValue)
         let minValue = min(day.surplus, minValue)
-        let diff = maxValue - minValue
         let lineEvery = Double(1000)
-        let number = Int(diff / lineEvery)
-        for i in 0...number {
-            self.yValues.append(minValue + (lineEvery * Double(i)))
+        let topLine = Int(maxValue - (maxValue.truncatingRemainder(dividingBy: lineEvery)))
+        let bottomLine = Int(minValue - (minValue.truncatingRemainder(dividingBy: lineEvery)))
+        for i in stride(from: bottomLine, through: topLine, by: Int(lineEvery)) {
+            self.yValues.append(Double(i))
         }
         self.maxValue = maxValue
         self.minValue = minValue
@@ -98,38 +98,84 @@ struct TodayView: View {
     var body: some View {
         HStack {
             if let vm, let today {
-                VStack {
-                    Text("You have a deficit of \(Int(today.deficit))! Try to burn \(1000 - Int(today.deficit)) more calories today.")
-//                        .frame(maxHeight: .infinity)
+                VStack(alignment: .leading) {
+                    Text("Net Energy")
+                        .font(.title)
+                        .bold()
                         .foregroundColor(.white)
                         .padding(.bottom, 20)
-                    Spacer()
+                    let sign = today.surplus > 0 ? "+" : "-"
+                    Text("\(sign)\(Int(today.surplus)) calories")
+                        .foregroundColor(.white)
+//                    Spacer()
                     TodayBar(today: today, vm: vm)
                         .frame(maxHeight: .infinity)
                 }
-                Spacer()
-                    .frame(width: 100)
-                VStack {
-                    let proteinPercentage = (today.protein * today.caloriesPerGramOfProtein) / today.consumedCalories
-                    Text("Protein")
-                        .foregroundColor(.white)
-                    Text(proteinPercentage.percentageToWholeNumber() + "/30% of cals")
-                        .foregroundColor(.white)
-                    GenericCircle(color: .purple, starting: 0, ending: proteinPercentage / 0.3, opacity: 1)
-                    Text(String(today.activeCalories))
-                        .foregroundColor(.white)
-                    Text(String(today.restingCalories))
-                        .foregroundColor(.white)
-                    Text(String(today.consumedCalories))
-                        .foregroundColor(.white)
+                .frame(maxWidth: 100)
+                .padding()
+                .mainBackground()
+                
+//                Spacer()
+//                    .frame(width: 100)
+                
+                VStack(alignment: .leading) {
+                    
+                    VStack(alignment: .leading) {
+                        let protein = (today.protein * today.caloriesPerGramOfProtein) / today.consumedCalories
+                        let proteinPercentage = protein.isNaN ? 0 : protein
+                        Text("Protein")
+                            .foregroundColor(.white)
+                        Text(proteinPercentage.percentageToWholeNumber() + "/30% of cals")
+                            .foregroundColor(.white)
+                        ZStack {
+                            Text(proteinPercentage.percentageToWholeNumber() + "%")
+                                .foregroundColor(.purple)
+                                .font(.system(size: 60))
+                            GenericCircle(color: .purple, starting: 0, ending: proteinPercentage / 0.3, opacity: 1)
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .mainBackground()
+                    
+                    Spacer()
+                        .frame(maxHeight: 40)
+                    
+                    VStack(alignment: .leading) {
+                        Text("Active Calories")
+                            .foregroundColor(.white)
+                        Text(String(Int(today.realActiveCalories)))
+                            .foregroundColor(.orange)
+//                            .font(.title)
+                            .font(.system(size: 60))
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .mainBackground()
+                    
+                    Spacer()
+                        .frame(maxHeight: 40)
+                    
+                    VStack(alignment: .leading) {
+                        Text("Expected Weight Loss")
+                            .foregroundColor(.white)
+                        Text(today.expectedWeightChangedBasedOnDeficit.roundedString() + " pounds")
+                            .foregroundColor(.green)
+                            .font(.system(size: 60))
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .mainBackground()
+
                 }
-                .frame(height: nil)
+//                .padding()
+//                .frame(height: .infinity)
+//                .mainBackground()
                 .padding()
             }
         }.padding()
         .onAppear {
             reloadToday()
-            
         }
         .onChange(of: scenePhase) { _ in
             reloadToday()
@@ -155,6 +201,8 @@ struct TodayView: View {
 struct Previews_TodayView_Previews: PreviewProvider {
     static var previews: some View {
         TodayView(environment: .debug)
-            .background(Color.myGray)
+            .background(Color.black)
+                    .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+
     }
 }

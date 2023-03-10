@@ -17,8 +17,8 @@ struct AppView: View {
             VStack {
                 TabView {
                     TodayView()
-                    FitnessView()
-                        .environmentObject(healthData)
+//                    FitnessView()
+//                        .environmentObject(healthData)
                     SettingsView()
                         .environmentObject(healthData)
                 }.tabViewStyle(.page)
