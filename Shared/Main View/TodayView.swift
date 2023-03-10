@@ -21,7 +21,7 @@ private class ViewModel: ObservableObject {
         self.day = day
         let maxValue = max(day.surplus, maxValue)
         let minValue = min(day.surplus, minValue)
-        let lineEvery = Double(1000)
+        let lineEvery = Double(500)
         let topLine = Int(maxValue - (maxValue.truncatingRemainder(dividingBy: lineEvery)))
         let bottomLine = Int(minValue - (minValue.truncatingRemainder(dividingBy: lineEvery)))
         for i in stride(from: bottomLine, through: topLine, by: Int(lineEvery)) {
@@ -73,8 +73,14 @@ struct TodayBar: View {
                 if let _ = value.as(Double.self) {
                     AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
                         .foregroundStyle(Color.white.opacity(0.5))
-                    AxisValueLabel()
-                        .foregroundStyle(Color.white)
+                    if value.as(Double.self) == 0.0 {
+                        AxisValueLabel()
+                            .foregroundStyle(Color.white)
+                            .font(.system(size: 30))
+                    } else {
+                        AxisValueLabel()
+                            .foregroundStyle(Color.white)
+                    }
                 }
             }
         }
@@ -202,7 +208,7 @@ struct Previews_TodayView_Previews: PreviewProvider {
     static var previews: some View {
         TodayView(environment: .debug)
             .background(Color.black)
-                    .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+//                    .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
 
     }
 }
