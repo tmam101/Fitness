@@ -10,13 +10,14 @@ import SwiftUI
 struct AppView: View {
     @EnvironmentObject var healthData: HealthData
     //    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
-    
+//    @State var day = Day()
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
                 TabView {
                     TodayView()
+                        .environmentObject(TestVM(today: Day()))
 //                    FitnessView()
 //                        .environmentObject(healthData)
                     SettingsView()

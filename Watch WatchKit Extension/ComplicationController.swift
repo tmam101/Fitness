@@ -16,7 +16,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 
     func getComplicationDescriptors(handler: @escaping ([CLKComplicationDescriptor]) -> Void) {
         let descriptors = [
-            CLKComplicationDescriptor(identifier: "complication", displayName: "Fitness", supportedFamilies: CLKComplicationFamily.allCases)
+            CLKComplicationDescriptor(identifier: "complication", displayName: "Fitness Goal", supportedFamilies: CLKComplicationFamily.allCases)
             // Multiple complication support can be added here with more descriptors
         ]
         
@@ -53,9 +53,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         //            handler(nil)
         //            return
         //        }
-        let _ = HealthData(environment: AppEnvironmentConfig.release) { health in
-            //        health.setValues(from: unencoded)
-            guard let cTemplate = self.makeTemplate(for: health, complication: complication) else {
+        Task {
+            let day = await HealthData.getToday()
+            guard let cTemplate = self.makeTemplate(for: day, complication: complication) else {
                 handler(nil)
                 return
             }
@@ -64,9 +64,22 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 complicationTemplate: cTemplate)
             DispatchQueue.main.async {
                 handler(entry)
-//                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(60 * 15), userInfo: <#T##(NSSecureCoding & NSObjectProtocol)?#>, scheduledCompletion: <#T##(Error?) -> Void#>)
             }
         }
+//        let _ = HealthData(environment: AppEnvironmentConfig.release) { health in
+//            //        health.setValues(from: unencoded)
+//            guard let cTemplate = self.makeTemplate(for: health, complication: complication) else {
+//                handler(nil)
+//                return
+//            }
+//            let entry = CLKComplicationTimelineEntry(
+//                date: Date(),
+//                complicationTemplate: cTemplate)
+//            DispatchQueue.main.async {
+//                handler(entry)
+////                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(60 * 15), userInfo: <#T##(NSSecureCoding & NSObjectProtocol)?#>, scheduledCompletion: <#T##(Error?) -> Void#>)
+//            }
+//        }
     }
     
     func getTimelineEntries(for complication: CLKComplication, after date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
@@ -83,6 +96,40 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 }
 
 extension ComplicationController {
+    func makeTemplate(
+      for day: Day,
+      complication: CLKComplication
+    ) -> CLKComplicationTemplate? {
+      switch complication.family {
+  //    case .modularLarge:
+  //        return CLKComplicationTemplateModularLargeTallBody(
+  //            BarChart()
+  //        )
+      case .graphicCircular:
+          return CLKComplicationTemplateGraphicCircularView(
+  //            DeficitRings(lineWidth: 5)
+  //                .environmentObject(healthData)
+  //            TodayRing(lineWidth: 5)
+  //                .environmentObject(healthData)
+//              TodayRingWithMonthly(lineWidth: 5)
+//                  .environmentObject(healthData)
+            OverallRing(today: day, lineWidth: 5, fontSize: 20, includeTitle: false, includeSubBody: false, shouldPad: false)
+          )
+//      case .graphicRectangular, .modularLarge, .modularSmall, .graphicExtraLarge:
+//  //    case .modularLarge:
+//          return CLKComplicationTemplateGraphicRectangularFullView(
+////              BarChart(cornerRadius: 2, showCalories: false, isComplication: true)
+////                  .environmentObject(healthData)
+//          )
+  //        return CLKComplicationTemplateExtraLargeSimpleImage
+  //      return CLKComplicationTemplateModularLargeTallBody(headerTextProvider: CLKTextProvider(format: "Deficits"), bodyTextProvider: <#T##CLKTextProvider#>)
+  //    case .graphicCorner:
+  //      return CLKComplicationTemplateGraphicCornerCircularView(
+  //        ComplicationViewCornerCircular(appointment: appointment))
+      default:
+        return nil
+      }
+    }
   func makeTemplate(
     for healthData: HealthData,
     complication: CLKComplication

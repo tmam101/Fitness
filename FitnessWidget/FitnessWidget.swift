@@ -89,13 +89,16 @@ struct FitnessWidgetEntryView : View {
                         
                     default:
                         VStack {
-                            DeficitRings(useNewDailyCircle: true)
-                            .environmentObject(entry.healthData)
-                            .padding([.top, .leading, .trailing])
-                            Text("Last updated \(hour):\(minuteString)")
-                                .foregroundColor(.white)
-                                .font(.system(size: 10))
-                                .padding([.bottom])
+                            if let day = entry.healthData.days[0] {
+                                OverallRing(today: day)
+                            }
+//                            DeficitRings(useNewDailyCircle: true)
+//                            .environmentObject(entry.healthData)
+//                            .padding([.top, .leading, .trailing])
+//                            Text("Last updated \(hour):\(minuteString)")
+//                                .foregroundColor(.white)
+//                                .font(.system(size: 10))
+//                                .padding([.bottom])
                         }
                     }
                 }

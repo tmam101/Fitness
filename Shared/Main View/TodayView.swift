@@ -9,54 +9,24 @@ import SwiftUI
 import Charts
 import Combine
 
-//// MARK: VIEW MODEL
-//private class ViewModel: ObservableObject {
-//    var environment: AppEnvironmentConfig = .release
-//    @Published var day: Day?
-//    @Published var maxValue: Double = 1000
-//    @Published var minValue: Double = -1000
-//    @Published var yValues: [Double] = []
-//
-//    init(day: Day) {
-//        self.day = day
-//        let maxValue = max(day.surplus, maxValue)
-//        let minValue = min(day.surplus, minValue)
-//        let lineEvery = Double(500)
-//        let topLine = Int(maxValue - (maxValue.truncatingRemainder(dividingBy: lineEvery)))
-//        let bottomLine = Int(minValue - (minValue.truncatingRemainder(dividingBy: lineEvery)))
-//        for i in stride(from: bottomLine, through: topLine, by: Int(lineEvery)) {
-//            self.yValues.append(Double(i))
-//        }
-//        self.maxValue = maxValue
-//        self.minValue = minValue
-//    }
-//
-//    func gradient(for day: Day) -> LinearGradient {
-//        let gradientColors = {
-//            var colors: [Color] = []
-//            for _ in 0..<100 {
-//                colors.append(.orange)
-//            }
-//            colors.append(.yellow)
-//            return colors
-//        }()
-//        let gradientPercentage = CGFloat(day.activeCalorieToDeficitRatio)
-//        let midPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y * (1 - gradientPercentage))
-//        let startPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y)
-//        let gradientStyle: LinearGradient = .linearGradient(colors: gradientColors,
-//                                                            startPoint: startPoint,
-//                                                            endPoint: midPoint)
-//        return gradientStyle
-//    }
-//}
+class TodayBarViewModel: ObservableObject {
+    @Published var today: Day
+    @Published var maxValue: Double
+    @Published var minValue: Double
+    @Published var yValues: [Double]
+    
+    init(today: Day, maxValue: Double, minValue: Double, yValues: [Double]) {
+        self.today = today
+        self.maxValue = maxValue
+        self.minValue = minValue
+        self.yValues = yValues
+    }
+}
 
 // MARK: TODAY BAR
 
 struct TodayBar: View {
-    @State var today: Day
-    @State var maxValue: Double
-    @State var minValue: Double
-    @State var yValues: [Double]
+    @EnvironmentObject var vm: TodayBarViewModel
     
     func gradient(for day: Day) -> LinearGradient {
         let gradientColors = {
@@ -77,6 +47,7 @@ struct TodayBar: View {
     }
     
     var body: some View {
+        let today = vm.today
         Chart([today]) { day in
             if day.surplus > 0 {
                 BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
@@ -91,15 +62,15 @@ struct TodayBar: View {
         }
         .backgroundStyle(.yellow)
         .chartYAxis {
-            AxisMarks(values: yValues) { value in
+            AxisMarks(values: vm.yValues) { value in
                 if let _ = value.as(Double.self) {
                     AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
                         .foregroundStyle(Color.white.opacity(0.5))
                     if value.as(Double.self) == 0.0 {
                         AxisValueLabel("0 cal")
-//                        AxisValueLabel()
+                        //                        AxisValueLabel()
                             .foregroundStyle(Color.white)
-//                            .font(.title)
+                        //                            .font(.title)
                             .font(.system(size: 20))
                     } else {
                         AxisValueLabel()
@@ -115,7 +86,7 @@ struct TodayBar: View {
                     .foregroundStyle(Color.white)
             }
         }
-        .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: minValue, upper: maxValue)))
+        .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: vm.minValue, upper: vm.maxValue)))
     }
 }
 
@@ -160,47 +131,94 @@ struct RingViewModel: Hashable, Identifiable {
     var bodyTextColor: RingColor = .white
     var subBodyTextColor: RingColor = .white
     var gradient: [RingColor]?
+    var lineWidth: CGFloat = 10
+    var fontSize: CGFloat = 40
+    var includeTitle: Bool = true
+    var includeSubBody: Bool = true
+    var shouldPad: Bool = true
+}
+
+struct OptionalPadding: ViewModifier {
+    var shouldPad: Bool
+    func body(content: Content) -> some View {
+        if shouldPad {
+            content
+                .padding()
+        } else {
+            content
+        }
+    }
 }
 
 struct RingView: View {
     var vm: RingViewModel
+    @State var animate: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(vm.titleText)
-                .bold()
-                .foregroundColor(.white)
+            if vm.includeTitle {
+                Text(vm.titleText)
+                    .bold()
+                    .foregroundColor(.white)
+            }
             ZStack {
                 VStack {
                     Text(vm.bodyText)
-                        .font(.system(size: 40))
+                        .font(.system(size: vm.fontSize))
                         .foregroundColor(vm.bodyTextColor.color)
-                    Text(vm.subBodyText)
-                        .foregroundColor(vm.subBodyTextColor.color)
+                    if vm.includeSubBody {
+                        Text(vm.subBodyText)
+                            .foregroundColor(vm.subBodyTextColor.color)
+                    }
                 }
                 if let g = vm.gradient {
                     let gradient = LinearGradient(
                         gradient: .init(colors: g.map(\.color)),
-                        startPoint: .leading,
-                        endPoint: .trailing
+                        startPoint: animate ? .top : .leading,
+                        endPoint: animate ? .bottom : .trailing
                     )
+//                        .onAppear {
+//                            withAnimation(.linear(duration: 2.0).repeatForever(autoreverses: true)) {
+//                                        animate.toggle()
+//                                    }
+//                    }
+                    Circle()
+                        .stroke(style: .init(lineWidth: 1))
+                        .foregroundColor(.gray)
                     Circle()
                         .trim(from: 0, to: vm.percentage)
-                        .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+                        .stroke(style: StrokeStyle(lineWidth: vm.lineWidth, lineCap: .round, lineJoin: .round))
                         .fill(gradient)
                         .rotationEffect(Angle(degrees: 270.0))
                         .animation(.easeOut(duration: 1), value: vm.percentage)
                 } else {
+                    Circle()
+                        .stroke(style: .init(lineWidth: 1))
+                        .foregroundColor(.gray)
                     GenericCircle(color: vm.color.color, starting: 0, ending: vm.percentage, opacity: 1)
                 }
             }
-        }.padding()
+        }
+        .onAppear {
+            withAnimation(.linear(duration: 2.0).repeatForever(autoreverses: true)) {
+                animate.toggle()
+            }
+        }
+        .modifier(OptionalPadding(shouldPad: vm.shouldPad))
+    }
+}
+
+class TestVM: ObservableObject {
+    @Published var today: Day
+    
+    init(today: Day) {
+        self.today = today
     }
 }
 
 // MARK: TODAY VIEW
 struct TodayView: View {
-    @State var today: Day? = nil
+    @EnvironmentObject var vm: TestVM
     @Environment(\.scenePhase) private var scenePhase
     var environment: AppEnvironmentConfig = .release
     let paddingAmount: CGFloat = 2 * 10
@@ -215,11 +233,12 @@ struct TodayView: View {
     @State var activeCaloriePercentage: CGFloat = 0
     @State var averagePercentage: CGFloat = 0
     @State var weightChangePercentage: CGFloat = 0
+    @State var columnCount: Int = 2
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                if let today {
+                if let today = vm.today {
                     let overallItem = RingViewModel(titleText: "Overall Score", bodyText: String(Int(averagePercentage * 100)) + "%", subBodyText: "overall", percentage: averagePercentage, bodyTextColor: .white, gradient: [.yellow, .purple, .orange])
                     
                     let sign = today.surplus > 0 ? "+" : ""
@@ -235,10 +254,13 @@ struct TodayView: View {
                     
                     let vms = [overallItem, proteinItem, activeCalorieItem, weightChangeItem, netEnergyItem]
                     
-                    let columns = [
-                        GridItem(.adaptive(minimum: 400)),
-                        GridItem(.adaptive(minimum: 400))
-                    ]
+                    let columns: [GridItem] = {
+                        var c: [GridItem] = []
+                        for _ in 1...columnCount {
+                            c.append(GridItem(.adaptive(minimum: 400)))
+                        }
+                        return c
+                    }()
                     Text("Fitness")
                         .foregroundColor(.white)
                         .font(.title)
@@ -248,9 +270,9 @@ struct TodayView: View {
                         ForEach(vms, id: \.self) { item in
                             RingView(vm: item)
                                 .mainBackground()
-                                .foregroundColor(.white)
                         }
-                        TodayBar(today: today, maxValue: maxValue, minValue: minValue, yValues: yValues)
+                        TodayBar()
+                            .environmentObject(TodayBarViewModel(today: vm.today, maxValue: maxValue, minValue: minValue, yValues: yValues))
                             .padding()
                             .mainBackground()
                     }
@@ -281,9 +303,11 @@ struct TodayView: View {
                 let lineEvery = Double(500)
                 let topLine = Int(maxValue - (maxValue.truncatingRemainder(dividingBy: lineEvery)))
                 let bottomLine = Int(minValue - (minValue.truncatingRemainder(dividingBy: lineEvery)))
+                var yValues: [Double] = []
                 for i in stride(from: bottomLine, through: topLine, by: Int(lineEvery)) {
-                    self.yValues.append(Double(i))
+                    yValues.append(Double(i))
                 }
+                self.yValues = yValues
                 self.maxValue = maxValue
                 self.minValue = minValue
                 
@@ -294,17 +318,28 @@ struct TodayView: View {
                 self.activeCaloriePercentage = today.activeCalories / 900
                 self.averagePercentage = (deficitPercentage + proteinGoalPercentage + activeCaloriePercentage) / 3
                 self.weightChangePercentage = today.expectedWeightChangedBasedOnDeficit / (-2/7)
-                self.today = today
+                vm.today = today
             }
         }
+    }
+}
+
+struct Prev: View {
+//    @State var day = TestData.emptyDay
+    @State var vm = TestVM(today: TestData.today)
+
+    var body: some View {
+        TodayView(environment: .debug)
+            .environmentObject(vm)
+            .background(Color.black)
     }
 }
     
 // MARK: PREVIEW
 struct Previews_TodayView_Previews: PreviewProvider {
+    @State var day = TestData.emptyDay
     static var previews: some View {
-        TodayView(environment: .debug)
-            .background(Color.black)
+        Prev()
 //                    .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
 
     }

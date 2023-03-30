@@ -8,6 +8,28 @@
 import Foundation
 import SwiftUI
 
+struct OverallRing: View {
+    @State var today: Day
+    var lineWidth: CGFloat = 10
+    var fontSize: CGFloat = 40
+    var includeTitle: Bool = true
+    var includeSubBody: Bool = true
+    var shouldPad: Bool = true
+    
+    var body: some View {
+        let deficitPercentage = today.deficit / 1000
+        let protein = (today.protein * today.caloriesPerGramOfProtein) / today.consumedCalories
+        let proteinPercentage = protein.isNaN ? 0 : protein
+        let proteinGoalPercentage = proteinPercentage / 0.3
+        let activeCaloriePercentage = today.activeCalories / 900
+        let overallPercentage = (deficitPercentage + proteinGoalPercentage + activeCaloriePercentage) / 3
+        let overallItem = RingViewModel(titleText: "Overall Score", bodyText: String(Int(overallPercentage * 100)) + "%", subBodyText: "overall", percentage: overallPercentage, bodyTextColor: .white, gradient: [.yellow, .purple, .orange], lineWidth: lineWidth, fontSize: fontSize, includeTitle: includeTitle, includeSubBody: includeSubBody, shouldPad: shouldPad)
+
+        RingView(vm: overallItem)
+//            .mainBackground()
+    }
+}
+
 struct TodayRingWithMonthly: View {
     @EnvironmentObject var healthData: HealthData
     var lineWidth: CGFloat = 10

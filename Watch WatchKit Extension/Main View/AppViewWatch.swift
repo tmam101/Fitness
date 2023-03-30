@@ -16,8 +16,10 @@ struct AppViewWatch: View {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
 //                TabView {
-                FitnessViewWatch()
-                    .environmentObject(healthData)
+//                FitnessViewWatch()
+//                    .environmentObject(healthData)
+                TodayView(columnCount: 1)
+                    .environmentObject(TestVM(today: Day()))
 //                    Text("Hey")
 //                }.tabViewStyle(.page)
 //                    .environmentObject(watchConnectivityWatch)
