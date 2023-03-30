@@ -174,14 +174,9 @@ struct RingView: View {
                 if let g = vm.gradient {
                     let gradient = LinearGradient(
                         gradient: .init(colors: g.map(\.color)),
-                        startPoint: animate ? .top : .leading,
-                        endPoint: animate ? .bottom : .trailing
+                        startPoint: animate ? .topLeading : .topTrailing,
+                        endPoint: animate ? .bottomTrailing : .bottomLeading
                     )
-//                        .onAppear {
-//                            withAnimation(.linear(duration: 2.0).repeatForever(autoreverses: true)) {
-//                                        animate.toggle()
-//                                    }
-//                    }
                     Circle()
                         .stroke(style: .init(lineWidth: 1))
                         .foregroundColor(.gray)
@@ -200,7 +195,7 @@ struct RingView: View {
             }
         }
         .onAppear {
-            withAnimation(.linear(duration: 2.0).repeatForever(autoreverses: true)) {
+            withAnimation(.linear(duration: 5.0).repeatForever(autoreverses: true)) {
                 animate.toggle()
             }
         }
@@ -239,7 +234,7 @@ struct TodayView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 if let today = vm.today {
-                    let overallItem = RingViewModel(titleText: "Overall Score", bodyText: String(Int(averagePercentage * 100)) + "%", subBodyText: "overall", percentage: averagePercentage, bodyTextColor: .white, gradient: [.yellow, .purple, .orange])
+                    let overallItem = RingViewModel(titleText: "Overall Score", bodyText: String(Int(averagePercentage * 100)) + "%", subBodyText: "overall", percentage: averagePercentage, bodyTextColor: .white, gradient: [.yellow, .purple, .orange, .yellow, .orange, .purple])
                     
                     let sign = today.surplus > 0 ? "+" : ""
                     let bodyText = "\(sign)\(Int(today.surplus))"
