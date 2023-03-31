@@ -186,6 +186,7 @@ struct RingView: View {
                         .fill(gradient)
                         .rotationEffect(Angle(degrees: 270.0))
                         .animation(.easeOut(duration: 1), value: vm.percentage)
+                    
                 } else {
                     Circle()
                         .stroke(style: .init(lineWidth: 1))
@@ -195,7 +196,7 @@ struct RingView: View {
             }
         }
         .onAppear {
-            withAnimation(.linear(duration: 5.0).repeatForever(autoreverses: true)) {
+            withAnimation(.linear(duration: 3.0).repeatForever(autoreverses: true)) {
                 animate.toggle()
             }
         }
