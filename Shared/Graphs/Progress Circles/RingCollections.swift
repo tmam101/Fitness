@@ -23,9 +23,9 @@ struct OverallRing: View {
         let proteinGoalPercentage = proteinPercentage / 0.3
         let activeCaloriePercentage = today.activeCalories / 900
         let overallPercentage = (deficitPercentage + proteinGoalPercentage + activeCaloriePercentage) / 3
-        let overallItem = RingViewModel(titleText: "Overall Score", bodyText: String(Int(overallPercentage * 100)) + "%", subBodyText: "overall", percentage: overallPercentage, bodyTextColor: .white, gradient: [.yellow, .purple, .orange], lineWidth: lineWidth, fontSize: fontSize, includeTitle: includeTitle, includeSubBody: includeSubBody, shouldPad: shouldPad)
+        let overallItem = TodayRingViewModel(titleText: "Overall Score", bodyText: String(Int(overallPercentage * 100)) + "%", subBodyText: "overall", percentage: overallPercentage, bodyTextColor: .white, gradient: [.yellow, .purple, .orange], lineWidth: lineWidth, fontSize: fontSize, includeTitle: includeTitle, includeSubBody: includeSubBody, shouldPad: shouldPad)
 
-        RingView(vm: overallItem)
+        TodayRingView(vm: overallItem)
 //            .mainBackground()
     }
 }

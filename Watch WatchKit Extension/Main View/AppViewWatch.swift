@@ -19,7 +19,7 @@ struct AppViewWatch: View {
 //                FitnessViewWatch()
 //                    .environmentObject(healthData)
                 TodayView(columnCount: 1)
-                    .environmentObject(TestVM(today: Day()))
+                    .environmentObject(TodayViewModel(today: Day(), environment: .release))
 //                    Text("Hey")
 //                }.tabViewStyle(.page)
 //                    .environmentObject(watchConnectivityWatch)

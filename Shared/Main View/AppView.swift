@@ -17,7 +17,7 @@ struct AppView: View {
             VStack {
                 TabView {
                     TodayView()
-                        .environmentObject(TestVM(today: Day()))
+                        .environmentObject(TodayViewModel(today: Day(), environment: .release))
 //                    FitnessView()
 //                        .environmentObject(healthData)
                     SettingsView()

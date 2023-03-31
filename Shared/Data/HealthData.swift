@@ -73,6 +73,7 @@ class HealthData: ObservableObject {
     //MARK: SET VALUES
     
     /// Set all values of health data critifal for the app. Returns a reference to itself.
+    @MainActor
     func setValues(forceLoad: Bool = false, haveAlreadyRetried: Bool = false, completion: ((_ health: HealthData) -> Void)?) async {
         hasLoaded = false
         setupDates()
