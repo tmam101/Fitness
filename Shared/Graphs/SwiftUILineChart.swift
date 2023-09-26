@@ -16,12 +16,20 @@ private class LineChartViewModel: ObservableObject {
     private var cancellables: [AnyCancellable] = []
     
     init(health: HealthData) {
-        health.$hasLoaded
-            .filter { $0 }
-            .sink(receiveValue: { _ in
-                self.days = self.constructDays(using: health)
-                self.updateMinMaxValues()
-            }).store(in: &cancellables)
+        switch health.environment {
+        case .debug:
+            self.populateDays(for: health)
+        case .release, .widgetRelease:
+            health.$hasLoaded.sink { [weak self] hasLoaded in
+                guard let self = self, hasLoaded else { return }
+                self.populateDays(for: health)
+            }.store(in: &cancellables)
+        }
+    }
+    
+    private func populateDays(for health: HealthData) {
+        self.days = self.constructDays(using: health)
+        self.updateMinMaxValues()
     }
 
     private func constructDays(using health: HealthData) -> [Day] {
