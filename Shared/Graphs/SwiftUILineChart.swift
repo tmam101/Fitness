@@ -31,7 +31,7 @@ private class LineChartViewModel: ObservableObject {
                 Day(date: Date.subtract(days: $0, from: Date()),
                     daysAgo: $0,
                     activeCalories: 200,
-                    expectedWeight: 200.0 - Double($0))
+                    expectedWeight: [200, 201, 198, 197, 200, 202, 203, 205][$0])
             }
         case .release:
             return health.days.filter { $0.key <= 31 }
