@@ -125,10 +125,6 @@ struct TodayView: View {
 
 }
 
-// Rest of the code remains unchanged...
-
-
-
 struct TodayViewPreview: View {
     @State var vm = TodayViewModel(today: TestData.today, environment: .debug)
 
