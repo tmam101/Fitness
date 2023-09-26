@@ -21,15 +21,23 @@ class SwiftUIBarChartViewModel: ObservableObject {
     @Published var yValues: [Double] = []
     
     init(health: HealthData) {
-        health.$hasLoaded.sink { [weak self] hasLoaded in
-            guard let self = self else { return }
-            if hasLoaded {
-                self.setupDays(using: health)
-                self.updateMinMaxValues()
-                self.setupYValues()
-            }
-        }.store(in: &cancellables)
+        switch health.environment {
+        case .debug:
+            setup(for: health)
+        case .release, .widgetRelease:
+            health.$hasLoaded.sink { [weak self] hasLoaded in
+                guard let self = self, hasLoaded else { return }
+                self.setup(for: health)
+            }.store(in: &cancellables)
+        }
     }
+
+    private func setup(for health: HealthData) {
+        self.setupDays(using: health)
+        self.updateMinMaxValues()
+        self.setupYValues()
+    }
+
     
     func setupDays(using health: HealthData) {
         switch health.environment {
