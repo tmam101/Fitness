@@ -9,72 +9,67 @@ import SwiftUI
 import Charts
 import Combine
 
-private class ViewModel: ObservableObject {
-    @State private var health: HealthData
-    var days: [Day] = []
-    private var cancellables: [AnyCancellable] = []
+private class LineChartViewModel: ObservableObject {
+    @Published var days: [Day] = []
     @Published var maxValue: Double = 0
     @Published var minValue: Double = 0
-
+    private var cancellables: [AnyCancellable] = []
+    
     init(health: HealthData) {
-        self.health = health
-        health.$hasLoaded.sink(
-            receiveCompletion: { _ in },
-            receiveValue: { hasLoaded in
-                if hasLoaded {
-                    let days = {
-                        switch health.environment {
-                        case .debug:
-                            return [Day(date: Date.subtract(days: 0, from: Date()), daysAgo: 0, activeCalories: 200, expectedWeight: 200.0),
-                                    Day(date: Date.subtract(days: 1, from: Date()), daysAgo: 1, activeCalories: 200, expectedWeight: 199),
-                                    Day(date: Date.subtract(days: 2, from: Date()), daysAgo: 2, activeCalories: 200, expectedWeight: 201),
-                                    Day(date: Date.subtract(days: 3, from: Date()), daysAgo: 3, activeCalories: 200, expectedWeight: 200.0),
-                                    Day(date: Date.subtract(days: 4, from: Date()), daysAgo: 4, activeCalories: 500, expectedWeight: 200.0),
-                                    Day(date: Date.subtract(days: 5, from: Date()), daysAgo: 5, activeCalories: 200, expectedWeight: 200.0),
-                                    Day(date: Date.subtract(days: 6, from: Date()), daysAgo: 6, activeCalories: 200, expectedWeight: 200.0),
-                                    Day(date: Date.subtract(days: 7, from: Date()), daysAgo: 7, activeCalories: 200, expectedWeight: 200.0)]
-                        case .release:
-                            return health.days.filter { $0.key <= 31 }
-                                .values
-                                .sorted(by: { $0.daysAgo < $1.daysAgo })
-                        default:
-                            return []
-                            
-                        }
-                    }()
-                    self.days = days
-                    self.maxValue = days.map(\.expectedWeight).max() ?? 1
-                    self.minValue = days.map(\.expectedWeight).min() ?? 0
-                }
+        health.$hasLoaded
+            .filter { $0 }
+            .sink(receiveValue: { _ in
+                self.days = self.constructDays(using: health)
+                self.updateMinMaxValues()
             }).store(in: &cancellables)
-        
+    }
+
+    private func constructDays(using health: HealthData) -> [Day] {
+        switch health.environment {
+        case .debug:
+            return (0...7).map {
+                Day(date: Date.subtract(days: $0, from: Date()),
+                    daysAgo: $0,
+                    activeCalories: 200,
+                    expectedWeight: 200.0 - Double($0))
+            }
+        case .release:
+            return health.days.filter { $0.key <= 31 }
+                .values
+                .sorted(by: { $0.daysAgo < $1.daysAgo })
+        default:
+            return []
+        }
+    }
+    
+    private func updateMinMaxValues() {
+        maxValue = days.map(\.expectedWeight).max() ?? 1
+        minValue = days.map(\.expectedWeight).min() ?? 0
     }
 }
 
 struct SwiftUILineChart: View {
-    @State fileprivate var vm: ViewModel
+    @State private var viewModel: LineChartViewModel
     
     init(health: HealthData) {
-        self.vm = ViewModel(health: health)
+        self.viewModel = LineChartViewModel(health: health)
     }
     
     var body: some View {
         Group {
-            Chart(vm.days) { day in
+            Chart(viewModel.days) { day in
                 LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeight))
                     .foregroundStyle(.yellow)
             }
             .chartYAxis {
-                AxisMarks(values: .automatic) { value in
-//                    if let _ = value.as(Double.self) {
-                        AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
-                            .foregroundStyle(Color.white.opacity(0.5))
-                        AxisValueLabel()
-                            .foregroundStyle(Color.white)
-//                    }
+                AxisMarks(values: .automatic) { _ in
+                    AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
+                        .foregroundStyle(Color.white.opacity(0.5))
+                    AxisValueLabel()
+                        .foregroundStyle(Color.white)
                 }
             }
-            .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: vm.minValue, upper: vm.maxValue)))
+            .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue, upper: viewModel.maxValue)))
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: 1)) { _ in
                     AxisGridLine()
