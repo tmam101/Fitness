@@ -19,4 +19,8 @@ extension Color {
     static let yellow1 = Color.init(red: 252/255, green: 241/255, blue: 6/255)
     static let yellow2 = Color.init(red: 249/255, green: 194/255, blue: 16/255)
     static let yellow3 = Color.init(red: 246/255, green: 148/255, blue: 30/255)
+    
+    func solidColorGradient() -> LinearGradient {
+        return LinearGradient(gradient: Gradient(colors: [self, self]), startPoint: .bottom, endPoint: .top)
+    }
 }

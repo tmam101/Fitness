@@ -1,9 +1,7 @@
-//
 //  SwiftUIBarChart.swift
 //  Fitness
 //
 //  Created by Thomas Goss on 11/16/22.
-//
 
 import Foundation
 import SwiftUI
@@ -20,25 +18,27 @@ class SwiftUIBarChartViewModel: ObservableObject {
     private var cancellables: [AnyCancellable] = []
     @Published var yValues: [Double] = []
     
+    // Constants
+    private let lineInterval: Double = 500
+    
     init(health: HealthData) {
         switch health.environment {
         case .debug:
-            setup(for: health)
+            populateDays(for: health)
         case .release, .widgetRelease:
             health.$hasLoaded.sink { [weak self] hasLoaded in
                 guard let self = self, hasLoaded else { return }
-                self.setup(for: health)
+                self.populateDays(for: health)
             }.store(in: &cancellables)
         }
     }
 
-    private func setup(for health: HealthData) {
-        self.setupDays(using: health)
-        self.updateMinMaxValues()
-        self.setupYValues()
+    private func populateDays(for health: HealthData) {
+        setupDays(using: health)
+        updateMinMaxValues()
+        setupYValues()
     }
 
-    
     func setupDays(using health: HealthData) {
         switch health.environment {
         case .debug:
@@ -56,15 +56,14 @@ class SwiftUIBarChartViewModel: ObservableObject {
     }
     
     func updateMinMaxValues() {
-        maxValue = Double(days.map(\.surplus).max() ?? 1.0).rounded(toNextSignificant: 500)
-        minValue = Double(days.map(\.surplus).min() ?? 0.0).rounded(toNextSignificant: 500)
+        maxValue = Double(days.map(\.surplus).max() ?? 1.0).rounded(toNextSignificant: lineInterval)
+        minValue = Double(days.map(\.surplus).min() ?? 0.0).rounded(toNextSignificant: lineInterval)
     }
     
     func setupYValues() {
         let diff = maxValue - minValue
-        let lineEvery = Double(500)
-        let number = Int(diff / lineEvery)
-        yValues = (0...number).map { minValue + (lineEvery * Double($0)) }
+        let number = Int(diff / lineInterval)
+        yValues = (0...number).map { minValue + (lineInterval * Double($0)) }
     }
     
     func gradient(for day: Day) -> LinearGradient {
@@ -77,7 +76,7 @@ class SwiftUIBarChartViewModel: ObservableObject {
 // MARK: SWIFTUI BAR CHART
 
 struct SwiftUIBarChart: View {
-    @State private var viewModel: SwiftUIBarChartViewModel
+    @ObservedObject private var viewModel: SwiftUIBarChartViewModel
     
     init(health: HealthData) {
         viewModel = SwiftUIBarChartViewModel(health: health)
@@ -86,15 +85,10 @@ struct SwiftUIBarChart: View {
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                if day.surplus > 0 {
-                    BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
-                        .cornerRadius(5)
-                        .foregroundStyle(.red)
-                } else {
-                    BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
-                        .cornerRadius(5)
-                        .foregroundStyle(viewModel.gradient(for: day))
-                }
+                BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
+                    .cornerRadius(5)
+                    .foregroundStyle(day.surplus > 0 ? Color.red.solidColorGradient() : viewModel.gradient(for: day))
+
             }
             .backgroundStyle(.yellow)
             .chartYAxis {
@@ -117,15 +111,13 @@ struct SwiftUIBarChart: View {
             .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue, upper: viewModel.maxValue)))
         }
         .padding()
-        
     }
 }
 
 struct SwiftUIBarChart_Previews: PreviewProvider {
     static var previews: some View {
         SwiftUIBarChart(health: HealthData(environment: .debug))
-//            .environmentObject(HealthData(environment: .debug))
             .mainBackground()
-        FitnessPreviewProvider.MainPreview()
+        // More preview configurations can be added as needed
     }
 }
