@@ -18,14 +18,28 @@ struct AppView: View {
                 TabView {
                     TodayView()
                         .environmentObject(TodayViewModel(today: Day(), environment: .release))
-//                    FitnessView()
-//                        .environmentObject(healthData)
+                    FitnessView()
+                        .environmentObject(healthData)
                     SettingsView()
                         .environmentObject(healthData)
                 }.tabViewStyle(.page)
                 //                    .environmentObject(watchConnectivityIphone)
             }
         }
+    }
+}
+
+struct AppView_Previews: PreviewProvider {
+    static var previews: some View {
+        AppPreviewProvider.MainPreview()
+    }
+}
+
+public struct AppPreviewProvider {
+    static func MainPreview() -> some View {
+        return AppView()
+            .environmentObject(HealthData(environment: .debug))
+            .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
     }
 }
 
