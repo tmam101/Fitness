@@ -37,7 +37,7 @@ struct FitnessView: View {
                 renderWeightRingsAndLineChartSection()
 
                 // MARK: Mile Time
-                renderMileTimeSection()
+//                renderMileTimeSection()
             }
             .padding()
         }

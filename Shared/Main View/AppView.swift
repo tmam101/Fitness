@@ -16,8 +16,8 @@ struct AppView: View {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
                 TabView {
-                    TodayView()
-                        .environmentObject(TodayViewModel(today: Day(), environment: .release))
+//                    TodayView() // This is using a different healthData, could be an issue
+//                        .environmentObject(TodayViewModel(today: Day(), environment: .release))
                     FitnessView()
                         .environmentObject(healthData)
                     SettingsView()

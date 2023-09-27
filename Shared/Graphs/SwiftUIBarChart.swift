@@ -57,7 +57,9 @@ class SwiftUIBarChartViewModel: ObservableObject {
     
     func updateMinMaxValues() {
         maxValue = Double(days.map(\.surplus).max() ?? 1.0).rounded(toNextSignificant: lineInterval)
+        maxValue = max(0, maxValue)
         minValue = Double(days.map(\.surplus).min() ?? 0.0).rounded(toNextSignificant: lineInterval)
+        minValue = min(0, minValue)
     }
     
     func setupYValues() {

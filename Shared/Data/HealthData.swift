@@ -35,7 +35,7 @@ class HealthData: ObservableObject {
     @Published public var weights: [Double] = []
         
     // Constants
-    var startDateString = "01.23.2021"
+    var startDateString = "08.23.2023"
     var startDate: Date?
     
     //MARK: INIT
@@ -85,7 +85,7 @@ class HealthData: ObservableObject {
             await weightManager.setup()
             await runManager.setup(fitness: weightManager, startDate: self.startDate ?? Date())
             await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
-            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
+//            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
             
             guard !calorieManager.days.isEmpty else {
                 completion?(self)

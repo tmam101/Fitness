@@ -85,12 +85,15 @@ class CalorieManager: ObservableObject {
         }
         let needToReloadAllDays = forceReload || catchError(in: days) || days.count < 7
         days = needToReloadAllDays ? await getEveryDay() : await loadNecessaryDays(days: days)
-        if catchError(in: days) { return [:] }
+//        if catchError(in: days) {
+//            return [:]
+//        }
         Settings.setDays(days: days)
         
         // Apply active calorie modifier if necessary
         let settingsIndicateActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? false
-        if applyActiveCalorieModifier || settingsIndicateActiveCalorieModifier {
+        if false {
+//        if applyActiveCalorieModifier || settingsIndicateActiveCalorieModifier {
             await setActiveCalorieModifier(1)
             let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
             let startingWeight = fitness?.weight(at: startDate) ?? 0
