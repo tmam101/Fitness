@@ -169,7 +169,6 @@
 		48D9C7B227FCB0FF003BE84D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6A274AFA890007AC15 /* LineGraph.swift */; };
 		48D9C7B327FCB108003BE84D /* RunningLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E6E274AFAF90007AC15 /* RunningLineGraph.swift */; };
 		48D9C7B427FCB10D003BE84D /* LiftingLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48199FB62628D045000247E8 /* LiftingLineGraph.swift */; };
-		48D9C7B527FCB110003BE84D /* DeficitLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48813F582798A9BF0045859C /* DeficitLineGraph.swift */; };
 		48D9C7B627FCB112003BE84D /* DeficitAndWeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE027A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift */; };
 		48D9C7B727FCB114003BE84D /* WeightLossGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE1DE527A086E700F2EE5B /* WeightLossGraph.swift */; };
 		48D9C7B827FCB118003BE84D /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486388E0261F9099005B1227 /* BarChart.swift */; };
@@ -1334,7 +1333,6 @@
 				48D9C7B927FCB11B003BE84D /* RingCollections.swift in Sources */,
 				48D9C7AF27FCB0CB003BE84D /* RunManager.swift in Sources */,
 				48D9C7BA27FCB11E003BE84D /* Progress Rings.swift in Sources */,
-				48D9C7B527FCB110003BE84D /* DeficitLineGraph.swift in Sources */,
 				48D9C7AD27FCB0BD003BE84D /* WeightManager.swift in Sources */,
 				48D9C7BE27FCB129003BE84D /* ColorExtension.swift in Sources */,
 				48D9C7AC27FCB0B3003BE84D /* Run.swift in Sources */,

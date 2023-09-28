@@ -35,11 +35,11 @@ private class LineChartViewModel: ObservableObject {
     private func constructDays(using health: HealthData) -> [Day] {
         switch health.environment {
         case .debug:
-            return (0...7).map {
+            return (0...31).map {
                 Day(date: Date.subtract(days: $0, from: Date()),
                     daysAgo: $0,
                     activeCalories: 200,
-                    expectedWeight: [200, 201, 198, 197, 200, 202, 203, 205][$0])
+                    expectedWeight: Double(200 + $0))
             }
         case .release:
             return health.days.filter { $0.key <= 31 }
@@ -79,7 +79,7 @@ struct SwiftUILineChart: View {
             }
             .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue, upper: viewModel.maxValue)))
             .chartXAxis {
-                AxisMarks(values: .stride(by: .day, count: 1)) { _ in
+                AxisMarks(values: .stride(by: .day, count: viewModel.days.count)) { _ in
                     AxisGridLine()
                     AxisValueLabel()
                         .foregroundStyle(Color.white)

@@ -30,9 +30,9 @@ struct FitnessView: View {
                 renderDeficitBarChartSection()
 
                 // MARK: Deficit Line Graph
-                if showWeeklyDeficitLine {
-                    renderDeficitLineGraphSection()
-                }
+//                if showWeeklyDeficitLine {
+//                    renderDeficitLineGraphSection()
+//                }
 
                 renderWeightRingsAndLineChartSection()
 
@@ -68,7 +68,7 @@ struct FitnessView: View {
     @ViewBuilder
     private func renderDeficitBarChartSection() -> some View {
         Group {
-            Text("Deficits This Week")
+            Text("Net Energy This Week")
                 .foregroundColor(.white)
                 .font(.title2)
             SwiftUIBarChart(health: healthData)
@@ -147,5 +147,6 @@ public struct FitnessPreviewProvider {
         return FitnessView()
             .environmentObject(HealthData(environment: .debug))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+            .background(Color.myGray)
     }
 }
