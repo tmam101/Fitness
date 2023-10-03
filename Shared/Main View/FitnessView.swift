@@ -24,7 +24,7 @@ struct FitnessView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 // MARK: Deficit Rings
-                renderDeficitRingsSection()
+//                renderDeficitRingsSection()
 
                 // MARK: Deficit Bar Chart
                 renderDeficitBarChartSection()

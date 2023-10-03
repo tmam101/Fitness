@@ -89,7 +89,28 @@ struct Day: Codable, Identifiable, Plottable {
         activeCalories / deficit
     }
     var protein: Double = 0
+    var proteinPercentage: Double {
+        let p = (protein * caloriesPerGramOfProtein) / consumedCalories
+        return p.isNaN ? 0 : p
+    }
+    var proteinGoalPercentage: Double {
+        proteinPercentage / 0.3 // TODO Make settings
+    }
     var caloriesPerGramOfProtein: Double = 4
+    var deficitPercentage: Double {
+        deficit / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000)
+    }
+    
+    var activeCaloriePercentage: Double {
+        activeCalories / 900 // TODO Make settings
+    }
+    var averagePercentage: Double {
+        (deficitPercentage + proteinGoalPercentage + activeCaloriePercentage) / 3
+    }
+    var weightChangePercentage: Double {
+        expectedWeightChangedBasedOnDeficit / (-2/7) // TODO Make settings
+    }
+
 }
 
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.

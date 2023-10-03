@@ -14,7 +14,7 @@ import Combine
 // MARK: - TodayView
 
 struct TodayView: View {
-    @EnvironmentObject var vm: TodayViewModel
+    @EnvironmentObject var health: HealthData
     @Environment(\.scenePhase) private var scenePhase
     let paddingAmount: CGFloat = 20 // Instead of `2 * 10`, use a single value for clarity
     @State var columnCount: Int = 2
@@ -28,12 +28,13 @@ struct TodayView: View {
                 displayGridItems()
             }
         }
-        .onAppear {
-            vm.reloadToday()
-        }
-        .onChange(of: scenePhase) { _ in
-            vm.reloadToday()
-        }
+        // TODO Make reload like FitnessView
+//        .onAppear {
+//            vm.reloadToday()
+//        }
+//        .onChange(of: scenePhase) { _ in
+//            vm.reloadToday()
+//        }
     }
     
     // MARK: - Private Helper Functions
@@ -52,10 +53,10 @@ struct TodayView: View {
                 TodayRingView(vm: item)
                     .mainBackground()
             }
-            TodayBar()
-                .environmentObject(TodayBarViewModel(today: vm.today, maxValue: vm.maxValue, minValue: vm.minValue, yValues: vm.yValues))
-                .padding()
-                .mainBackground()
+//            TodayBar()
+//                .environmentObject(TodayBarViewModel(today: vm.today, maxValue: vm.maxValue, minValue: vm.minValue, yValues: vm.yValues))
+//                .padding()
+//                .mainBackground()
         }
         .padding(.horizontal)
     }
@@ -66,13 +67,13 @@ struct TodayView: View {
     
     private func createRingViewModels() -> [TodayRingViewModel] {
         // Construct and return an array of TodayRingViewModel objects
-        let today = vm.today
+        guard let today = health.days[0] else { return [] }
 
         let overallItem = TodayRingViewModel(
             titleText: "Overall Score",
-            bodyText: "\(Int(vm.averagePercentage * 100))%",
+            bodyText: "\(Int(today.averagePercentage * 100))%",
             subBodyText: "overall",
-            percentage: vm.averagePercentage,
+            percentage: today.averagePercentage,
             bodyTextColor: .white,
             gradient: [.yellow, .purple, .orange, .yellow, .orange, .purple]
         )
@@ -84,7 +85,7 @@ struct TodayView: View {
             titleText: "Net Energy",
             bodyText: bodyText,
             subBodyText: "cals",
-            percentage: vm.deficitPercentage,
+            percentage: today.deficitPercentage,
             color: .yellow,
             bodyTextColor: color,
             subBodyTextColor: color
@@ -92,9 +93,9 @@ struct TodayView: View {
         
         let proteinItem = TodayRingViewModel(
             titleText: "Protein",
-            bodyText: vm.proteinPercentage.percentageToWholeNumber() + "/30%",
+            bodyText: today.proteinPercentage.percentageToWholeNumber() + "/30%",
             subBodyText: "cals",
-            percentage: vm.proteinGoalPercentage,
+            percentage: today.proteinGoalPercentage,
             color: .purple,
             bodyTextColor: .purple,
             subBodyTextColor: .purple
@@ -104,7 +105,7 @@ struct TodayView: View {
             titleText: "Active Calories",
             bodyText: "\(Int(today.activeCalories))",
             subBodyText: "cals",
-            percentage: vm.activeCaloriePercentage,
+            percentage: today.activeCaloriePercentage,
             color: .orange,
             bodyTextColor: .orange,
             subBodyTextColor: .orange
@@ -114,7 +115,7 @@ struct TodayView: View {
             titleText: "Weight Change",
             bodyText: today.expectedWeightChangedBasedOnDeficit.roundedString(),
             subBodyText: "pounds",
-            percentage: vm.weightChangePercentage,
+            percentage: today.weightChangePercentage,
             color: .green,
             bodyTextColor: .green,
             subBodyTextColor: .green
@@ -126,22 +127,20 @@ struct TodayView: View {
 }
 
 struct TodayViewPreview: View {
-    @State var vm = TodayViewModel(today: TestData.today, environment: .debug)
-
+    @State var health: HealthData = HealthData(environment: .debug)
     var body: some View {
         TodayView()
-            .environmentObject(vm)
+            .environmentObject(health)
             .background(Color.black)
     }
 }
     
 // MARK: PREVIEW
 struct Previews_TodayView_Previews: PreviewProvider {
-    @State var vm = TodayViewModel(today: TestData.today, environment: .debug)
-    
+    @State var health = HealthData(environment: .debug)
+
     static var previews: some View {
         TodayViewPreview()
-//                    .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
 
     }
 }

@@ -51,8 +51,12 @@ private class LineChartViewModel: ObservableObject {
     }
     
     private func updateMinMaxValues() {
-        maxValue = days.map(\.expectedWeight).max() ?? 1
-        minValue = days.map(\.expectedWeight).min() ?? 0
+        maxValue = days.map {
+            $0.expectedWeight + $0.expectedWeightChangedBasedOnDeficit
+        }.max() ?? 1
+        minValue = days.map {
+            $0.expectedWeight + $0.expectedWeightChangedBasedOnDeficit
+        }.min() ?? 0
     }
 }
 
@@ -63,10 +67,11 @@ struct SwiftUILineChart: View {
         self.viewModel = LineChartViewModel(health: health)
     }
     
+    //TODO: The initial weight doesn't quite match up with the deficit line.
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeight))
+                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeight + day.expectedWeightChangedBasedOnDeficit))
                     .foregroundStyle(.yellow)
             }
             .chartYAxis {
@@ -77,7 +82,7 @@ struct SwiftUILineChart: View {
                         .foregroundStyle(Color.white)
                 }
             }
-            .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue, upper: viewModel.maxValue)))
+            .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue - 1, upper: viewModel.maxValue)))
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: viewModel.days.count)) { _ in
                     AxisGridLine()

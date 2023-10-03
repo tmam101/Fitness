@@ -20,7 +20,9 @@ struct Settings {
         case useActiveCalorieModifier
         case days
         case activeCalorieModifier
+        case netEnergyGoal
     }
+    
     static func set(key: UserDefaultsKey, value: Any) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }

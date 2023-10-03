@@ -19,7 +19,8 @@ struct AppView: View {
                     FitnessView()
                         .environmentObject(healthData)
                     TodayView() // This is using a different healthData, could be an issue
-                        .environmentObject(TodayViewModel(today: Day(), environment: .release))
+                        .environmentObject(healthData)
+//                        .environmentObject(TodayViewModel(today: Day(), environment: .release))
                     SettingsView()
                         .environmentObject(healthData)
                 }.tabViewStyle(.page)
