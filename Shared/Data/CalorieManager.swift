@@ -83,8 +83,8 @@ class CalorieManager: ObservableObject {
         if days.isEmpty {
             days = Settings.getDays() ?? [:]
         }
-        let needToReloadAllDays = forceReload || catchError(in: days) || days.count < 7
-        days = needToReloadAllDays ? await getEveryDay() : await loadNecessaryDays(days: days)
+//        let needToReloadAllDays = forceReload || catchError(in: days) || days.count < 7
+        days = forceReload ? await getEveryDay() : await loadNecessaryDays(days: days)
 //        if catchError(in: days) {
 //            return [:]
 //        }
@@ -133,7 +133,7 @@ class CalorieManager: ObservableObject {
 
         // If we've already loaded days today, just reload the last week
         if howManyDaysAgoWasLastRecorded == 0 {
-            return await reload(days: &days, fromDay: 7)
+            return await reload(days: &days, fromDay: min(daysBetweenStartAndNow, 7))
         }
         
         // Increment days

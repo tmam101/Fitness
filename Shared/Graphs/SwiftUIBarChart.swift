@@ -90,6 +90,7 @@ struct SwiftUIBarChart: View {
                 BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
                     .cornerRadius(5)
                     .foregroundStyle(day.surplus > 0 ? Color.red.solidColorGradient() : viewModel.gradient(for: day))
+                    .opacity(day.daysAgo == 0 ? 0.5 : 1.0)
 
             }
             .backgroundStyle(.yellow)

@@ -14,6 +14,7 @@ private class LineChartViewModel: ObservableObject {
     @Published var maxValue: Double = 0
     @Published var minValue: Double = 0
     private var cancellables: [AnyCancellable] = []
+    private var weights: [Double] = []
     
     init(health: HealthData) {
         switch health.environment {
@@ -71,7 +72,7 @@ struct SwiftUILineChart: View {
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeight + day.expectedWeightChangedBasedOnDeficit))
+                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeight))
                     .foregroundStyle(.yellow)
             }
             .chartYAxis {
