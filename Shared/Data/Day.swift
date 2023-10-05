@@ -10,24 +10,26 @@ import Charts
 import SwiftUI
 
 struct Day: Codable, Identifiable, Plottable {
+    
+    static var testDays: Days = {
+        var days: Days = [:]
+        var netEnergies: [Double] = [
+            100, 200, 291, -32, -570, 334, -46, 794, -861, -310,
+            951, -662, 332, 892, 482, 596, -312, -599, 36, 829,
+            330, 232, 14, 153, -781, 654, -309, 830, 408, 272,
+            405
+        ]
+        days[30] = Day(date: Date.subtract(days: 30, from: Date()), daysAgo: 30, deficit: netEnergies[30], expectedWeight: 200)
+        for i in (0...29).reversed() {
+            guard let previousDay = days[i+1] else { return [:] }
+            let previousWeight = previousDay.expectedWeight
+            let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit
+            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, deficit: netEnergies[i], expectedWeight: expectedWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
+        }
+        return days
+    }()
+    
     var primitivePlottable: String = "Day"
-//    private static var gradientColors = {
-//        var colors: [Color] = []
-//        for _ in 0..<100 {
-//            colors.append(.orange)
-//        }
-//        colors.append(.yellow)
-//        return colors
-//    }()
-//    var gradient: LinearGradient {
-//        let gradientPercentage = CGFloat(self.activeCalorieToDeficitRatio)
-//            let midPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y * (1 - gradientPercentage))
-//            let startPoint = UnitPoint(x: (UnitPoint.bottom.x - UnitPoint.bottom.x / 2), y: UnitPoint.bottom.y)
-//        let gradientStyle: LinearGradient = .linearGradient(colors: Day.gradientColors,
-//                                                                startPoint: startPoint,
-//                                                                endPoint: midPoint)
-//            return gradientStyle
-//    }
     
     init?(primitivePlottable: String) {
         
@@ -38,13 +40,12 @@ struct Day: Codable, Identifiable, Plottable {
          daysAgo: Int = -1,
          deficit: Double = 0,
          activeCalories: Double = 0,
-         realActiveCalories: Double = 0,
+         measuredActiveCalories: Double = 0,
          restingCalories: Double = 0,
-         realRestingCalories: Double = 0,
+         measuredRestingCalories: Double = 0,
          consumedCalories: Double = 0,
          runningTotalDeficit: Double = 0,
          expectedWeight: Double = 0,
-         expectedWeightChangedBasedOnDeficit: Double = 0,
          realisticWeight: Double = 0,
          weight: Double = 0,
          protein: Double = 0
@@ -54,13 +55,12 @@ struct Day: Codable, Identifiable, Plottable {
         self.daysAgo = daysAgo
         self.deficit = deficit
         self.activeCalories = activeCalories
-        self.realActiveCalories = realActiveCalories
+        self.measuredActiveCalories = measuredActiveCalories
         self.restingCalories = restingCalories
-        self.realRestingCalories = realRestingCalories
+        self.measuredRestingCalories = measuredRestingCalories
         self.consumedCalories = consumedCalories
         self.runningTotalDeficit = runningTotalDeficit
         self.expectedWeight = expectedWeight
-        self.expectedWeightChangedBasedOnDeficit = expectedWeightChangedBasedOnDeficit
         self.realisticWeight = realisticWeight
         self.weight = weight
         self.protein = protein
@@ -73,13 +73,15 @@ struct Day: Codable, Identifiable, Plottable {
     var daysAgo: Int = -1
     var deficit: Double = 0
     var activeCalories: Double = 0
-    var realActiveCalories: Double = 0
+    var measuredActiveCalories: Double = 0
     var restingCalories: Double = 0
-    var realRestingCalories: Double = 0
+    var measuredRestingCalories: Double = 0
     var consumedCalories: Double = 0
     var runningTotalDeficit: Double = 0
     var expectedWeight: Double = 0
-    var expectedWeightChangedBasedOnDeficit: Double = 0
+    var expectedWeightChangeBasedOnDeficit: Double {
+        0 - (deficit / 3500)
+    }
     var realisticWeight: Double = 0
     var weight: Double = 0
     var surplus: Double {
@@ -108,7 +110,7 @@ struct Day: Codable, Identifiable, Plottable {
         (deficitPercentage + proteinGoalPercentage + activeCaloriePercentage) / 3
     }
     var weightChangePercentage: Double {
-        expectedWeightChangedBasedOnDeficit / (-2/7) // TODO Make settings
+        expectedWeightChangeBasedOnDeficit / (-2/7) // TODO Make settings
     }
 
 }

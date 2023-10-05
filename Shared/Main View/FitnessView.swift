@@ -24,7 +24,7 @@ struct FitnessView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 // MARK: Deficit Rings
-//                renderDeficitRingsSection()
+                renderDeficitRingsSection()
 
                 // MARK: Deficit Bar Chart
                 renderDeficitBarChartSection()
@@ -147,6 +147,6 @@ public struct FitnessPreviewProvider {
         return FitnessView()
             .environmentObject(HealthData(environment: .debug))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
-            .background(Color.myGray)
+            .background(Color.black)
     }
 }

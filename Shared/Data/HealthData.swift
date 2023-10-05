@@ -105,7 +105,7 @@ class HealthData: ObservableObject {
                 let daysAgo = Date.daysBetween(date1: $0.date, date2: Date())!
                 calorieManager.days[daysAgo]?.weight = $0.weight
             }
-            
+            let d = Day.testDays
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
@@ -275,10 +275,10 @@ class HealthData: ObservableObject {
                 var adjustedWeightDifference = realWeightDifference
 
                 if adjustedWeightDifference < -maximumWeightChangePerDay  {
-                    adjustedWeightDifference = min(-maximumWeightChangePerDay, day.expectedWeightChangedBasedOnDeficit)
+                    adjustedWeightDifference = min(-maximumWeightChangePerDay, day.expectedWeightChangeBasedOnDeficit)
                 }
                 if adjustedWeightDifference > maximumWeightChangePerDay {
-                    adjustedWeightDifference = max(maximumWeightChangePerDay, day.expectedWeightChangedBasedOnDeficit)
+                    adjustedWeightDifference = max(maximumWeightChangePerDay, day.expectedWeightChangeBasedOnDeficit)
                 }
                 
                 realisticWeights[i] = realisticWeights[i+1]! + adjustedWeightDifference

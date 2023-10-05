@@ -42,12 +42,7 @@ class SwiftUIBarChartViewModel: ObservableObject {
     func setupDays(using health: HealthData) {
         switch health.environment {
         case .debug:
-            days = (0...7).map {
-                Day(
-                    date: Date.subtract(days: $0, from: Date()),
-                    deficit: [1000, 300, 200, -200, 1200, 200, 200, 100][$0],
-                    activeCalories: 200)
-            }
+            days = Array(Day.testDays.values).sorted { $0.date < $1.date }.filter { $0.daysAgo <= 7}
         case .release:
             days = health.days.filter { $0.key <= 7 }.values.sorted { $0.daysAgo < $1.daysAgo }
         default:

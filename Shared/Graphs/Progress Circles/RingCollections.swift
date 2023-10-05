@@ -43,7 +43,7 @@ struct TodayRingWithMonthly: View {
                     .foregroundColor(.white)
                     .font(.system(size: 9))
                     .fontWeight(.bold)
-                Text("\(Int(healthData.days[0]?.realActiveCalories ?? 200))")
+                Text("\(Int(healthData.days[0]?.measuredActiveCalories ?? 200))")
                     .foregroundColor(.orange)
                     .font(.system(size: 8))
                     .fontWeight(.bold)

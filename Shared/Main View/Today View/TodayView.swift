@@ -113,7 +113,7 @@ struct TodayView: View {
         
         let weightChangeItem = TodayRingViewModel(
             titleText: "Weight Change",
-            bodyText: today.expectedWeightChangedBasedOnDeficit.roundedString(),
+            bodyText: today.expectedWeightChangeBasedOnDeficit.roundedString(),
             subBodyText: "pounds",
             percentage: today.weightChangePercentage,
             color: .green,

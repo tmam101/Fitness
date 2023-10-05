@@ -156,30 +156,28 @@ class CalorieManager: ObservableObject {
     func getDays(forPastDays days: Int, dealWithWeights: Bool = true) async -> Days {
         var dayInformation: Days = [:]
         for i in stride(from: days, through: 0, by: -1) {
-            let active = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
             let protein = await sumValueForDay(daysAgo: i, forType: .dietaryProtein)
-            let resting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
-            let realActive = max(self.minimumActiveCalories, active)
-            let realResting = max(self.minimumRestingCalories, resting)
+            let measuredActive = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
+            let measuredResting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
+            let realActive = max(self.minimumActiveCalories, measuredActive)
+            let realResting = max(self.minimumRestingCalories, measuredResting)
             
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
             let runningTotalDeficit = i == days ? deficit : dayInformation[i+1]!.runningTotalDeficit + deficit
             let expectedWeight = dealWithWeights ? ((fitness?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
-            let expectedWeightChangedBasedOnDeficit = 0 - (deficit / 3500)
             
             let day = Day(date: date,
                           daysAgo: i,
                           deficit: deficit,
                           activeCalories: realActive,
-                          realActiveCalories: active,
+                          measuredActiveCalories: measuredActive,
                           restingCalories: realResting,
-                          realRestingCalories: resting,
+                          measuredRestingCalories: measuredResting,
                           consumedCalories: eaten,
                           runningTotalDeficit: runningTotalDeficit,
                           expectedWeight: expectedWeight,
-                          expectedWeightChangedBasedOnDeficit: expectedWeightChangedBasedOnDeficit,
                           protein: protein)
             
             //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
@@ -206,7 +204,7 @@ class CalorieManager: ObservableObject {
         var reloadedDays = await getDays(forPastDays: daysAgo)
         let earliestDeficit = (days[daysAgo + 1]?.runningTotalDeficit ?? 0) + (reloadedDays[daysAgo]?.deficit ?? 0)
         reloadedDays[daysAgo]?.runningTotalDeficit = earliestDeficit
-        reloadedDays[daysAgo]?.expectedWeight = startingWeight - (earliestDeficit / 3500)
+        reloadedDays[daysAgo]?.expectedWeight = startingWeight - (earliestDeficit / 3500) // TODO Reloaded expected weights are different from the initial calculation
         for i in stride(from: daysAgo - 1, through: 0, by: -1) {
             let deficit = (reloadedDays[i+1]?.runningTotalDeficit ?? 0) + (reloadedDays[i]?.deficit ?? 0)
             reloadedDays[i]?.runningTotalDeficit = deficit

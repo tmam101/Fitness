@@ -36,12 +36,7 @@ private class LineChartViewModel: ObservableObject {
     private func constructDays(using health: HealthData) -> [Day] {
         switch health.environment {
         case .debug:
-            return (0...31).map {
-                Day(date: Date.subtract(days: $0, from: Date()),
-                    daysAgo: $0,
-                    activeCalories: 200,
-                    expectedWeight: Double(200 + $0))
-            }
+            return Array(Day.testDays.values).sorted { $0.daysAgo < $1.daysAgo }
         case .release:
             return health.days.filter { $0.key <= 31 }
                 .values
@@ -53,10 +48,10 @@ private class LineChartViewModel: ObservableObject {
     
     private func updateMinMaxValues() {
         maxValue = days.map {
-            $0.expectedWeight + $0.expectedWeightChangedBasedOnDeficit
+            $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
         }.max() ?? 1
         minValue = days.map {
-            $0.expectedWeight + $0.expectedWeightChangedBasedOnDeficit
+            $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
         }.min() ?? 0
     }
 }
