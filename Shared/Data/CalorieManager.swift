@@ -91,31 +91,31 @@ class CalorieManager: ObservableObject {
         Settings.setDays(days: days)
         
         // Apply active calorie modifier if necessary
-        let settingsIndicateActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? false
-        if false {
-//        if applyActiveCalorieModifier || settingsIndicateActiveCalorieModifier {
-            await setActiveCalorieModifier(1)
-            let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
-            let startingWeight = fitness?.weight(at: startDate) ?? 0
-            let weightLost = startingWeight - (fitness?.weights.first?.weight ?? 0)
-            var activeCalorieModifier = await getActiveCalorieModifier(days: days, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: false)
-            activeCalorieModifier = min(1.0, activeCalorieModifier)
-            Settings.set(key: .activeCalorieModifier, value: activeCalorieModifier)
-            for i in stride(from: days.count - 1, through: 0, by: -1) {
-                let newActive = (days[i]?.activeCalories ?? 0) * activeCalorieModifier
-                let difference = (days[i]?.activeCalories ?? 0) - newActive
-                let newTotalDeficit = (days[i]?.deficit ?? 0) - difference
-                days[i]?.activeCalories = newActive
-                days[i]?.deficit = newTotalDeficit
-                if i < days.count - 1 {
-                    let newRunningDeficit = (days[i+1]?.runningTotalDeficit ?? 0) + (days[i]?.deficit ?? 0)
-                    days[i]?.runningTotalDeficit = newRunningDeficit
-                } else {
-                    let newRunningDeficit = (days[i]?.deficit ?? 0)
-                    days[i]?.runningTotalDeficit = newRunningDeficit
-                }
-            }
-        }
+//        let settingsIndicateActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? false
+//        if false {
+////        if applyActiveCalorieModifier || settingsIndicateActiveCalorieModifier {
+//            await setActiveCalorieModifier(1)
+//            let startDate = Date.subtract(days: daysBetweenStartAndNow, from: Date())
+//            let startingWeight = fitness?.weight(at: startDate) ?? 0
+//            let weightLost = startingWeight - (fitness?.weights.first?.weight ?? 0)
+//            var activeCalorieModifier = await getActiveCalorieModifier(days: days, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: false)
+//            activeCalorieModifier = min(1.0, activeCalorieModifier)
+//            Settings.set(key: .activeCalorieModifier, value: activeCalorieModifier)
+//            for i in stride(from: days.count - 1, through: 0, by: -1) {
+//                let newActive = (days[i]?.activeCalories ?? 0) * activeCalorieModifier
+//                let difference = (days[i]?.activeCalories ?? 0) - newActive
+//                let newTotalDeficit = (days[i]?.deficit ?? 0) - difference
+//                days[i]?.activeCalories = newActive
+//                days[i]?.deficit = newTotalDeficit
+//                if i < days.count - 1 {
+//                    let newRunningDeficit = (days[i+1]?.runningTotalDeficit ?? 0) + (days[i]?.deficit ?? 0)
+//                    days[i]?.runningTotalDeficit = newRunningDeficit
+//                } else {
+//                    let newRunningDeficit = (days[i]?.deficit ?? 0)
+//                    days[i]?.runningTotalDeficit = newRunningDeficit
+//                }
+//            }
+//        }
         return days
     }
     

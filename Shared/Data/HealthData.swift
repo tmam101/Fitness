@@ -157,7 +157,7 @@ class HealthData: ObservableObject {
     func setValuesLocally() async {
         let minimumResting = Settings.get(key: .resting) as? Double ?? 2000
         let minimumActive = Settings.get(key: .active) as? Double ?? 100
-        let activeCalorieModifier = Settings.get(key: .activeCalorieModifier) as? Double ?? 1.0
+//        let activeCalorieModifier = Settings.get(key: .activeCalorieModifier) as? Double ?? 1.0
         
         await calorieManager.setup(overrideMinimumRestingCalories:minimumResting, overrideMinimumActiveCalories: minimumActive, shouldGetDays: false, startingWeight: 200, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
         let days = await calorieManager.getDays(forPastDays: 40, dealWithWeights: false)

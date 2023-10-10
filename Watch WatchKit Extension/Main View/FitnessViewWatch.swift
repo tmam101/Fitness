@@ -56,7 +56,7 @@ struct FitnessViewWatch: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                let sectionHeight: CGFloat = 75
+//                let sectionHeight: CGFloat = 75
                 Group {
                     //                    StatsTitle(title: "Deficits")
                     //                    Rings()
