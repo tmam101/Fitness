@@ -151,6 +151,8 @@ extension Days {
         case weight
         case realisticWeight
         case expectedWeight
+        case surplus
+        case deficit
     }
     
     func sum(property: DayProperty) -> Double {
@@ -169,6 +171,10 @@ extension Days {
                     return $0.realisticWeight
                 case .expectedWeight:
                     return $0.expectedWeight
+                case .surplus:
+                    return $0.surplus
+                case .deficit:
+                    return $0.deficit
                 }
             }
             .reduce(0, { x, y in x + y })
