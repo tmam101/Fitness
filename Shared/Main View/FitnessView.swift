@@ -116,7 +116,7 @@ struct FitnessView: View {
                 .foregroundColor(.white)
                 .font(.title2)
             SwiftUIBarChart(health: healthData)
-                .frame(maxWidth: .infinity, minHeight: 400)
+                .frame(maxWidth: .infinity, minHeight: 300)
                 .mainBackground()
         }
     }

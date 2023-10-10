@@ -10,21 +10,20 @@ import SwiftUI
 struct AppView: View {
     @EnvironmentObject var healthData: HealthData
     //    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
-//    @State var day = Day()
+    //    @State var day = Day()
     var body: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-            VStack {
-                TabView {
-                    FitnessView()
-                        .environmentObject(healthData)
-                    TodayView() // This is using a different healthData, could be an issue
-                        .environmentObject(healthData)
-//                        .environmentObject(TodayViewModel(today: Day(), environment: .release))
-                    SettingsView()
-                        .environmentObject(healthData)
-                }.tabViewStyle(.page)
-                //                    .environmentObject(watchConnectivityIphone)
+        VStack {
+            TabView {
+                FitnessView()
+                    .environmentObject(healthData)
+                    .tabItem { Label("This Week", systemImage: "calendar") }
+                TodayView()
+                    .environmentObject(healthData)
+                    .tabItem { Label("Today", systemImage: "clock") }
+                SettingsView()
+                    .environmentObject(healthData)
+                    .tabItem { Label("Settings", systemImage: "gear") }
+                
             }
         }
     }

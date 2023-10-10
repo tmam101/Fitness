@@ -28,6 +28,8 @@
 	<string>&quot;Please Please Please Please Please Please&quot;</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>&quot;Please Please Please Please Please Please&quot;</string>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
