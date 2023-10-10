@@ -1,4 +1,4 @@
-//  SwiftUIBarChart.swift
+//  NetEnergyBarChart.swift
 //  Fitness
 //
 //  Created by Thomas Goss on 11/16/22.
@@ -10,7 +10,7 @@ import Combine
 
 // MARK: VIEW MODEL
 
-class SwiftUIBarChartViewModel: ObservableObject {
+class NetEnergyBarChartViewModel: ObservableObject {
     @Published var days: [Day] = []
     @Published var maxValue: Double = 0
     @Published var minValue: Double = 0
@@ -72,11 +72,11 @@ class SwiftUIBarChartViewModel: ObservableObject {
 
 // MARK: SWIFTUI BAR CHART
 
-struct SwiftUIBarChart: View {
-    @ObservedObject private var viewModel: SwiftUIBarChartViewModel
+struct NetEnergyBarChart: View {
+    @ObservedObject private var viewModel: NetEnergyBarChartViewModel
     
     init(health: HealthData) {
-        viewModel = SwiftUIBarChartViewModel(health: health)
+        viewModel = NetEnergyBarChartViewModel(health: health)
     }
     
     var body: some View {
@@ -112,9 +112,9 @@ struct SwiftUIBarChart: View {
     }
 }
 
-struct SwiftUIBarChart_Previews: PreviewProvider {
+struct NetEnergyBarChart_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUIBarChart(health: HealthData(environment: .debug))
+        NetEnergyBarChart(health: HealthData(environment: .debug))
             .mainBackground()
         // More preview configurations can be added as needed
     }

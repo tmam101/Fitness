@@ -80,11 +80,11 @@ struct FitnessWidgetEntryView : View {
                                     .font(.system(size: 10))
                                     .padding([.bottom])
                             }
-                            BarChart(cornerRadius: 2.0, showCalories: false)
-                                .environmentObject(entry.healthData)
-                                .frame(minWidth: 0, maxWidth: .infinity)
-                                .background(Color.myGray)
-                                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+//                            BarChart(cornerRadius: 2.0, showCalories: false)
+//                                .environmentObject(entry.healthData)
+//                                .frame(minWidth: 0, maxWidth: .infinity)
+//                                .background(Color.myGray)
+//                                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                         }
                         
                     default:

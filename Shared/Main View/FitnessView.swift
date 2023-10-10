@@ -115,7 +115,7 @@ struct FitnessView: View {
             Text("Net Energy By Day")
                 .foregroundColor(.white)
                 .font(.title2)
-            SwiftUIBarChart(health: healthData)
+            NetEnergyBarChart(health: healthData)
                 .frame(maxWidth: .infinity, minHeight: 300)
                 .mainBackground()
         }

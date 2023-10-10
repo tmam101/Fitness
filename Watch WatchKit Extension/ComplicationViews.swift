@@ -66,8 +66,7 @@ struct ComplicationViewCornerCircular: View {
 struct ComplicationViewModular: View {
     @EnvironmentObject var healthData: HealthData
     var body: some View {
-        BarChart()
-            .environmentObject(healthData)
+        NetEnergyBarChart(health: healthData)
     }
 }
 
