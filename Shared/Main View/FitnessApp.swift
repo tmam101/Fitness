@@ -22,7 +22,7 @@ struct FitnessApp: App {
             AppView()
                 .environmentObject(healthData)
 //                .environmentObject(WatchConnectivityIphone())
-        }.onChange(of: scenePhase) { _ in
+        }.onChange(of: scenePhase) {
             if scenePhase == .background {
                 Task {
                     WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in

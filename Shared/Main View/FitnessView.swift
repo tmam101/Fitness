@@ -85,7 +85,7 @@ struct FitnessView: View {
             }
             .padding()
         }
-        .onChange(of: scenePhase) { _ in
+        .onChange(of: scenePhase) {
             handleSceneChange()
         }
     }

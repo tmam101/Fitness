@@ -96,8 +96,8 @@ struct SettingsView: View {
                     Text("Show lines on weight graph")
                         .foregroundColor(.white)
                 }
-                .onChange(of: showLinesOnWeightGraph) { v in
-                    Settings.set(key: .showLinesOnWeightGraph, value: v)
+                .onChange(of: showLinesOnWeightGraph) { _, new in
+                    Settings.set(key: .showLinesOnWeightGraph, value: new)
                 }
             }
             HStack {
@@ -105,8 +105,8 @@ struct SettingsView: View {
                     Text("Use active calorie modifier")
                         .foregroundColor(.white)
                 }
-                .onChange(of: useActiveCalorieModifier) { v in
-                    Settings.set(key: .useActiveCalorieModifier, value: v)
+                .onChange(of: useActiveCalorieModifier) { _, new in
+                    Settings.set(key: .useActiveCalorieModifier, value: new)
                 }
             }
         }

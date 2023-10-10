@@ -144,7 +144,7 @@ struct FitnessViewWatch: View {
         .onAppear {
             reloadToday()
         }
-        .onChange(of: scenePhase) { _ in
+        .onChange(of: scenePhase) {
             reloadToday()
         }
     }
