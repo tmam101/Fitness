@@ -8,7 +8,7 @@
 import XCTest
 @testable import Fitness
 
-final class FitnessUnitTests: XCTestCase {
+final class DayUnitTests: XCTestCase {
     
     var day: Day!
     
