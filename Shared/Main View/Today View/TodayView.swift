@@ -126,6 +126,33 @@ struct TodayView: View {
 
 }
 
+enum RingType {
+    case weightChange
+}
+
+struct TestRing: View {
+    var ringType: RingType
+    var health: HealthData // TODO Shouldn't need to pass the whole thing
+    
+    var body: some View {
+        switch ringType {
+        case .weightChange:
+            if let today = health.days[0] {
+                let vm = TodayRingViewModel(
+                    titleText: "Weight Change",
+                    bodyText: today.expectedWeightChangeBasedOnDeficit.roundedString(),
+                    subBodyText: "pounds",
+                    percentage: today.weightChangePercentage,
+                    color: .green,
+                    bodyTextColor: .green,
+                    subBodyTextColor: .green
+                )
+                TodayRingView(vm: vm)
+            }
+        }
+    }
+}
+
 struct TodayViewPreview: View {
     @State var health: HealthData = HealthData(environment: .debug)
     var body: some View {

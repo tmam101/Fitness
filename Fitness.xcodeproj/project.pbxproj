@@ -217,6 +217,9 @@
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAD29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
+		E9DE68692AD5A3D700320684 /* DeficitLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48813F582798A9BF0045859C /* DeficitLineGraph.swift */; };
+		E9DE686A2AD5A3E700320684 /* TodayRingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83ADC29D77F2F00E0C70B /* TodayRingViewModel.swift */; };
+		E9DE686B2AD5A3FA00320684 /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
 		E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
 		E9F83AD929D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
 		E9F83ADA29D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
@@ -1287,6 +1290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				48D9C7B827FCB118003BE84D /* BarChart.swift in Sources */,
+				E9DE68692AD5A3D700320684 /* DeficitLineGraph.swift in Sources */,
 				48D9C7C427FCB137003BE84D /* DateExtension.swift in Sources */,
 				48821CCC25B8BF3800C9F58A /* Tests_iOS.swift in Sources */,
 				E901DE1E29B8111700F889D3 /* TestData.swift in Sources */,
@@ -1301,6 +1305,7 @@
 				48D9C7AF27FCB0CB003BE84D /* RunManager.swift in Sources */,
 				48D9C7BA27FCB11E003BE84D /* Progress Rings.swift in Sources */,
 				48D9C7AD27FCB0BD003BE84D /* WeightManager.swift in Sources */,
+				E9DE686A2AD5A3E700320684 /* TodayRingViewModel.swift in Sources */,
 				48D9C7BE27FCB129003BE84D /* ColorExtension.swift in Sources */,
 				48D9C7AC27FCB0B3003BE84D /* Run.swift in Sources */,
 				48D9C7BD27FCB125003BE84D /* Environment.swift in Sources */,
@@ -1313,6 +1318,7 @@
 				48D9C7AB27FCB0AA003BE84D /* Day.swift in Sources */,
 				48D9C7AE27FCB0C2003BE84D /* WorkoutManager.swift in Sources */,
 				48D9C7B127FCB0D2003BE84D /* Weight.swift in Sources */,
+				E9DE686B2AD5A3FA00320684 /* TodayRingView.swift in Sources */,
 				48D9C7BC27FCB122003BE84D /* Ring (unused).swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

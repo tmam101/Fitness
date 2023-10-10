@@ -12,6 +12,8 @@ import SwiftUI
 struct Day: Codable, Identifiable, Plottable {
     
     static var testDays: Days = {
+        // TODO add running total deficit
+        // TODO add active calories
         var days: Days = [:]
         var netEnergies: [Double] = [
             100, 200, 291, -32, -570, 334, -46, 794, -861, -310,
@@ -26,6 +28,7 @@ struct Day: Codable, Identifiable, Plottable {
             let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit
             days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, deficit: netEnergies[i], expectedWeight: expectedWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
+        days.addRunningTotalDeficits()
         return days
     }()
     
@@ -127,6 +130,17 @@ extension Days {
             let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
             let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
             return startDate <= date
+        }
+    }
+    
+    mutating func addRunningTotalDeficits() {
+        var i = self.count - 1
+        var runningTotalDeficit: Double = 0
+        while i >= 0 {
+            let deficit = self[i]?.deficit ?? 0
+            runningTotalDeficit = runningTotalDeficit + deficit
+            self[i]?.runningTotalDeficit = runningTotalDeficit
+            i -= 1
         }
     }
     

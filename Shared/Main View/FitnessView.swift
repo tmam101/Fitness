@@ -141,6 +141,9 @@ struct FitnessView: View {
                 StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
                     .frame(maxWidth: .infinity)
             }
+            Text("Expected Weight")
+                .foregroundColor(.white)
+                .font(.title2)
             SwiftUILineChart(health: healthData)
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()

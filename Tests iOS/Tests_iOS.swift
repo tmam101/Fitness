@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import Fitness
+@testable import Fitness
 
 class Tests_iOS: XCTestCase {
 
@@ -21,6 +21,11 @@ class Tests_iOS: XCTestCase {
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+    
+    func testSomething() throws {
+        let x = Day.testDays
+        XCTAssertNotNil(x)
     }
 
     func testExample() throws {
