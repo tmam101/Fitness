@@ -60,19 +60,19 @@ class CalorieManager: ObservableObject {
     }
     
     func setValues(from days: Days) async {
-        if days.count < 30 { return }
+        self.deficitToday = days[0]?.deficit ?? 0
+        if days.count < 8 { return }
         print("days: \(days)")
         self.deficitsThisWeek = days.filter { $0.key < 8 }.mapValues{ $0.deficit }
-        self.deficitToday = days[0]?.deficit ?? 0
         self.deficitToGetCorrectDeficit = self.goalDeficit //todo
         self.averageDeficitThisWeek = ((days[1]?.runningTotalDeficit ?? 0) - (days[8]?.runningTotalDeficit ?? 0)) / 7
         self.percentWeeklyDeficit = Int((averageDeficitThisWeek / goalDeficit) * 100)
-        self.averageDeficitThisMonth = ((days[1]?.runningTotalDeficit ?? 0) - (days[31]?.runningTotalDeficit ?? 0)) / 30
-        self.percentDailyDeficit = percentDailyDeficit
         self.projectedAverageWeeklyDeficitForTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[7]?.runningTotalDeficit ?? 0)) / 7
         self.averageDeficitSinceStart = (days[0]?.runningTotalDeficit ?? 0) / Double(daysBetweenStartAndNow)
-        self.projectedAverageMonthlyDeficitTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[30]?.runningTotalDeficit ?? 0)) / 30
         self.expectedWeights = Array(days.values).map { DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
+        if days.count < 30 { return }
+        self.averageDeficitThisMonth = ((days[1]?.runningTotalDeficit ?? 0) - (days[31]?.runningTotalDeficit ?? 0)) / 30
+        self.projectedAverageMonthlyDeficitTomorrow = ((days[0]?.runningTotalDeficit ?? 0) - (days[30]?.runningTotalDeficit ?? 0)) / 30
     }
     
     // MARK: GET DAYS

@@ -105,7 +105,6 @@ class HealthData: ObservableObject {
                 let daysAgo = Date.daysBetween(date1: $0.date, date2: Date())!
                 calorieManager.days[daysAgo]?.weight = $0.weight
             }
-            let d = Day.testDays
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
@@ -142,7 +141,8 @@ class HealthData: ObservableObject {
             completion?(self)
 #endif
         case .debug:
-            await self.setValuesFromNetworkWithDays()
+//            await self.setValuesFromNetworkWithDays()
+            self.days = Day.testDays
             completion?(self)
             self.hasLoaded = true
         case .widgetRelease:

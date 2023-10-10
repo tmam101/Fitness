@@ -18,14 +18,58 @@ struct FitnessView: View {
     @State private var showLifts = false
     @State private var showWeightRings = false
     @State private var showWeeklyDeficitLine = false
-
+    
     // MARK: - Body
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
+                Text("Net Energy This Week")
+                    .foregroundStyle(.white)
+                    .font(.title)
                 // MARK: Deficit Rings
-                renderDeficitRingsSection()
-
+                let thisWeekDeficit = healthData.calorieManager.averageDeficitThisWeek
+                let thisWeekNetEnergy = 0 - thisWeekDeficit
+                let sign = thisWeekNetEnergy > 0 ? "+" : ""
+                let bodyText = "\(sign)\(Int(thisWeekNetEnergy))"
+                let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
+                let netEnergyItem = TodayRingViewModel(
+                    titleText: "Average\nThis Week",
+                    bodyText: bodyText,
+                    subBodyText: "cals",
+                    percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
+                    color: .yellow,
+                    bodyTextColor: color,
+                    subBodyTextColor: color
+                )
+                
+                let weeklyDeficitTomorrow = healthData.calorieManager.projectedAverageWeeklyDeficitForTomorrow
+                let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
+                let sign2 = weeklyNetEnergyTomorrow > 0 ? "+" : ""
+                let bodyText2 = "\(sign2)\(Int(weeklyNetEnergyTomorrow))"
+                let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
+                let tomorrowEnergyItem = TodayRingViewModel(
+                    titleText: "Tomorrow's Projected Average",
+                    bodyText: bodyText2,
+                    subBodyText: "cals",
+                    percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
+                    color: .yellow,
+                    bodyTextColor: color2,
+                    subBodyTextColor: color2
+                )
+                
+                HStack {
+                    TodayRingView(vm: netEnergyItem)
+                        .mainBackground()
+                    TodayRingView(vm: tomorrowEnergyItem)
+                        .mainBackground()
+                }
+                .frame(maxHeight: 300)
+                
+                
+                
+                
+                //                renderDeficitRingsSection()
+                
                 // MARK: Deficit Bar Chart
                 renderDeficitBarChartSection()
 
@@ -68,7 +112,7 @@ struct FitnessView: View {
     @ViewBuilder
     private func renderDeficitBarChartSection() -> some View {
         Group {
-            Text("Net Energy This Week")
+            Text("Net Energy By Day")
                 .foregroundColor(.white)
                 .font(.title2)
             SwiftUIBarChart(health: healthData)
