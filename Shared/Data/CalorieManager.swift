@@ -54,7 +54,7 @@ class CalorieManager: ObservableObject {
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         self.startingWeight = startingWeight
         if shouldGetDays {
-            self.days = await getDays(forceReload: forceLoad, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
+            self.days = await getDays(forceReload: true, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
             await setValues(from: days)
         }
     }

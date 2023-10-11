@@ -36,7 +36,7 @@ private class LineChartViewModel: ObservableObject {
     private func constructDays(using health: HealthData) -> [Day] {
         switch health.environment {
         case .debug:
-            return Array(Day.testDays.values).sorted { $0.daysAgo < $1.daysAgo }
+            return Array(Days.testDays.values).sorted { $0.daysAgo < $1.daysAgo }
         case .release:
             return health.days.filter { $0.key <= 31 }
                 .values

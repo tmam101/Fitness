@@ -9,28 +9,9 @@ import Foundation
 import Charts
 import SwiftUI
 
+// MARK: DAY
+
 struct Day: Codable, Identifiable, Plottable {
-    
-    static var testDays: Days = {
-        // TODO add running total deficit
-        // TODO add active calories
-        var days: Days = [:]
-        var netEnergies: [Double] = [
-            100, 200, 291, -32, -570, 334, -46, 794, -861, -310,
-            951, -662, 332, 892, 482, 596, -312, -599, 36, 829,
-            330, 232, 14, 153, -781, 654, -309, 830, 408, 272,
-            405
-        ]
-        days[30] = Day(date: Date.subtract(days: 30, from: Date()), daysAgo: 30, deficit: netEnergies[30], expectedWeight: 200)
-        for i in (0...29).reversed() {
-            guard let previousDay = days[i+1] else { return [:] }
-            let previousWeight = previousDay.expectedWeight
-            let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit
-            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, deficit: netEnergies[i], expectedWeight: expectedWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
-        }
-        days.addRunningTotalDeficits()
-        return days
-    }()
     
     var primitivePlottable: String = "Day"
     
@@ -68,6 +49,41 @@ struct Day: Codable, Identifiable, Plottable {
         self.weight = weight
         self.protein = protein
     }
+    
+    // TODO: WIP: make an initializer that accepts active calories, consumed, and resting, so we can calculate the deficit internally. 
+//    init(id: UUID = UUID(),
+//         date: Date = Date(),
+//         daysAgo: Int = -1,
+//         activeCalories: Double = 0,
+//         measuredActiveCalories: Double = 0,
+//         restingCalories: Double = 0,
+//         measuredRestingCalories: Double = 0,
+//         consumedCalories: Double = 0,
+//         runningTotalDeficit: Double = 0,
+//         expectedWeight: Double = 0,
+//         realisticWeight: Double = 0,
+//         weight: Double = 0,
+//         protein: Double = 0
+//    ) {
+//        self.id = id
+//        self.date = date
+//        self.daysAgo = daysAgo
+//        self.deficit =
+//        self.activeCalories = activeCalories
+//        self.measuredActiveCalories = measuredActiveCalories
+//        self.restingCalories = restingCalories
+//        self.measuredRestingCalories = measuredRestingCalories
+//        self.consumedCalories = consumedCalories
+//        self.runningTotalDeficit =
+//        self.expectedWeight = expectedWeight
+//        self.realisticWeight = realisticWeight
+//        self.weight = weight
+//        self.protein = protein
+//    }
+//    
+//    func calculateDeficit() {
+//        return (resting + (active * activeCalorieModifier)) - eaten
+//    }
     
     typealias PrimitivePlottable = String
     
@@ -117,11 +133,32 @@ struct Day: Codable, Identifiable, Plottable {
     }
 
 }
-
+// MARK: DAYS
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
 typealias Days = [Int:Day]
 
 extension Days {
+    
+    static var testDays: Days = {
+        // TODO add running total deficit
+        // TODO add active calories
+        var days: Days = [:]
+        var netEnergies: [Double] = [
+            100, 200, 291, -32, -570, 334, -46, 794, -861, -310,
+            951, -662, 332, 892, 482, 596, -312, -599, 36, 829,
+            330, 232, 14, 153, -781, 654, -309, 830, 408, 272,
+            405
+        ]
+        days[30] = Day(date: Date.subtract(days: 30, from: Date()), daysAgo: 30, deficit: netEnergies[30], expectedWeight: 200)
+        for i in (0...29).reversed() {
+            guard let previousDay = days[i+1] else { return [:] }
+            let previousWeight = previousDay.expectedWeight
+            let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit
+            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, deficit: netEnergies[i], expectedWeight: expectedWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
+        }
+        days.addRunningTotalDeficits()
+        return days
+    }()
     
     //TODO: Test
     func upTo(date: Date) -> Days {

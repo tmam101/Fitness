@@ -42,7 +42,7 @@ class NetEnergyBarChartViewModel: ObservableObject {
     func setupDays(using health: HealthData) {
         switch health.environment {
         case .debug:
-            days = Array(Day.testDays.values).sorted { $0.date < $1.date }.filter { $0.daysAgo <= 7}
+            days = Array(Days.testDays.values).sorted { $0.date < $1.date }.filter { $0.daysAgo <= 7}
         case .release:
             days = health.days.filter { $0.key <= 7 }.values.sorted { $0.daysAgo < $1.daysAgo }
         default:

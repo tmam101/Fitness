@@ -51,12 +51,12 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testDays() {
-        let days = Day.testDays
+        let days = Days.testDays
         XCTAssertEqual(days.count, 31)
     }
     
     func testAddingRunningTotalDeficits() throws {
-        let days = Day.testDays
+        let days = Days.testDays
         let todaysRunningTotalDeficit = days[0]?.runningTotalDeficit
         let shouldBe = days.sum(property: .deficit)
         XCTAssertEqual(todaysRunningTotalDeficit, shouldBe)
@@ -64,7 +64,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testSumPropertyActiveCalories() {
-        let days = Day.testDays
+        let days = Days.testDays
         let total = days.sum(property: .activeCalories)
         XCTAssertEqual(total, days.values.reduce(0) {$0 + $1.activeCalories})
     }

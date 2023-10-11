@@ -24,7 +24,7 @@ class Tests_iOS: XCTestCase {
     }
     
     func testSomething() throws {
-        let x = Day.testDays
+        let x = Days.testDays
         XCTAssertNotNil(x)
     }
 
