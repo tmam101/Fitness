@@ -42,7 +42,7 @@ struct FitnessAppWatch: App {
             }
         }
         
-//        WKExtension.shared().scheduleSnapshotRefresh(withPreferredDate: <#T##Date#>, userInfo: <#T##(NSSecureCoding & NSObjectProtocol)?#>, scheduledCompletion: <#T##(Error?) -> Void#>)
+//        WKApplication.shared().scheduleSnapshotRefresh(withPreferredDate: <#T##Date#>, userInfo: <#T##(NSSecureCoding & NSObjectProtocol)?#>, scheduledCompletion: <#T##(Error?) -> Void#>)
 
         WKNotificationScene(controller: NotificationController.self, category: "myCategory")
     }

@@ -77,7 +77,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 //                complicationTemplate: cTemplate)
 //            DispatchQueue.main.async {
 //                handler(entry)
-////                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(60 * 15), userInfo: <#T##(NSSecureCoding & NSObjectProtocol)?#>, scheduledCompletion: <#T##(Error?) -> Void#>)
+////                WKApplication.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(60 * 15), userInfo: <#T##(NSSecureCoding & NSObjectProtocol)?#>, scheduledCompletion: <#T##(Error?) -> Void#>)
 //            }
 //        }
     }
