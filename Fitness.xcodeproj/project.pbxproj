@@ -208,6 +208,7 @@
 		E901DE2029B8111700F889D3 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901DE1C29B8111700F889D3 /* TestData.swift */; };
 		E901DE2129B8111700F889D3 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901DE1C29B8111700F889D3 /* TestData.swift */; };
 		E91D3F4B2AD5D25A001E1397 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
+		E91D3F4F2AD7393A001E1397 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		E9391CAB29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAD29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
@@ -510,8 +511,6 @@
 		48199FB52628D02A000247E8 /* Graphs */ = {
 			isa = PBXGroup;
 			children = (
-				48BD6E69274AFA730007AC15 /* Line Graphs */,
-				48E0E1CD2603C3370037EEAF /* Progress Circles */,
 				4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */,
 				48E5F00C2925D92F00ADF691 /* SwiftUILineChart.swift */,
 			);
@@ -593,13 +592,13 @@
 		48821CAF25B8BF3600C9F58A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E91D3F4E2AD73882001E1397 /* Old */,
 				487A95182640F97500627BA3 /* strong.json */,
 				48199FB52628D02A000247E8 /* Graphs */,
 				48E4B44C262619DE002321B5 /* Environment.swift */,
 				48A7707326053273002E5853 /* Extensions */,
 				48E0E20926041E550037EEAF /* Data */,
 				48E0E20826041E4A0037EEAF /* Main View */,
-				4845B78F25C09853003BF999 /* Lines.swift */,
 				48821CB225B8BF3800C9F58A /* Assets.xcassets */,
 				484BB6872776AAB900E24B1C /* Network.swift */,
 				48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */,
@@ -748,7 +747,6 @@
 				48E0E1F626041DE50037EEAF /* RingCollections.swift */,
 				48D7995C25B8C7950047C8E0 /* Progress Rings.swift */,
 				48E0E1CE2603C3490037EEAF /* GenericCircles.swift */,
-				48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */,
 			);
 			path = "Progress Circles";
 			sourceTree = "<group>";
@@ -776,11 +774,22 @@
 				4802D48E278581CB0001BE9D /* RunManager.swift */,
 				4802D492278584750001BE9D /* CalorieManager.swift */,
 				4803BE9E271F035C00882BCC /* Day.swift */,
-				48EE13282738C3AB00128623 /* Run.swift */,
 				48755A89267AF13200F7680E /* Weight.swift */,
-				E901DE1C29B8111700F889D3 /* TestData.swift */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		E91D3F4E2AD73882001E1397 /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				E901DE1C29B8111700F889D3 /* TestData.swift */,
+				48EE13282738C3AB00128623 /* Run.swift */,
+				4845B78F25C09853003BF999 /* Lines.swift */,
+				48E0E1CD2603C3370037EEAF /* Progress Circles */,
+				48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */,
+				48BD6E69274AFA730007AC15 /* Line Graphs */,
+			);
+			path = Old;
 			sourceTree = "<group>";
 		};
 		E9DE68712AD5A60F00320684 /* FitnessUnitTests */ = {
@@ -1297,6 +1306,7 @@
 				48D9C7C527FCB169003BE84D /* Network.swift in Sources */,
 				48D9C7C227FCB137003BE84D /* Settings.swift in Sources */,
 				48D9C7C327FCB137003BE84D /* DoubleExtension.swift in Sources */,
+				E91D3F4F2AD7393A001E1397 /* Lines.swift in Sources */,
 				48D9C7C027FCB137003BE84D /* TimeExtension.swift in Sources */,
 				48D9C7B027FCB0CE003BE84D /* CalorieManager.swift in Sources */,
 				48D9C7C127FCB137003BE84D /* ViewExtension.swift in Sources */,
