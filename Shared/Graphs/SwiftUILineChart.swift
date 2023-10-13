@@ -15,7 +15,7 @@ private class LineChartViewModel: ObservableObject {
     @Published var minValue: Double = 0
     private var cancellables: [AnyCancellable] = []
     private var weights: [Double] = []
-    var timeFrame: TimeFrame
+    @Published var timeFrame: TimeFrame
     
     init(health: HealthData, timeFrame: TimeFrame) {
         self.timeFrame = timeFrame
@@ -36,6 +36,8 @@ private class LineChartViewModel: ObservableObject {
     }
 
     private func constructDays(using health: HealthData) -> [Day] {
+        print("timeFrame \(timeFrame)")
+        print("keys \(health.days.keys) \(health.days.filter { $0.key <= timeFrame.days }.count)")
         return health.days.filter { $0.key <= timeFrame.days }
             .values
             .sorted(by: { $0.daysAgo < $1.daysAgo })
@@ -52,7 +54,7 @@ private class LineChartViewModel: ObservableObject {
 }
 
 struct SwiftUILineChart: View {
-    @State private var viewModel: LineChartViewModel
+    @ObservedObject private var viewModel: LineChartViewModel
     
     init(health: HealthData, timeFrame: TimeFrame) {
         self.viewModel = LineChartViewModel(health: health, timeFrame: timeFrame)
@@ -88,7 +90,7 @@ struct SwiftUILineChart: View {
 
 struct SwiftUILineChart_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUILineChart(health: HealthData(environment: .debug), timeFrame: .init(name: "Week", days: 7))
+        SwiftUILineChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
             .mainBackground()
         FitnessPreviewProvider.MainPreview()
     }

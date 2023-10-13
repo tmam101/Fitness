@@ -8,6 +8,7 @@
 import Foundation
 
 struct TimeFrame {
+    var longName: String
     var name: String
     var days: Int
 }

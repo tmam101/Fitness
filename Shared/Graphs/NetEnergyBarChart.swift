@@ -112,7 +112,7 @@ struct NetEnergyBarChart: View {
 
 struct NetEnergyBarChart_Previews: PreviewProvider {
     static var previews: some View {
-        NetEnergyBarChart(health: HealthData(environment: .debug), timeFrame: .init(name: "Week", days: 7))
+        NetEnergyBarChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
             .mainBackground()
         // More preview configurations can be added as needed
     }

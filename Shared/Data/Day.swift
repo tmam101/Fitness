@@ -224,4 +224,22 @@ extension Days {
             }
             .reduce(0, { x, y in x + y })
     }
+    
+//    func averageDeficitOfPreviousWeek() -> Double? {
+//        guard let yesterday = self[1], let firstDayOfWeek = self[8] else { return nil }
+//        return (yesterday.runningTotalDeficit  - firstDayOfWeek.runningTotalDeficit) / 7
+//    }
+    
+    func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
+        guard 
+            let lastDay = self[day],
+            let firstDay = self[Swift.min(self.keys.count - 1, day + days)]
+        else { return nil }
+        return (lastDay.runningTotalDeficit  - firstDay.runningTotalDeficit) / 7
+    }
+    
+//    func averageDeficitOfPreviousMonth() -> Double? {
+//        guard let yesterday = self[1], let firstDayOfMonth = self[31] else { return nil }
+//        return (yesterday.runningTotalDeficit  - firstDayOfMonth.runningTotalDeficit) / 7
+//    }
 }

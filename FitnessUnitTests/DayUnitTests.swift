@@ -22,6 +22,14 @@ final class DayUnitTests: XCTestCase {
         super.tearDown()
     }
     
+    func testPreviousWeekAverageDeficit() {
+        if let deficit = Days.testDays.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
+            XCTAssertEqual(deficit, -138.0)
+        } else {
+            XCTFail()
+        }
+    }
+    
     func testExpectedWeightTomorrow() {
         let days = Days.testDays
         XCTAssertEqual(days[1]?.expectedWeight, days[2]?.expectedWeightTomorrow)

@@ -20,10 +20,11 @@ struct FitnessView: View {
     @State private var showWeeklyDeficitLine = false
     
     @State private var selectedPeriod = 2
+    
     let timeFrames = [
-        TimeFrame(name: "All Time", days: Int.max),
-        TimeFrame(name: "Month", days: 30),
-        TimeFrame(name: "Week", days: 7)
+        TimeFrame(longName: "All Time", name: "All Time", days: 10000), //TODO
+        TimeFrame(longName: "This Month", name: "Month", days: 30),
+        TimeFrame(longName: "This Week", name: "Week", days: 7)
     ]
     
     // MARK: - Body
@@ -36,51 +37,51 @@ struct FitnessView: View {
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                
-                Text("Net Energy This Week")
+                let timeFrame = timeFrames[selectedPeriod]
+
+                Text("Net Energy \(timeFrame.longName)")
                     .foregroundStyle(.white)
                     .font(.title)
                 // MARK: Deficit Rings
-                let thisWeekDeficit = healthData.calorieManager.averageDeficitThisWeek
-                let thisWeekNetEnergy = 0 - thisWeekDeficit
-                let sign = thisWeekNetEnergy > 0 ? "+" : ""
-                let bodyText = "\(sign)\(Int(thisWeekNetEnergy))"
-                let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
-                let netEnergyItem = TodayRingViewModel(
-                    titleText: "Average\nThis Week",
-                    bodyText: bodyText,
-                    subBodyText: "cals",
-                    percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
-                    color: .yellow,
-                    bodyTextColor: color,
-                    subBodyTextColor: color
-                )
-                
-                let weeklyDeficitTomorrow = healthData.calorieManager.projectedAverageWeeklyDeficitForTomorrow
-                let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
-                let sign2 = weeklyNetEnergyTomorrow > 0 ? "+" : ""
-                let bodyText2 = "\(sign2)\(Int(weeklyNetEnergyTomorrow))"
-                let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
-                let tomorrowEnergyItem = TodayRingViewModel(
-                    titleText: "Tomorrow's Projected Average",
-                    bodyText: bodyText2,
-                    subBodyText: "cals",
-                    percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
-                    color: .yellow,
-                    bodyTextColor: color2,
-                    subBodyTextColor: color2
-                )
-                
-                HStack {
-                    TodayRingView(vm: netEnergyItem)
-                        .mainBackground()
-                    TodayRingView(vm: tomorrowEnergyItem)
-                        .mainBackground()
+                if let thisWeekDeficit = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1), let weeklyDeficitTomorrow = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0) {
+                    let thisWeekNetEnergy = 0 - thisWeekDeficit
+                    let sign = thisWeekNetEnergy > 0 ? "+" : ""
+                    let bodyText = "\(sign)\(Int(thisWeekNetEnergy))"
+                    let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
+                    let netEnergyItem = TodayRingViewModel(
+                        titleText: "Average\n\(timeFrame.longName)",
+                        bodyText: bodyText,
+                        subBodyText: "cals",
+                        percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
+                        color: .yellow,
+                        bodyTextColor: color,
+                        subBodyTextColor: color
+                    )
+                    
+                    let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
+                    let sign2 = weeklyNetEnergyTomorrow > 0 ? "+" : ""
+                    let bodyText2 = "\(sign2)\(Int(weeklyNetEnergyTomorrow))"
+                    let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
+                    let tomorrowEnergyItem = TodayRingViewModel(
+                        titleText: "Tomorrow's Projected Average",
+                        bodyText: bodyText2,
+                        subBodyText: "cals",
+                        percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
+                        color: .yellow,
+                        bodyTextColor: color2,
+                        subBodyTextColor: color2
+                    )
+                    
+                    HStack {
+                        TodayRingView(vm: netEnergyItem)
+                            .mainBackground()
+                        TodayRingView(vm: tomorrowEnergyItem)
+                            .mainBackground()
+                    }
+                    .frame(maxHeight: 300)
+                    
+                    
                 }
-                .frame(maxHeight: 300)
-                
-                
-                
                 
                 //                renderDeficitRingsSection()
                 
