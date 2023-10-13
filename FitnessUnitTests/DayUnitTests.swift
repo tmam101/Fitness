@@ -22,6 +22,11 @@ final class DayUnitTests: XCTestCase {
         super.tearDown()
     }
     
+    func testExpectedWeightTomorrow() {
+        let days = Days.testDays
+        XCTAssertEqual(days[1]?.expectedWeight, days[2]?.expectedWeightTomorrow)
+    }
+    
     func testDeficitProperty() {
         day.deficit = 500
         XCTAssertEqual(day.deficit, 500)

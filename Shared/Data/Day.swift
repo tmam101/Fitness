@@ -98,6 +98,9 @@ struct Day: Codable, Identifiable, Plottable {
     var consumedCalories: Double = 0
     var runningTotalDeficit: Double = 0
     var expectedWeight: Double = 0
+    var expectedWeightTomorrow: Double {
+        expectedWeight + expectedWeightChangeBasedOnDeficit
+    }
     var expectedWeightChangeBasedOnDeficit: Double {
         0 - (deficit / 3500)
     }
@@ -147,10 +150,15 @@ extension Days {
             100, 200, 291, -32, -570, 334, -46, 794, -861, -310,
             951, -662, 332, 892, 482, 596, -312, -599, 36, 829,
             330, 232, 14, 153, -781, 654, -309, 830, 408, 272,
+            405, 200, 291, -32, -570, 334, -46, 794, -861, -310,
+            951, -662, 332, 892, 482, 596, -312, -599, 36, 829,
+            330, 232, 14, 153, -781, 654, -309, 830, 408, 272,
+            405, 232, 14, 153, -781, 654, -309, 830, 408, 272,
             405
         ]
-        days[30] = Day(date: Date.subtract(days: 30, from: Date()), daysAgo: 30, deficit: netEnergies[30], expectedWeight: 200)
-        for i in (0...29).reversed() {
+        let count = netEnergies.count - 1
+        days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, deficit: netEnergies[count], expectedWeight: 200)
+        for i in (0...count-1).reversed() {
             guard let previousDay = days[i+1] else { return [:] }
             let previousWeight = previousDay.expectedWeight
             let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit

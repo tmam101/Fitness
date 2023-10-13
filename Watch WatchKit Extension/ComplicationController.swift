@@ -151,7 +151,7 @@ extension ComplicationController {
     case .graphicRectangular, .modularLarge, .modularSmall, .graphicExtraLarge:
 //    case .modularLarge:
         return CLKComplicationTemplateGraphicRectangularFullView(
-            NetEnergyBarChart(health: healthData)
+            NetEnergyBarChart(health: healthData, timeFrame: .init(name: "Week", days: 7))
 
         )
 //        return CLKComplicationTemplateExtraLargeSimpleImage

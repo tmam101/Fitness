@@ -17,11 +17,13 @@ class NetEnergyBarChartViewModel: ObservableObject {
     @Published var gradientColors: [Color] = Array(repeating: .orange, count: 101) + [.yellow]
     private var cancellables: [AnyCancellable] = []
     @Published var yValues: [Double] = []
+    var timeFrame: TimeFrame
     
     // Constants
     private let lineInterval: Double = 500
     
-    init(health: HealthData) {
+    init(health: HealthData, timeFrame: TimeFrame) {
+        self.timeFrame = timeFrame
         switch health.environment {
         case .debug:
             populateDays(for: health)
@@ -40,14 +42,10 @@ class NetEnergyBarChartViewModel: ObservableObject {
     }
 
     func setupDays(using health: HealthData) {
-        switch health.environment {
-        case .debug:
-            days = Array(Days.testDays.values).sorted { $0.date < $1.date }.filter { $0.daysAgo <= 7}
-        case .release:
-            days = health.days.filter { $0.key <= 7 }.values.sorted { $0.daysAgo < $1.daysAgo }
-        default:
-            days = []
-        }
+        days = health.days
+            .filter { $0.key <= timeFrame.days }
+            .values
+            .sorted { $0.daysAgo < $1.daysAgo }
     }
     
     func updateMinMaxValues() {
@@ -75,8 +73,8 @@ class NetEnergyBarChartViewModel: ObservableObject {
 struct NetEnergyBarChart: View {
     @ObservedObject private var viewModel: NetEnergyBarChartViewModel
     
-    init(health: HealthData) {
-        viewModel = NetEnergyBarChartViewModel(health: health)
+    init(health: HealthData, timeFrame: TimeFrame) {
+        viewModel = NetEnergyBarChartViewModel(health: health, timeFrame: timeFrame)
     }
     
     var body: some View {
@@ -91,10 +89,10 @@ struct NetEnergyBarChart: View {
             .backgroundStyle(.yellow)
             .chartYAxis {
                 AxisMarks(values: viewModel.yValues) { value in
-                    if let _ = value.as(Double.self) {
+                    if let value = value.as(Double.self) {
                         AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
                             .foregroundStyle(Color.white.opacity(0.5))
-                        AxisValueLabel()
+                        AxisValueLabel("\(Int(value)) cal")
                             .foregroundStyle(Color.white)
                     }
                 }
@@ -114,7 +112,7 @@ struct NetEnergyBarChart: View {
 
 struct NetEnergyBarChart_Previews: PreviewProvider {
     static var previews: some View {
-        NetEnergyBarChart(health: HealthData(environment: .debug))
+        NetEnergyBarChart(health: HealthData(environment: .debug), timeFrame: .init(name: "Week", days: 7))
             .mainBackground()
         // More preview configurations can be added as needed
     }

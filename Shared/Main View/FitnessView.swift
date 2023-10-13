@@ -19,10 +19,24 @@ struct FitnessView: View {
     @State private var showWeightRings = false
     @State private var showWeeklyDeficitLine = false
     
+    @State private var selectedPeriod = 2
+    let timeFrames = [
+        TimeFrame(name: "All Time", days: Int.max),
+        TimeFrame(name: "Month", days: 30),
+        TimeFrame(name: "Week", days: 7)
+    ]
+    
     // MARK: - Body
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
+                Picker(selection: $selectedPeriod, label: Text("Select Period")) {
+                    ForEach(0..<timeFrames.count) {
+                        Text(timeFrames[$0].name)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                
                 Text("Net Energy This Week")
                     .foregroundStyle(.white)
                     .font(.title)
@@ -115,7 +129,7 @@ struct FitnessView: View {
             Text("Net Energy By Day")
                 .foregroundColor(.white)
                 .font(.title2)
-            NetEnergyBarChart(health: healthData)
+            NetEnergyBarChart(health: healthData, timeFrame: timeFrames[selectedPeriod])
                 .frame(maxWidth: .infinity, minHeight: 300)
                 .mainBackground()
         }
@@ -144,7 +158,7 @@ struct FitnessView: View {
             Text("Expected Weight")
                 .foregroundColor(.white)
                 .font(.title2)
-            SwiftUILineChart(health: healthData)
+            SwiftUILineChart(health: healthData, timeFrame: timeFrames[selectedPeriod])
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()
         }

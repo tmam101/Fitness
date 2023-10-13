@@ -15,8 +15,10 @@ private class LineChartViewModel: ObservableObject {
     @Published var minValue: Double = 0
     private var cancellables: [AnyCancellable] = []
     private var weights: [Double] = []
+    var timeFrame: TimeFrame
     
-    init(health: HealthData) {
+    init(health: HealthData, timeFrame: TimeFrame) {
+        self.timeFrame = timeFrame
         switch health.environment {
         case .debug:
             self.populateDays(for: health)
@@ -34,16 +36,9 @@ private class LineChartViewModel: ObservableObject {
     }
 
     private func constructDays(using health: HealthData) -> [Day] {
-        switch health.environment {
-        case .debug:
-            return Array(Days.testDays.values).sorted { $0.daysAgo < $1.daysAgo }
-        case .release:
-            return health.days.filter { $0.key <= 31 }
-                .values
-                .sorted(by: { $0.daysAgo < $1.daysAgo })
-        default:
-            return []
-        }
+        return health.days.filter { $0.key <= timeFrame.days }
+            .values
+            .sorted(by: { $0.daysAgo < $1.daysAgo })
     }
     
     private func updateMinMaxValues() {
@@ -59,15 +54,15 @@ private class LineChartViewModel: ObservableObject {
 struct SwiftUILineChart: View {
     @State private var viewModel: LineChartViewModel
     
-    init(health: HealthData) {
-        self.viewModel = LineChartViewModel(health: health)
+    init(health: HealthData, timeFrame: TimeFrame) {
+        self.viewModel = LineChartViewModel(health: health, timeFrame: timeFrame)
     }
     
     //TODO: The initial weight doesn't quite match up with the deficit line.
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeight))
+                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeightTomorrow))
                     .foregroundStyle(.yellow)
             }
             .chartYAxis {
@@ -93,7 +88,7 @@ struct SwiftUILineChart: View {
 
 struct SwiftUILineChart_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUILineChart(health: HealthData(environment: .debug))
+        SwiftUILineChart(health: HealthData(environment: .debug), timeFrame: .init(name: "Week", days: 7))
             .mainBackground()
         FitnessPreviewProvider.MainPreview()
     }
