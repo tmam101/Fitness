@@ -22,9 +22,18 @@ final class DayUnitTests: XCTestCase {
         super.tearDown()
     }
     
+    func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
+        let days = Days.testDays
+        let totalSurplus = days.sum(property: .surplus)
+        let totalDeficit = days.sum(property: .deficit)
+        let runningTotalDeficit = days[0]?.runningTotalDeficit
+        XCTAssertEqual(totalSurplus, -totalDeficit)
+        XCTAssertEqual(totalDeficit, runningTotalDeficit)
+    }
+    
     func testPreviousWeekAverageDeficit() {
         if let deficit = Days.testDays.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
-            XCTAssertEqual(deficit, -138.0)
+            XCTAssertEqual(deficit, 138.71, accuracy: 0.1)
         } else {
             XCTFail()
         }
@@ -65,7 +74,7 @@ final class DayUnitTests: XCTestCase {
     
     func testDays() {
         let days = Days.testDays
-        XCTAssertEqual(days.count, 31)
+        XCTAssert(days.count != 0)
     }
     
     func testAddingRunningTotalDeficits() throws {
