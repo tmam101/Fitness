@@ -11,31 +11,27 @@ import XCTest
 final class DayUnitTests: XCTestCase {
     
     var day: Day!
+    var days: Days!
     
     override func setUp() {
         super.setUp()
         day = Day()
+        days = Days.testDays
     }
     
     override func tearDown() {
         day = nil
+        days = nil
         super.tearDown()
     }
     
-    // Helper function to reduce code duplication
-    func generateTestDays() -> Days {
-        return Days.testDays
-    }
-    
     func testAverage() {
-        let days = generateTestDays()
         let sum = days.sum(property: .activeCalories)
         let average = days.average(property: .activeCalories)
         XCTAssertEqual(sum / Double(days.count), average, "Calculated average does not match expected value")
     }
     
     func testExtractedDays() {
-        let days = generateTestDays()
         var newDays = days.extractDays(from: 0, to: 10)
         XCTAssertEqual(newDays.count, 11, "Extracted days count should match")
         newDays = days.extractDays(from: 10, to: 0)
@@ -43,7 +39,6 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testAllTimeAverage() {
-        let days = generateTestDays()
         let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
         let extractedDays = days.extractDays(from: 1, to: days.count - 1)
         let sum = Array(extractedDays.values)
@@ -54,13 +49,11 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testWeeklyAverage() {
-        let days = Days.testDays
         let weeklyAverage = days.averageDeficitOfPrevious(days: TimeFrame.week.days, endingOnDay: 1) ?? 0.0
         XCTAssertEqual(weeklyAverage, 138.71, accuracy: 0.1)
     }
     
     func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
-        let days = Days.testDays
         let totalSurplus = days.sum(property: .surplus)
         let totalDeficit = days.sum(property: .deficit)
         let runningTotalDeficit = days[0]?.runningTotalDeficit
@@ -69,7 +62,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testPreviousWeekAverageDeficit() {
-        if let deficit = Days.testDays.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
+        if let deficit = days.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
             XCTAssertEqual(deficit, 138.71, accuracy: 0.1)
         } else {
             XCTFail()
@@ -77,7 +70,6 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testExpectedWeightTomorrow() {
-        let days = Days.testDays
         XCTAssertEqual(days[1]?.expectedWeight, days[2]?.expectedWeightTomorrow)
     }
     
@@ -110,7 +102,6 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testDays() {
-        let days = Days.testDays
         XCTAssert(days.count != 0)
     }
     
@@ -127,32 +118,30 @@ final class DayUnitTests: XCTestCase {
         let total = days.sum(property: .activeCalories)
         XCTAssertEqual(total, days.values.reduce(0) {$0 + $1.activeCalories})
     }
-        
-        // Test with edge case of zero days
-        func testZeroDaysAverage() {
-            let days = Days()
-            let average = days.average(property: .activeCalories)
-            XCTAssertNil(average, "Average should be nil for zero days")
-        }
-        
-        // Test for edge case where start and end index are same
-        func testSingleDayExtracted() {
-            let days = generateTestDays()
-            let newDays = days.extractDays(from: 5, to: 5)
-            XCTAssertEqual(newDays.count, 1, "Extracted days count should be 1")
-        }
-        
-        // Test with an edge case of large number of days
-        func testLargeNumberOfDays() {
-            let days = generateTestDays()
-            let average = days.averageDeficitOfPrevious(days: 100000, endingOnDay: 1)
-            XCTAssertNotNil(average, "Average should not be nil")
-        }
-                
-        // Test for negative deficit values
-        func testNegativeDeficit() {
-            day.deficit = -500
-            XCTAssertEqual(day.deficit, -500, "Deficit should be set to negative value")
-        }
-        
+    
+    // Test with edge case of zero days
+    func testZeroDaysAverage() {
+        let days = Days()
+        let average = days.average(property: .activeCalories)
+        XCTAssertNil(average, "Average should be nil for zero days")
     }
+    
+    // Test for edge case where start and end index are same
+    func testSingleDayExtracted() {
+        let newDays = days.extractDays(from: 5, to: 5)
+        XCTAssertEqual(newDays.count, 1, "Extracted days count should be 1")
+    }
+    
+    // Test with an edge case of large number of days
+    func testLargeNumberOfDays() {
+        let average = days.averageDeficitOfPrevious(days: 100000, endingOnDay: 1)
+        XCTAssertNotNil(average, "Average should not be nil")
+    }
+    
+    // Test for negative deficit values
+    func testNegativeDeficit() {
+        day.deficit = -500
+        XCTAssertEqual(day.deficit, -500, "Deficit should be set to negative value")
+    }
+    
+}
