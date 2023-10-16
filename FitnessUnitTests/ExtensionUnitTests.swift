@@ -144,9 +144,69 @@ class DateTests: XCTestCase {
         // Test with empty date (edge case)
         let emptyDate = Date(timeIntervalSince1970: 0)
         XCTAssertNotEqual(Date.daysBetween(date1: emptyDate, date2: date1), 0)
-        
     }
-
+    
+    func testDateFromString() {
+        // Test with valid date string
+        XCTAssertNotNil(Date.dateFromString("01.01.2022"))
+        
+        // Test with invalid date string
+        XCTAssertNil(Date.dateFromString("invalid.date"))
+        
+        // Test with another valid date string
+        let expectedDate = Date.dateFromString("12.31.2021")
+        XCTAssertNotNil(expectedDate)
+    }
+    
+    func testDateFromStringComponents() {
+        // Test with valid date components
+        XCTAssertNotNil(Date.dateFromString(month: "01", day: "01", year: "2022"))
+        
+        // Test with invalid date components
+        XCTAssertNil(Date.dateFromString(month: "invalid", day: "date", year: "components"))
+    }
+    
+    func testSubtractDays() {
+        let currentDate = Date()
+        
+        // Test subtracting zero days
+        let sameDay = Date.subtract(days: 0, from: currentDate)
+        XCTAssertTrue(Date.sameDay(date1: currentDate, date2: sameDay))
+        
+        // Test subtracting 7 days
+        let sevenDaysEarlier = Date.subtract(days: 7, from: currentDate)
+        XCTAssertEqual(Date.daysBetween(date1: sevenDaysEarlier, date2: currentDate), 7)
+    }
+    
+    func testSameDay() {
+        let date1 = Date()
+        
+        // Test with the same date
+        XCTAssertTrue(Date.sameDay(date1: date1, date2: date1))
+        
+        // Test with different date
+        let date2 = Date.subtract(days: 1, from: date1)
+        XCTAssertFalse(Date.sameDay(date1: date1, date2: date2))
+    }
+    
+    func testStartOfDay() {
+        let currentDate = Date()
+        let startOfDay = Date.startOfDay(currentDate)
+        
+        // Ensure that the time components are all zero
+        let components = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: startOfDay)
+        XCTAssertEqual(components.hour, 0)
+        XCTAssertEqual(components.minute, 0)
+        XCTAssertEqual(components.second, 0)
+        XCTAssertEqual(components.nanosecond, 0)
+    }
+    
+    func testDayOfWeek() {
+        // Test with a known date (e.g., 1st January 2022 was a Saturday)
+        let knownDate = Date.dateFromString("01.01.2022")!
+        XCTAssertEqual(knownDate.dayOfWeek(), "Saturday")
+    }
+    
 }
 
 class TimeTests: XCTestCase {
