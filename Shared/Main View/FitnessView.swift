@@ -37,7 +37,10 @@ struct FitnessView: View {
                     .foregroundStyle(.white)
                     .font(.title)
                 // MARK: Deficit Rings
-                if let thisWeekDeficit = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1), let weeklyDeficitTomorrow = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0) {
+                if 
+                    let thisWeekDeficit = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1),
+                    let weeklyDeficitTomorrow = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0),
+                    !thisWeekDeficit.isNaN {
                     let thisWeekNetEnergy = 0 - thisWeekDeficit
                     let sign = thisWeekNetEnergy > 0 ? "+" : ""
                     let bodyText = "\(sign)\(Int(thisWeekNetEnergy))"

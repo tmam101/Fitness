@@ -178,6 +178,16 @@ extension Days {
         }
     }
     
+    func extractDays(from: Int, to: Int) -> Days {
+        var extractedDays = Days()
+        let min = Swift.min(from, to)
+        let max = Swift.max(from, to)
+        for i in min...max {
+            extractedDays[i] = self[i]
+        }
+        return extractedDays
+    }
+    
     mutating func addRunningTotalDeficits() {
         var i = self.count - 1
         var runningTotalDeficit: Double = 0
@@ -225,21 +235,13 @@ extension Days {
             .reduce(0, { x, y in x + y })
     }
     
-//    func averageDeficitOfPreviousWeek() -> Double? {
-//        guard let yesterday = self[1], let firstDayOfWeek = self[8] else { return nil }
-//        return (yesterday.runningTotalDeficit  - firstDayOfWeek.runningTotalDeficit) / 7
-//    }
-    
-    func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
-        guard 
-            let lastDay = self[day],
-            let firstDay = self[Swift.min(self.keys.count - 1, days + day)]
-        else { return nil }
-        return (lastDay.runningTotalDeficit  - firstDay.runningTotalDeficit) / Double(days)
+    func average(property: DayProperty) -> Double {
+        return sum(property: property) / Double(self.count)
     }
     
-//    func averageDeficitOfPreviousMonth() -> Double? {
-//        guard let yesterday = self[1], let firstDayOfMonth = self[31] else { return nil }
-//        return (yesterday.runningTotalDeficit  - firstDayOfMonth.runningTotalDeficit) / 7
-//    }
+    func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
+        let extracted = self.extractDays(from: day, to: day + days - 1)
+        return extracted.average(property: .deficit)
+        // TODO This doesn't use runningTotalDeficit. Problem?
+    }
 }

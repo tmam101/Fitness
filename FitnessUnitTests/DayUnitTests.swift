@@ -22,10 +22,31 @@ final class DayUnitTests: XCTestCase {
         super.tearDown()
     }
     
+    func testAverage() {
+        let days = Days.testDays
+        let sum = days.sum(property: .activeCalories)
+        let average = days.average(property: .activeCalories)
+        XCTAssertEqual(sum / Double(days.count), average)
+    }
+    
+    func testExtractedDays() {
+        let days = Days.testDays
+        var newDays = days.extractDays(from: 0, to: 10)
+        XCTAssertEqual(newDays.count, 11)
+        newDays = days.extractDays(from: 10, to: 0)
+        XCTAssertEqual(newDays.count, 11)
+    }
+    
     func testAllTimeAverage() {
         let days = Days.testDays
-        let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1)
-        XCTAssertEqual(allTimeAverage, 2)
+        let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
+        XCTAssertEqual(allTimeAverage, 156.9142857142857)
+    }
+    
+    func testWeeklyAverage() {
+        let days = Days.testDays
+        let weeklyAverage = days.averageDeficitOfPrevious(days: TimeFrame.week.days, endingOnDay: 1) ?? 0.0
+        XCTAssertEqual(weeklyAverage, 138.71, accuracy: 0.1)
     }
     
     func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
