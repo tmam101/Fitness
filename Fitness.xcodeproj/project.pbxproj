@@ -120,7 +120,6 @@
 		48BD6F09274B12CB0007AC15 /* FitnessAppWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F08274B12CB0007AC15 /* FitnessAppWatch.swift */; };
 		48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F0C274B12CB0007AC15 /* NotificationController.swift */; };
 		48BD6F0F274B12CB0007AC15 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F0E274B12CB0007AC15 /* NotificationView.swift */; };
-		48BD6F11274B12CB0007AC15 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F10274B12CB0007AC15 /* ComplicationController.swift */; };
 		48BD6F13274B12CD0007AC15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48BD6F12274B12CD0007AC15 /* Assets.xcassets */; };
 		48BD6F16274B12CD0007AC15 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48BD6F15274B12CD0007AC15 /* Preview Assets.xcassets */; };
 		48BD6F22274B12CE0007AC15 /* WatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F21274B12CE0007AC15 /* WatchTests.swift */; };
@@ -391,7 +390,6 @@
 		48BD6F08274B12CB0007AC15 /* FitnessAppWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessAppWatch.swift; sourceTree = "<group>"; };
 		48BD6F0C274B12CB0007AC15 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		48BD6F0E274B12CB0007AC15 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
-		48BD6F10274B12CB0007AC15 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		48BD6F12274B12CD0007AC15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48BD6F15274B12CD0007AC15 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		48BD6F17274B12CD0007AC15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -722,7 +720,6 @@
 				48BD6F61274B191A0007AC15 /* Watch WatchKit ExtensionDebug.entitlements */,
 				48BD6F0C274B12CB0007AC15 /* NotificationController.swift */,
 				48BD6F0E274B12CB0007AC15 /* NotificationView.swift */,
-				48BD6F10274B12CB0007AC15 /* ComplicationController.swift */,
 				48BD6F12274B12CD0007AC15 /* Assets.xcassets */,
 				48BD6F17274B12CD0007AC15 /* Info.plist */,
 				48BD6F18274B12CE0007AC15 /* PushNotificationPayload.apns */,
@@ -774,7 +771,6 @@
 				48821CB025B8BF3600C9F58A /* FitnessApp.swift */,
 				48BD6F5C274B17C20007AC15 /* AppView.swift */,
 				48A0D45225BB6605007C40ED /* FitnessView.swift */,
-				48E0E21726041F3D0037EEAF /* TextCollections.swift */,
 				48E0E20A26041E700037EEAF /* Stats.swift */,
 				48108135278A3609008E9AE6 /* FitnessViewViews.swift */,
 			);
@@ -799,6 +795,7 @@
 		E91D3F4E2AD73882001E1397 /* Old */ = {
 			isa = PBXGroup;
 			children = (
+				48E0E21726041F3D0037EEAF /* TextCollections.swift */,
 				E901DE1C29B8111700F889D3 /* TestData.swift */,
 				48EE13282738C3AB00128623 /* Run.swift */,
 				4845B78F25C09853003BF999 /* Lines.swift */,
@@ -1448,7 +1445,6 @@
 				E90086CE2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
 				E95C9B7F2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 				48BD6F48274B160F0007AC15 /* Progress Rings.swift in Sources */,
-				48BD6F11274B12CB0007AC15 /* ComplicationController.swift in Sources */,
 				48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */,
 				48BD6F47274B16080007AC15 /* RingCollections.swift in Sources */,
 				48BD6F44274B16010007AC15 /* RunningLineGraph.swift in Sources */,

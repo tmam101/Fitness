@@ -104,23 +104,6 @@ struct FitnessView: View {
     
     // MARK: - View Rendering Functions
     
-    // TODO: Do I need ViewBuilder?
-    @ViewBuilder
-    private func renderDeficitRingsSection() -> some View {
-        Group {
-            HStack {
-                StatsTitle(title: "Deficits")
-                if !healthData.hasLoaded {
-                    Circle()
-                        .fill(Color.red)
-                        .frame(width: 20)
-                }
-            }
-            StatsRow(text: { DeficitText() }, rings: { DeficitRings() })
-                .frame(maxWidth: .infinity)
-        }
-    }
-    
     @ViewBuilder
     private func renderDeficitBarChartSection() -> some View {
         Group {
@@ -148,11 +131,11 @@ struct FitnessView: View {
     @ViewBuilder
     private func renderWeightRingsAndLineChartSection() -> some View {
         Group {
-            if showWeightRings {
-                StatsTitle(title: "Weight Loss")
-                StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
-                    .frame(maxWidth: .infinity)
-            }
+//            if showWeightRings {
+//                StatsTitle(title: "Weight Loss")
+//                StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
+//                    .frame(maxWidth: .infinity)
+//            }
             Text("Expected Weight")
                 .foregroundColor(.white)
                 .font(.title2)

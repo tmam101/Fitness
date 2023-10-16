@@ -65,14 +65,12 @@ struct FitnessWidgetEntryView : View {
                 VStack(alignment: .leading) {
                     switch family {
                     case WidgetFamily.systemLarge:
-                        AllRings()
-                            .environmentObject(entry.healthData)
+                        NetEnergyBarChart(health: entry.healthData, timeFrame: .week)
                             .padding()
                     case WidgetFamily.systemMedium:
                         HStack {
                             VStack {
-                                DeficitRings(useNewDailyCircle: true)
-                                    .environmentObject(entry.healthData)
+                                NetEnergyBarChart(health: entry.healthData, timeFrame: .week)
                                     .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                                     .frame(maxWidth: 125)
                                 Text("Last updated \(hour):\(minuteString)")
@@ -90,7 +88,7 @@ struct FitnessWidgetEntryView : View {
                     default:
                         VStack {
                             if let day = entry.healthData.days[0] {
-                                OverallRing(today: day)
+                                NetEnergyBarChart(health: entry.healthData, timeFrame: .week)
                             }
 //                            DeficitRings(useNewDailyCircle: true)
 //                            .environmentObject(entry.healthData)

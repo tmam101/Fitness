@@ -7,37 +7,37 @@
 
 import SwiftUI
 
-struct DeficitsView: View {
-    @EnvironmentObject var healthData: HealthData
-    
-    var body: some View {
-        VStack {
-            HStack {
-                Text("\(Int(healthData.calorieManager.averageDeficitThisMonth))")
-                    .foregroundColor(.orange)
-                    .frame(maxWidth: .infinity)
-                Text("\(Int(healthData.calorieManager.averageDeficitThisWeek))")
-                    .foregroundColor(.yellow)
-                    .frame(maxWidth: .infinity)
-                Text("\(Int(healthData.calorieManager.deficitToday))")
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity)
-            }
-            DeficitRings()
-                .environmentObject(healthData)
-        }
-    }
-}
-
-struct Rings: View {
-    @EnvironmentObject var healthData: HealthData
-    
-    var body: some View {
-        TodayRingWithMonthly()
-            .environmentObject(healthData)
-            .padding()
-    }
-}
+//struct DeficitsView: View {
+//    @EnvironmentObject var healthData: HealthData
+//    
+//    var body: some View {
+//        VStack {
+//            HStack {
+//                Text("\(Int(healthData.calorieManager.averageDeficitThisMonth))")
+//                    .foregroundColor(.orange)
+//                    .frame(maxWidth: .infinity)
+//                Text("\(Int(healthData.calorieManager.averageDeficitThisWeek))")
+//                    .foregroundColor(.yellow)
+//                    .frame(maxWidth: .infinity)
+//                Text("\(Int(healthData.calorieManager.deficitToday))")
+//                    .foregroundColor(.blue)
+//                    .frame(maxWidth: .infinity)
+//            }
+////            DeficitRings()
+////                .environmentObject(healthData)
+//        }
+//    }
+//}
+//
+//struct Rings: View {
+//    @EnvironmentObject var healthData: HealthData
+//    
+//    var body: some View {
+//        TodayRingWithMonthly()
+//            .environmentObject(healthData)
+//            .padding()
+//    }
+//}
 
 struct FitnessViewWatch: View {
     @EnvironmentObject var healthData: HealthData
@@ -64,8 +64,10 @@ struct FitnessViewWatch: View {
                     //                        .environmentObject(healthData)
                     //                        .background(Color.myGray)
                     //                        .cornerRadius(20)
+                    
                     if let today {
-                        OverallRing(today: today)
+                        
+//                        OverallRing(today: today)
                     }
                 }
                 
