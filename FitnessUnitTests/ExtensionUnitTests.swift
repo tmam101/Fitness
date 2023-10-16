@@ -115,17 +115,17 @@ class DateTests: XCTestCase {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
         let date = formatter.date(from: "2022/01/01")!
-        XCTAssertEqual(Date.stringFromDate(date: date), "1/1/2022")
+        XCTAssertEqual(Date.stringFromDate(date: date), "01/01/2022")
         
         // Test with current date
         let currentDate = Date()
         let components = Calendar.current.dateComponents([.day, .month, .year], from: currentDate)
-        let expectedString = "\(components.day!)/\(components.month!)/\(components.year!)"
+        let expectedString = "\(components.month!)/\(components.day!)/\(components.year!)"
         XCTAssertEqual(Date.stringFromDate(date: currentDate), expectedString)
         
         // Test with empty date (edge case)
         let emptyDate = Date(timeIntervalSince1970: 0)
-        XCTAssertEqual(Date.stringFromDate(date: emptyDate), "1/1/1970")
+        XCTAssertEqual(Date.stringFromDate(date: emptyDate), "12/31/1969")
     }
 }
 
@@ -142,6 +142,12 @@ class TimeTests: XCTestCase {
         
         // Test with a negative value (edge case)
         XCTAssertEqual(Time.doubleToString(double: -12.5), "-12:30")
+        
+        // Test with zero (edge case)
+        XCTAssertEqual(Time.doubleToString(double: 0.0), "0:00")
+        
+        // Test with a negative whole number (edge case)
+        XCTAssertEqual(Time.doubleToString(double: -10.0), "-10:00")
     }
 }
 

@@ -10,9 +10,9 @@ import Foundation
 extension Date {
     
     static func stringFromDate(date: Date) -> String {
-        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
-        let string = "\(components.month ?? 0)/\(components.day ?? 0)/\((components.year ?? 0) - 2000)"
-        return string
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter.string(from: date)
     }
     
     //TODO: I think this can be wrong if the order of the dates is wrong. need to fix
