@@ -230,12 +230,13 @@ extension Days {
 //        return (yesterday.runningTotalDeficit  - firstDayOfWeek.runningTotalDeficit) / 7
 //    }
     
+    // TODO Unit test. Is this right?
     func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
         guard 
             let lastDay = self[day],
-            let firstDay = self[Swift.min(self.keys.count - 1, day + days)]
+            let firstDay = self[Swift.min(self.keys.count - 1, days - day)]
         else { return nil }
-        return (lastDay.runningTotalDeficit  - firstDay.runningTotalDeficit) / 7
+        return (lastDay.runningTotalDeficit  - firstDay.runningTotalDeficit) / Double(days - day)
     }
     
 //    func averageDeficitOfPreviousMonth() -> Double? {
