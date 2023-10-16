@@ -21,23 +21,17 @@ struct FitnessView: View {
     
     @State private var selectedPeriod = 2
     
-    let timeFrames = [
-        TimeFrame(longName: "All Time", name: "All Time", days: 10000), //TODO
-        TimeFrame(longName: "This Month", name: "Month", days: 30),
-        TimeFrame(longName: "This Week", name: "Week", days: 7)
-    ]
-    
     // MARK: - Body
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 Picker(selection: $selectedPeriod, label: Text("Select Period")) {
-                    ForEach(timeFrames) { timeFrame in
-                        Text(timeFrame.name)
+                    ForEach(0..<TimeFrame.timeFrames.count) {
+                                            Text(TimeFrame.timeFrames[$0].name)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                let timeFrame = timeFrames[selectedPeriod]
+                let timeFrame = TimeFrame.timeFrames[selectedPeriod]
 
                 Text("Net Energy \(timeFrame.longName)")
                     .foregroundStyle(.white)
@@ -130,7 +124,7 @@ struct FitnessView: View {
             Text("Net Energy By Day")
                 .foregroundColor(.white)
                 .font(.title2)
-            NetEnergyBarChart(health: healthData, timeFrame: timeFrames[selectedPeriod])
+            NetEnergyBarChart(health: healthData, timeFrame: TimeFrame.timeFrames[selectedPeriod])
                 .frame(maxWidth: .infinity, minHeight: 300)
                 .mainBackground()
         }
@@ -159,7 +153,7 @@ struct FitnessView: View {
             Text("Expected Weight")
                 .foregroundColor(.white)
                 .font(.title2)
-            SwiftUILineChart(health: healthData, timeFrame: timeFrames[selectedPeriod])
+            SwiftUILineChart(health: healthData, timeFrame: TimeFrame.timeFrames[selectedPeriod])
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()
         }

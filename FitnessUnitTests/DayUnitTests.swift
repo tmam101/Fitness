@@ -22,6 +22,12 @@ final class DayUnitTests: XCTestCase {
         super.tearDown()
     }
     
+    func testAllTimeAverage() {
+        let days = Days.testDays
+        let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1)
+        XCTAssertEqual(allTimeAverage, 2)
+    }
+    
     func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
         let days = Days.testDays
         let totalSurplus = days.sum(property: .surplus)
