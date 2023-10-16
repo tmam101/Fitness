@@ -11,7 +11,7 @@ import SwiftUI
 
 // MARK: DAY
 
-struct Day: Codable, Identifiable, Plottable {
+struct Day: Codable, Identifiable, Plottable, Equatable {
     
     var primitivePlottable: String = "Day"
     
@@ -232,7 +232,7 @@ extension Days {
                     return $0.deficit
                 }
             }
-            .reduce(0, { x, y in x + y })
+            .reduce(0, +)
     }
     
     func average(property: DayProperty) -> Double {

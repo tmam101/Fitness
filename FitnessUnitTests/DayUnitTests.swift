@@ -41,6 +41,12 @@ final class DayUnitTests: XCTestCase {
         let days = Days.testDays
         let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
         XCTAssertEqual(allTimeAverage, 156.9142857142857)
+        let extractedDays = days.extractDays(from: 1, to: days.count - 1)
+        let sum = Array(extractedDays.values)
+            .map(\.deficit)
+            .reduce(0, +)
+        let average = sum / Double(extractedDays.count)
+        XCTAssertEqual(allTimeAverage, average)
     }
     
     func testWeeklyAverage() {

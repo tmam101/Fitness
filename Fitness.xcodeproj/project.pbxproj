@@ -218,6 +218,13 @@
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAD29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
+		E95C9B7B2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
+		E95C9B7C2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
+		E95C9B7D2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
+		E95C9B7E2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
+		E95C9B7F2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
+		E95C9B812ADDC52C00B2FCC9 /* ExtensionUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */; };
+		E95C9B822ADDC6BF00B2FCC9 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		E9DE68692AD5A3D700320684 /* DeficitLineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48813F582798A9BF0045859C /* DeficitLineGraph.swift */; };
 		E9DE686A2AD5A3E700320684 /* TodayRingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83ADC29D77F2F00E0C70B /* TodayRingViewModel.swift */; };
 		E9DE686B2AD5A3FA00320684 /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
@@ -412,6 +419,8 @@
 		E90086C92AD8935A000F77B8 /* TimeFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFrame.swift; sourceTree = "<group>"; };
 		E901DE1C29B8111700F889D3 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
+		E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUnitTests.swift; sourceTree = "<group>"; };
 		E9DE68702AD5A60F00320684 /* FitnessUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9DE68722AD5A60F00320684 /* DayUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayUnitTests.swift; sourceTree = "<group>"; };
 		E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRingView.swift; sourceTree = "<group>"; };
@@ -679,6 +688,7 @@
 				48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */,
 				4802D49627875B7F0001BE9D /* ViewExtension.swift */,
 				485B992527CEC29C00C70C81 /* Settings.swift */,
+				E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -803,6 +813,7 @@
 			isa = PBXGroup;
 			children = (
 				E9DE68722AD5A60F00320684 /* DayUnitTests.swift */,
+				E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */,
 			);
 			path = FitnessUnitTests;
 			sourceTree = "<group>";
@@ -1235,6 +1246,7 @@
 				E901DE2029B8111700F889D3 /* TestData.swift in Sources */,
 				48BD6E71274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				E90086CD2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
+				E95C9B7E2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1301,6 +1313,7 @@
 				4845B79525C0987D003BF999 /* Lines.swift in Sources */,
 				E9391CAB29AD205200D09252 /* TodayView.swift in Sources */,
 				48755A8A267AF13200F7680E /* Weight.swift in Sources */,
+				E95C9B7B2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1329,6 +1342,7 @@
 				48D9C7BE27FCB129003BE84D /* ColorExtension.swift in Sources */,
 				48D9C7AC27FCB0B3003BE84D /* Run.swift in Sources */,
 				48D9C7BD27FCB125003BE84D /* Environment.swift in Sources */,
+				E95C9B7C2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 				48D9C7B327FCB108003BE84D /* RunningLineGraph.swift in Sources */,
 				48D9C7BF27FCB12B003BE84D /* FloatingPointExtensions.swift in Sources */,
 				48D9C7AA27FCB08C003BE84D /* HealthData.swift in Sources */,
@@ -1397,6 +1411,7 @@
 				48E0E20226041E2F0037EEAF /* RingCollections.swift in Sources */,
 				E9391CAC29AD205200D09252 /* TodayView.swift in Sources */,
 				48755A8D267AF1BF00F7680E /* Weight.swift in Sources */,
+				E95C9B7D2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1431,6 +1446,7 @@
 				48BD6F5B274B16B50007AC15 /* Run.swift in Sources */,
 				E901DE2129B8111700F889D3 /* TestData.swift in Sources */,
 				E90086CE2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
+				E95C9B7F2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 				48BD6F48274B160F0007AC15 /* Progress Rings.swift in Sources */,
 				48BD6F11274B12CB0007AC15 /* ComplicationController.swift in Sources */,
 				48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */,
@@ -1475,7 +1491,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E95C9B822ADDC6BF00B2FCC9 /* ColorExtension.swift in Sources */,
 				E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */,
+				E95C9B812ADDC52C00B2FCC9 /* ExtensionUnitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
