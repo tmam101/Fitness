@@ -127,6 +127,26 @@ class DateTests: XCTestCase {
         let emptyDate = Date(timeIntervalSince1970: 0)
         XCTAssertEqual(Date.stringFromDate(date: emptyDate), "12/31/1969")
     }
+    
+    func testDaysBetween() {
+        // Test with same day
+        let date1 = Date()
+        let date2 = Date()
+        XCTAssertEqual(Date.daysBetween(date1: date1, date2: date2), 0)
+        
+        // Test with one day difference
+        let oneDayLater = Calendar.current.date(byAdding: .day, value: 1, to: date1)!
+        XCTAssertEqual(Date.daysBetween(date1: date1, date2: oneDayLater), 1)
+        
+        // Test with negative days (date2 is earlier than date1)
+        XCTAssertEqual(Date.daysBetween(date1: oneDayLater, date2: date1), 1)
+        
+        // Test with empty date (edge case)
+        let emptyDate = Date(timeIntervalSince1970: 0)
+        XCTAssertNotEqual(Date.daysBetween(date1: emptyDate, date2: date1), 0)
+        
+    }
+
 }
 
 class TimeTests: XCTestCase {

@@ -31,6 +31,10 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(sum / Double(days.count), average, "Calculated average does not match expected value")
     }
     
+    func testDayDates() {
+        XCTAssertEqual(Date.daysBetween(date1: days[0]!.date, date2: days[30]!.date), 30)
+    }
+    
     func testExtractedDays() {
         var newDays = days.extractDays(from: 0, to: 10)
         XCTAssertEqual(newDays.count, 11, "Extracted days count should match")
