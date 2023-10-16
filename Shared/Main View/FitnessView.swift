@@ -32,8 +32,8 @@ struct FitnessView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 Picker(selection: $selectedPeriod, label: Text("Select Period")) {
-                    ForEach(0..<timeFrames.count) {
-                        Text(timeFrames[$0].name)
+                    ForEach(timeFrames) { timeFrame in
+                        Text(timeFrame.name)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())

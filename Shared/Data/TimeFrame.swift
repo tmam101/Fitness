@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct TimeFrame {
+struct TimeFrame: Identifiable {
+    var id = UUID()
     var longName: String
     var name: String
     var days: Int
