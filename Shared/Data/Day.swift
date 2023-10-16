@@ -210,7 +210,7 @@ extension Days {
         case deficit
     }
     
-    func sum(property: DayProperty) -> Double {
+    func mappedToProperty(property: DayProperty) -> [Double] {
         return Array(self.values)
             .map {
                 switch property {
@@ -232,11 +232,14 @@ extension Days {
                     return $0.deficit
                 }
             }
-            .reduce(0, +)
     }
     
-    func average(property: DayProperty) -> Double {
-        return sum(property: property) / Double(self.count)
+    func sum(property: DayProperty) -> Double {
+        return self.mappedToProperty(property: property).sum
+    }
+    
+    func average(property: DayProperty) -> Double? {
+        return self.mappedToProperty(property: property).average
     }
     
     func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
