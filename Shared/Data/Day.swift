@@ -109,7 +109,6 @@ extension Days {
     // TODO Function for adding a new day that pushes everything forward a day
     
     static var testDays: Days = {
-        // TODO add active calories
         var days: Days = [:]
         // Active Calories
         var activeCalories: [Double] = [
@@ -142,7 +141,7 @@ extension Days {
             1885.750, 2087.456, 3344.863, 1501.685, 1602.111, 1317.179, 3303.113, 2179.775, 2354.898, 2076.150,
             1421.452, 1353.783, 1045.187, 1021.009, 1692.573, 2551.751, 1461.937, 2777.730, 3489.914, 3388.308,
             2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 3190.687, 1800.286, 2217.806, 2354.423, 1334.216
-        ]
+        ] 
 
         
         let count = activeCalories.count - 1

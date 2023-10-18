@@ -19,6 +19,7 @@ struct TodayRingView: View {
                     .bold()
                     .foregroundColor(.white)
             }
+            Spacer()
             ZStack {
                 VStack {
                     Text(vm.bodyText)
@@ -53,6 +54,7 @@ struct TodayRingView: View {
                 }
             }
         }
+        .frame(maxHeight: .infinity)
         .onAppear {
             withAnimation(.linear(duration: 3.0).repeatForever(autoreverses: true)) {
                 animate.toggle()
