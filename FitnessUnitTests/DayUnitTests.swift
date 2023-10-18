@@ -43,13 +43,15 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testAllTimeAverage() {
-        let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
-        let extractedDays = days.extractDays(from: 1, to: days.count - 1)
-        let sum = Array(extractedDays.values)
-            .map(\.deficit)
-            .reduce(0, +)
-        let average = sum / Double(extractedDays.count)
-        XCTAssertEqual(allTimeAverage, average, "Calculated average does not match expected value")
+        let allTimeAverageExceptToday = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
+        let allDaysExceptToday = days.extractDays(from: 1, to: days.count - 1)
+        let averageExceptToday = allDaysExceptToday.average(property: .deficit)
+        XCTAssertEqual(allTimeAverageExceptToday, averageExceptToday, "Calculated average does not match expected value")
+        
+        let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 0) ?? 0.0
+        let allDays = days.extractDays(from: 1, to: days.count - 1)
+        let average = allDays.average(property: .deficit)
+        XCTAssertEqual(allTimeAverageExceptToday, average, "Calculated average does not match expected value")
     }
     
     func testWeeklyAverage() {
@@ -71,6 +73,13 @@ final class DayUnitTests: XCTestCase {
         } else {
             XCTFail()
         }
+    }
+    
+    //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
+    func testSomething() {
+        let a = days.averageDeficitOfPrevious(days: 30, endingOnDay: 1)
+        let b = days.averageDeficitOfPrevious(days: 30, endingOnDay: 0)
+//        XCTAssertEqual(days.averageDeficitOfPrevious(days: 30, endingOnDay: 1), <#T##expression2: Equatable##Equatable#>)
     }
     
     func testExpectedWeightTomorrow() {

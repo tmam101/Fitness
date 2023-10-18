@@ -142,8 +142,9 @@ typealias Days = [Int:Day]
 
 extension Days {
     
+    // TODO Function for adding a new day that pushes everything forward a day
+    
     static var testDays: Days = {
-        // TODO add running total deficit
         // TODO add active calories
         var days: Days = [:]
         var netEnergies: [Double] = [
@@ -156,6 +157,7 @@ extension Days {
             405, 232, 14, 153, -781, 654, -309, 830, 408, 272,
             405
         ]
+        
         let count = netEnergies.count - 1
         days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, deficit: netEnergies[count], expectedWeight: 200)
         for i in (0...count-1).reversed() {
