@@ -20,7 +20,7 @@ struct FitnessView: View {
     @State private var showWeeklyDeficitLine = false
     
     @State private var selectedPeriod = 2
-    
+        
     // MARK: - Body
     var body: some View {
         ScrollView {

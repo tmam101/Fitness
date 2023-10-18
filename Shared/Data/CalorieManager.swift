@@ -27,7 +27,6 @@ class CalorieManager: ObservableObject {
     var days: Days = [:]
     var startingWeight: Double = 0
     
-    @Published public var deficitToday: Double = 0
     @Published public var deficitToGetCorrectDeficit: Double = 0
     @Published public var percentWeeklyDeficit: Int = 0
     @Published public var percentDailyDeficit: Int = 0
@@ -52,7 +51,6 @@ class CalorieManager: ObservableObject {
     }
     
     func setValues(from days: Days) async {
-        self.deficitToday = days[0]?.deficit ?? 0
         if days.count < 8 { return }
         print("days: \(days)")
         self.deficitToGetCorrectDeficit = self.goalDeficit //todo

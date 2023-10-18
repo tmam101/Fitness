@@ -180,10 +180,10 @@ extension Days {
         }
     }
     
-    func extractDays(from: Int, to: Int) -> Days {
+    func subset(from: Int, through: Int) -> Days {
         var extractedDays = Days()
-        let min = Swift.min(from, to)
-        let max = Swift.max(from, to)
+        let min = Swift.min(from, through)
+        let max = Swift.max(from, through)
         for i in min...max {
             extractedDays[i] = self[i]
         }
@@ -244,9 +244,13 @@ extension Days {
         return self.mappedToProperty(property: property).average
     }
     
+    func averageOfPrevious(property: DayProperty, days: Int, endingOnDay day: Int) -> Double? {
+        let extracted = self.subset(from: day, through: day + days - 1)
+        return extracted.average(property: property)
+    }
+    
     func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
-        let extracted = self.extractDays(from: day, to: day + days - 1)
-        return extracted.average(property: .deficit)
+        averageOfPrevious(property: .deficit, days: days, endingOnDay: day)
         // TODO This doesn't use runningTotalDeficit. Problem?
     }
 }

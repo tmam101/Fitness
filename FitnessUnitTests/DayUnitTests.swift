@@ -36,20 +36,20 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testExtractedDays() {
-        var newDays = days.extractDays(from: 0, to: 10)
+        var newDays = days.subset(from: 0, through: 10)
         XCTAssertEqual(newDays.count, 11, "Extracted days count should match")
-        newDays = days.extractDays(from: 10, to: 0)
+        newDays = days.subset(from: 10, through: 0)
         XCTAssertEqual(newDays.count, 11, "Extracted days count should match")
     }
     
     func testAllTimeAverage() {
         let allTimeAverageExceptToday = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
-        let allDaysExceptToday = days.extractDays(from: 1, to: days.count - 1)
+        let allDaysExceptToday = days.subset(from: 1, through: days.count - 1)
         let averageExceptToday = allDaysExceptToday.average(property: .deficit)
         XCTAssertEqual(allTimeAverageExceptToday, averageExceptToday, "Calculated average does not match expected value")
         
         let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 0) ?? 0.0
-        let allDays = days.extractDays(from: 1, to: days.count - 1)
+        let allDays = days.subset(from: 1, through: days.count - 1)
         let average = allDays.average(property: .deficit)
         XCTAssertEqual(allTimeAverageExceptToday, average, "Calculated average does not match expected value")
     }
@@ -141,7 +141,7 @@ final class DayUnitTests: XCTestCase {
     
     // Test for edge case where start and end index are same
     func testSingleDayExtracted() {
-        let newDays = days.extractDays(from: 5, to: 5)
+        let newDays = days.subset(from: 5, through: 5)
         XCTAssertEqual(newDays.count, 1, "Extracted days count should be 1")
     }
     
