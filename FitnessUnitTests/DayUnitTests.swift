@@ -49,9 +49,12 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(allTimeAverageExceptToday, averageExceptToday, "Calculated average does not match expected value")
         
         let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 0) ?? 0.0
-        let allDays = days.subset(from: 1, through: days.count - 1)
-        let average = allDays.average(property: .deficit)
-        XCTAssertEqual(allTimeAverageExceptToday, average, "Calculated average does not match expected value")
+        let allDays = days.subset(from: 0, through: days.count - 1)
+        if let average = allDays.average(property: .deficit) {
+            XCTAssertEqual(allTimeAverage, average, accuracy: 0.1, "Calculated average does not match expected value")
+        } else {
+            XCTFail()
+        }
     }
     
     func testWeeklyAverage() {
