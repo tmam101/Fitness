@@ -145,22 +145,22 @@ class CalorieManager: ObservableObject {
             let realResting = max(self.minimumRestingCalories, measuredResting)
             
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
-            let deficit = await getDeficitForDay(daysAgo: i) ?? 0
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-            let runningTotalDeficit = i == days ? deficit : dayInformation[i+1]!.runningTotalDeficit + deficit
+            // TODO figure out runningtotaldeficit
             let expectedWeight = dealWithWeights ? ((fitness?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
-            
-            let day = Day(date: date,
+
+            var day = Day(date: date,
                           daysAgo: i,
-                          deficit: deficit,
                           activeCalories: realActive,
                           measuredActiveCalories: measuredActive,
                           restingCalories: realResting,
                           measuredRestingCalories: measuredResting,
                           consumedCalories: eaten,
-                          runningTotalDeficit: runningTotalDeficit,
                           expectedWeight: expectedWeight,
                           protein: protein)
+            
+            let runningTotalDeficit = i == days ? day.deficit : dayInformation[i+1]!.runningTotalDeficit + day.deficit
+            day.runningTotalDeficit = runningTotalDeficit
             
             //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
             if !allowThreeDaysOfFasting {

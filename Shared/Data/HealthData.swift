@@ -195,9 +195,9 @@ class HealthData: ObservableObject {
             if reloadToday {
                 await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, overrideMinimumActiveCalories: getResponse.minimumActiveCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
                 var today = await calorieManager.getDays(forPastDays: 0)[0]!
-                let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
-                today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
-                today.deficit = today.deficit - diff
+//                let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
+//                today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
+//                today.deficit = today.deficit - diff
                 if let yesterday = days[1] {
                     today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
                 }
@@ -219,9 +219,9 @@ class HealthData: ObservableObject {
             
             await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
-            let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-            today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-            today.deficit = today.deficit - diff
+//            let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+//            today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+//            today.deficit = today.deficit - diff
             if let yesterday = days[1] {
                 today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
             }

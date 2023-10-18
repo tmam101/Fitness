@@ -56,7 +56,11 @@ final class DayUnitTests: XCTestCase {
     
     func testWeeklyAverage() {
         let weeklyAverage = days.averageDeficitOfPrevious(days: TimeFrame.week.days, endingOnDay: 1) ?? 0.0
-        XCTAssertEqual(weeklyAverage, 138.71, accuracy: 0.1)
+        if let calculatedAverage = days.subset(from: TimeFrame.week.days + 1, through: 1).average(property: .deficit) {
+            XCTAssertEqual(weeklyAverage, calculatedAverage, accuracy: 0.1)
+        } else {
+            XCTFail()
+        }
     }
     
     func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
@@ -67,13 +71,14 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(totalDeficit, runningTotalDeficit)
     }
     
-    func testPreviousWeekAverageDeficit() {
-        if let deficit = days.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
-            XCTAssertEqual(deficit, 138.71, accuracy: 0.1)
-        } else {
-            XCTFail()
-        }
-    }
+    // DO i need this?
+//    func testPreviousWeekAverageDeficit() {
+//        if let deficit = days.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
+//            XCTAssertEqual(deficit, 138.71, accuracy: 0.1)
+//        } else {
+//            XCTFail()
+//        }
+//    }
     
 //    //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
 //    func testSomething() {
@@ -87,13 +92,16 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testDeficitProperty() {
-        day.deficit = 500
+        day.activeCalories = 500
+        day.restingCalories = 2000
+        day.consumedCalories = 2000
         XCTAssertEqual(day.deficit, 500)
     }
     
     func testActiveCalorieToDeficitRatio() {
         day.activeCalories = 250
-        day.deficit = 500
+        day.restingCalories = 2750
+        day.consumedCalories = 2500
         XCTAssertEqual(day.activeCalorieToDeficitRatio, 0.5)
     }
     
@@ -110,7 +118,9 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testExpectedWeightChangeBasedOnDeficit() {
-        day.deficit = 500
+        day.activeCalories = 500
+        day.restingCalories = 2000
+        day.consumedCalories = 2000
         XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.14, accuracy: 0.01)
     }
     
@@ -125,6 +135,7 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days[days.count-1]?.deficit, days[days.count-1]?.runningTotalDeficit)
     }
     
+    // TODO Finish
     func testAverageProperties() {
         let averageActiveCalories = days.averageDeficitOfPrevious(days: 7, endingOnDay: 0)
     }
@@ -155,7 +166,9 @@ final class DayUnitTests: XCTestCase {
     
     // Test for negative deficit values
     func testNegativeDeficit() {
-        day.deficit = -500
+        day.activeCalories = 500
+        day.restingCalories = 2000
+        day.consumedCalories = 3000
         XCTAssertEqual(day.deficit, -500, "Deficit should be set to negative value")
     }
     
