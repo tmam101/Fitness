@@ -49,9 +49,9 @@ class NetEnergyBarChartViewModel: ObservableObject {
     }
     
     func updateMinMaxValues() {
-        maxValue = Double(days.map(\.surplus).max() ?? 1.0).rounded(toNextSignificant: lineInterval)
+        maxValue = Double(days.map(\.netEnergy).max() ?? 1.0).rounded(toNextSignificant: lineInterval)
         maxValue = max(0, maxValue)
-        minValue = Double(days.map(\.surplus).min() ?? 0.0).rounded(toNextSignificant: lineInterval)
+        minValue = Double(days.map(\.netEnergy).min() ?? 0.0).rounded(toNextSignificant: lineInterval)
         minValue = min(0, minValue)
     }
     
@@ -80,9 +80,9 @@ struct NetEnergyBarChart: View {
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.surplus))
+                BarMark(x: .value("Day", day.date, unit: .day), y: .value("Deficit", day.netEnergy))
                     .cornerRadius(5)
-                    .foregroundStyle(day.surplus > 0 ? Color.red.solidColorGradient() : viewModel.gradient(for: day))
+                    .foregroundStyle(day.netEnergy > 0 ? Color.red.solidColorGradient() : viewModel.gradient(for: day))
                     .opacity(day.daysAgo == 0 ? 0.5 : 1.0)
 
             }

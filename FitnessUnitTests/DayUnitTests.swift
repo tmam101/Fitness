@@ -60,7 +60,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
-        let totalSurplus = days.sum(property: .surplus)
+        let totalSurplus = days.sum(property: .netEnergy)
         let totalDeficit = days.sum(property: .deficit)
         let runningTotalDeficit = days[0]?.runningTotalDeficit
         XCTAssertEqual(totalSurplus, -totalDeficit)
@@ -75,12 +75,12 @@ final class DayUnitTests: XCTestCase {
         }
     }
     
-    //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
-    func testSomething() {
-        let a = days.averageDeficitOfPrevious(days: 30, endingOnDay: 1)
-        let b = days.averageDeficitOfPrevious(days: 30, endingOnDay: 0)
-//        XCTAssertEqual(days.averageDeficitOfPrevious(days: 30, endingOnDay: 1), <#T##expression2: Equatable##Equatable#>)
-    }
+//    //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
+//    func testSomething() {
+//        let a = days.averageDeficitOfPrevious(days: 30, endingOnDay: 1)
+//        let b = days.averageDeficitOfPrevious(days: 30, endingOnDay: 0)
+////        XCTAssertEqual(days.averageDeficitOfPrevious(days: 30, endingOnDay: 1), <#T##expression2: Equatable##Equatable#>)
+//    }
     
     func testExpectedWeightTomorrow() {
         XCTAssertEqual(days[1]?.expectedWeight, days[2]?.expectedWeightTomorrow)
@@ -119,15 +119,17 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testAddingRunningTotalDeficits() throws {
-        let days = Days.testDays
         let todaysRunningTotalDeficit = days[0]?.runningTotalDeficit
         let shouldBe = days.sum(property: .deficit)
         XCTAssertEqual(todaysRunningTotalDeficit, shouldBe)
         XCTAssertEqual(days[days.count-1]?.deficit, days[days.count-1]?.runningTotalDeficit)
     }
     
+    func testAverageProperties() {
+        let averageActiveCalories = days.averageDeficitOfPrevious(days: 7, endingOnDay: 0)
+    }
+    
     func testSumPropertyActiveCalories() {
-        let days = Days.testDays
         let total = days.sum(property: .activeCalories)
         XCTAssertEqual(total, days.values.reduce(0) {$0 + $1.activeCalories})
     }
@@ -146,7 +148,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     // Test with an edge case of large number of days
-    func testLargeNumberOfDays() {
+    func testLargeNumberOfDaysAverageDeficit() {
         let average = days.averageDeficitOfPrevious(days: 100000, endingOnDay: 1)
         XCTAssertNotNil(average, "Average should not be nil")
     }

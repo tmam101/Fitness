@@ -106,7 +106,7 @@ struct Day: Codable, Identifiable, Plottable, Equatable {
     }
     var realisticWeight: Double = 0
     var weight: Double = 0
-    var surplus: Double {
+    var netEnergy: Double {
         deficit * -1
     }
     var activeCalorieToDeficitRatio: Double {
@@ -208,7 +208,7 @@ extension Days {
         case weight
         case realisticWeight
         case expectedWeight
-        case surplus
+        case netEnergy
         case deficit
     }
     
@@ -228,8 +228,8 @@ extension Days {
                     return $0.realisticWeight
                 case .expectedWeight:
                     return $0.expectedWeight
-                case .surplus:
-                    return $0.surplus
+                case .netEnergy:
+                    return $0.netEnergy
                 case .deficit:
                     return $0.deficit
                 }

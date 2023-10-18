@@ -78,9 +78,9 @@ struct TodayView: View {
             gradient: [.yellow, .purple, .orange, .yellow, .orange, .purple]
         )
         
-        let sign = today.surplus > 0 ? "+" : ""
-        let bodyText = "\(sign)\(Int(today.surplus))"
-        let color: TodayRingColor = today.surplus > 0 ? .red : .yellow
+        let sign = today.netEnergy > 0 ? "+" : ""
+        let bodyText = "\(sign)\(Int(today.netEnergy))"
+        let color: TodayRingColor = today.netEnergy > 0 ? .red : .yellow
         let netEnergyItem = TodayRingViewModel(
             titleText: "Net Energy",
             bodyText: bodyText,
