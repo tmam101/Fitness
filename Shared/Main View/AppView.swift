@@ -16,7 +16,7 @@ struct AppView: View {
             TabView {
                 FitnessView()
                     .environmentObject(healthData)
-                    .tabItem { Label("This Week", systemImage: "calendar") }
+                    .tabItem { Label("Over Time", systemImage: "calendar") }
                 TodayView()
                     .environmentObject(healthData)
                     .tabItem { Label("Today", systemImage: "clock") }
