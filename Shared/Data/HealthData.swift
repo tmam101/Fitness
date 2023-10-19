@@ -54,7 +54,7 @@ class HealthData: ObservableObject {
         let weightManager = WeightManager()
         let calorieManager = CalorieManager()
         await weightManager.setup()
-        await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: 0, forceLoad: false)
+        await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: 0, forceLoad: false)
         var today = await calorieManager.getDays(forPastDays: 0)[0]!
         today.weight = weightManager.currentWeight
         return today
@@ -83,8 +83,8 @@ class HealthData: ObservableObject {
 #if os(iOS)
             // Setup managers
             await weightManager.setup()
-            await runManager.setup(fitness: weightManager, startDate: self.startDate ?? Date())
-            await calorieManager.setup(startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await runManager.setup(weightManager: weightManager, startDate: self.startDate ?? Date())
+            await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
 //            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
             
             guard !calorieManager.days.isEmpty else {
@@ -159,7 +159,7 @@ class HealthData: ObservableObject {
         let minimumActive = Settings.get(key: .active) as? Double ?? 100
 //        let activeCalorieModifier = Settings.get(key: .activeCalorieModifier) as? Double ?? 1.0
         
-        await calorieManager.setup(overrideMinimumRestingCalories:minimumResting, overrideMinimumActiveCalories: minimumActive, shouldGetDays: false, startingWeight: 200, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+        await calorieManager.setup(overrideMinimumRestingCalories:minimumResting, overrideMinimumActiveCalories: minimumActive, shouldGetDays: false, startingWeight: 200, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
         let days = await calorieManager.getDays(forPastDays: 40, dealWithWeights: false)
         await setDaysAndFinish(days: days)
     }
@@ -193,7 +193,7 @@ class HealthData: ObservableObject {
             Settings.set(key: .activeCalorieModifier, value: getResponse.activeCalorieModifier)
             
             if reloadToday {
-                await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, overrideMinimumActiveCalories: getResponse.minimumActiveCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+                await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, overrideMinimumActiveCalories: getResponse.minimumActiveCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
                 var today = await calorieManager.getDays(forPastDays: 0)[0]!
 //                let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
 //                today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
@@ -217,7 +217,7 @@ class HealthData: ObservableObject {
             let expectedWeights = Array(days.values).map { DateAndDouble(date: $0.date, double: $0.expectedWeight)}
             calorieManager.expectedWeights = expectedWeights
             
-            await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, fitness: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
+            await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
 //            let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
 //            today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)

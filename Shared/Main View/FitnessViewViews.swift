@@ -226,20 +226,20 @@ struct MileTimeStats: View {
 
 struct BenchGraph: View {
     @EnvironmentObject var workouts: WorkoutManager
-    @EnvironmentObject var fitness: WeightManager
+    @EnvironmentObject var weightManager: WeightManager
     
     var body: some View {
         LiftingLineGraph(oneRepMaxes: workouts.benchORMs, color: .purple)
-            .environmentObject(fitness)
+            .environmentObject(weightManager)
     }
 }
 
 struct SquatGraph: View {
     @EnvironmentObject var workouts: WorkoutManager
-    @EnvironmentObject var fitness: WeightManager
+    @EnvironmentObject var weightManager: WeightManager
     
     var body: some View {
         LiftingLineGraph(oneRepMaxes: workouts.squatORMs, color: .pink)
-            .environmentObject(fitness)
+            .environmentObject(weightManager)
     }
 }

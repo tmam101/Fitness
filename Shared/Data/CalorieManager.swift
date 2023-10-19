@@ -18,7 +18,7 @@ class CalorieManager: ObservableObject {
     var adjustActiveCalorieModifier: Bool = false
     var allowThreeDaysOfFasting = false
     var daysBetweenStartAndNow: Int = 0
-    var fitness: WeightManager? = nil
+    var weightManager: WeightManager? = nil
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     var minimumActiveCalories: Double = 200
@@ -34,13 +34,13 @@ class CalorieManager: ObservableObject {
     
     //MARK: SETUP
     
-    func setup(overrideMinimumRestingCalories: Double? = nil, overrideMinimumActiveCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, fitness: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+    func setup(overrideMinimumRestingCalories: Double? = nil, overrideMinimumActiveCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, weightManager: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         // Set values from settings
         self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Double ?? self.minimumRestingCalories
         self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Double ?? self.minimumActiveCalories
         self.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? self.adjustActiveCalorieModifier
         
-        self.fitness = fitness
+        self.weightManager = weightManager
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         self.startingWeight = startingWeight
@@ -147,7 +147,7 @@ class CalorieManager: ObservableObject {
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
             // TODO figure out runningtotaldeficit
-            let expectedWeight = dealWithWeights ? ((fitness?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
+            let expectedWeight = dealWithWeights ? ((weightManager?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
 
             var day = Day(date: date,
                           daysAgo: i,
@@ -221,7 +221,7 @@ class CalorieManager: ObservableObject {
     //MARK: ACTIVE CALORIE MODFIER
     
     func getActiveCalorieModifier(days: Days, weightLost: Double, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Double {
-        let lastWeight = fitness?.weights.first
+        let lastWeight = weightManager?.weights.first
         let caloriesLost = weightLost * 3500
         
         let filtered = days.upTo(date: lastWeight?.date ?? Date())

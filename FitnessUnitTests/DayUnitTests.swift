@@ -8,6 +8,8 @@
 import XCTest
 @testable import Fitness
 
+// TODO: Put this into HealthData. So it goes through the real process, and can detect errors in HealthData and CalorieManager. 
+
 final class DayUnitTests: XCTestCase {
     
     var day: Day!
