@@ -421,6 +421,7 @@
 		E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUnitTests.swift; sourceTree = "<group>"; };
 		E9DE68702AD5A60F00320684 /* FitnessUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9DE68722AD5A60F00320684 /* DayUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayUnitTests.swift; sourceTree = "<group>"; };
+		E9EA45D02AEAE7CF00345CEA /* FitnessUnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FitnessUnitTests.xctestplan; sourceTree = "<group>"; };
 		E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRingView.swift; sourceTree = "<group>"; };
 		E9F83ADC29D77F2F00E0C70B /* TodayRingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRingViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -582,6 +583,7 @@
 		48821CAA25B8BF3600C9F58A = {
 			isa = PBXGroup;
 			children = (
+				E9EA45D02AEAE7CF00345CEA /* FitnessUnitTests.xctestplan */,
 				4832D11627835D3400414573 /* WatchManager.swift */,
 				48A0D4A125BB92DE007C40ED /* FitnessWidgetExtensionDebug.entitlements */,
 				48A0D49925BB8703007C40ED /* FitnessDebug.entitlements */,

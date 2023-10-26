@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "41F9D6A4-58FE-4089-81ED-5487C7AB4E03",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Fitness.xcodeproj",
+        "identifier" : "E9DE686F2AD5A60F00320684",
+        "name" : "FitnessUnitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

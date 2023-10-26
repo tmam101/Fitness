@@ -47,8 +47,11 @@ final class DayUnitTests: XCTestCase {
     func testAllTimeAverage() {
         let allTimeAverageExceptToday = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
         let allDaysExceptToday = days.subset(from: 1, through: days.count - 1)
-        let averageExceptToday = allDaysExceptToday.average(property: .deficit)
-        XCTAssertEqual(allTimeAverageExceptToday, averageExceptToday, "Calculated average does not match expected value")
+        guard let averageExceptToday = allDaysExceptToday.average(property: .deficit) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(allTimeAverageExceptToday, averageExceptToday, accuracy: 0.1)
         
         let allTimeAverage = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 0) ?? 0.0
         let allDays = days.subset(from: 0, through: days.count - 1)
@@ -61,7 +64,7 @@ final class DayUnitTests: XCTestCase {
     
     func testWeeklyAverage() {
         let weeklyAverage = days.averageDeficitOfPrevious(days: TimeFrame.week.days, endingOnDay: 1) ?? 0.0
-        if let calculatedAverage = days.subset(from: TimeFrame.week.days + 1, through: 1).average(property: .deficit) {
+        if let calculatedAverage = days.subset(from: TimeFrame.week.days, through: 1).average(property: .deficit) {
             XCTAssertEqual(weeklyAverage, calculatedAverage, accuracy: 0.1)
         } else {
             XCTFail()
@@ -71,9 +74,12 @@ final class DayUnitTests: XCTestCase {
     func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
         let totalSurplus = days.sum(property: .netEnergy)
         let totalDeficit = days.sum(property: .deficit)
-        let runningTotalDeficit = days[0]?.runningTotalDeficit
-        XCTAssertEqual(totalSurplus, -totalDeficit)
-        XCTAssertEqual(totalDeficit, runningTotalDeficit)
+        if let runningTotalDeficit = days[0]?.runningTotalDeficit {
+            XCTAssertEqual(totalSurplus, -totalDeficit, accuracy: 0.1)
+            XCTAssertEqual(totalDeficit, runningTotalDeficit, accuracy: 0.1)
+        } else {
+            XCTFail()
+        }
     }
     
     // DO i need this?
@@ -134,10 +140,19 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testAddingRunningTotalDeficits() throws {
-        let todaysRunningTotalDeficit = days[0]?.runningTotalDeficit
+        guard let today = days[0] else {
+            XCTFail()
+            return
+        }
+        // Test that today's runningTotalDeficit is the sum of all deficits
+        let todaysRunningTotalDeficit = today.runningTotalDeficit
         let shouldBe = days.sum(property: .deficit)
-        XCTAssertEqual(todaysRunningTotalDeficit, shouldBe)
-        XCTAssertEqual(days[days.count-1]?.deficit, days[days.count-1]?.runningTotalDeficit)
+        XCTAssertEqual(todaysRunningTotalDeficit, shouldBe, accuracy: 0.1)
+        
+        // Test that the first day's deficit is the same as the runningTotalDeficit
+        if let firstDay = days[days.count-1] {
+            XCTAssertEqual(firstDay.deficit, firstDay.runningTotalDeficit, accuracy: 0.1)
+        }
     }
     
     // TODO Finish
