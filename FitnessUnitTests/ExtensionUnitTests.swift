@@ -120,7 +120,7 @@ class DateTests: XCTestCase {
         // Test with current date
         let currentDate = Date()
         let components = Calendar.current.dateComponents([.day, .month, .year], from: currentDate)
-        let expectedString = "\(components.month!)/\(components.day!)/\(components.year!)"
+        let expectedString = "\(components.month!)/\(components.day! < 10 ? "0" : "")\(components.day!)/\(components.year!)"
         XCTAssertEqual(Date.stringFromDate(date: currentDate), expectedString)
         
         // Test with empty date (edge case)
