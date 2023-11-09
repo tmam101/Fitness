@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+struct TimeFramePicker: View {
+    @Binding var selectedPeriod: Int
+    var body: some View {
+        Picker(selection: $selectedPeriod, label: Text("Select Period")) {
+            ForEach(0..<TimeFrame.timeFrames.count) {
+                                    Text(TimeFrame.timeFrames[$0].name)
+            }
+        }
+        .pickerStyle(SegmentedPickerStyle())
+    }
+}
+
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
     @Environment(\.scenePhase) private var scenePhase
@@ -25,12 +37,8 @@ struct FitnessView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Picker(selection: $selectedPeriod, label: Text("Select Period")) {
-                    ForEach(0..<TimeFrame.timeFrames.count) {
-                                            Text(TimeFrame.timeFrames[$0].name)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
+                TimeFramePicker(selectedPeriod: $selectedPeriod)
+                
                 let timeFrame = TimeFrame.timeFrames[selectedPeriod]
 
                 Text("Net Energy \(timeFrame.longName)")
