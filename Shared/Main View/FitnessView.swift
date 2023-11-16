@@ -16,6 +16,7 @@ struct TimeFramePicker: View {
             }
         }
         .pickerStyle(SegmentedPickerStyle())
+        .accessibilityIdentifier("Picker2")
     }
 }
 

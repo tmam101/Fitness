@@ -10,7 +10,7 @@ import WatchConnectivity
 
 @main
 struct FitnessApp: App {
-    @State var healthData = HealthData(environment: AppEnvironmentConfig.release )
+    @State var healthData = HealthData(environment: AppEnvironmentConfig.debug )
     @State var watchConnectivityIphone = WatchConnectivityIphone()
     @Environment(\.scenePhase) private var scenePhase
 
