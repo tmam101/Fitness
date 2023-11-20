@@ -30,7 +30,7 @@ final class FitnessUITests: XCTestCase {
         lookForText("Net Energy This Week")
         app.buttons["Month"].tap()
         lookForText("Net Energy This Month")
-        app.otherElements[-115]
+        XCTAssertEqual(app.otherElements["bar 0 days ago"].value as? Int, -115)
     }
     
     func lookForText(_ text: String) {
