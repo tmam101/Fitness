@@ -629,14 +629,14 @@
 		48821CAF25B8BF3600C9F58A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				48E0E20826041E4A0037EEAF /* Main View */,
+				48E0E20926041E550037EEAF /* Data */,
 				E91D3F4E2AD73882001E1397 /* Old */,
-				487A95182640F97500627BA3 /* strong.json */,
 				48199FB52628D02A000247E8 /* Graphs */,
 				48E4B44C262619DE002321B5 /* Environment.swift */,
 				48A7707326053273002E5853 /* Extensions */,
-				48E0E20926041E550037EEAF /* Data */,
-				48E0E20826041E4A0037EEAF /* Main View */,
 				48821CB225B8BF3800C9F58A /* Assets.xcassets */,
+				487A95182640F97500627BA3 /* strong.json */,
 				484BB6872776AAB900E24B1C /* Network.swift */,
 				48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */,
 				48108120278A0EDC008E9AE6 /* WatchConnectivityIphone.swift */,
