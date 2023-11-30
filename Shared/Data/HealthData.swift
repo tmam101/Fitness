@@ -253,6 +253,7 @@ class HealthData: ObservableObject {
      Set the realistic weight loss to: 0.2 pounds, unless the expected weight loss is greater, or the actual loss is smaller
      */
     func createRealisticWeights() -> [Int: Double] {
+        // TODO: Unit test, move to Days(?)
         guard let firstWeight = weightManager.weights.last else { return [:] }
         let maximumWeightChangePerDay = 0.2
         var realisticWeights: [Int: Double] = [:]
