@@ -27,13 +27,13 @@ class HealthData: ObservableObject {
 #endif
     @Published public var weightManager: WeightManager = WeightManager()
     @Published public var workoutManager: WorkoutManager = WorkoutManager()
-
+    
     @Published public var days: Days = [:]
     @Published public var daysBetweenStartAndNow: Int = 350
     @Published public var hasLoaded: Bool = false
     @Published public var realisticWeights: [Int: Double] = [:]
     @Published public var weights: [Double] = []
-        
+    
     // Constants
     var startDateString = "08.23.2023"
     var startDate: Date?
@@ -85,7 +85,7 @@ class HealthData: ObservableObject {
             await weightManager.setup()
             await runManager.setup(weightManager: weightManager, startDate: self.startDate ?? Date())
             await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
-//            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
+            //            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
             
             guard !calorieManager.days.isEmpty else {
                 completion?(self)
@@ -129,8 +129,8 @@ class HealthData: ObservableObject {
 #endif
 #if os(watchOS)
             // On watch, receive relevant data
-//            await setValuesFromNetworkWithDays(reloadToday: true)
-//            self.hasLoaded = true
+            //            await setValuesFromNetworkWithDays(reloadToday: true)
+            //            self.hasLoaded = true
             await setValuesLocally()
             completion?(self)
 #endif
@@ -141,15 +141,15 @@ class HealthData: ObservableObject {
             completion?(self)
 #endif
         case .debug:
-//            await self.setValuesFromNetworkWithDays()
+            //            await self.setValuesFromNetworkWithDays()
             self.days = Days.testDays
             await calorieManager.setValues(from: self.days)
             completion?(self)
             self.hasLoaded = true
         case .widgetRelease:
             await setValuesLocally()
-//            await setValuesFromNetworkWithDays(reloadToday: true)
-//            self.hasLoaded = true
+            //            await setValuesFromNetworkWithDays(reloadToday: true)
+            //            self.hasLoaded = true
             completion?(self)
         }
     }
@@ -157,7 +157,7 @@ class HealthData: ObservableObject {
     func setValuesLocally() async {
         let minimumResting = Settings.get(key: .resting) as? Double ?? 2000
         let minimumActive = Settings.get(key: .active) as? Double ?? 100
-//        let activeCalorieModifier = Settings.get(key: .activeCalorieModifier) as? Double ?? 1.0
+        //        let activeCalorieModifier = Settings.get(key: .activeCalorieModifier) as? Double ?? 1.0
         
         await calorieManager.setup(overrideMinimumRestingCalories:minimumResting, overrideMinimumActiveCalories: minimumActive, shouldGetDays: false, startingWeight: 200, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
         let days = await calorieManager.getDays(forPastDays: 40, dealWithWeights: false)
@@ -195,9 +195,9 @@ class HealthData: ObservableObject {
             if reloadToday {
                 await calorieManager.setup(overrideMinimumRestingCalories:getResponse.minimumRestingCalories, overrideMinimumActiveCalories: getResponse.minimumActiveCalories, shouldGetDays: false, startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
                 var today = await calorieManager.getDays(forPastDays: 0)[0]!
-//                let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
-//                today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
-//                today.deficit = today.deficit - diff
+                //                let diff = today.activeCalories - today.activeCalories * getResponse.activeCalorieModifier
+                //                today.activeCalories = today.activeCalories * getResponse.activeCalorieModifier
+                //                today.deficit = today.deficit - diff
                 if let yesterday = days[1] {
                     today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
                 }
@@ -205,7 +205,7 @@ class HealthData: ObservableObject {
                 days[0] = today
             }
             // Set self values
-           await setDaysAndFinish(days: days)
+            await setDaysAndFinish(days: days)
         } else if reloadToday, let settingsDays = Settings.getDays() {
             days = settingsDays
             
@@ -219,9 +219,9 @@ class HealthData: ObservableObject {
             
             await calorieManager.setup(shouldGetDays: false, startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             var today = await calorieManager.getDays(forPastDays: 0)[0]!
-//            let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-//            today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-//            today.deficit = today.deficit - diff
+            //            let diff = today.activeCalories - today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+            //            today.activeCalories = today.activeCalories * (Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+            //            today.deficit = today.deficit - diff
             if let yesterday = days[1] {
                 today.runningTotalDeficit = yesterday.runningTotalDeficit + today.deficit
             }
@@ -266,7 +266,7 @@ class HealthData: ObservableObject {
             else {
                 return realisticWeights
             }
-
+            
             let onFirstDay = i == calorieManager.days.count - 1
             if onFirstDay {
                 realisticWeights[i] = firstWeight.weight
@@ -274,7 +274,7 @@ class HealthData: ObservableObject {
                 let dayDifferenceBetweenNowAndNextWeight = Double(Date.daysBetween(date1: day.date, date2: Date.startOfDay(nextWeight.date))!)
                 let realWeightDifference = (nextWeight.weight - realisticWeights[i+1]!) / dayDifferenceBetweenNowAndNextWeight
                 var adjustedWeightDifference = realWeightDifference
-
+                
                 if adjustedWeightDifference < -maximumWeightChangePerDay  {
                     adjustedWeightDifference = min(-maximumWeightChangePerDay, day.expectedWeightChangeBasedOnDeficit)
                 }
@@ -313,36 +313,36 @@ class HealthData: ObservableObject {
     }
     
     private func authorizeHealthKit() async -> Bool {
-            if !HKHealthStore.isHealthDataAvailable() { return false }
-            
-            let readDataTypes: Swift.Set<HKSampleType> = [
-                HKSampleType.quantityType(forIdentifier: .bodyMass)!,
-                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
-                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
-                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
-                HKSampleType.quantityType(forIdentifier: .dietaryProtein)!,
-                HKSampleType.workoutType(),
-                HKSampleType.quantityType(forIdentifier: .heartRate)!,
-                HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]
-            let writeDataTypes: Swift.Set<HKSampleType> = [
-                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
-            ]
-            
-            do {
-                let status = try await HKHealthStore().statusForAuthorizationRequest(toShare: writeDataTypes, read: readDataTypes)
-                switch status {
-                case .unknown, .unnecessary:
-                    return true
-                case .shouldRequest:
-                    try await HKHealthStore().requestAuthorization(toShare: writeDataTypes, read: readDataTypes)
-                    return true
-                @unknown default:
-                    return true
-                }
-            } catch {
-                return false
+        if !HKHealthStore.isHealthDataAvailable() { return false }
+        
+        let readDataTypes: Swift.Set<HKSampleType> = [
+            HKSampleType.quantityType(forIdentifier: .bodyMass)!,
+            HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
+            HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
+            HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+            HKSampleType.quantityType(forIdentifier: .dietaryProtein)!,
+            HKSampleType.workoutType(),
+            HKSampleType.quantityType(forIdentifier: .heartRate)!,
+            HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]
+        let writeDataTypes: Swift.Set<HKSampleType> = [
+            HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+        ]
+        
+        do {
+            let status = try await HKHealthStore().statusForAuthorizationRequest(toShare: writeDataTypes, read: readDataTypes)
+            switch status {
+            case .unknown, .unnecessary:
+                return true
+            case .shouldRequest:
+                try await HKHealthStore().requestAuthorization(toShare: writeDataTypes, read: readDataTypes)
+                return true
+            @unknown default:
+                return true
             }
+        } catch {
+            return false
         }
+    }
 }
 
 //MARK: NETWORK MODELS
