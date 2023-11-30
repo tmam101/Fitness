@@ -187,6 +187,38 @@ extension Days {
         }
     }
     
+    mutating func setRealisticWeights() {
+        let maximumWeightChangePerDay = 0.2
+        
+        // Start from the oldest day and work forwards
+        for i in stride(from: self.count - 1, through: 0, by: -1) {
+            guard let currentDay = self[i] else { continue }
+            
+            // Oldest day uses its own weight as the realistic weight
+            if i == self.count - 1 {
+                self[i]?.realisticWeight = currentDay.weight
+                continue
+            }
+            
+            guard let previousDay = self[i - 1] else { continue }
+            
+            // Calculate the realistic weight difference
+            let realWeightDifference = (previousDay.weight - currentDay.weight)
+            var adjustedWeightDifference = realWeightDifference
+            
+            // Adjust the weight difference based on the maximum allowed change per day
+            if adjustedWeightDifference < -maximumWeightChangePerDay  {
+                adjustedWeightDifference = Swift.min(-maximumWeightChangePerDay, currentDay.expectedWeightChangeBasedOnDeficit)
+            } else if adjustedWeightDifference > maximumWeightChangePerDay {
+                adjustedWeightDifference = Swift.max(maximumWeightChangePerDay, currentDay.expectedWeightChangeBasedOnDeficit)
+            }
+            
+            // Set the realistic weight for the current day
+            self[i]?.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
+        }
+    }
+
+    
     enum DayProperty {
         case activeCalories
         case restingCalories
