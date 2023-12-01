@@ -193,17 +193,17 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testSetRealisticWeights() {
-        // Arrange
-        var days = Days.testDays // Assuming this creates a Days dictionary with predefined data
-        
-        // Act
+        var days = Days.testDays
         days.setRealisticWeights()
         
-        // Assert
         for i in 0..<days.count - 1 {
-            let currentDay = days[i]
-            let previousDay = days[i + 1]!
-            let weightDifference = currentDay!.realisticWeight - previousDay.realisticWeight
+            guard let currentDay = days[i], let previousDay = days[i + 1] else {
+                XCTFail()
+                return
+            }
+            XCTAssert(currentDay.realisticWeight != 0)
+            
+            let weightDifference = currentDay.realisticWeight - previousDay.realisticWeight
             
             if abs(weightDifference) > 0.2 {
                 XCTAssertEqual(weightDifference, previousDay.expectedWeightChangeBasedOnDeficit, "If weight difference exceeds 0.2, it should equal the previous day's expected weight change based on deficit.")

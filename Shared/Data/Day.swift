@@ -151,7 +151,7 @@ extension Days {
             let previousWeight = previousDay.expectedWeight
             let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit
             let realWeight = expectedWeight + Double.random(in: -1.0...1.0)
-            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: consumedCalories[i], expectedWeight: expectedWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
+            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: consumedCalories[i], expectedWeight: expectedWeight, weight: realWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
         days.addRunningTotalDeficits()
         return days
@@ -212,7 +212,7 @@ extension Days {
                 continue
             }
             
-            guard let previousDay = self[i - 1] else { continue }
+            guard let previousDay = self[i + 1] else { continue }
             
             // Calculate the realistic weight difference
             let realWeightDifference = (previousDay.weight - currentDay.weight)
@@ -228,12 +228,11 @@ extension Days {
             // Set the realistic weight for the current day
             self[i]?.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
         }
-        
-        func values() -> [Day] {
-            Array(self.values)
-        }
     }
-
+    
+    func array() -> [Day] {
+        Array(self.values)
+    }
     
     enum DayProperty {
         case activeCalories
