@@ -150,6 +150,7 @@ extension Days {
             guard let previousDay = days[i+1] else { return [:] }
             let previousWeight = previousDay.expectedWeight
             let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit
+            let realWeight = expectedWeight + Double.random(in: -1.0...1.0)
             days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: consumedCalories[i], expectedWeight: expectedWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
         days.addRunningTotalDeficits()
@@ -187,6 +188,17 @@ extension Days {
         }
     }
     
+    /**
+     These weights represent a smoothed out version of the real weights, so large weight changes based on water or something are less impactful.
+     
+     Start on first weight
+     
+     Loop through each subsequent day, finding expected weight loss
+     
+     Find next weight's actual loss
+     
+     Set the realistic weight loss to: 0.2 pounds, unless the expected weight loss is greater, or the actual loss is smaller
+     */
     mutating func setRealisticWeights() {
         let maximumWeightChangePerDay = 0.2
         
@@ -215,6 +227,10 @@ extension Days {
             
             // Set the realistic weight for the current day
             self[i]?.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
+        }
+        
+        func values() -> [Day] {
+            Array(self.values)
         }
     }
 
