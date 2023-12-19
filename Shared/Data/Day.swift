@@ -145,7 +145,7 @@ extension Days {
 
         
         let count = activeCalories.count - 1
-        days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, activeCalories: activeCalories[count], restingCalories: restingCalories[count], consumedCalories: consumedCalories[count], expectedWeight: 200)
+        days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, activeCalories: activeCalories[count], restingCalories: restingCalories[count], consumedCalories: consumedCalories[count], expectedWeight: 200, weight: 200)
         for i in (0...count-1).reversed() {
             guard let previousDay = days[i+1] else { return [:] }
             let previousWeight = previousDay.expectedWeight
