@@ -20,13 +20,6 @@
     {
       "target" : {
         "containerPath" : "container:Fitness.xcodeproj",
-        "identifier" : "48821CC625B8BF3800C9F58A",
-        "name" : "Tests iOS"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Fitness.xcodeproj",
         "identifier" : "E9DE686F2AD5A60F00320684",
         "name" : "FitnessUnitTests"
       }
