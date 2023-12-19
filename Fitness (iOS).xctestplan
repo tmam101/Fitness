@@ -1,0 +1,44 @@
+{
+  "configurations" : [
+    {
+      "id" : "D37F558F-AEE7-4277-A220-57833D42F1F2",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Fitness.xcodeproj",
+      "identifier" : "48821CB625B8BF3800C9F58A",
+      "name" : "Fitness (iOS)"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Fitness.xcodeproj",
+        "identifier" : "48821CC625B8BF3800C9F58A",
+        "name" : "Tests iOS"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Fitness.xcodeproj",
+        "identifier" : "E9DE686F2AD5A60F00320684",
+        "name" : "FitnessUnitTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Fitness.xcodeproj",
+        "identifier" : "E967015A2AFEBB5A0059E55C",
+        "name" : "FitnessUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -431,6 +431,7 @@
 		E967015B2AFEBB5A0059E55C /* FitnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITests.swift; sourceTree = "<group>"; };
 		E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Fitness (iOS).xctestplan"; sourceTree = "<group>"; };
 		E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FitnessUITests.xctestplan; sourceTree = "<group>"; };
 		E9DE68702AD5A60F00320684 /* FitnessUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9DE68722AD5A60F00320684 /* DayUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayUnitTests.swift; sourceTree = "<group>"; };
@@ -603,6 +604,7 @@
 		48821CAA25B8BF3600C9F58A = {
 			isa = PBXGroup;
 			children = (
+				E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */,
 				E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */,
 				E9EA45D02AEAE7CF00345CEA /* FitnessUnitTests.xctestplan */,
 				4832D11627835D3400414573 /* WatchManager.swift */,
