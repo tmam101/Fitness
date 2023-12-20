@@ -215,14 +215,14 @@ extension Days {
             guard let previousDay = self[i + 1] else { continue }
             
             // Calculate the realistic weight difference
-            let realWeightDifference = (previousDay.weight - currentDay.weight)
+            let realWeightDifference = (currentDay.weight - previousDay.weight)
             var adjustedWeightDifference = realWeightDifference
             
             // Adjust the weight difference based on the maximum allowed change per day
             if adjustedWeightDifference < -maximumWeightChangePerDay  {
-                adjustedWeightDifference = Swift.min(-maximumWeightChangePerDay, currentDay.expectedWeightChangeBasedOnDeficit)
+                adjustedWeightDifference = Swift.min(-maximumWeightChangePerDay, previousDay.expectedWeightChangeBasedOnDeficit)
             } else if adjustedWeightDifference > maximumWeightChangePerDay {
-                adjustedWeightDifference = Swift.max(maximumWeightChangePerDay, currentDay.expectedWeightChangeBasedOnDeficit)
+                adjustedWeightDifference = Swift.max(maximumWeightChangePerDay, previousDay.expectedWeightChangeBasedOnDeficit)
             }
             
             // Set the realistic weight for the current day
