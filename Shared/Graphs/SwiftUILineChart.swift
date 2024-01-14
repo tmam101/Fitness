@@ -44,9 +44,16 @@ private class LineChartViewModel: ObservableObject {
     }
     
     private func updateMinMaxValues() {
-        maxValue = days.map {
+        let expectedWeightMax = days.map {
             $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
         }.max() ?? 1
+        let weightMax = days.map {
+            $0.weight
+        }.max() ?? 1
+        let realisticMax = days.map {
+            $0.realisticWeight
+        }.max() ?? 1
+        maxValue = [expectedWeightMax, weightMax, realisticMax].max()!
         minValue = days.map {
             $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
         }.min() ?? 0
@@ -64,8 +71,21 @@ struct SwiftUILineChart: View {
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeightTomorrow))
+                LineMark(x: .value("Days ago", day.date),
+                         y: .value("Expected Weight", day.expectedWeightTomorrow),
+                         series: .value("Expected weight", "A"))
                     .foregroundStyle(.yellow)
+                
+                LineMark(x: .value("Days ago", day.date),
+                         y: .value("Realistic Weight", day.realisticWeight),
+                         series: .value("Realistic Weight", "B"))
+                .foregroundStyle(.yellow).opacity(0.5)
+                
+                LineMark(x: .value("Days ago", day.date),
+                         y: .value("Real Weight", day.weight),
+                         series: .value("Weight", "C"))
+                    .foregroundStyle(.green)
+
             }
             .chartYAxis {
                 AxisMarks(values: .automatic) { _ in

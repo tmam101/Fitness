@@ -110,7 +110,6 @@ extension Days {
     
     static var testDays: Days = {
         var days: Days = [:]
-        // Active Calories
         var activeCalories: [Double] = [
             530.484, 426.822, 401.081, 563.949, 329.136, 304.808, 1045.074, 447.229, 1140.485, 287.526,
             664.498, 729.646, 141.281, 137.878, 185.565, 524.932, 387.086, 206.355, 895.737, 161.954,
@@ -121,7 +120,6 @@ extension Days {
             1047.608, 927.059, 1001.858, 364.928, 694.303, 241.747, 852.663, 564.521, 585.509, 970.332
         ]
 
-        // Resting Calories
         var restingCalories: [Double] = [
             2076.454, 2042.446, 2287.673, 2278.498, 2064.136, 2185.697, 2255.600, 2064.478, 2042.546, 2260.872,
             2225.101, 2077.174, 2081.573, 2014.575, 2253.578, 2125.535, 2238.620, 2123.777, 2027.833, 2075.052,
@@ -132,7 +130,6 @@ extension Days {
             2021.752, 2110.388, 2000.413, 2077.071, 2065.038, 2006.245, 2189.875, 2002.384, 2217.719, 2081.205
         ]
 
-        // Consumed Calories
         var consumedCalories: [Double] = [
             2491.550, 2981.141, 3251.261, 1649.266, 3317.525, 2537.793, 2574.484, 1227.777, 2330.589, 1321.549,
             3132.249, 3471.490, 1519.824, 2076.862, 2215.301, 2609.347, 2166.949, 1082.332, 1724.588, 1945.672,
@@ -148,12 +145,12 @@ extension Days {
         days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, activeCalories: activeCalories[count], restingCalories: restingCalories[count], consumedCalories: consumedCalories[count], expectedWeight: 200, weight: 200)
         for i in (0...count-1).reversed() {
             guard let previousDay = days[i+1] else { return [:] }
-            let previousWeight = previousDay.expectedWeight
-            let expectedWeight = previousWeight + previousDay.expectedWeightChangeBasedOnDeficit
+            let expectedWeight = previousDay.expectedWeight + previousDay.expectedWeightChangeBasedOnDeficit
             let realWeight = expectedWeight + Double.random(in: -1.0...1.0)
             days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: consumedCalories[i], expectedWeight: expectedWeight, weight: realWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
         days.addRunningTotalDeficits()
+        days.setRealisticWeights()
         return days
     }()
     
@@ -226,7 +223,7 @@ extension Days {
             }
             
             // Set the realistic weight for the current day
-            self[i]?.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
+            self[i]?.realisticWeight = previousDay.weight + adjustedWeightDifference
         }
     }
     
