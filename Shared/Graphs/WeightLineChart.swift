@@ -1,5 +1,5 @@
 //
-//  SwiftUILineChart.swift
+//  WeightLineChart.swift
 //  Fitness
 //
 //  Created by Thomas Goss on 11/16/22.
@@ -60,7 +60,7 @@ private class LineChartViewModel: ObservableObject {
     }
 }
 
-struct SwiftUILineChart: View {
+struct WeightLineChart: View {
     @ObservedObject private var viewModel: LineChartViewModel
     
     init(health: HealthData, timeFrame: TimeFrame) {
@@ -76,10 +76,10 @@ struct SwiftUILineChart: View {
                          series: .value("Expected weight", "A"))
                     .foregroundStyle(.yellow)
                 
-                LineMark(x: .value("Days ago", day.date),
-                         y: .value("Realistic Weight", day.realisticWeight),
-                         series: .value("Realistic Weight", "B"))
-                .foregroundStyle(.yellow).opacity(0.5)
+//                LineMark(x: .value("Days ago", day.date),
+//                         y: .value("Realistic Weight", day.realisticWeight),
+//                         series: .value("Realistic Weight", "B"))
+//                .foregroundStyle(.yellow).opacity(0.5)
                 
                 LineMark(x: .value("Days ago", day.date),
                          y: .value("Real Weight", day.weight),
@@ -108,9 +108,9 @@ struct SwiftUILineChart: View {
     }
 }
 
-struct SwiftUILineChart_Previews: PreviewProvider {
+struct WeightLineChart_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUILineChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
+        WeightLineChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
             .mainBackground()
         FitnessPreviewProvider.MainPreview()
     }
