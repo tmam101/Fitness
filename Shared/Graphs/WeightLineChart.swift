@@ -44,19 +44,13 @@ private class LineChartViewModel: ObservableObject {
     }
     
     private func updateMinMaxValues() {
-        let expectedWeightMax = days.map {
+        let expectedWeights = days.map {
             $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
-        }.max() ?? 1
-        let weightMax = days.map {
-            $0.weight
-        }.max() ?? 1
-        let realisticMax = days.map {
-            $0.realisticWeight
-        }.max() ?? 1
-        maxValue = [expectedWeightMax, weightMax, realisticMax].max()!
-        minValue = days.map {
-            $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
-        }.min() ?? 0
+        }
+        let realWeights = days.map { $0.weight }
+        let realisticWeights = days.map { $0.realisticWeight }
+        maxValue = [expectedWeights, realWeights, realisticWeights].map { $0.max() ?? 0.0 }.max() ?? 1 //todo
+        minValue = [expectedWeights, realWeights, realisticWeights].map { $0.min() ?? 0.0 }.min() ?? 1 //todo
     }
 }
 
@@ -80,11 +74,12 @@ struct WeightLineChart: View {
 //                         y: .value("Realistic Weight", day.realisticWeight),
 //                         series: .value("Realistic Weight", "B"))
 //                .foregroundStyle(.yellow).opacity(0.5)
-                
-                LineMark(x: .value("Days ago", day.date),
-                         y: .value("Real Weight", day.weight),
-                         series: .value("Weight", "C"))
+                if day.weight != 0 {
+                    LineMark(x: .value("Days ago", day.date),
+                             y: .value("Real Weight", day.weight),
+                             series: .value("Weight", "C"))
                     .foregroundStyle(.green)
+                }
 
             }
             .chartYAxis {

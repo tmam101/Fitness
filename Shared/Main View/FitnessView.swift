@@ -148,7 +148,7 @@ struct FitnessView: View {
             Text("Expected Weight")
                 .foregroundColor(.white)
                 .font(.title2)
-            SwiftUILineChart(health: healthData, timeFrame: TimeFrame.timeFrames[selectedPeriod])
+            WeightLineChart(health: healthData, timeFrame: TimeFrame.timeFrames[selectedPeriod])
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()
         }
