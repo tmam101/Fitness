@@ -72,11 +72,12 @@ struct WeightLineChart: View {
                          y: .value("Expected Weight", day.expectedWeight),
                          series: .value("Expected weight", "A"))
                     .foregroundStyle(.yellow)
-                
-//                LineMark(x: .value("Days ago", day.date),
-//                         y: .value("Realistic Weight", day.realisticWeight),
-//                         series: .value("Realistic Weight", "B"))
-//                .foregroundStyle(.yellow).opacity(0.5)
+                if day.realisticWeight != 0 {
+                    LineMark(x: .value("Days ago", day.date),
+                             y: .value("Realistic Weight", day.realisticWeight),
+                             series: .value("Realistic Weight", "B"))
+                    .foregroundStyle(.yellow).opacity(0.5)
+                }
                 if day.weight != 0 {
                     LineMark(x: .value("Days ago", day.date),
                              y: .value("Real Weight", day.weight),
@@ -108,8 +109,8 @@ struct WeightLineChart: View {
 
 struct WeightLineChart_Previews: PreviewProvider {
     static var previews: some View {
-        WeightLineChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
-            .mainBackground()
+//        WeightLineChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
+//            .mainBackground()
         FitnessPreviewProvider.MainPreview()
     }
 }
