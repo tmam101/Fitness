@@ -1,5 +1,5 @@
 //
-//  SwiftUILineChart.swift
+//  WeightLineChart.swift
 //  Fitness
 //
 //  Created by Thomas Goss on 11/16/22.
@@ -36,24 +36,28 @@ private class LineChartViewModel: ObservableObject {
     }
 
     private func constructDays(using health: HealthData) -> [Day] {
-        print("timeFrame \(timeFrame)")
-        print("keys \(health.days.keys) \(health.days.filter { $0.key <= timeFrame.days }.count)")
-        return health.days.filter { $0.key <= timeFrame.days }
+        var days = health.days
+        // Add tomorrow for the graph
+        if let today = days[0] {
+            days[-1] = Day(date: Date.subtract(days: -1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow)
+        }
+        return days.filter { $0.key <= timeFrame.days }
             .values
             .sorted(by: { $0.daysAgo < $1.daysAgo })
     }
     
     private func updateMinMaxValues() {
-        maxValue = days.map {
+        let expectedWeights = days.map {
             $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
-        }.max() ?? 1
-        minValue = days.map {
-            $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
-        }.min() ?? 0
+    }.filter { $0 != 0 }
+        let realWeights = days.map { $0.weight }.filter { $0 != 0 }
+        let realisticWeights = days.map { $0.realisticWeight }.filter { $0 != 0 }
+        maxValue = [expectedWeights, realWeights, realisticWeights].compactMap { $0.max() ?? nil }.max() ?? 1 //todo
+        minValue = [expectedWeights, realWeights, realisticWeights].compactMap { $0.min() ?? nil }.min() ?? 1 //todo
     }
 }
 
-struct SwiftUILineChart: View {
+struct WeightLineChart: View {
     @ObservedObject private var viewModel: LineChartViewModel
     
     init(health: HealthData, timeFrame: TimeFrame) {
@@ -64,8 +68,22 @@ struct SwiftUILineChart: View {
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                LineMark(x: .value("Days ago", day.date), y: .value("Expected Weight", day.expectedWeightTomorrow))
+                LineMark(x: .value("Days ago", day.date),
+                         y: .value("Expected Weight", day.expectedWeight),
+                         series: .value("Expected weight", "A"))
                     .foregroundStyle(.yellow)
+                
+//                LineMark(x: .value("Days ago", day.date),
+//                         y: .value("Realistic Weight", day.realisticWeight),
+//                         series: .value("Realistic Weight", "B"))
+//                .foregroundStyle(.yellow).opacity(0.5)
+                if day.weight != 0 {
+                    LineMark(x: .value("Days ago", day.date),
+                             y: .value("Real Weight", day.weight),
+                             series: .value("Weight", "C"))
+                    .foregroundStyle(.green)
+                }
+
             }
             .chartYAxis {
                 AxisMarks(values: .automatic) { _ in
@@ -88,9 +106,9 @@ struct SwiftUILineChart: View {
     }
 }
 
-struct SwiftUILineChart_Previews: PreviewProvider {
+struct WeightLineChart_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUILineChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
+        WeightLineChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
             .mainBackground()
         FitnessPreviewProvider.MainPreview()
     }

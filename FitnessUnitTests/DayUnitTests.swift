@@ -203,12 +203,13 @@ final class DayUnitTests: XCTestCase {
 //            }
 //            XCTAssert(currentDay.realisticWeight != 0)
 //            
-//            let weightDifference = currentDay.realisticWeight - previousDay.realisticWeight
+//            let realisticWeightDifference = currentDay.realisticWeight - previousDay.realisticWeight
 //            
-//            if abs(weightDifference) > 0.2 {
-//                XCTAssertEqual(weightDifference, previousDay.expectedWeightChangeBasedOnDeficit, "If weight difference exceeds 0.2, it should equal the previous day's expected weight change based on deficit.")
+//            if abs(realisticWeightDifference) > 0.2 {
+//                XCTAssertEqual(realisticWeightDifference, previousDay.expectedWeightChangeBasedOnDeficit, accuracy: 0.1, "If weight difference exceeds 0.2, it should equal the previous day's expected weight change based on deficit.")
 //            } else {
-//                XCTAssertLessThanOrEqual(abs(weightDifference), 0.2, "Realistic weight change should not exceed 0.2 per day.")
+//                XCTAssertEqual(realisticWeightDifference, previousDay.expectedWeightChangeBasedOnDeficit, accuracy: 0.1)
+////                XCTAssertLessThanOrEqual(abs(weightDifference), 0.2, "Realistic weight change should not exceed 0.2 per day.")
 //            }
 //        }
 //    }
