@@ -18,7 +18,7 @@ final class DayUnitTests: XCTestCase {
     override func setUp() {
         super.setUp()
         day = Day()
-        days = Days.testDays
+        days = Days.testDays()
     }
     
     override func tearDown() {
@@ -194,7 +194,7 @@ final class DayUnitTests: XCTestCase {
     
     func testEveryDayHasWeight() {
         for i in 0...100 {
-            days = Days.testDays
+            days = Days.testDays()
             // Ensure there are empty weights at first
             var daysWithoutWeights = days.array().filter { $0.weight == 0 }
             XCTAssertNotEqual(daysWithoutWeights.count, 0)

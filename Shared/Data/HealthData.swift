@@ -135,7 +135,7 @@ class HealthData: ObservableObject {
 #endif
         case .debug:
             //            await self.setValuesFromNetworkWithDays()
-            self.days = Days.testDays
+            self.days = Days.testDays()
             await calorieManager.setValues(from: self.days)
             completion?(self)
             self.hasLoaded = true
