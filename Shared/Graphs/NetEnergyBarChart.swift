@@ -99,10 +99,18 @@ struct NetEnergyBarChart: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(values: .stride(by: .day, count: 1)) { _ in
-                    AxisGridLine()
-                    AxisValueLabel(format: .dateTime.weekday(.narrow), centered: true)
-                        .foregroundStyle(Color.white)
+                if viewModel.days.count < 30 {
+                    AxisMarks(values: .stride(by: .day, count: 1)) { _ in
+                        AxisGridLine()
+                        AxisValueLabel(format: .dateTime.weekday(.narrow), centered: true)
+                            .foregroundStyle(Color.white)
+                    }
+                } else {
+                    AxisMarks(values: .stride(by: .day, count:  31)) { _ in
+                        AxisGridLine()
+                        AxisValueLabel(format: .dateTime.month(.wide), centered: true)
+                            .foregroundStyle(Color.white)
+                    }
                 }
             }
             .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue, upper: viewModel.maxValue)))
