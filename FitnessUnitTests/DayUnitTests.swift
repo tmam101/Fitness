@@ -18,7 +18,7 @@ final class DayUnitTests: XCTestCase {
     override func setUp() {
         super.setUp()
         day = Day()
-        days = Days.testDays
+        days = Days.testDays()
     }
     
     override func tearDown() {
@@ -190,6 +190,31 @@ final class DayUnitTests: XCTestCase {
         day.restingCalories = 2000
         day.consumedCalories = 3000
         XCTAssertEqual(day.deficit, -500, "Deficit should be set to negative value")
+    }
+    
+    func testEveryDayHasWeight() {
+        for _ in 0...100 {
+            days = Days.testDays(weightsOnEveryDay: false)
+            // Ensure there are empty weights at first
+            var daysWithoutWeights = days.array().filter { $0.weight == 0 }
+            XCTAssertNotEqual(daysWithoutWeights.count, 0)
+            
+            // Set weights on every day
+            // Ensure the existing weights are the same after the calculation
+            let originalDaysAndWeights = days.array().filter { $0.weight != 0 }.map { ($0.daysAgo, $0.weight) }
+            days.setWeightOnEveryDay()
+            for x in originalDaysAndWeights {
+                XCTAssertEqual(days[x.0]?.weight, x.1)
+            }
+            
+            // Ensure the only empty days are the ones closest to now, if you havent weighed yourself
+            daysWithoutWeights = days.array().filter { $0.weight == 0 }
+            if daysWithoutWeights.count != 0 {
+                for x in 0..<daysWithoutWeights.count {
+                    XCTAssertEqual(days[x]?.weight, 0)
+                }
+            }
+        }
     }
     
 //    func testSetRealisticWeights() {
