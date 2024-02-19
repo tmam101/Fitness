@@ -108,7 +108,7 @@ extension Days {
     
     // TODO Function for adding a new day that pushes everything forward a day
     
-    static func testDays(weightsOnEveryDay: Bool = false) -> Days {
+    static func testDays(weightsOnEveryDay: Bool = true) -> Days {
         var days: Days = [:]
         var activeCalories: [Double] = [
             530.484, 426.822, 401.081, 563.949, 329.136, 304.808, 1045.074, 447.229, 1140.485, 287.526,

@@ -194,7 +194,7 @@ final class DayUnitTests: XCTestCase {
     
     func testEveryDayHasWeight() {
         for _ in 0...100 {
-            days = Days.testDays()
+            days = Days.testDays(weightsOnEveryDay: false)
             // Ensure there are empty weights at first
             var daysWithoutWeights = days.array().filter { $0.weight == 0 }
             XCTAssertNotEqual(daysWithoutWeights.count, 0)
