@@ -147,10 +147,12 @@ extension Days {
             guard let previousDay = days[i+1] else { return [:] }
             let expectedWeight = previousDay.expectedWeight + previousDay.expectedWeightChangeBasedOnDeficit
             let realWeight = expectedWeight + Double.random(in: -1.0...1.0)
-            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: consumedCalories[i], expectedWeight: expectedWeight, weight: realWeight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
+            let dayHasWeight = Bool.random()
+            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: consumedCalories[i], expectedWeight: expectedWeight, weight: dayHasWeight ? realWeight : 0) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
         days.addRunningTotalDeficits()
         days.setRealisticWeights()
+//        days.setWeightOnEveryDay()
         return days
     }()
     
@@ -226,6 +228,79 @@ extension Days {
             self[i]?.realisticWeight = previousDay.weight + adjustedWeightDifference
         }
     }
+    
+    mutating func setWeightOnEveryDay() {
+        let weights = self.array().filter { $0.weight != 0 }.sorted(by: {x, y in x.daysAgo > y.daysAgo })
+        for i in 0..<weights.count-1 {
+            let thisDay = weights[i]
+            let nextDay = weights[i+1]
+            let daysBetween = thisDay.daysAgo - nextDay.daysAgo
+            if daysBetween == 1 {
+                continue
+            }
+            let weightBetween = nextDay.weight - thisDay.weight
+            let weightAdjustmentEachDay = weightBetween / Double(daysBetween)
+            for j in stride(from: thisDay.daysAgo - 1, to: nextDay.daysAgo, by: -1) {
+                guard let _ = self[j], let _ = self[j+1] else {
+                    // if we are at the longest ago day, and its 0, we set it to the next weight that exists
+                    continue
+                }
+                self[j]!.weight = self[j+1]!.weight + weightAdjustmentEachDay
+            }
+        }
+    }
+    
+    //MARK: REALISTIC WEIGHTS
+    /**
+     Return a dictionary of realistic weights, with index 0 being today and x being x days ago. These weights represent a smoothed out version of the real weights, so large weight changes based on water or something are less impactful.
+     
+     Start on first weight
+     
+     Loop through each subsequent day, finding expected weight loss
+     
+     Find next weight's actual loss
+     
+     Set the realistic weight loss to: 0.2 pounds, unless the expected weight loss is greater, or the actual loss is smaller
+     */
+//    mutating func createRealisticWeights() {
+//        guard let firstWeight = self[self.count-1]?.weight else { return }
+//        let maximumWeightChangePerDay = 0.2
+//        var realisticWeights: [Int: Double] = [:]
+//        
+//        for i in stride(from: self.count-1, through: 0, by: -1) {
+//            let day = self[i]!
+//            
+//            guard
+//                let nextWeight = self.array()
+//                    .sorted(by: { x, y in x.daysAgo > y.daysAgo })
+//                    .last(where: { Date.startOfDay($0.date) > day.date}),
+////                    .map({x in x.weight}),
+////                let nextWeight = weightManager.weights.last(where: { Date.startOfDay($0.date) > day.date }),
+//                day.date >= Date.startOfDay(firstWeight.date)
+//            else {
+//                return realisticWeights
+//            }
+//
+//            let onFirstDay = i == calorieManager.days.count - 1
+//            if onFirstDay {
+//                realisticWeights[i] = firstWeight.weight
+//            } else {
+//                let dayDifferenceBetweenNowAndNextWeight = Double(Date.daysBetween(date1: day.date, date2: Date.startOfDay(nextWeight.date))!)
+//                let realWeightDifference = (nextWeight.weight - realisticWeights[i+1]!) / dayDifferenceBetweenNowAndNextWeight
+//                var adjustedWeightDifference = realWeightDifference
+//
+//                if adjustedWeightDifference < -maximumWeightChangePerDay  {
+//                    adjustedWeightDifference = min(-maximumWeightChangePerDay, day.expectedWeightChangedBasedOnDeficit)
+//                }
+//                if adjustedWeightDifference > maximumWeightChangePerDay {
+//                    adjustedWeightDifference = max(maximumWeightChangePerDay, day.expectedWeightChangedBasedOnDeficit)
+//                }
+//                
+//                realisticWeights[i] = realisticWeights[i+1]! + adjustedWeightDifference
+//            }
+//        }
+//        return realisticWeights
+//    }
     
     func array() -> [Day] {
         Array(self.values)
