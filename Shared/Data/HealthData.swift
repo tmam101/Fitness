@@ -93,7 +93,6 @@ class HealthData: ObservableObject {
             }
             
             // Set real weights on days
-            // TODO: Have every day have a weight, based on math
             weightManager.weights.forEach {
                 let daysAgo = Date.daysBetween(date1: $0.date, date2: Date())!
                 calorieManager.days[daysAgo]?.weight = $0.weight
@@ -101,6 +100,7 @@ class HealthData: ObservableObject {
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
+                days.setWeightOnEveryDay()
                 self.hasLoaded = true
                 self.realisticWeights = realisticWeights
             }

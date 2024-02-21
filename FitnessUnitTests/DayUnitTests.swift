@@ -215,6 +215,21 @@ final class DayUnitTests: XCTestCase {
                 }
             }
         }
+        // Ensure the calculations are correct
+        var d: Days = [:]
+        d[0] = Day(daysAgo: 0, weight: 1)
+        d[1] = Day(daysAgo: 1, weight: 0)
+        d[2] = Day(daysAgo: 2, weight: 3)
+        d[3] = Day(daysAgo: 2, weight: 0)
+        d[4] = Day(daysAgo: 2, weight: 0)
+        d[5] = Day(daysAgo: 5, weight: 3.3)
+        d[6] = Day(daysAgo: 6, weight: 0)
+        d[7] = Day(daysAgo: 7, weight: 1)
+        d.setWeightOnEveryDay()
+        XCTAssertEqual(d[1]?.weight, 2)
+        XCTAssertEqual(d[3]?.weight ?? 0.0, 3.1, accuracy: 0.01)
+        XCTAssertEqual(d[4]?.weight ?? 0.0, 3.2, accuracy: 0.01)
+        XCTAssertEqual(d[6]?.weight ?? 0.0, 2.15, accuracy: 0.01)
     }
     
 //    func testSetRealisticWeights() {
