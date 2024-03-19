@@ -13,12 +13,11 @@ import XCTest
 final class DayUnitTests: XCTestCase {
     
     var day: Day!
-    var days: Days!
+    var days: Days?
     
     override func setUp() {
         super.setUp()
         day = Day()
-        days = Days.testDays()
     }
     
     override func tearDown() {
@@ -28,16 +27,33 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testAverage() {
+        days = Days.testDays()
+        guard let days else { 
+            XCTFail()
+            return
+        }
+        
         let sum = days.sum(property: .activeCalories)
         let average = days.average(property: .activeCalories)
         XCTAssertEqual(sum / Double(days.count), average, "Calculated average does not match expected value")
     }
     
     func testDayDates() {
+        days = Days.testDays()
+        guard let days else { XCTFail()
+            return
+        }
+        
         XCTAssertEqual(Date.daysBetween(date1: days[0]!.date, date2: days[30]!.date), 30)
     }
     
     func testExtractedDays() {
+        days = Days.testDays()
+        guard let days else { 
+            XCTFail()
+            return
+        }
+        
         var newDays = days.subset(from: 0, through: 10)
         XCTAssertEqual(newDays.count, 11, "Extracted days count should match")
         newDays = days.subset(from: 10, through: 0)
@@ -45,6 +61,12 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testAllTimeAverage() {
+        days = Days.testDays()
+        guard let days else { 
+            XCTFail()
+            return
+        }
+        
         let allTimeAverageExceptToday = days.averageDeficitOfPrevious(days: TimeFrame.allTime.days, endingOnDay: 1) ?? 0.0
         let allDaysExceptToday = days.subset(from: 1, through: days.count - 1)
         guard let averageExceptToday = allDaysExceptToday.average(property: .deficit) else {
@@ -63,6 +85,12 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testWeeklyAverage() {
+        days = Days.testDays()
+        guard let days else { 
+            XCTFail()
+            return
+        }
+        
         let weeklyAverage = days.averageDeficitOfPrevious(days: TimeFrame.week.days, endingOnDay: 1) ?? 0.0
         if let calculatedAverage = days.subset(from: TimeFrame.week.days, through: 1).average(property: .deficit) {
             XCTAssertEqual(weeklyAverage, calculatedAverage, accuracy: 0.1)
@@ -72,6 +100,12 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testDeficitAndSurplusAndRunningTotalDeficitAlign() {
+        days = Days.testDays()
+        guard let days else {
+            XCTFail()
+            return
+        }
+        
         let totalSurplus = days.sum(property: .netEnergy)
         let totalDeficit = days.sum(property: .deficit)
         if let runningTotalDeficit = days[0]?.runningTotalDeficit {
@@ -99,6 +133,12 @@ final class DayUnitTests: XCTestCase {
 //    }
     
     func testExpectedWeightTomorrow() {
+        days = Days.testDays()
+        guard let days else {
+            XCTFail()
+            return
+        }
+        
         XCTAssertEqual(days[1]?.expectedWeight, days[2]?.expectedWeightTomorrow)
     }
     
@@ -136,14 +176,22 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testDays() {
+        days = Days.testDays()
+        guard let days else {
+            XCTFail()
+            return
+        }
+        
         XCTAssert(days.count != 0)
     }
     
     func testAddingRunningTotalDeficits() throws {
-        guard let today = days[0] else {
+        days = Days.testDays()
+        guard let days, let today = days[0] else {
             XCTFail()
             return
         }
+
         // Test that today's runningTotalDeficit is the sum of all deficits
         let todaysRunningTotalDeficit = today.runningTotalDeficit
         let shouldBe = days.sum(property: .deficit)
@@ -157,10 +205,22 @@ final class DayUnitTests: XCTestCase {
     
     // TODO Finish
     func testAverageProperties() {
+        days = Days.testDays()
+        guard let days else {
+            XCTFail()
+            return
+        }
+        
         let averageActiveCalories = days.averageDeficitOfPrevious(days: 7, endingOnDay: 0)
     }
     
     func testSumPropertyActiveCalories() {
+        days = Days.testDays()
+        guard let days else {
+            XCTFail()
+            return
+        }
+        
         let total = days.sum(property: .activeCalories)
         XCTAssertEqual(total, days.values.reduce(0) {$0 + $1.activeCalories})
     }
@@ -174,12 +234,24 @@ final class DayUnitTests: XCTestCase {
     
     // Test for edge case where start and end index are same
     func testSingleDayExtracted() {
+        days = Days.testDays()
+        guard let days else {
+            XCTFail()
+            return
+        }
+        
         let newDays = days.subset(from: 5, through: 5)
         XCTAssertEqual(newDays.count, 1, "Extracted days count should be 1")
     }
     
     // Test with an edge case of large number of days
     func testLargeNumberOfDaysAverageDeficit() {
+        days = Days.testDays()
+        guard let days else {
+            XCTFail()
+            return
+        }
+        
         let average = days.averageDeficitOfPrevious(days: 100000, endingOnDay: 1)
         XCTAssertNotNil(average, "Average should not be nil")
     }
@@ -193,8 +265,13 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testEveryDayHasWeight() {
+        
         for _ in 0...100 {
             days = Days.testDays(weightsOnEveryDay: false)
+            guard var days else { 
+                XCTFail()
+                return
+            }
             // Ensure there are empty weights at first
             var daysWithoutWeights = days.array().filter { $0.weight == 0 }
             XCTAssertNotEqual(daysWithoutWeights.count, 0)
@@ -232,6 +309,17 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(d[6]?.weight ?? 0.0, 2.15, accuracy: 0.01)
     }
     
+    func testMissingDayAdjustment() {
+        days = Days.testDays(missingData: true, weightsOnEveryDay: true)
+        guard var days else {
+            XCTFail()
+            return
+        }
+        
+        let daysWhereNoConsumedCalories = days.array().map { $0.consumedCalories }.filter { $0 == 0 }.count
+        // This doesnt make sense, because some days should have 0 as consumed. If the weight drops, the bet we can do is 0 consumed calories - we cant eat negative calories.
+        XCTAssertEqual(daysWhereNoConsumedCalories, days.array().count)
+    }
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays
 //        days.setRealisticWeights()

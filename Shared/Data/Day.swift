@@ -108,9 +108,9 @@ extension Days {
     
     // TODO Function for adding a new day that pushes everything forward a day
     
-    static func testDays(weightsOnEveryDay: Bool = true) -> Days {
+    static func testDays(missingData: Bool = false, weightsOnEveryDay: Bool = true) -> Days {
         var days: Days = [:]
-        var activeCalories: [Double] = [
+        let activeCalories: [Double] = [
             530.484, 426.822, 401.081, 563.949, 329.136, 304.808, 1045.074, 447.229, 1140.485, 287.526,
             664.498, 729.646, 141.281, 137.878, 185.565, 524.932, 387.086, 206.355, 895.737, 161.954,
             619.241, 624.191, 284.112, 272.095, 840.536, 158.428, 443.622, 264.205, 1025.872, 394.575,
@@ -120,7 +120,7 @@ extension Days {
             1047.608, 927.059, 1001.858, 364.928, 694.303, 241.747, 852.663, 564.521, 585.509, 970.332
         ]
 
-        var restingCalories: [Double] = [
+        let restingCalories: [Double] = [
             2076.454, 2042.446, 2287.673, 2278.498, 2064.136, 2185.697, 2255.600, 2064.478, 2042.546, 2260.872,
             2225.101, 2077.174, 2081.573, 2014.575, 2253.578, 2125.535, 2238.620, 2123.777, 2027.833, 2075.052,
             2122.309, 2210.026, 2248.741, 2248.441, 2267.896, 2167.579, 2196.028, 2296.148, 2187.730, 2266.040,
@@ -130,7 +130,7 @@ extension Days {
             2021.752, 2110.388, 2000.413, 2077.071, 2065.038, 2006.245, 2189.875, 2002.384, 2217.719, 2081.205
         ]
 
-        var consumedCalories: [Double] = [
+        let consumedCalories: [Double] = [
             2491.550, 2981.141, 3251.261, 1649.266, 3317.525, 2537.793, 2574.484, 1227.777, 2330.589, 1321.549,
             3132.249, 3471.490, 1519.824, 2076.862, 2215.301, 2609.347, 2166.949, 1082.332, 1724.588, 1945.672,
             1427.247, 1381.015, 2816.176, 1825.608, 1461.852, 1929.458, 1751.465, 3041.235, 3014.910, 2873.213,
@@ -139,21 +139,37 @@ extension Days {
             1421.452, 1353.783, 1045.187, 1021.009, 1692.573, 2551.751, 1461.937, 2777.730, 3489.914, 3388.308,
             2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 3190.687, 1800.286, 2217.806, 2354.423, 1334.216
         ] 
+        
+        let missingConsumedCalories: [Double] = consumedCalories.map { _ in 0.0 }
+        
+        let upAndDownWeights: [Double] = [
+            192.24, 187.16, 203.76, 228.98, 193.57, 204.86, 182.63, 205.87, 219.10, 196.44, 211.89, 188.68, 197.26, 183.53, 182.54,
+            216.36, 200.92, 203.68, 196.19, 183.07, 224.18, 190.32, 185.80, 229.59, 189.81, 191.09, 229.23, 197.03, 223.40, 193.45,
+            199.29, 225.76, 183.89, 218.00, 219.24, 197.93, 192.50, 196.15, 212.82, 188.09, 217.22, 181.75, 193.92, 221.66, 215.75,
+            206.40, 196.15, 196.68, 201.18, 207.69, 187.29, 210.59, 209.10, 208.64, 182.22, 180.44, 219.64, 210.07, 198.67, 195.19,
+            187.88, 198.97, 201.41, 181.73, 200.46, 184.15, 210.24, 184.27, 218.57, 207.35
+            
+        ]
 
         
         let count = activeCalories.count - 1
-        days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, activeCalories: activeCalories[count], restingCalories: restingCalories[count], consumedCalories: consumedCalories[count], expectedWeight: 200, weight: 200)
+        days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, activeCalories: activeCalories[count], restingCalories: restingCalories[count], consumedCalories: missingData ? missingConsumedCalories[count] : consumedCalories[count], expectedWeight: 200, weight: 200)
         for i in (0...count-1).reversed() {
             guard let previousDay = days[i+1] else { return [:] }
             let expectedWeight = previousDay.expectedWeight + previousDay.expectedWeightChangeBasedOnDeficit
             let realWeight = expectedWeight + Double.random(in: -1.0...1.0)
             let dayHasWeight = Bool.random()
-            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: consumedCalories[i], expectedWeight: expectedWeight, weight: dayHasWeight ? realWeight : 0) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
+            var weight = dayHasWeight ? realWeight : 0
+            weight = missingData ? upAndDownWeights[i] : weight
+            days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: missingData ? missingConsumedCalories[i] : consumedCalories[i], expectedWeight: expectedWeight, weight: weight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
         days.addRunningTotalDeficits()
         days.setRealisticWeights()
         if weightsOnEveryDay {
             days.setWeightOnEveryDay()
+        }
+        if missingData {
+            days.adjustDaysWhereUserDidntEnterData()
         }
         return days
     }
@@ -233,6 +249,7 @@ extension Days {
     
     mutating func setWeightOnEveryDay() {
         let weights = self.array().filter { $0.weight != 0 }.sorted(by: {x, y in x.daysAgo > y.daysAgo })
+        guard weights.count > 0 else { return } //todo test
         for i in 0..<weights.count-1 {
             let thisDay = weights[i]
             let nextDay = weights[i+1]
@@ -248,6 +265,45 @@ extension Days {
                     continue
                 }
                 self[j]!.weight = self[j+1]!.weight + weightAdjustmentEachDay
+            }
+        }
+    }
+    
+    // Need to look at tomorrow's weight, not yesterday's weight, right?
+    mutating func adjustDaysWhereUserDidntEnterData() {
+        guard self.array().filter({ $0.weight == 0 }).count == 0 else { return }
+        for i in stride(from: self.count - 1, through: 0, by: -1) {
+            guard let day = self[i] else { return }
+            guard let tomorrow = self[i-1] else { continue }
+            guard let yesterday = self[i+1] else { continue }
+            let didUserEnterData = day.consumedCalories != 0
+            if !didUserEnterData {
+                let weightDifferenceBetweenTodayAndTomorrow = tomorrow.weight - day.weight
+                var newConsumedCalories: Double = 0
+                if weightDifferenceBetweenTodayAndTomorrow < 0 {
+                    let totalBurned = day.activeCalories + day.restingCalories
+                    let caloriesAssumedToBeBurned = 0 - (weightDifferenceBetweenTodayAndTomorrow * 3500)
+                    let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
+                    if caloriesLeftToBeBurned {
+                        newConsumedCalories = 0
+                    } else {
+                        newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
+                    }
+                } else {
+                    let totalBurned = day.activeCalories + day.restingCalories
+                    let caloriesAssumedToBeEaten = (weightDifferenceBetweenTodayAndTomorrow * 3500) + totalBurned
+//                    let caloriesLeftToBeEaten = (caloriesAssumedToBeBurned - totalBurned) > 0
+                    newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+                }
+//                var consumedCalories = 0 - (weightDifferenceBetweenTodayAndTomorrow * 3500 - day.activeCalories - day.restingCalories)
+//                if consumedCalories < 0 { consumedCalories = 0 } // cant be negative. consider making active calories more
+                self[i]?.consumedCalories = newConsumedCalories
+                if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
+                    self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
+                }
+                print(self[i]?.deficit)
+                print(self[i]?.expectedWeightChangeBasedOnDeficit)
+                //0 = active + resting - consumed
             }
         }
     }

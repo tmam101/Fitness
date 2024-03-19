@@ -83,6 +83,12 @@ class HealthData: ObservableObject {
 #if os(iOS)
             // Setup managers
             await weightManager.setup()
+            
+            // Set start date to first recorded weight after the original start date
+            if let startDate = weightManager.weights.sorted(by: { x, y in x.date < y.date }).first?.date {
+                setupDates(startDate: startDate)
+            }
+            
             await runManager.setup(weightManager: weightManager, startDate: self.startDate ?? Date())
             await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             //            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
@@ -101,6 +107,7 @@ class HealthData: ObservableObject {
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
                 days.setWeightOnEveryDay()
+                days.adjustDaysWhereUserDidntEnterData()
                 self.hasLoaded = true
                 self.realisticWeights = realisticWeights
             }
@@ -135,7 +142,7 @@ class HealthData: ObservableObject {
 #endif
         case .debug:
             //            await self.setValuesFromNetworkWithDays()
-            self.days = Days.testDays()
+            self.days = Days.testDays(missingData: true, weightsOnEveryDay: true)
             await calorieManager.setValues(from: self.days)
             completion?(self)
             self.hasLoaded = true
@@ -250,6 +257,15 @@ class HealthData: ObservableObject {
     
     private func setupDates() {
         guard let startDate = Date.dateFromString(startDateString),
+              let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
+        else { return }
+        
+        self.startDate = startDate
+        self.daysBetweenStartAndNow = daysBetweenStartAndNow
+    }
+    
+    private func setupDates(startDate: Date?) {
+        guard let startDate,
               let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
         else { return }
         
