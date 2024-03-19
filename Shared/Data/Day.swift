@@ -270,6 +270,17 @@ extension Days {
                 self[j]!.weight = self[j+1]!.weight + weightAdjustmentEachDay
             }
         }
+        // Make the most recent weights, if they are not recorded, equal to the last recorded weight
+        var mostRecentWeight: Double? = nil
+        for i in stride(from: self.count - 1, through: 0, by: -1) {
+            if self[i]?.weight == 0 {
+                if let mostRecentWeight {
+                    self[i]?.weight = mostRecentWeight
+                }
+            } else {
+                mostRecentWeight = self[i]?.weight
+            }
+        }
     }
     
     // Need to look at tomorrow's weight, not yesterday's weight, right?
@@ -313,6 +324,11 @@ extension Days {
                 print(self[i]?.deficit)
                 print(self[i]?.expectedWeightChangeBasedOnDeficit)
                 //0 = active + resting - consumed
+            } else {
+                if let change = self[i]?.expectedWeightChangeBasedOnDeficit {
+//                    self[i]?.consumedCalories = day.activeCalories
+                    self[i]?.expectedWeight = yesterday.expectedWeight + change
+                }
             }
         }
     }

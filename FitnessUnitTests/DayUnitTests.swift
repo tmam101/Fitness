@@ -291,6 +291,8 @@ final class DayUnitTests: XCTestCase {
                     XCTAssertEqual(days[x]?.weight, 0)
                 }
             }
+            
+            // TODO: Now the logic adds weights closes to now if you havent weighed yourself
         }
         // Ensure the calculations are correct
         var d: Days = [:]
