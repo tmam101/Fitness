@@ -288,17 +288,21 @@ extension Days {
         guard self.array().filter({ $0.weight == 0 }).count == 0 else { return }
         for i in stride(from: self.count - 1, through: 0, by: -1) {
             guard let day = self[i] else { return }
+            let didUserEnterData = day.consumedCalories != 0
             guard let yesterday = self[i+1] else { continue }
+            // Tomorrow
             guard self[i-1] != nil else {
-                if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
-                    self[i]?.consumedCalories = 0
-                    self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
+                // If we're on today
+                if !didUserEnterData {
+                    if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit { // not quite right...
+                        self[i]?.consumedCalories = 0
+                        self[i]?.expectedWeight = yesterday.expectedWeight + (day.weight - yesterday.weight)
+                    }
                 }
                 continue
             }
-            let didUserEnterData = day.consumedCalories != 0
             if !didUserEnterData {
-                let weightDifferenceBetweenYesterdayAndToday = day.weight - yesterday.weight
+                let weightDifferenceBetweenYesterdayAndToday = day.weight - yesterday.expectedWeight
                 var newConsumedCalories: Double = 0
                 if weightDifferenceBetweenYesterdayAndToday < 0 {
                     let totalBurned = day.activeCalories + day.restingCalories
@@ -331,6 +335,7 @@ extension Days {
                 }
             }
         }
+        print(self)
     }
     
     //MARK: REALISTIC WEIGHTS
