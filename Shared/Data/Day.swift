@@ -108,7 +108,7 @@ extension Days {
     
     // TODO Function for adding a new day that pushes everything forward a day
     
-    static func testDays(missingData: Bool = false, weightsOnEveryDay: Bool = true) -> Days {
+    static func testDays(missingData: Bool = false, weightsOnEveryDay: Bool = true, dayCount: Int? = nil) -> Days {
         var days: Days = [:]
         let activeCalories: [Double] = [
             530.484, 426.822, 401.081, 563.949, 329.136, 304.808, 1045.074, 447.229, 1140.485, 287.526,
@@ -152,7 +152,7 @@ extension Days {
         ]
 
         
-        let count = activeCalories.count - 1
+        let count: Int = dayCount ?? activeCalories.count - 1
         days[count] = Day(date: Date.subtract(days: count, from: Date()), daysAgo: count, activeCalories: activeCalories[count], restingCalories: restingCalories[count], consumedCalories: missingData ? missingConsumedCalories[count] : consumedCalories[count], expectedWeight: 200, weight: 200)
         for i in (0...count-1).reversed() {
             guard let previousDay = days[i+1] else { return [:] }
@@ -163,6 +163,9 @@ extension Days {
             weight = missingData ? upAndDownWeights[i] : weight
             days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: missingData ? missingConsumedCalories[i] : consumedCalories[i], expectedWeight: expectedWeight, weight: weight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
+//        if let today = days[0] {
+//            days[-1] = Day(date: Date.subtract(days: -1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow)
+//        }
         days.addRunningTotalDeficits()
         days.setRealisticWeights()
         if weightsOnEveryDay {
@@ -274,15 +277,21 @@ extension Days {
         guard self.array().filter({ $0.weight == 0 }).count == 0 else { return }
         for i in stride(from: self.count - 1, through: 0, by: -1) {
             guard let day = self[i] else { return }
-            guard let tomorrow = self[i-1] else { continue }
             guard let yesterday = self[i+1] else { continue }
+            guard self[i-1] != nil else {
+                if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
+                    self[i]?.consumedCalories = 0
+                    self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
+                }
+                continue
+            }
             let didUserEnterData = day.consumedCalories != 0
             if !didUserEnterData {
-                let weightDifferenceBetweenTodayAndTomorrow = tomorrow.weight - day.weight
+                let weightDifferenceBetweenYesterdayAndToday = day.weight - yesterday.weight
                 var newConsumedCalories: Double = 0
-                if weightDifferenceBetweenTodayAndTomorrow < 0 {
+                if weightDifferenceBetweenYesterdayAndToday < 0 {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeBurned = 0 - (weightDifferenceBetweenTodayAndTomorrow * 3500)
+                    let caloriesAssumedToBeBurned = 0 - (weightDifferenceBetweenYesterdayAndToday * 3500)
                     let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
                     if caloriesLeftToBeBurned {
                         newConsumedCalories = 0
@@ -291,11 +300,11 @@ extension Days {
                     }
                 } else {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeEaten = (weightDifferenceBetweenTodayAndTomorrow * 3500) + totalBurned
+                    let caloriesAssumedToBeEaten = (weightDifferenceBetweenYesterdayAndToday * 3500) + totalBurned
 //                    let caloriesLeftToBeEaten = (caloriesAssumedToBeBurned - totalBurned) > 0
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
-//                var consumedCalories = 0 - (weightDifferenceBetweenTodayAndTomorrow * 3500 - day.activeCalories - day.restingCalories)
+//                var consumedCalories = 0 - (weightDifferenceBetweenYesterdayAndToday * 3500 - day.activeCalories - day.restingCalories)
 //                if consumedCalories < 0 { consumedCalories = 0 } // cant be negative. consider making active calories more
                 self[i]?.consumedCalories = newConsumedCalories
                 if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
