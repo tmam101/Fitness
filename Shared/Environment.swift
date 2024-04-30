@@ -19,7 +19,13 @@ struct GlobalEnvironment {
 }
 
 enum AppEnvironmentConfig {
-    case debug
-    case release
+    case debug([TestDayOption]?)
+    case release([TestDayOption]?)
     case widgetRelease
+}
+
+enum TestDayOption {
+    case missingData
+    case weightGoingSteadilyDown
+    case weightsOnEveryDay
 }

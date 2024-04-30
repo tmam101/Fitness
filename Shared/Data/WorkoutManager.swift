@@ -109,7 +109,7 @@ struct WorkoutSet: Codable {
 typealias Workout = [WorkoutSet]
 
 class WorkoutManager: ObservableObject {
-    var environment: AppEnvironmentConfig = .debug
+    var environment: AppEnvironmentConfig = .debug(nil)
     @Published var workouts: Workout = []
     @Published var workoutsGroupedByDay: [Workout] = []
     @Published public var firstBenchORM: Double = 0.0

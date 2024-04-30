@@ -317,10 +317,18 @@ final class DayUnitTests: XCTestCase {
             XCTFail()
             return
         }
-        
-        let daysWhereNoConsumedCalories = days.array().map { $0.consumedCalories }.filter { $0 == 0 }.count
-        // This doesnt make sense, because some days should have 0 as consumed. If the weight drops, the bet we can do is 0 consumed calories - we cant eat negative calories.
-        XCTAssertEqual(daysWhereNoConsumedCalories, days.array().count)
+        // TODO might need to consider the first day, is it adjusted ever?
+        for i in stride(from: days.count - 2, through: 0, by: -1) {
+            guard let day = days[i] else {
+                XCTFail()
+                return
+            }
+            if day.wasModifiedBecauseTheUserDidntEnterData {
+                if let yesterday = days[day.daysAgo + 1] {
+                    XCTAssertEqual(day.expectedWeight, yesterday.expectedWeight + day.expectedWeightChangeBasedOnDeficit)
+                }
+            }
+        }
     }
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays

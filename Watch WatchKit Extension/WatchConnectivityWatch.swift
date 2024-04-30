@@ -16,8 +16,11 @@ class WatchConnectivityWatch : NSObject,  WCSessionDelegate, ObservableObject {
     init(session: WCSession = .default){
         self.session = session
         super.init()
-        if healthData?.environment == .debug {
+        switch healthData?.environment {
+        case .debug(_):
             return
+        case .widgetRelease, .release, .none:
+            break // TODO
         }
         session.delegate = self
         session.activate()

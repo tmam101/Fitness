@@ -161,7 +161,7 @@ struct FitnessViewWatch: View {
 struct FitnessViewWatch_Previews: PreviewProvider {
     static var previews: some View {
         FitnessViewWatch()
-            .environmentObject(HealthData(environment: AppEnvironmentConfig.debug))
+            .environmentObject(HealthData(environment: AppEnvironmentConfig.debug(nil)))
             .previewDevice(PreviewDevice(rawValue: "Apple Watch Series 7 - 45 mm"))
     }
 }

@@ -19,7 +19,7 @@ import SwiftUI
 class HealthData: ObservableObject {
     
     //MARK: PROPERTIES
-    var environment: AppEnvironmentConfig = .debug
+    var environment: AppEnvironmentConfig = .debug(nil)
 #if !os(macOS)
     @Published var calorieManager: CalorieManager = CalorieManager()
     @Published var runManager: RunManager = RunManager()
@@ -79,7 +79,7 @@ class HealthData: ObservableObject {
         setupDates()
         
         switch self.environment {
-        case .release:
+        case .release(let options):
 #if os(iOS)
             // Setup managers
             await weightManager.setup()
@@ -106,8 +106,12 @@ class HealthData: ObservableObject {
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
-                days.setWeightOnEveryDay()
-                days.adjustDaysWhereUserDidntEnterData()
+                if options?.contains(.weightsOnEveryDay) ?? false {
+                    days.setWeightOnEveryDay()
+                }
+                if options?.contains(.missingData) ?? false {
+                    days.adjustDaysWhereUserDidntEnterData()
+                }
                 self.hasLoaded = true
                 self.realisticWeights = realisticWeights
             }
@@ -140,9 +144,9 @@ class HealthData: ObservableObject {
             self.hasLoaded = true
             completion?(self)
 #endif
-        case .debug:
+        case .debug(let options):
             //            await self.setValuesFromNetworkWithDays()
-            self.days = Days.testDays(missingData: true, weightsOnEveryDay: true)
+            self.days = Days.testDays(options: options)
 //            self.days = Days.testDays(missingData: true, weightsOnEveryDay: true, dayCount: 15)
 
             await calorieManager.setValues(from: self.days)

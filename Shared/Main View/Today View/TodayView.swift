@@ -154,7 +154,7 @@ struct TestRing: View {
 }
 
 struct TodayViewPreview: View {
-    @State var health: HealthData = HealthData(environment: .debug)
+    @State var health: HealthData = HealthData(environment: .debug(nil))
     var body: some View {
         TodayView()
             .environmentObject(health)
@@ -164,7 +164,7 @@ struct TodayViewPreview: View {
     
 // MARK: PREVIEW
 struct Previews_TodayView_Previews: PreviewProvider {
-    @State var health = HealthData(environment: .debug)
+    @State var health = HealthData(environment: .debug(nil))
 
     static var previews: some View {
         TodayViewPreview()

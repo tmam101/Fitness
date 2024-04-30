@@ -10,7 +10,7 @@ import WatchConnectivity
 
 @main
 struct FitnessApp: App {
-    @State var healthData = HealthData(environment: AppEnvironmentConfig.release)
+    @State var healthData = HealthData(environment: AppEnvironmentConfig.release([.weightsOnEveryDay, .missingData]))
     @State var watchConnectivityIphone = WatchConnectivityIphone()
     @Environment(\.scenePhase) private var scenePhase
 
@@ -41,7 +41,7 @@ struct FitnessApp_Previews: PreviewProvider {
     
     static var previews: some View {
         AppView()
-            .environmentObject(HealthData(environment: .debug))
+            .environmentObject(HealthData(environment: .debug(nil)))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
 //            .environmentObject(WatchConnectivityIphone())
     }

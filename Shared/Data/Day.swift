@@ -62,6 +62,7 @@ struct Day: Codable, Identifiable, Plottable, Equatable {
     var consumedCalories: Double = 0
     var runningTotalDeficit: Double = 0
     var expectedWeight: Double = 0
+    var wasModifiedBecauseTheUserDidntEnterData = false
     var expectedWeightTomorrow: Double {
         expectedWeight + expectedWeightChangeBasedOnDeficit
     }
@@ -107,6 +108,25 @@ typealias Days = [Int:Day]
 extension Days {
     
     // TODO Function for adding a new day that pushes everything forward a day
+    
+    static func testDays(options: [TestDayOption]?) -> Days {
+        var missingData = false
+        var weightsOnEveryDay = false
+        var weightGoingSteadilyDown = false
+        if let options {
+            for option in options {
+                switch option {
+                case .missingData:
+                    missingData = true
+                case .weightGoingSteadilyDown:
+                    weightGoingSteadilyDown = true
+                case .weightsOnEveryDay:
+                    weightsOnEveryDay = true
+                }
+            }
+        }
+        return testDays(missingData: missingData, weightsOnEveryDay: weightsOnEveryDay)
+    }
     
     static func testDays(missingData: Bool = false, weightsOnEveryDay: Bool = true, dayCount: Int? = nil) -> Days {
         var days: Days = [:]
@@ -295,8 +315,9 @@ extension Days {
                 // If we're on today
                 if !didUserEnterData {
                     if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit { // not quite right...
-                        self[i]?.consumedCalories = 0
-                        self[i]?.expectedWeight = yesterday.expectedWeight + (day.weight - yesterday.weight)
+//                        self[i]?.consumedCalories = 0
+                        self[i]?.expectedWeight = yesterday.expectedWeight + (day.weight - yesterday.expectedWeight)
+                        self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
                     }
                 }
                 continue
@@ -325,6 +346,7 @@ extension Days {
                 if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
                     self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
                 }
+                self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
                 print(self[i]?.deficit)
                 print(self[i]?.expectedWeightChangeBasedOnDeficit)
                 //0 = active + resting - consumed
