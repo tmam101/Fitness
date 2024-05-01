@@ -312,7 +312,8 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDayAdjustment() {
-        days = Days.testDays(missingData: true, weightsOnEveryDay: true)
+        let options: [TestDayOption] = [.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown]
+        days = Days.testDays(options: options)
         guard var days else {
             XCTFail()
             return

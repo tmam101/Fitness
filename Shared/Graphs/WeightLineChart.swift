@@ -68,24 +68,49 @@ struct WeightLineChart: View {
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
-                LineMark(x: .value("Days ago", day.date),
-                         y: .value("Expected Weight", day.expectedWeight),
-                         series: .value("Expected weight", "A"))
+                // Expected Weight graph until tomorrow
+                if day.daysAgo >= 0 {
+                    LineMark(x: .value("Days ago", day.date),
+                             y: .value("Expected Weight", day.expectedWeight),
+                             series: .value("Expected weight", "A"))
                     .foregroundStyle(.yellow)
                     .opacity(0.8)
-                
-//                LineMark(x: .value("Days ago", day.date),
-//                         y: .value("Realistic Weight", day.realisticWeight),
-//                         series: .value("Realistic Weight", "B"))
-//                .foregroundStyle(.yellow).opacity(0.5)
+                    
+                    PointMark(
+                        x: .value("Days ago", day.date),
+                        y: .value("Expected Weight", day.expectedWeight))
+                    .foregroundStyle(.yellow)
+                    .symbolSize(10)
+                }
+                // Expected weight tomorrow
+                if day.daysAgo <= 0 {
+                    LineMark(x: .value("Days ago", day.date),
+                             y: .value("Expected Weight", day.expectedWeight),
+                             series: .value("Tomorrow's expected weight", "B"))
+                    .foregroundStyle(.yellow)
+                    .opacity(0.3)
+                    PointMark(
+                        x: .value("Days ago", day.date),
+                        y: .value("Expected Weight", day.expectedWeight))
+                    .foregroundStyle(.yellow)
+                    .symbolSize(10)
+                    .opacity(0.3)
+                }
+                // Weight
                 if day.weight != 0 {
                     LineMark(x: .value("Days ago", day.date),
                              y: .value("Real Weight", day.weight),
                              series: .value("Weight", "C"))
                     .foregroundStyle(.green)
                     .opacity(0.5)
+                    
+                    PointMark(
+                        x: .value("Days ago", day.date),
+                        y: .value("Real Weight", day.weight))
+                    .foregroundStyle(.green)
+                    .symbolSize(10)
+                    .opacity(0.5)
                 }
-
             }
             .chartYAxis {
                 AxisMarks(values: .automatic) { _ in

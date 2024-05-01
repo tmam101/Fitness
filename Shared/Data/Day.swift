@@ -160,7 +160,16 @@ extension Days {
             2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 3190.687, 1800.286, 2217.806, 2354.423, 1334.216
         ] 
         
-        let missingConsumedCalories: [Double] = consumedCalories.map { _ in 0.0 }
+//        let missingConsumedCalories: [Double] = consumedCalories.map { _ in 0.0 }
+        let missingConsumedCalories: [Double] = [
+            2491.550, 2981.141, 3251.261, 1649.266, 3317.525, 2537.793, 2574.484, 1227.777, 2330.589, 1321.549,
+            3132.249, 3471.490, 1519.824, 2076.862, 2215.301, 2609.347, 2166.949, 1082.332, 1724.588, 1945.672,
+            1427.247, 1381.015, 2816.176, 1825.608, 1461.852, 1929.458, 1751.465, 3041.235, 3014.910, 2873.213,
+            2910.372, 3072.810, 2405.098, 1719.862, 1245.969, 2901.889, 3357.390, 3147.907, 3123.125, 2441.369,
+            1885.750, 2087.456, 3344.863, 1501.685, 1602.111, 1317.179, 3303.113, 2179.775, 2354.898, 2076.150,
+            1421.452, 1353.783, 1045.187, 1021.009, 1692.573, 2551.751, 1461.937, 2777.730, 3489.914, 3388.308,
+            2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 0, 0, 0, 0, 0
+        ].reversed()
         
         let upAndDownWeights: [Double] = [
             192.24, 187.16, 203.76, 228.98, 193.57, 204.86, 182.63, 205.87, 219.10, 196.44, 211.89, 188.68, 197.26, 183.53, 182.54,
@@ -168,8 +177,15 @@ extension Days {
             199.29, 225.76, 183.89, 218.00, 219.24, 197.93, 192.50, 196.15, 212.82, 188.09, 217.22, 181.75, 193.92, 221.66, 215.75,
             206.40, 196.15, 196.68, 201.18, 207.69, 187.29, 210.59, 209.10, 208.64, 182.22, 180.44, 219.64, 210.07, 198.67, 195.19,
             187.88, 198.97, 201.41, 181.73, 200.46, 184.15, 210.24, 184.27, 218.57, 207.35
-            
         ]
+        
+        let weightGoingSteadilyDown: [Double] = [
+            200.00, 199.98, 200.00, 199.73, 199.64, 199.92, 199.52, 199.27, 199.20, 199.09, 198.63, 198.49, 198.76, 198.94, 199.10,
+            199.09, 199.17, 198.95, 198.47, 198.19, 198.34, 198.43, 198.44, 198.73, 198.91, 198.61, 198.90, 198.55, 198.72, 198.73,
+            198.64, 198.80, 199.01, 198.62, 198.57, 198.78, 199.01, 199.13, 199.02, 199.05, 198.73, 198.68, 198.96, 198.75, 198.87,
+            199.02, 199.24, 199.40, 199.24, 198.93, 199.06, 199.13, 198.70, 198.86, 198.87, 198.42, 198.51, 198.53, 198.17, 198.33,
+            198.03, 198.08, 197.96, 198.10, 198.14, 197.87, 197.79, 197.69, 197.65, 197
+        ].reversed()
 
         
         let count: Int = dayCount ?? activeCalories.count - 1
@@ -180,7 +196,7 @@ extension Days {
             let realWeight = expectedWeight + Double.random(in: -1.0...1.0)
             let dayHasWeight = Bool.random()
             var weight = dayHasWeight ? realWeight : 0
-            weight = missingData ? upAndDownWeights[i] : weight
+            weight = missingData ? weightGoingSteadilyDown[i] : weight
             days[i] = Day(date: Date.subtract(days: i, from: Date()), daysAgo: i, activeCalories: activeCalories[i], restingCalories: restingCalories[i], consumedCalories: missingData ? missingConsumedCalories[i] : consumedCalories[i], expectedWeight: expectedWeight, weight: weight) // TODO Not sure exactly how expectedWeight and expectedWeightChangeBasedOnDeficit should relate to each other.
         }
 //        if let today = days[0] {
