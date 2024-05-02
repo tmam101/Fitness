@@ -128,7 +128,9 @@ extension Days {
                 case .jsonFile(let file):
                     switch file {
                     case .incorrectDays:
-                        return Days.decode(path: file.rawValue) ?? [:] // TODO
+                        var days = Days.decode(path: file.rawValue) ?? [:] // TODO
+                        days.completelyFormat(options: options)
+                        return days
                     }
                 }
             }
@@ -218,7 +220,21 @@ extension Days {
         if missingData {
             days.adjustDaysWhereUserDidntEnterData()
         }
+        print(days.encodeAsString())
         return days
+    }
+    
+    mutating func completelyFormat(options: [TestDayOption]?) {
+        self.addRunningTotalDeficits()
+        self.setRealisticWeights()
+        if let options {
+            if options.contains(.weightsOnEveryDay) {
+                self.setWeightOnEveryDay()
+            }
+            if options.contains(.missingData) {
+                self.adjustDaysWhereUserDidntEnterData()
+            }
+        }
     }
     
     //TODO: Test
@@ -520,7 +536,7 @@ extension Days {
         return jsonData
     }
     
-    static func decode(path: String) -> Days? {
+    static func decode(path: String) -> Days? { // Pass in options here? format in here?
         guard
             let path = Bundle.main.path(forResource: path, ofType: "json"),
             let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),

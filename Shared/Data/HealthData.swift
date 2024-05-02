@@ -106,11 +106,11 @@ class HealthData: ObservableObject {
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
+                print("JSON of days dictionary: \n")
+                print(days.encodeAsString())
                 if options?.contains(.weightsOnEveryDay) ?? false {
                     days.setWeightOnEveryDay()
                 }
-                print("JSON of days dictionary: \n")
-                print(days.encodeAsString())
                 if options?.contains(.missingData) ?? false {
                     days.adjustDaysWhereUserDidntEnterData()
                 }
