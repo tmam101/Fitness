@@ -156,7 +156,7 @@
 		E95C9B822ADDC6BF00B2FCC9 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		E967015E2AFEBB5A0059E55C /* FitnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */; };
 		E96701602AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */; };
-		E99B514B2BE435EC002CEB48 /* incorrectDays.json in Resources */ = {isa = PBXBuildFile; fileRef = E99B514A2BE435EC002CEB48 /* incorrectDays.json */; };
+		E99B514B2BE435EC002CEB48 /* missingDataIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E99B514A2BE435EC002CEB48 /* missingDataIssue.json */; };
 		E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE68722AD5A60F00320684 /* DayUnitTests.swift */; };
 		E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
 		E9F83AD929D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
@@ -317,7 +317,8 @@
 		E967015B2AFEBB5A0059E55C /* FitnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITests.swift; sourceTree = "<group>"; };
 		E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		E99B514A2BE435EC002CEB48 /* incorrectDays.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = incorrectDays.json; sourceTree = "<group>"; };
+		E99B514A2BE435EC002CEB48 /* missingDataIssue.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingDataIssue.json; sourceTree = "<group>"; };
+		E99B514F2BE446ED002CEB48 /* missingDataIssue.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = missingDataIssue.PNG; sourceTree = "<group>"; };
 		E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Fitness (iOS).xctestplan"; sourceTree = "<group>"; };
 		E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FitnessUITests.xctestplan; sourceTree = "<group>"; };
 		E9DE68702AD5A60F00320684 /* FitnessUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -631,9 +632,18 @@
 		E99B514C2BE4468F002CEB48 /* Test Case JSON Files */ = {
 			isa = PBXGroup;
 			children = (
-				E99B514A2BE435EC002CEB48 /* incorrectDays.json */,
+				E99B514E2BE446D6002CEB48 /* Today's expected weight going up when it shouldn't */,
 			);
 			path = "Test Case JSON Files";
+			sourceTree = "<group>";
+		};
+		E99B514E2BE446D6002CEB48 /* Today's expected weight going up when it shouldn't */ = {
+			isa = PBXGroup;
+			children = (
+				E99B514A2BE435EC002CEB48 /* missingDataIssue.json */,
+				E99B514F2BE446ED002CEB48 /* missingDataIssue.PNG */,
+			);
+			path = "Today's expected weight going up when it shouldn't";
 			sourceTree = "<group>";
 		};
 		E9DE68712AD5A60F00320684 /* FitnessUnitTests */ = {
@@ -860,7 +870,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				487A95192640F97500627BA3 /* strong.json in Resources */,
-				E99B514B2BE435EC002CEB48 /* incorrectDays.json in Resources */,
+				E99B514B2BE435EC002CEB48 /* missingDataIssue.json in Resources */,
 				48821CDD25B8BF3800C9F58A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
