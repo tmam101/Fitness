@@ -108,7 +108,7 @@ typealias Days = [Int:Day]
 extension Days {
     
     enum TestFiles: String {
-        case incorrectDays = "incorrectDays"
+        case missingDataIssue = "missingDataIssue"
     }
     // TODO Function for adding a new day that pushes everything forward a day
     
@@ -127,7 +127,7 @@ extension Days {
                     weightsOnEveryDay = true
                 case .testCase(let file):
                     switch file {
-                    case .incorrectDays:
+                    case .missingDataIssue:
                         var days = Days.decode(path: file.rawValue) ?? [:] // TODO
                         days.completelyFormat(options: options)
                         return days
