@@ -52,7 +52,7 @@ class CalorieManager: ObservableObject {
     
     func setValues(from days: Days) async {
         if days.count < 8 { return }
-        print("days: \(days)")
+//        print("days: \(days)")
         self.deficitToGetCorrectDeficit = self.goalDeficit //todo
         self.expectedWeights = Array(days.values).map { DateAndDouble(date: Date.subtract(days: -1, from: $0.date), double: startingWeight - ($0.runningTotalDeficit / 3500)) }.sorted { $0.date < $1.date }
     }
@@ -173,7 +173,7 @@ class CalorieManager: ObservableObject {
                 }
             }
             dayInformation[i] = day
-            print("day \(i): \(day)")
+//            print("day \(i): \(day)")
             if dayInformation.count == days + 1 {
                 return dayInformation
             }
@@ -259,7 +259,7 @@ class CalorieManager: ObservableObject {
         let eaten = await sumValueForDay(daysAgo: daysAgo, forType: .dietaryEnergyConsumed)
         let realResting = max(resting, self.minimumRestingCalories)
         let realActive = max(active, self.minimumActiveCalories)
-        print("\(daysAgo) days ago: resting: \(realResting) active: \(realActive) eaten: \(eaten)")
+//        print("\(daysAgo) days ago: resting: \(realResting) active: \(realActive) eaten: \(eaten)")
         let deficit = self.getDeficit(resting: realResting, active: realActive, eaten: eaten)
         return deficit
     }

@@ -24,8 +24,9 @@ enum AppEnvironmentConfig {
     case widgetRelease
 }
 
-enum TestDayOption {
+enum TestDayOption:Equatable {
     case missingData
     case weightGoingSteadilyDown
     case weightsOnEveryDay
+    case jsonFile(Days.TestFiles)
 }

@@ -331,6 +331,11 @@ final class DayUnitTests: XCTestCase {
             }
         }
     }
+    
+    func testDecodingJSON() {
+        let days = Days.decode(path: "String")
+        XCTAssertNotNil(days)
+    }
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays
 //        days.setRealisticWeights()

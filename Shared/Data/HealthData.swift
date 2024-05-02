@@ -109,6 +109,8 @@ class HealthData: ObservableObject {
                 if options?.contains(.weightsOnEveryDay) ?? false {
                     days.setWeightOnEveryDay()
                 }
+                print("JSON of days dictionary: \n")
+                print(days.encodeAsString())
                 if options?.contains(.missingData) ?? false {
                     days.adjustDaysWhereUserDidntEnterData()
                 }

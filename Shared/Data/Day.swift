@@ -107,6 +107,9 @@ typealias Days = [Int:Day]
 
 extension Days {
     
+    enum TestFiles: String {
+        case incorrectDays = "incorrectDays"
+    }
     // TODO Function for adding a new day that pushes everything forward a day
     
     static func testDays(options: [TestDayOption]?) -> Days {
@@ -122,6 +125,11 @@ extension Days {
                     weightGoingSteadilyDown = true
                 case .weightsOnEveryDay:
                     weightsOnEveryDay = true
+                case .jsonFile(let file):
+                    switch file {
+                    case .incorrectDays:
+                        return Days.decode(path: file.rawValue) ?? [:] // TODO
+                    }
                 }
             }
         }
@@ -422,7 +430,7 @@ extension Days {
 //    }
     
     func array() -> [Day] {
-        Array(self.values)
+        Array(self.values).sorted(by: { x, y in x.daysAgo > y.daysAgo })
     }
     
     enum DayProperty {
@@ -476,5 +484,59 @@ extension Days {
     func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
         averageOfPrevious(property: .deficit, days: days, endingOnDay: day)
         // TODO This doesn't use runningTotalDeficit. Problem?
+    }
+}
+
+// TODO Test
+extension [Day] {
+    func toDays() -> Days {
+        var days = Days()
+        for day in self {
+            days[day.daysAgo] = day
+        }
+        return days
+    }
+}
+
+extension Days {
+    func encodeAsString() -> String {
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
+        guard
+            let jsonData = try? jsonEncoder.encode(self),
+            let json = String(data: jsonData, encoding: String.Encoding.utf8) else {
+            return "Failed"
+        }
+        print(json)
+        return json
+    }
+    
+    func encode() -> Data? {
+        let jsonEncoder = JSONEncoder()
+        guard
+            let jsonData = try? jsonEncoder.encode(self) else {
+            return nil
+        }
+        return jsonData
+    }
+    
+    static func decode(path: String) -> Days? {
+        guard
+            let path = Bundle.main.path(forResource: path, ofType: "json"),
+            let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),
+            let jsonResult = try? JSONDecoder().decode(Days.self, from: data)
+        else {
+            return nil
+        }
+        return jsonResult
+    }
+    
+    func test() -> Days? {
+        let encoded: String = self.encodeAsString()
+        if let data = encoded.data(using: .utf8) {
+            let decoded: Days? = try? JSONDecoder().decode(Days.self, from: data)
+            return decoded
+        }
+        return nil
     }
 }
