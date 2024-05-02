@@ -330,11 +330,12 @@ extension Days {
             guard self[i-1] != nil else {
                 // If we're on today
                 if !didUserEnterData {
-                    if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit { // not quite right...
-//                        self[i]?.consumedCalories = 0
-                        self[i]?.expectedWeight = yesterday.expectedWeight + (day.weight - yesterday.expectedWeight)
-                        self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
-                    }
+//                    if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit { // not quite right...
+////                        self[i]?.consumedCalories = 0
+//                        self[i]?.expectedWeight = yesterday.expectedWeight + (day.weight - yesterday.expectedWeight)
+//                        self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+//                    }
+                    self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
                 }
                 continue
             }
@@ -353,22 +354,15 @@ extension Days {
                 } else {
                     let totalBurned = day.activeCalories + day.restingCalories
                     let caloriesAssumedToBeEaten = (weightDifferenceBetweenYesterdayAndToday * 3500) + totalBurned
-//                    let caloriesLeftToBeEaten = (caloriesAssumedToBeBurned - totalBurned) > 0
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
-//                var consumedCalories = 0 - (weightDifferenceBetweenYesterdayAndToday * 3500 - day.activeCalories - day.restingCalories)
-//                if consumedCalories < 0 { consumedCalories = 0 } // cant be negative. consider making active calories more
                 self[i]?.consumedCalories = newConsumedCalories
                 if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
                     self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
                 }
                 self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
-                print(self[i]?.deficit)
-                print(self[i]?.expectedWeightChangeBasedOnDeficit)
-                //0 = active + resting - consumed
             } else {
                 if let change = self[i]?.expectedWeightChangeBasedOnDeficit {
-//                    self[i]?.consumedCalories = day.activeCalories
                     self[i]?.expectedWeight = yesterday.expectedWeight + change
                 }
             }
