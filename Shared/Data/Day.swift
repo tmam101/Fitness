@@ -168,7 +168,7 @@ extension Days {
             2910.372, 3072.810, 2405.098, 1719.862, 1245.969, 2901.889, 3357.390, 3147.907, 3123.125, 2441.369,
             1885.750, 2087.456, 3344.863, 1501.685, 1602.111, 1317.179, 3303.113, 2179.775, 2354.898, 2076.150,
             1421.452, 1353.783, 1045.187, 1021.009, 1692.573, 2551.751, 1461.937, 2777.730, 3489.914, 3388.308,
-            2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 0, 0, 0, 0, 0
+            2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 0, 0, 0, 0, 2000
         ].reversed()
         
         let upAndDownWeights: [Double] = [
@@ -330,12 +330,11 @@ extension Days {
             guard self[i-1] != nil else {
                 // If we're on today
                 if !didUserEnterData {
-//                    if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit { // not quite right...
-////                        self[i]?.consumedCalories = 0
-//                        self[i]?.expectedWeight = yesterday.expectedWeight + (day.weight - yesterday.expectedWeight)
-//                        self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
-//                    }
                     self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
+                } else {
+                    if let expectedWeightChangeBasedOnDeficit = self[i]?.expectedWeightChangeBasedOnDeficit {
+                        self[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
+                    }
                 }
                 continue
             }
