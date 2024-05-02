@@ -125,7 +125,7 @@ extension Days {
                     weightGoingSteadilyDown = true
                 case .weightsOnEveryDay:
                     weightsOnEveryDay = true
-                case .jsonFile(let file):
+                case .testCase(let file):
                     switch file {
                     case .incorrectDays:
                         var days = Days.decode(path: file.rawValue) ?? [:] // TODO

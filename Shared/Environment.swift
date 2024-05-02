@@ -28,5 +28,5 @@ enum TestDayOption:Equatable {
     case missingData
     case weightGoingSteadilyDown
     case weightsOnEveryDay
-    case jsonFile(Days.TestFiles)
+    case testCase(Days.TestFiles)
 }

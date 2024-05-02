@@ -430,6 +430,7 @@
 		48821CAF25B8BF3600C9F58A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E99B514C2BE4468F002CEB48 /* Test Case JSON Files */,
 				48E0E20826041E4A0037EEAF /* Main View */,
 				48E0E20926041E550037EEAF /* Data */,
 				48199FB52628D02A000247E8 /* Graphs */,
@@ -441,7 +442,6 @@
 				484BB6872776AAB900E24B1C /* Network.swift */,
 				48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */,
 				48108120278A0EDC008E9AE6 /* WatchConnectivityIphone.swift */,
-				E99B514A2BE435EC002CEB48 /* incorrectDays.json */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -626,6 +626,14 @@
 				E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */,
 			);
 			path = FitnessUITests;
+			sourceTree = "<group>";
+		};
+		E99B514C2BE4468F002CEB48 /* Test Case JSON Files */ = {
+			isa = PBXGroup;
+			children = (
+				E99B514A2BE435EC002CEB48 /* incorrectDays.json */,
+			);
+			path = "Test Case JSON Files";
 			sourceTree = "<group>";
 		};
 		E9DE68712AD5A60F00320684 /* FitnessUnitTests */ = {

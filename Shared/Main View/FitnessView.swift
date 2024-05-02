@@ -196,7 +196,7 @@ struct FitnessView_Previews: PreviewProvider {
 public struct FitnessPreviewProvider {
     static func MainPreview() -> some View {
         return FitnessView()
-            .environmentObject(HealthData(environment: .debug([.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown, .jsonFile(.incorrectDays)])))
+            .environmentObject(HealthData(environment: .debug([.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown, .testCase(.incorrectDays)])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
     }
