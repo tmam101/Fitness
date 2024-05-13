@@ -99,6 +99,14 @@ struct Day: Codable, Identifiable, Plottable, Equatable {
     var weightChangePercentage: Double {
         expectedWeightChangeBasedOnDeficit / (-2/7) // TODO Make settings
     }
+    
+    var dayOfWeek: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE" // "EEEE" is the date format for the full name of the day
+        let dayOfWeekString = dateFormatter.string(from: date)
+        
+        return dayOfWeekString
+    }
 
 }
 // MARK: DAYS
@@ -345,7 +353,9 @@ extension Days {
     
     // Need to look at tomorrow's weight, not yesterday's weight, right?
     mutating func adjustDaysWhereUserDidntEnterData() {
-        guard self.array().filter({ $0.weight == 0 }).count == 0 else { return }
+        if self.array().filter({ $0.weight == 0 }).count != 0 {
+            self.setWeightOnEveryDay()
+        }
         for i in stride(from: self.count - 1, through: 0, by: -1) {
             guard let day = self[i] else { return }
             let didUserEnterData = day.consumedCalories != 0
@@ -380,14 +390,10 @@ extension Days {
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
                 self[i]?.consumedCalories = newConsumedCalories
-                if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
-                    self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
-                }
                 self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
-            } else {
-                if let change = self[i]?.expectedWeightChangeBasedOnDeficit {
-                    self[i]?.expectedWeight = yesterday.expectedWeight + change
-                }
+            }
+            if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
+                self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
             }
         }
         print(self)
@@ -555,4 +561,8 @@ extension Days {
         }
         return nil
     }
+}
+
+#Preview("Missing data issue") {
+    FitnessPreviewProvider.missingDataIssue()
 }

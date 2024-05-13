@@ -157,6 +157,9 @@
 		E967015E2AFEBB5A0059E55C /* FitnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */; };
 		E96701602AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */; };
 		E99B514B2BE435EC002CEB48 /* missingDataIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E99B514A2BE435EC002CEB48 /* missingDataIssue.json */; };
+		E99B51512BE564F1002CEB48 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
+		E99B51522BE56C18002CEB48 /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D45225BB6605007C40ED /* FitnessView.swift */; };
+		E99B51532BE56C6D002CEB48 /* WeightLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E5F00C2925D92F00ADF691 /* WeightLineChart.swift */; };
 		E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE68722AD5A60F00320684 /* DayUnitTests.swift */; };
 		E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
 		E9F83AD929D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
@@ -319,6 +322,7 @@
 		E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E99B514A2BE435EC002CEB48 /* missingDataIssue.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingDataIssue.json; sourceTree = "<group>"; };
 		E99B514F2BE446ED002CEB48 /* missingDataIssue.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = missingDataIssue.PNG; sourceTree = "<group>"; };
+		E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingDataIssue.swift; sourceTree = "<group>"; };
 		E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Fitness (iOS).xctestplan"; sourceTree = "<group>"; };
 		E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FitnessUITests.xctestplan; sourceTree = "<group>"; };
 		E9DE68702AD5A60F00320684 /* FitnessUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -642,6 +646,7 @@
 			children = (
 				E99B514A2BE435EC002CEB48 /* missingDataIssue.json */,
 				E99B514F2BE446ED002CEB48 /* missingDataIssue.PNG */,
+				E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */,
 			);
 			path = "Today's expected weight going up when it shouldn't";
 			sourceTree = "<group>";
@@ -939,6 +944,7 @@
 				48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */,
 				48E0E1F726041DE50037EEAF /* RingCollections.swift in Sources */,
+				E99B51512BE564F1002CEB48 /* MissingDataIssue.swift in Sources */,
 				E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */,
 				48DE1DE127A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				E901DE1D29B8111700F889D3 /* TestData.swift in Sources */,
@@ -1051,6 +1057,7 @@
 				485B992927CEC29C00C70C81 /* Settings.swift in Sources */,
 				48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */,
 				48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */,
+				E99B51532BE56C6D002CEB48 /* WeightLineChart.swift in Sources */,
 				48BD6F55274B162E0007AC15 /* WeightManager.swift in Sources */,
 				48108138278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
 				4802D495278585CF0001BE9D /* CalorieManager.swift in Sources */,
@@ -1065,6 +1072,7 @@
 				48BD6F09274B12CB0007AC15 /* FitnessAppWatch.swift in Sources */,
 				48BD6F59274B16380007AC15 /* Weight.swift in Sources */,
 				48BD6F56274B162E0007AC15 /* Day.swift in Sources */,
+				E99B51522BE56C18002CEB48 /* FitnessView.swift in Sources */,
 				48BD6F58274B16350007AC15 /* Lines.swift in Sources */,
 				48B984E12784E47700C0E93A /* ComplicationViews.swift in Sources */,
 				4832D11927835D3C00414573 /* WatchManager.swift in Sources */,

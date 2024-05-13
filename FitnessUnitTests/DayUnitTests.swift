@@ -312,7 +312,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDayAdjustment() {
-        let options: [TestDayOption] = [.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown]
+        let options: [TestDayOption] = [.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown, .testCase(.missingDataIssue)]
         days = Days.testDays(options: options)
         guard var days else {
             XCTFail()
@@ -330,6 +330,11 @@ final class DayUnitTests: XCTestCase {
                 }
             }
         }
+    }
+    
+    func testDayOfWeek() {
+        days = Days.testDays(options: [.testCase(.missingDataIssue)])
+        XCTAssertEqual(days?[0]?.dayOfWeek, "Thursday")
     }
     
     func testDecodingJSON() {

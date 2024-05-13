@@ -12,7 +12,7 @@ import WatchKit
 @main
 struct FitnessAppWatch: App {
     @State var healthData = HealthData(environment: AppEnvironmentConfig.release(nil))
-    @State var watchConnectivityWatch = WatchConnectivityWatch()
+//    @State var watchConnectivityWatch = WatchConnectivityWatch()
     
     @Environment(\.scenePhase) private var scenePhase
 
@@ -21,9 +21,9 @@ struct FitnessAppWatch: App {
             NavigationView {
                 AppViewWatch()
                     .environmentObject(healthData)
-                    .environmentObject(watchConnectivityWatch)
+//                    .environmentObject(watchConnectivityWatch)
             }.onAppear {
-                watchConnectivityWatch.setHealthData(healthData: healthData)
+//                watchConnectivityWatch.setHealthData(healthData: healthData)
 //                watchConnectivityWatch.requestHealthData()
                 let server = CLKComplicationServer.sharedInstance()
                 server.activeComplications?.forEach { complication in

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if !os(watchOS)
 struct TimeFramePicker: View {
     @Binding var selectedPeriod: Int
     var body: some View {
@@ -19,6 +20,7 @@ struct TimeFramePicker: View {
         .accessibilityIdentifier("Picker2")
     }
 }
+#endif
 
 struct FitnessView: View {
     @EnvironmentObject var healthData: HealthData
@@ -38,8 +40,9 @@ struct FitnessView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
+#if !os(watchOS)
                 TimeFramePicker(selectedPeriod: $selectedPeriod)
-                
+#endif
                 let timeFrame = TimeFrame.timeFrames[selectedPeriod]
 
                 Text("Net Energy \(timeFrame.longName)")
@@ -194,10 +197,21 @@ struct FitnessView_Previews: PreviewProvider {
 }
 
 public struct FitnessPreviewProvider {
-    static func MainPreview() -> some View {
+    static func MainPreview(options: [TestDayOption]) -> some View {
         return FitnessView()
-            .environmentObject(HealthData(environment: .debug([.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown, .testCase(.missingDataIssue)])))
+            .environmentObject(HealthData(environment: .debug(options)))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
+    }
+    
+    static func MainPreview() -> some View {
+        return FitnessView()
+            .environmentObject(HealthData(environment: .debug([.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown])))
+            .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+            .background(Color.black)
+    }
+    
+    static func missingDataIssue() -> some View {
+        MainPreview(options: [.testCase(.missingDataIssue)])
     }
 }

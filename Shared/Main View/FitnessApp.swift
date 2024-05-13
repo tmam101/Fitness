@@ -23,16 +23,16 @@ struct FitnessApp: App {
                 .environmentObject(healthData)
 //                .environmentObject(WatchConnectivityIphone())
         }.onChange(of: scenePhase) {
-            if scenePhase == .background {
-                Task {
-                    WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in
-                        print("watch connectivity iphone received \(response)")
-                    }, errorHandler: { error in
-                        print("watch connectivity iphone error \(error)")
-                    })
-//                    watchConnectivityIphone = WatchConnectivityIphone()
-                }
-            }
+//            if scenePhase == .background {
+//                Task {
+//                    WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in
+//                        print("watch connectivity iphone received \(response)")
+//                    }, errorHandler: { error in
+//                        print("watch connectivity iphone error \(error)")
+//                    })
+////                    watchConnectivityIphone = WatchConnectivityIphone()
+//                }
+//            }
         }
     }
 }
