@@ -192,7 +192,7 @@ struct FitnessView: View {
 
 struct FitnessView_Previews: PreviewProvider {
     static var previews: some View {
-        FitnessPreviewProvider.MainPreview()
+        FitnessPreviewProvider.MainPreview(options: [.dayCount(10)])
     }
 }
 
@@ -206,12 +206,12 @@ public struct FitnessPreviewProvider {
     
     static func MainPreview() -> some View {
         return FitnessView()
-            .environmentObject(HealthData(environment: .debug([.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown])))
+            .environmentObject(HealthData(environment: .debug([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .weightGoingSteadilyDown])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
     }
     
     static func missingDataIssue() -> some View {
-        MainPreview(options: [.testCase(.missingDataIssue)])
+        MainPreview(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .testCase(.missingDataIssue)])
     }
 }

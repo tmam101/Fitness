@@ -25,8 +25,9 @@ enum AppEnvironmentConfig {
 }
 
 enum TestDayOption:Equatable {
-    case missingData
+    case isMissingConsumedCalories
     case weightGoingSteadilyDown
-    case weightsOnEveryDay
+    case shouldAddWeightsOnEveryDay
+    case dayCount(Int)
     case testCase(Days.TestFiles)
 }

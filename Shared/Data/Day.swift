@@ -124,59 +124,42 @@ extension Days {
         var missingData = false
         var weightsOnEveryDay = false
         var weightGoingSteadilyDown = false
+        var dayCount = 30 /*activeCalories.count - 1*/
         if let options {
             for option in options {
                 switch option {
-                case .missingData:
+                case .isMissingConsumedCalories:
                     missingData = true
                 case .weightGoingSteadilyDown:
                     weightGoingSteadilyDown = true
-                case .weightsOnEveryDay:
+                case .shouldAddWeightsOnEveryDay:
                     weightsOnEveryDay = true
                 case .testCase(let file):
                     switch file {
                     case .missingDataIssue:
-                        var days = Days.decode(path: file.rawValue) ?? [:] // TODO
+                        var days: Days = Days.decode(path: .missingDataIssue) ?? [:] // TODO
                         days.completelyFormat(options: options)
                         return days
                     }
+                case .dayCount(let count):
+                    dayCount = count
                 }
             }
         }
-        return testDays(missingData: missingData, weightsOnEveryDay: weightsOnEveryDay)
+        return testDays(missingData: missingData, weightsOnEveryDay: weightsOnEveryDay, dayCount: dayCount)
     }
     
     static func testDays(missingData: Bool = false, weightsOnEveryDay: Bool = true, dayCount: Int? = nil) -> Days {
         var days: Days = [:]
-        let activeCalories: [Double] = [
-            530.484, 426.822, 401.081, 563.949, 329.136, 304.808, 1045.074, 447.229, 1140.485, 287.526,
-            664.498, 729.646, 141.281, 137.878, 185.565, 524.932, 387.086, 206.355, 895.737, 161.954,
-            619.241, 624.191, 284.112, 272.095, 840.536, 158.428, 443.622, 264.205, 1025.872, 394.575,
-            135.940, 696.240, 976.788, 383.816, 1057.616, 1056.868, 741.806, 1145.090, 514.840, 674.655,
-            620.510, 1151.488, 696.858, 724.303, 953.539, 117.319, 207.876, 884.699, 672.569, 659.526,
-            366.072, 672.032, 536.885, 1075.278, 705.510, 362.428, 1157.047, 376.990, 808.443, 1141.884,
-            1047.608, 927.059, 1001.858, 364.928, 694.303, 241.747, 852.663, 564.521, 585.509, 970.332
-        ]
+        guard
+            let activeCalories: [Double] = .decode(path: .activeCalories),
+            let restingCalories: [Double] = .decode(path: .restingCalories),
+            let consumedCalories: [Double] = .decode(path: .consumedCalories),
+            let upAndDownWeights: [Double] = .decode(path: .upAndDownWeights)
+        else {
+            return days
+        }
 
-        let restingCalories: [Double] = [
-            2076.454, 2042.446, 2287.673, 2278.498, 2064.136, 2185.697, 2255.600, 2064.478, 2042.546, 2260.872,
-            2225.101, 2077.174, 2081.573, 2014.575, 2253.578, 2125.535, 2238.620, 2123.777, 2027.833, 2075.052,
-            2122.309, 2210.026, 2248.741, 2248.441, 2267.896, 2167.579, 2196.028, 2296.148, 2187.730, 2266.040,
-            2197.855, 2284.924, 2171.021, 2108.903, 2283.985, 2010.677, 2256.032, 2193.350, 2159.414, 2290.834,
-            2242.151, 2097.752, 2233.537, 2061.468, 2020.333, 2141.652, 2029.953, 2249.580, 2207.639, 2058.964,
-            2149.820, 2172.519, 2156.872, 2278.420, 2298.363, 2181.238, 2224.319, 2047.811, 2173.178, 2069.339,
-            2021.752, 2110.388, 2000.413, 2077.071, 2065.038, 2006.245, 2189.875, 2002.384, 2217.719, 2081.205
-        ]
-
-        let consumedCalories: [Double] = [
-            2491.550, 2981.141, 3251.261, 1649.266, 3317.525, 2537.793, 2574.484, 1227.777, 2330.589, 1321.549,
-            3132.249, 3471.490, 1519.824, 2076.862, 2215.301, 2609.347, 2166.949, 1082.332, 1724.588, 1945.672,
-            1427.247, 1381.015, 2816.176, 1825.608, 1461.852, 1929.458, 1751.465, 3041.235, 3014.910, 2873.213,
-            2910.372, 3072.810, 2405.098, 1719.862, 1245.969, 2901.889, 3357.390, 3147.907, 3123.125, 2441.369,
-            1885.750, 2087.456, 3344.863, 1501.685, 1602.111, 1317.179, 3303.113, 2179.775, 2354.898, 2076.150,
-            1421.452, 1353.783, 1045.187, 1021.009, 1692.573, 2551.751, 1461.937, 2777.730, 3489.914, 3388.308,
-            2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 3190.687, 1800.286, 2217.806, 2354.423, 1334.216
-        ] 
         
 //        let missingConsumedCalories: [Double] = consumedCalories.map { _ in 0.0 }
         let missingConsumedCalories: [Double] = [
@@ -188,14 +171,6 @@ extension Days {
             1421.452, 1353.783, 1045.187, 1021.009, 1692.573, 2551.751, 1461.937, 2777.730, 3489.914, 3388.308,
             2419.659, 2304.889, 1025.358, 1448.402, 3365.539, 0, 0, 0, 0, 2000
         ].reversed()
-        
-        let upAndDownWeights: [Double] = [
-            192.24, 187.16, 203.76, 228.98, 193.57, 204.86, 182.63, 205.87, 219.10, 196.44, 211.89, 188.68, 197.26, 183.53, 182.54,
-            216.36, 200.92, 203.68, 196.19, 183.07, 224.18, 190.32, 185.80, 229.59, 189.81, 191.09, 229.23, 197.03, 223.40, 193.45,
-            199.29, 225.76, 183.89, 218.00, 219.24, 197.93, 192.50, 196.15, 212.82, 188.09, 217.22, 181.75, 193.92, 221.66, 215.75,
-            206.40, 196.15, 196.68, 201.18, 207.69, 187.29, 210.59, 209.10, 208.64, 182.22, 180.44, 219.64, 210.07, 198.67, 195.19,
-            187.88, 198.97, 201.41, 181.73, 200.46, 184.15, 210.24, 184.27, 218.57, 207.35
-        ]
         
         let weightGoingSteadilyDown: [Double] = [
             200.00, 199.98, 200.00, 199.73, 199.64, 199.92, 199.52, 199.27, 199.20, 199.09, 198.63, 198.49, 198.76, 198.94, 199.10,
@@ -236,10 +211,10 @@ extension Days {
         self.addRunningTotalDeficits()
         self.setRealisticWeights()
         if let options {
-            if options.contains(.weightsOnEveryDay) {
+            if options.contains(.shouldAddWeightsOnEveryDay) {
                 self.setWeightOnEveryDay()
             }
-            if options.contains(.missingData) {
+            if options.contains(.isMissingConsumedCalories) {
                 self.adjustDaysWhereUserDidntEnterData()
             }
         }
@@ -352,6 +327,53 @@ extension Days {
     }
     
     // Need to look at tomorrow's weight, not yesterday's weight, right?
+//    mutating func adjustDaysWhereUserDidntEnterData() {
+//        if self.array().filter({ $0.weight == 0 }).count != 0 {
+//            self.setWeightOnEveryDay()
+//        }
+//        for i in stride(from: self.count - 1, through: 0, by: -1) {
+//            guard let day = self[i] else { return }
+//            let didUserEnterData = day.consumedCalories != 0
+//            guard let yesterday = self[i+1] else { continue }
+//            // Tomorrow
+//            guard self[i-1] != nil else {
+//                // If we're on today
+//                if !didUserEnterData {
+//                    self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
+//                } else {
+//                    if let expectedWeightChangeBasedOnDeficit = self[i]?.expectedWeightChangeBasedOnDeficit {
+//                        self[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
+//                    }
+//                }
+//                continue
+//            }
+//            if !didUserEnterData {
+//                let todaysWeightMinusYesterdaysExpectedWeight = day.weight - yesterday.expectedWeight
+//                var newConsumedCalories: Double = 0
+//                if todaysWeightMinusYesterdaysExpectedWeight < 0 {
+//                    let totalBurned = day.activeCalories + day.restingCalories
+//                    let caloriesAssumedToBeBurned = 0 - (todaysWeightMinusYesterdaysExpectedWeight * 3500)
+//                    let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
+//                    if caloriesLeftToBeBurned {
+//                        newConsumedCalories = 0
+//                    } else {
+//                        newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
+//                    }
+//                } else {
+//                    let totalBurned = day.activeCalories + day.restingCalories
+//                    let caloriesAssumedToBeEaten = (todaysWeightMinusYesterdaysExpectedWeight * 3500) + totalBurned
+//                    newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+//                }
+//                self[i]?.consumedCalories = newConsumedCalories
+//                self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+//            }
+//            if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
+//                self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
+//            }
+//        }
+//        print(self)
+//    }
+    
     mutating func adjustDaysWhereUserDidntEnterData() {
         if self.array().filter({ $0.weight == 0 }).count != 0 {
             self.setWeightOnEveryDay()
@@ -361,7 +383,7 @@ extension Days {
             let didUserEnterData = day.consumedCalories != 0
             guard let yesterday = self[i+1] else { continue }
             // Tomorrow
-            guard self[i-1] != nil else {
+            guard let tomorrow = self[i-1] else {
                 // If we're on today
                 if !didUserEnterData {
                     self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
@@ -373,11 +395,11 @@ extension Days {
                 continue
             }
             if !didUserEnterData {
-                let weightDifferenceBetweenYesterdayAndToday = day.weight - yesterday.expectedWeight
+                let weightChangecausedByToday = tomorrow.weight - day.weight
                 var newConsumedCalories: Double = 0
-                if weightDifferenceBetweenYesterdayAndToday < 0 {
+                if weightChangecausedByToday < 0 {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeBurned = 0 - (weightDifferenceBetweenYesterdayAndToday * 3500)
+                    let caloriesAssumedToBeBurned = 0 - (weightChangecausedByToday * 3500)
                     let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
                     if caloriesLeftToBeBurned {
                         newConsumedCalories = 0
@@ -386,13 +408,19 @@ extension Days {
                     }
                 } else {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeEaten = (weightDifferenceBetweenYesterdayAndToday * 3500) + totalBurned
+                    let caloriesAssumedToBeEaten = (weightChangecausedByToday * 3500) + totalBurned
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
                 self[i]?.consumedCalories = newConsumedCalories
                 self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
             }
-            if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
+            // Should make sure this isnt too high or low
+            if var expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
+                if expectedWeightChange > 0.5 {
+                    expectedWeightChange = 0.5
+                } else if expectedWeightChange < -0.5 {
+                    expectedWeightChange = -0.5
+                }
                 self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
             }
         }
@@ -521,46 +549,30 @@ extension [Day] {
 }
 
 extension Days {
-    func encodeAsString() -> String {
-        let jsonEncoder = JSONEncoder()
-        jsonEncoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
-        guard
-            let jsonData = try? jsonEncoder.encode(self),
-            let json = String(data: jsonData, encoding: String.Encoding.utf8) else {
-            return "Failed"
-        }
-        print(json)
-        return json
-    }
+//    func encodeAsString() -> String {
+//        let jsonEncoder = JSONEncoder()
+//        jsonEncoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
+//        guard
+//            let jsonData = try? jsonEncoder.encode(self),
+//            let json = String(data: jsonData, encoding: String.Encoding.utf8) else {
+//            return "Failed"
+//        }
+//        print(json)
+//        return json
+//    }
+//    
+//    func encode() -> Data? {
+//        let jsonEncoder = JSONEncoder()
+//        guard
+//            let jsonData = try? jsonEncoder.encode(self) else {
+//            return nil
+//        }
+//        return jsonData
+//    }
     
-    func encode() -> Data? {
-        let jsonEncoder = JSONEncoder()
-        guard
-            let jsonData = try? jsonEncoder.encode(self) else {
-            return nil
-        }
-        return jsonData
-    }
-    
-    static func decode(path: String) -> Days? { // Pass in options here? format in here?
-        guard
-            let path = Bundle.main.path(forResource: path, ofType: "json"),
-            let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),
-            let jsonResult = try? JSONDecoder().decode(Days.self, from: data)
-        else {
-            return nil
-        }
-        return jsonResult
-    }
-    
-    func test() -> Days? {
-        let encoded: String = self.encodeAsString()
-        if let data = encoded.data(using: .utf8) {
-            let decoded: Days? = try? JSONDecoder().decode(Days.self, from: data)
-            return decoded
-        }
-        return nil
-    }
+//    static func decode(path: String) -> Days? { // Pass in options here? format in here?
+//        Decoder<Days>.decode(path: path)
+//    }
 }
 
 #Preview("Missing data issue") {

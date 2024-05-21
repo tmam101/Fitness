@@ -149,6 +149,12 @@
 		E9391CAB29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
+		E9442CDA2BF5346000F56B43 /* activeCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E9442CD92BF5346000F56B43 /* activeCalories.json */; };
+		E951EB662BF56ABA004D3CBF /* missingConsumedCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */; };
+		E951EB672BF56ABA004D3CBF /* weightGoingSteadilyDown.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */; };
+		E951EB682BF56ABA004D3CBF /* restingCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB632BF56ABA004D3CBF /* restingCalories.json */; };
+		E951EB692BF56ABA004D3CBF /* consumedCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB642BF56ABA004D3CBF /* consumedCalories.json */; };
+		E951EB6A2BF56ABA004D3CBF /* upAndDownWeights.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB652BF56ABA004D3CBF /* upAndDownWeights.json */; };
 		E95C9B7B2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
 		E95C9B7D2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
 		E95C9B7F2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
@@ -160,6 +166,9 @@
 		E99B51512BE564F1002CEB48 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
 		E99B51522BE56C18002CEB48 /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D45225BB6605007C40ED /* FitnessView.swift */; };
 		E99B51532BE56C6D002CEB48 /* WeightLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E5F00C2925D92F00ADF691 /* WeightLineChart.swift */; };
+		E99F347E2BF6A45C004E84C0 /* CodableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */; };
+		E99F347F2BF6A45C004E84C0 /* CodableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */; };
+		E99F34802BF6A45C004E84C0 /* CodableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */; };
 		E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE68722AD5A60F00320684 /* DayUnitTests.swift */; };
 		E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
 		E9F83AD929D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
@@ -315,6 +324,12 @@
 		E90086C92AD8935A000F77B8 /* TimeFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFrame.swift; sourceTree = "<group>"; };
 		E901DE1C29B8111700F889D3 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		E9442CD92BF5346000F56B43 /* activeCalories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = activeCalories.json; sourceTree = "<group>"; };
+		E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = missingConsumedCalories.json; sourceTree = "<group>"; };
+		E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weightGoingSteadilyDown.json; sourceTree = "<group>"; };
+		E951EB632BF56ABA004D3CBF /* restingCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = restingCalories.json; sourceTree = "<group>"; };
+		E951EB642BF56ABA004D3CBF /* consumedCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = consumedCalories.json; sourceTree = "<group>"; };
+		E951EB652BF56ABA004D3CBF /* upAndDownWeights.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = upAndDownWeights.json; sourceTree = "<group>"; };
 		E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUnitTests.swift; sourceTree = "<group>"; };
 		E967015B2AFEBB5A0059E55C /* FitnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -323,6 +338,7 @@
 		E99B514A2BE435EC002CEB48 /* missingDataIssue.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingDataIssue.json; sourceTree = "<group>"; };
 		E99B514F2BE446ED002CEB48 /* missingDataIssue.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = missingDataIssue.PNG; sourceTree = "<group>"; };
 		E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingDataIssue.swift; sourceTree = "<group>"; };
+		E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableExtension.swift; sourceTree = "<group>"; };
 		E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Fitness (iOS).xctestplan"; sourceTree = "<group>"; };
 		E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FitnessUITests.xctestplan; sourceTree = "<group>"; };
 		E9DE68702AD5A60F00320684 /* FitnessUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -435,6 +451,7 @@
 		48821CAF25B8BF3600C9F58A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E9442CD82BF5343200F56B43 /* Test Data */,
 				E99B514C2BE4468F002CEB48 /* Test Case JSON Files */,
 				48E0E20826041E4A0037EEAF /* Main View */,
 				48E0E20926041E550037EEAF /* Data */,
@@ -505,6 +522,7 @@
 				4802D49627875B7F0001BE9D /* ViewExtension.swift */,
 				485B992527CEC29C00C70C81 /* Settings.swift */,
 				E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */,
+				E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -622,6 +640,19 @@
 				48BD6E69274AFA730007AC15 /* Line Graphs */,
 			);
 			path = Old;
+			sourceTree = "<group>";
+		};
+		E9442CD82BF5343200F56B43 /* Test Data */ = {
+			isa = PBXGroup;
+			children = (
+				E9442CD92BF5346000F56B43 /* activeCalories.json */,
+				E951EB642BF56ABA004D3CBF /* consumedCalories.json */,
+				E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */,
+				E951EB632BF56ABA004D3CBF /* restingCalories.json */,
+				E951EB652BF56ABA004D3CBF /* upAndDownWeights.json */,
+				E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */,
+			);
+			path = "Test Data";
 			sourceTree = "<group>";
 		};
 		E967015C2AFEBB5A0059E55C /* FitnessUITests */ = {
@@ -874,7 +905,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E951EB682BF56ABA004D3CBF /* restingCalories.json in Resources */,
+				E951EB6A2BF56ABA004D3CBF /* upAndDownWeights.json in Resources */,
 				487A95192640F97500627BA3 /* strong.json in Resources */,
+				E951EB672BF56ABA004D3CBF /* weightGoingSteadilyDown.json in Resources */,
+				E951EB662BF56ABA004D3CBF /* missingConsumedCalories.json in Resources */,
+				E9442CDA2BF5346000F56B43 /* activeCalories.json in Resources */,
+				E951EB692BF56ABA004D3CBF /* consumedCalories.json in Resources */,
 				E99B514B2BE435EC002CEB48 /* missingDataIssue.json in Resources */,
 				48821CDD25B8BF3800C9F58A /* Assets.xcassets in Resources */,
 			);
@@ -957,6 +994,7 @@
 				48EE132A2738C3E700128623 /* Run.swift in Sources */,
 				4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */,
 				48D7995D25B8C7950047C8E0 /* Progress Rings.swift in Sources */,
+				E99F347E2BF6A45C004E84C0 /* CodableExtension.swift in Sources */,
 				48EC266A25B8D1280003B455 /* WeightManager.swift in Sources */,
 				485B992627CEC29C00C70C81 /* Settings.swift in Sources */,
 				48108136278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
@@ -1014,6 +1052,7 @@
 				485B72992631EBD70070E096 /* Lines.swift in Sources */,
 				48199FB92628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44F262619DE002321B5 /* Environment.swift in Sources */,
+				E99F347F2BF6A45C004E84C0 /* CodableExtension.swift in Sources */,
 				4805D29A2925B989009F1F47 /* NetEnergyBarChart.swift in Sources */,
 				4803BEA3271F1AB500882BCC /* Day.swift in Sources */,
 				48E0E21926041F3D0037EEAF /* TextCollections.swift in Sources */,
@@ -1080,6 +1119,7 @@
 				48BD6F4D274B16190007AC15 /* DoubleExtension.swift in Sources */,
 				48BD6F43274B15FD0007AC15 /* LineGraph.swift in Sources */,
 				E9391CAE29AD205200D09252 /* TodayView.swift in Sources */,
+				E99F34802BF6A45C004E84C0 /* CodableExtension.swift in Sources */,
 				48BD6F45274B16040007AC15 /* LiftingLineGraph.swift in Sources */,
 				48108127278A0FA8008E9AE6 /* WatchConnectivityWatch.swift in Sources */,
 				4810812E278A34A8008E9AE6 /* AppViewWatch.swift in Sources */,

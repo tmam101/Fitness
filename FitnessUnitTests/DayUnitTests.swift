@@ -312,7 +312,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDayAdjustment() {
-        let options: [TestDayOption] = [.weightsOnEveryDay, .missingData, .weightGoingSteadilyDown, .testCase(.missingDataIssue)]
+        let options: [TestDayOption] = [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .weightGoingSteadilyDown, .testCase(.missingDataIssue)]
         days = Days.testDays(options: options)
         guard var days else {
             XCTFail()
@@ -338,8 +338,44 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testDecodingJSON() {
-        let days = Days.decode(path: "String")
+        days = Days.decode(path: .missingDataIssue)
         XCTAssertNotNil(days)
+    }
+    
+    func testEncodingJSON() {
+        days = Days.decode(path: .missingDataIssue)
+        XCTAssertNotNil(days.encodeAsString())
+    }
+    
+    func testMissingDataIssue() {
+        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .testCase(.missingDataIssue)])
+        guard let days else {
+            XCTFail()
+            return
+        }
+        for i in stride(from: days.count - 1, through: 0, by: -1) {
+            if let tomorrow = days[i-1], let yesterday = days[i+1], let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
+                XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, tomorrow.weight - day.weight)
+            }
+        }
+        // Thursday [0]: No food logged
+        // expected weight today is based on yesterday's net energy
+        //
+        // Wednesday [1]: No food logged
+        // net energy is based on the day before
+        //
+        // Tuesday [2]: Food is logged
+        
+        // Monday [3] no food logged
+        
+        // Sunday had a net energy of -1691, so Monday's expected weight should have gone down. Why didn't it?
+        // It was probably trying to adjust to reach the weight line. But it shouldn't do that if we have data from yesterday, right?
+        
+        
+        
+        // Should the yellow line go up to meet the green line, then match it? Or should it follow the exact same pattern as the green line?
+        
+
     }
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays
