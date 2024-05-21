@@ -108,12 +108,7 @@ class HealthData: ObservableObject {
                 self.days = calorieManager.days
                 print("JSON of days dictionary: \n")
                 print(days.encodeAsString())
-                if options?.contains(.shouldAddWeightsOnEveryDay) ?? false {
-                    days.setWeightOnEveryDay()
-                }
-                if options?.contains(.isMissingConsumedCalories) ?? false {
-                    days.adjustDaysWhereUserDidntEnterData()
-                }
+                days.formatAccordingTo(options: options)
                 self.hasLoaded = true
                 self.realisticWeights = realisticWeights
             }

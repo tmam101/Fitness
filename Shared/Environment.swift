@@ -24,10 +24,25 @@ enum AppEnvironmentConfig {
     case widgetRelease
 }
 
-enum TestDayOption:Equatable {
-    case isMissingConsumedCalories
+enum TestDayOption: Equatable {
+    case isMissingConsumedCalories(MissingConsumedCaloriesStrategy)
     case weightGoingSteadilyDown
     case shouldAddWeightsOnEveryDay
     case dayCount(Int)
     case testCase(Days.TestFiles)
+    
+    enum MissingConsumedCaloriesStrategy {
+        case v1
+        case v2
+    }
+}
+
+struct TestOptionModel {
+    // Default values for options
+    var missingData = false
+    var isMissingConsumedCalories: TestDayOption
+}
+
+extension [TestDayOption] {
+    
 }

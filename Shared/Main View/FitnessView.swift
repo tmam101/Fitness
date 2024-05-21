@@ -206,12 +206,8 @@ public struct FitnessPreviewProvider {
     
     static func MainPreview() -> some View {
         return FitnessView()
-            .environmentObject(HealthData(environment: .debug([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .weightGoingSteadilyDown])))
+            .environmentObject(HealthData(environment: .debug([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v1), .weightGoingSteadilyDown])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
-    }
-    
-    static func missingDataIssue() -> some View {
-        MainPreview(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .testCase(.missingDataIssue)])
     }
 }

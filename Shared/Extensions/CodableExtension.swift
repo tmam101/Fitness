@@ -8,10 +8,6 @@
 import Foundation
 
 extension Decodable {
-//    static func decode(path: String) -> Self? {
-//        return decodeFromFile(path: path)
-//    }
-    
     fileprivate static func decodeFromFile<T: Decodable>(path: String) -> T? {
         guard
             let path = Bundle.main.path(forResource: path, ofType: "json"),
@@ -30,6 +26,8 @@ enum Filepath {
         case restingCalories
         case consumedCalories
         case upAndDownWeights
+        case missingConsumedCalories
+        case weightGoingSteadilyDown
     }
     enum Days: String {
         case missingDataIssue

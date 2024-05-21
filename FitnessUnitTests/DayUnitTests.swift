@@ -26,6 +26,20 @@ final class DayUnitTests: XCTestCase {
         super.tearDown()
     }
     
+    func testDecoding() {
+        guard
+            let activeCalories: [Double] = .decode(path: .activeCalories),
+            let restingCalories: [Double] = .decode(path: .restingCalories),
+            let consumedCalories: [Double] = .decode(path: .consumedCalories),
+            let upAndDownWeights: [Double] = .decode(path: .upAndDownWeights),
+            let missingConsumedCalories: [Double] = .decode(path: .missingConsumedCalories),
+            let weightsGoingSteadilyDown: [Double] = .decode(path: .weightGoingSteadilyDown)
+        else {
+            XCTFail()
+            return
+        }
+    }
+    
     func testAverage() {
         days = Days.testDays()
         guard let days else { 
@@ -267,7 +281,7 @@ final class DayUnitTests: XCTestCase {
     func testEveryDayHasWeight() {
         
         for _ in 0...100 {
-            days = Days.testDays(weightsOnEveryDay: false)
+            days = Days.testDays()
             guard var days else { 
                 XCTFail()
                 return
@@ -312,7 +326,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDayAdjustment() {
-        let options: [TestDayOption] = [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .weightGoingSteadilyDown, .testCase(.missingDataIssue)]
+        let options: [TestDayOption] = [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v1), .weightGoingSteadilyDown, .testCase(.missingDataIssue)]
         days = Days.testDays(options: options)
         guard var days else {
             XCTFail()
@@ -348,7 +362,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDataIssue() {
-        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories, .testCase(.missingDataIssue)])
+        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v1), .testCase(.missingDataIssue)])
         guard let days else {
             XCTFail()
             return

@@ -146,6 +146,8 @@
 		E901DE1F29B8111700F889D3 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901DE1C29B8111700F889D3 /* TestData.swift */; };
 		E901DE2129B8111700F889D3 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901DE1C29B8111700F889D3 /* TestData.swift */; };
 		E91D3F4B2AD5D25A001E1397 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
+		E924B7662BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
+		E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
 		E9391CAB29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
@@ -1049,6 +1051,7 @@
 				485B992727CEC29C00C70C81 /* Settings.swift in Sources */,
 				48108137278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
 				48813F5A2798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
+				E924B7662BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */,
 				485B72992631EBD70070E096 /* Lines.swift in Sources */,
 				48199FB92628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44F262619DE002321B5 /* Environment.swift in Sources */,
@@ -1107,6 +1110,7 @@
 				48BD6F48274B160F0007AC15 /* Progress Rings.swift in Sources */,
 				48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */,
 				48BD6F47274B16080007AC15 /* RingCollections.swift in Sources */,
+				E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */,
 				48BD6F44274B16010007AC15 /* RunningLineGraph.swift in Sources */,
 				48BD6F09274B12CB0007AC15 /* FitnessAppWatch.swift in Sources */,
 				48BD6F59274B16380007AC15 /* Weight.swift in Sources */,
