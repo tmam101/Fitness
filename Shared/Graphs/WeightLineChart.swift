@@ -82,6 +82,7 @@ struct WeightLineChart: View {
                     .foregroundStyle(.yellow)
                     .symbolSize(10)
                 }
+                
                 // Expected weight tomorrow
                 if day.daysAgo <= 0 {
                     LineMark(x: .value("Days ago", day.date),
@@ -96,6 +97,7 @@ struct WeightLineChart: View {
                     .symbolSize(10)
                     .opacity(0.3)
                 }
+                
                 // Weight
                 if day.weight != 0 {
                     LineMark(x: .value("Days ago", day.date),
@@ -110,6 +112,22 @@ struct WeightLineChart: View {
                     .foregroundStyle(.green)
                     .symbolSize(10)
                     .opacity(0.5)
+                }
+                
+                // Realistic weights
+                if day.weight != 0 {
+                    LineMark(x: .value("Days ago", day.date),
+                             y: .value("Real Weight", day.realisticWeight),
+                             series: .value("Weight", "D"))
+                    .foregroundStyle(.purple)
+                    .opacity(0.3)
+                    
+                    PointMark(
+                        x: .value("Days ago", day.date),
+                        y: .value("Real Weight", day.realisticWeight))
+                    .foregroundStyle(.purple)
+                    .symbolSize(10)
+                    .opacity(0.3)
                 }
             }
             .chartYAxis {
@@ -133,10 +151,10 @@ struct WeightLineChart: View {
     }
 }
 
-struct WeightLineChart_Previews: PreviewProvider {
-    static var previews: some View {
-        WeightLineChart(health: HealthData(environment: .debug(nil)), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
-            .mainBackground()
-        FitnessPreviewProvider.MainPreview()
-    }
-}
+//struct WeightLineChart_Previews: PreviewProvider {
+//    static var previews: some View {
+////        WeightLineChart(health: HealthData(environment: .debug(nil)), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
+////            .mainBackground()
+////        FitnessPreviewProvider.MainPreview()
+//    }
+//}

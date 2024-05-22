@@ -192,7 +192,8 @@ struct FitnessView: View {
 
 struct FitnessView_Previews: PreviewProvider {
     static var previews: some View {
-        FitnessPreviewProvider.MainPreview(options: [.dayCount(10)])
+        FitnessPreviewProvider.MainPreview()
+//        FitnessPreviewProvider.MainPreview(options: [.dayCount(10)])
     }
 }
 
