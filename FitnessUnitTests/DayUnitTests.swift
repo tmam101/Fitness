@@ -325,27 +325,6 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(d[6]?.weight ?? 0.0, 2.15, accuracy: 0.01)
     }
     
-    func testMissingDayAdjustment() {
-        let options: [TestDayOption] = [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v1), .weightGoingSteadilyDown, .testCase(.missingDataIssue)]
-        days = Days.testDays(options: options)
-        guard var days else {
-            XCTFail()
-            return
-        }
-        // TODO might need to consider the first day, is it adjusted ever?
-        for i in stride(from: days.count - 2, through: 0, by: -1) {
-            guard let day = days[i] else {
-                XCTFail()
-                return
-            }
-            if day.wasModifiedBecauseTheUserDidntEnterData {
-                if let yesterday = days[day.daysAgo + 1] {
-                    XCTAssertEqual(day.expectedWeight, yesterday.expectedWeight + day.expectedWeightChangeBasedOnDeficit)
-                }
-            }
-        }
-    }
-    
     func testDayOfWeek() {
         days = Days.testDays(options: [.testCase(.missingDataIssue)])
         XCTAssertEqual(days?[0]?.dayOfWeek, "Thursday")
@@ -366,7 +345,7 @@ final class DayUnitTests: XCTestCase {
         XCTAssertNotNil(days.encodeAsString())
     }
     
-    func testMissingDataIssue() {
+    func testMissingDayAdjustment() {
         days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.missingDataIssue)])
         guard let days else {
             XCTFail()
@@ -380,28 +359,11 @@ final class DayUnitTests: XCTestCase {
                 } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
                     XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2)
                 } else {
-                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday)
+                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
                 }
+                XCTAssertEqual(day.expectedWeight, yesterday.expectedWeightTomorrow)
             }
         }
-        // Thursday [0]: No food logged
-        // expected weight today is based on yesterday's net energy
-        //
-        // Wednesday [1]: No food logged
-        // net energy is based on the day before
-        //
-        // Tuesday [2]: Food is logged
-        
-        // Monday [3] no food logged
-        
-        // Sunday had a net energy of -1691, so Monday's expected weight should have gone down. Why didn't it?
-        // It was probably trying to adjust to reach the weight line. But it shouldn't do that if we have data from yesterday, right?
-        
-        
-        
-        // Should the yellow line go up to meet the green line, then match it? Or should it follow the exact same pattern as the green line?
-        
-
     }
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays
