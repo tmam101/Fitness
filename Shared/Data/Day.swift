@@ -188,8 +188,11 @@ extension Days {
     
     mutating func formatAccordingTo(options: [TestDayOption]?) {
         self.addRunningTotalDeficits()
-        self.setRealisticWeights()
         if let options {
+            if options.contains(.shouldAddWeightsOnEveryDay) {
+                self.setWeightOnEveryDay()
+            }
+            self.setRealisticWeights()
             for option in options {
                 switch option {
                 case .isMissingConsumedCalories(let version):
@@ -201,12 +204,12 @@ extension Days {
                     case .v3:
                         self.adjustDaysWhereUserDidntEnterDatav3()
                     }
-                case .shouldAddWeightsOnEveryDay:
-                    self.setWeightOnEveryDay()
-                case .testCase(_), .dayCount(_), .weightGoingSteadilyDown:
-                    return
+                case .testCase(_), .dayCount(_), .weightGoingSteadilyDown, .shouldAddWeightsOnEveryDay:
+                    continue
                 }
             }
+        } else {
+            self.setRealisticWeights()
         }
     }
     
@@ -269,7 +272,7 @@ extension Days {
             guard let previousDay = self[i + 1] else { continue }
             
             // Calculate the realistic weight difference
-            let realWeightDifference = (currentDay.weight - previousDay.weight)
+            let realWeightDifference = (currentDay.weight - previousDay.realisticWeight)
             var adjustedWeightDifference = realWeightDifference
             
             // Adjust the weight difference based on the maximum allowed change per day
@@ -280,7 +283,7 @@ extension Days {
             }
             
             // Set the realistic weight for the current day
-            self[i]?.realisticWeight = previousDay.weight + adjustedWeightDifference
+            self[i]?.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
         }
     }
     
@@ -420,6 +423,9 @@ extension Days {
     
     mutating func adjustDaysWhereUserDidntEnterDatav3() {
         if self.array().filter({ $0.weight == 0 }).count != 0 {
+            self.setWeightOnEveryDay()
+        }
+        if self.array().filter({ $0.realisticWeight == 0 }).count != 0 {
             self.setWeightOnEveryDay()
         }
         for i in stride(from: self.count - 1, through: 0, by: -1) {

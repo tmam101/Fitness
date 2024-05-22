@@ -81,9 +81,12 @@ struct WeightLineChart: View {
                         y: .value("Expected Weight", day.expectedWeight))
                     .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
                     .symbolSize(10)
-//                    .annotation(position: .overlay, alignment: .bottom, spacing: 10) {
-//                        Text("\(day.dayOfWeek.prefix(1))")
-//                    }
+                    .annotation(position: .overlay, alignment: .bottom, spacing: 5) {
+                        Text("\(day.dayOfWeek.prefix(1))")
+                            .foregroundStyle(.yellow)
+                            .fontWeight(.light)
+                            .font(.system(size: 10))
+                    }
                 }
                 
                 // Expected weight tomorrow
@@ -122,15 +125,15 @@ struct WeightLineChart: View {
                     LineMark(x: .value("Days ago", day.date),
                              y: .value("Real Weight", day.realisticWeight),
                              series: .value("Weight", "D"))
-                    .foregroundStyle(.purple)
-                    .opacity(0.3)
+                    .foregroundStyle(.green)
+                    .opacity(0.2)
                     
                     PointMark(
                         x: .value("Days ago", day.date),
                         y: .value("Real Weight", day.realisticWeight))
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(.green)
                     .symbolSize(10)
-                    .opacity(0.3)
+                    .opacity(0.2)
                 }
             }
             .chartYAxis {

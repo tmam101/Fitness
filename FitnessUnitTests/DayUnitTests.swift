@@ -352,18 +352,40 @@ final class DayUnitTests: XCTestCase {
             return
         }
         for i in stride(from: days.count - 1, through: 0, by: -1) {
-            if let tomorrow = days[i-1], let yesterday = days[i+1], let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
-                let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
-                if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
-                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2)
-                } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
-                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2)
-                } else {
-                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
+            if let yesterday = days[i+1], let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
+                if let tomorrow = days[i-1] {
+                    let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
+                    if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
+                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2)
+                    } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
+                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2)
+                    } else {
+                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
+                    }
                 }
                 XCTAssertEqual(day.expectedWeight, yesterday.expectedWeightTomorrow)
             }
         }
+    }
+    
+    func testSettingRealisticWeights() {
+        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
+        guard let days else {
+            XCTFail()
+            return
+        }
+        let realisticWeights = days.array().map { $0.realisticWeight }
+        let expectedWeights = days.array().map { $0.expectedWeight }
+        let numberOfDaysWithNoRealisticWeight = realisticWeights.filter { $0 == 0 }.count
+        let numberOfDaysWithBadExpectedWeights = expectedWeights.filter { $0 < 220 }.count
+        XCTAssertEqual(numberOfDaysWithNoRealisticWeight, 0)
+        XCTAssertEqual(numberOfDaysWithBadExpectedWeights, 0)
+        for i in stride(from: days.count - 1, through: 0, by: -1) {
+            if let tomorrow = days[i-1], let yesterday = days[i+1], let day = days[i] {
+                XCTAssert(abs(day.realisticWeight - yesterday.realisticWeight) <= 0.2 )
+            }
+        }
+        
     }
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays
