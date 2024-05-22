@@ -351,8 +351,13 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days?[0]?.dayOfWeek, "Thursday")
     }
     
-    func testDecodingJSON() {
+    func testDecodingMissingDataIssue() {
         days = Days.decode(path: .missingDataIssue)
+        XCTAssertNotNil(days)
+    }
+    
+    func testDecodingRealisticWeightsIssue() {
+        days = Days.decode(path: .realisticWeightsIssue)
         XCTAssertNotNil(days)
     }
     

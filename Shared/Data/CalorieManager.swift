@@ -135,9 +135,9 @@ class CalorieManager: ObservableObject {
     }
     
     /// Get day information for the past amount of days. Runningtotaldeficit will start from the first day here.
-    func getDays(forPastDays days: Int, dealWithWeights: Bool = true) async -> Days {
-        var dayInformation: Days = [:]
-        for i in stride(from: days, through: 0, by: -1) {
+    func getDays(forPastDays numberOfDays: Int, dealWithWeights: Bool = true) async -> Days {
+        var days: Days = [:]
+        for i in stride(from: numberOfDays, through: 0, by: -1) {
             let protein = await sumValueForDay(daysAgo: i, forType: .dietaryProtein)
             let measuredActive = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
             let measuredResting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
@@ -147,7 +147,7 @@ class CalorieManager: ObservableObject {
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
             // TODO figure out runningtotaldeficit
-            let expectedWeight = dealWithWeights ? ((weightManager?.startingWeight ?? 0) - (i == days ? 0 : (dayInformation[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
+            let expectedWeight = dealWithWeights ? ((weightManager?.startingWeight ?? 0) - (i == numberOfDays ? 0 : (days[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
 
             var day = Day(date: date,
                           daysAgo: i,
@@ -159,23 +159,23 @@ class CalorieManager: ObservableObject {
                           expectedWeight: expectedWeight,
                           protein: protein)
             
-            let runningTotalDeficit = i == days ? day.deficit : dayInformation[i+1]!.runningTotalDeficit + day.deficit
+            let runningTotalDeficit = i == numberOfDays ? day.deficit : days[i+1]!.runningTotalDeficit + day.deficit
             day.runningTotalDeficit = runningTotalDeficit
             
             //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
             if !allowThreeDaysOfFasting {
                 if i < daysBetweenStartAndNow - 1 {
-                    if dayInformation[i]?.consumedCalories == 0 &&
-                        dayInformation[i+1]?.consumedCalories == 0 &&
-                        dayInformation[i+2]?.consumedCalories == 0 {
+                    if days[i]?.consumedCalories == 0 &&
+                        days[i+1]?.consumedCalories == 0 &&
+                        days[i+2]?.consumedCalories == 0 {
                         return [:]
                     }
                 }
             }
-            dayInformation[i] = day
+            days[i] = day
 //            print("day \(i): \(day)")
-            if dayInformation.count == days + 1 {
-                return dayInformation
+            if days.count == numberOfDays + 1 {
+                return days
             }
         }
         return [:]

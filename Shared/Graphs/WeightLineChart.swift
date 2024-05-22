@@ -79,8 +79,11 @@ struct WeightLineChart: View {
                     PointMark(
                         x: .value("Days ago", day.date),
                         y: .value("Expected Weight", day.expectedWeight))
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
                     .symbolSize(10)
+//                    .annotation(position: .overlay, alignment: .bottom, spacing: 10) {
+//                        Text("\(day.dayOfWeek.prefix(1))")
+//                    }
                 }
                 
                 // Expected weight tomorrow

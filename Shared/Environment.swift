@@ -29,11 +29,12 @@ enum TestDayOption: Equatable {
     case weightGoingSteadilyDown
     case shouldAddWeightsOnEveryDay
     case dayCount(Int)
-    case testCase(Days.TestFiles)
+    case testCase(Filepath.Days)
     
     enum MissingConsumedCaloriesStrategy {
         case v1
         case v2
+        case v3
     }
 }
 

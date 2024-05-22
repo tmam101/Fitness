@@ -26,3 +26,7 @@ extension FitnessPreviewProvider {
     FitnessPreviewProvider.missingDataIssue(.v2)
 }
 
+#Preview("Missing calories v3") {
+    FitnessPreviewProvider.missingDataIssue(.v3)
+}
+

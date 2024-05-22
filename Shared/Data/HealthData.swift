@@ -110,7 +110,7 @@ class HealthData: ObservableObject {
                 print(days.encodeAsString())
                 days.formatAccordingTo(options: options)
                 self.hasLoaded = true
-                self.realisticWeights = realisticWeights
+//                self.realisticWeights = realisticWeights
             }
             
             // Post the last thirty days. Larger amounts seem to be too much for the network.

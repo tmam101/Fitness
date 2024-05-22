@@ -31,6 +31,7 @@ enum Filepath {
     }
     enum Days: String {
         case missingDataIssue
+        case realisticWeightsIssue
     }
 }
 
@@ -55,7 +56,6 @@ extension Encodable {
             let json = String(data: jsonData, encoding: String.Encoding.utf8) else {
             return "Failed"
         }
-        print(json)
         return json
     }
     

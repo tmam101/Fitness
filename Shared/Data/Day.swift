@@ -115,9 +115,10 @@ typealias Days = [Int:Day]
 
 extension Days {
     
-    enum TestFiles: String {
-        case missingDataIssue = "missingDataIssue"
-    }
+//    enum TestFiles: String {
+//        case missingDataIssue = "missingDataIssue"
+//        case realisticWeightsIssue = "realisticWeightsIssue"
+//    }
     // TODO Function for adding a new day that pushes everything forward a day
     static func testDays() -> Days {
         testDays(options: nil)
@@ -151,12 +152,9 @@ extension Days {
                 case .shouldAddWeightsOnEveryDay:
                     weightsOnEveryDay = true
                 case .testCase(let file):
-                    switch file {
-                    case .missingDataIssue:
-                        var days: Days = Days.decode(path: .missingDataIssue) ?? [:] // TODO
-                        days.formatAccordingTo(options: options)
-                        return days
-                    }
+                    var days: Days = Days.decode(path: file) ?? [:] // TODO
+                    days.formatAccordingTo(options: options)
+                    return days
                 case .dayCount(let count):
                     dayCount = count
                 }
@@ -200,6 +198,8 @@ extension Days {
                         self.adjustDaysWhereUserDidntEnterData()
                     case .v2:
                         self.adjustDaysWhereUserDidntEnterDatav2()
+                    case .v3:
+                        self.adjustDaysWhereUserDidntEnterDatav3()
                     }
                 case .shouldAddWeightsOnEveryDay:
                     self.setWeightOnEveryDay()
@@ -275,10 +275,8 @@ extension Days {
             // Adjust the weight difference based on the maximum allowed change per day
             if adjustedWeightDifference < -maximumWeightChangePerDay  {
                 adjustedWeightDifference = -maximumWeightChangePerDay
-//                adjustedWeightDifference = Swift.min(-maximumWeightChangePerDay, previousDay.expectedWeightChangeBasedOnDeficit)
             } else if adjustedWeightDifference > maximumWeightChangePerDay {
                 adjustedWeightDifference = maximumWeightChangePerDay
-//                adjustedWeightDifference = Swift.max(maximumWeightChangePerDay, previousDay.expectedWeightChangeBasedOnDeficit)
             }
             
             // Set the realistic weight for the current day
@@ -415,6 +413,56 @@ extension Days {
                     expectedWeightChange = -0.5
                 }
                 self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
+            }
+        }
+        print(self)
+    }
+    
+    mutating func adjustDaysWhereUserDidntEnterDatav3() {
+        if self.array().filter({ $0.weight == 0 }).count != 0 {
+            self.setWeightOnEveryDay()
+        }
+        for i in stride(from: self.count - 1, through: 0, by: -1) {
+            guard let day = self[i] else { return }
+            let didUserEnterData = day.consumedCalories != 0
+            guard let yesterday = self[i+1] else { continue }
+            // If we're on today
+            guard let tomorrow = self[i-1] else {
+                if !didUserEnterData {
+                    self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
+                } else {
+                    if let expectedWeightChangeBasedOnDeficit = self[i]?.expectedWeightChangeBasedOnDeficit {
+                        self[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
+                    }
+                }
+                continue
+            }
+            // If the user didnt enter data today
+            // We want to see what the realistic weight line did tomorrow, and then make it follow it
+            if !didUserEnterData {
+                var realisticWeightChangeCausedByToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
+                var newConsumedCalories: Double = 0
+                if realisticWeightChangeCausedByToday < 0 {
+                    realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
+                    let totalBurned = day.activeCalories + day.restingCalories
+                    let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
+                    let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
+                    if caloriesLeftToBeBurned {
+                        newConsumedCalories = 0
+                    } else {
+                        newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
+                    }
+                } else {
+                    realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
+                    let totalBurned = day.activeCalories + day.restingCalories
+                    let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
+                    newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+                }
+                self[i]?.consumedCalories = newConsumedCalories
+                self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+            }
+            if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
+                self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
             }
         }
         print(self)
