@@ -367,14 +367,21 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDataIssue() {
-        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v1), .testCase(.missingDataIssue)])
+        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.missingDataIssue)])
         guard let days else {
             XCTFail()
             return
         }
         for i in stride(from: days.count - 1, through: 0, by: -1) {
             if let tomorrow = days[i-1], let yesterday = days[i+1], let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
-                XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, tomorrow.weight - day.weight)
+                let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
+                if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
+                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2)
+                } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
+                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2)
+                } else {
+                    XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday)
+                }
             }
         }
         // Thursday [0]: No food logged
