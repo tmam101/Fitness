@@ -7,20 +7,66 @@
 
 import Foundation
 
+enum TimeFrameType {
+    case allTime
+    case month
+    case week
+    
+    var shortName: String {
+        switch self {
+        case .allTime:
+            "All Time"
+        case .month:
+            "Month"
+        case .week:
+            "Week"
+        }
+    }
+    
+    var longName: String {
+        switch self {
+        case .allTime:
+            "All Time"
+        case .month:
+            "This Month"
+        case .week:
+            "This Week"
+        }
+    }
+    
+    var days: Int {
+        switch self {
+        case .allTime:
+            10000 // TODO
+        case .month:
+            30
+        case .week:
+            7
+        }
+    }
+}
+
 struct TimeFrame: Identifiable {
     var id = UUID()
-    var longName: String
-    var name: String
-    var days: Int
+    var type: TimeFrameType
     
-    static let allTime =
-    TimeFrame(longName: "All Time", name: "All Time", days: 10000) //TODO
-    static let month = TimeFrame(longName: "This Month", name: "Month", days: 30)
-    static let week = TimeFrame(longName: "This Week", name: "Week", days: 7)
+    static let allTime = TimeFrame(type: .allTime)
+    static let month = TimeFrame(type: .month)
+    static let week = TimeFrame(type: .week)
     
-    static let timeFrames = [
-        TimeFrame.allTime,
-        TimeFrame.month,
-        TimeFrame.week
+    static let timeFrames: [TimeFrame] = [
+        .allTime, .month, .week
     ]
+    
+    var days: Int {
+        type.days
+    }
+    
+    var shortName: String {
+        type.shortName
+    }
+    
+    var longName: String {
+        type.longName
+    }
 }

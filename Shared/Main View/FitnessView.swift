@@ -13,7 +13,7 @@ struct TimeFramePicker: View {
     var body: some View {
         Picker(selection: $selectedPeriod, label: Text("Select Period")) {
             ForEach(0..<TimeFrame.timeFrames.count) {
-                                    Text(TimeFrame.timeFrames[$0].name)
+                                    Text(TimeFrame.timeFrames[$0].shortName)
             }
         }
         .pickerStyle(SegmentedPickerStyle())

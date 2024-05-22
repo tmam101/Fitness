@@ -64,30 +64,44 @@ struct WeightLineChart: View {
         self.viewModel = LineChartViewModel(health: health, timeFrame: timeFrame)
     }
     
+    @ChartContentBuilder
+    func expectedWeightPlot(day: Day) -> some ChartContent {
+        // Expected Weight graph until tomorrow
+        if day.daysAgo >= 0 {
+            LineMark(x: .value("Days ago", day.date),
+                     y: .value("Expected Weight", day.expectedWeight),
+                     series: .value("Expected weight", "A"))
+            .foregroundStyle(.yellow)
+            .opacity(0.8)
+            if viewModel.timeFrame.days == 7 {
+                PointMark(
+                    x: .value("Days ago", day.date),
+                    y: .value("Expected Weight", day.expectedWeight))
+                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
+                .symbolSize(10)
+                .annotation(position: .overlay, alignment: .bottom, spacing: 5) {
+                    Text("\(day.dayOfWeek.prefix(1))")
+                        .foregroundStyle(.yellow)
+                        .fontWeight(.light)
+                        .font(.system(size: 10))
+                }
+            }
+                    else {
+                        PointMark(
+                            x: .value("Days ago", day.date),
+                            y: .value("Expected Weight", day.expectedWeight))
+                        .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
+                        .symbolSize(10)
+                    }
+        }
+    }
+    
     //TODO: The initial weight doesn't quite match up with the deficit line.
     var body: some View {
         Group {
             Chart(viewModel.days) { day in
                 // Expected Weight graph until tomorrow
-                if day.daysAgo >= 0 {
-                    LineMark(x: .value("Days ago", day.date),
-                             y: .value("Expected Weight", day.expectedWeight),
-                             series: .value("Expected weight", "A"))
-                    .foregroundStyle(.yellow)
-                    .opacity(0.8)
-                    
-                    PointMark(
-                        x: .value("Days ago", day.date),
-                        y: .value("Expected Weight", day.expectedWeight))
-                    .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
-                    .symbolSize(10)
-                    .annotation(position: .overlay, alignment: .bottom, spacing: 5) {
-                        Text("\(day.dayOfWeek.prefix(1))")
-                            .foregroundStyle(.yellow)
-                            .fontWeight(.light)
-                            .font(.system(size: 10))
-                    }
-                }
+                expectedWeightPlot(day: day)
                 
                 // Expected weight tomorrow
                 if day.daysAgo <= 0 {
