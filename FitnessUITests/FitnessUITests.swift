@@ -12,6 +12,7 @@ final class FitnessUITests: XCTestCase {
 
     override func setUpWithError() throws {
         let app = XCUIApplication()
+        app.launchArguments = ["UITEST"]
         app.launch()
         self.app = app
         // Put setup code here. This method is called before the invocation of each test method in the class.

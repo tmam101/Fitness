@@ -19,7 +19,7 @@ import SwiftUI
 class HealthData: ObservableObject {
     
     //MARK: PROPERTIES
-    var environment: AppEnvironmentConfig = .debug(nil)
+    @Published var environment: AppEnvironmentConfig = .debug(nil)
 #if !os(macOS)
     @Published var calorieManager: CalorieManager = CalorieManager()
     @Published var runManager: RunManager = RunManager()

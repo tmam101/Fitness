@@ -8,11 +8,24 @@
 import SwiftUI
 import WatchConnectivity
 
+class AppSettings: ObservableObject {
+    @Published var healthData: HealthData
+    init() {
+        if  ProcessInfo.processInfo.arguments.contains("UITEST") {
+            healthData = HealthData(environment: .debug([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.firstDayNotAdjustingWhenMissing)]))
+        } else {
+            healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
+
+        }
+    }
+}
+
 @main
 struct FitnessApp: App {
-    @State var healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
-    @State var watchConnectivityIphone = WatchConnectivityIphone()
-    @Environment(\.scenePhase) private var scenePhase
+//    @StateObject var healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
+//    @State var watchConnectivityIphone = WatchConnectivityIphone()
+//    @Environment(\.scenePhase) private var scenePhase
+    @StateObject var settings = AppSettings()
 
     var body: some Scene {
         WindowGroup {
@@ -20,9 +33,10 @@ struct FitnessApp: App {
 //                .environmentObject(healthData)
 //                .environmentObject(watchConnectivityIphone)
             AppView()
-                .environmentObject(healthData)
+                .environmentObject(settings.healthData)
 //                .environmentObject(WatchConnectivityIphone())
-        }.onChange(of: scenePhase) {
+        }
+//        .onChange(of: scenePhase) {
 //            if scenePhase == .background {
 //                Task {
 //                    WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in
@@ -33,7 +47,7 @@ struct FitnessApp: App {
 ////                    watchConnectivityIphone = WatchConnectivityIphone()
 //                }
 //            }
-        }
+//        }
     }
 }
 
