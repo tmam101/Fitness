@@ -446,6 +446,7 @@ extension Days {
                 }
                 if !didUserEnterData {
                     var realisticWeightChangeCausedByToday = tomorrow.realisticWeight - day.expectedWeight
+                    // TODO Consolidate with code below
                     var newConsumedCalories: Double = 0
                     if realisticWeightChangeCausedByToday < 0 {
                         realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)

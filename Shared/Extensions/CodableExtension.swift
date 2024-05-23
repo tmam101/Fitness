@@ -33,6 +33,7 @@ enum Filepath {
         case missingDataIssue
         case realisticWeightsIssue
         case firstDayNotAdjustingWhenMissing
+        case twoDaysIssue
     }
 }
 

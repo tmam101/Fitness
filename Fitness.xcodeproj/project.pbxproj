@@ -154,6 +154,12 @@
 		E901FC172BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */; };
 		E901FC182BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */; };
 		E901FC192BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */; };
+		E901FC1C2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */; };
+		E901FC1D2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */; };
+		E901FC1E2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */; };
+		E901FC202BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */; };
+		E901FC212BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */; };
+		E901FC222BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */; };
 		E91D3F4B2AD5D25A001E1397 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
 		E924B7662BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
 		E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
@@ -340,6 +346,8 @@
 		E901FC0E2BFE4AC800C78104 /* realisticWeightsIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = realisticWeightsIssue.json; sourceTree = "<group>"; };
 		E901FC122BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = firstDayNotAdjustingWhenMissing.json; sourceTree = "<group>"; };
 		E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayNotAdjustingWhenMissing.swift; sourceTree = "<group>"; };
+		E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = twoDaysIssue.json; path = "First day not adjusting when missing/twoDaysIssue.json"; sourceTree = "<group>"; };
+		E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoDaysIssue.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E9442CD92BF5346000F56B43 /* activeCalories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = activeCalories.json; sourceTree = "<group>"; };
@@ -703,6 +711,8 @@
 		E99B514C2BE4468F002CEB48 /* Test Case JSON Files */ = {
 			isa = PBXGroup;
 			children = (
+				E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */,
+				E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */,
 				E901FC1A2BFF83D700C78104 /* First day not adjusting when missing */,
 				E924B76C2BFE3C9600BF00F6 /* Realistic weights not working */,
 				E99B514E2BE446D6002CEB48 /* Today's expected weight going up when it shouldn't */,
@@ -944,6 +954,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E951EB682BF56ABA004D3CBF /* restingCalories.json in Resources */,
+				E901FC1C2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */,
 				E901FC132BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 				E951EB6A2BF56ABA004D3CBF /* upAndDownWeights.json in Resources */,
 				487A95192640F97500627BA3 /* strong.json in Resources */,
@@ -962,6 +973,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E901FC142BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
+				E901FC1D2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */,
 				E901FC102BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48A0D46F25BB71CC007C40ED /* Assets.xcassets in Resources */,
 			);
@@ -972,6 +984,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				48BD6F16274B12CD0007AC15 /* Preview Assets.xcassets in Resources */,
+				E901FC1E2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */,
 				48BD6F13274B12CD0007AC15 /* Assets.xcassets in Resources */,
 				E901FC112BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48BD6EFE274B12CB0007AC15 /* Assets.xcassets in Resources */,
@@ -1050,6 +1063,7 @@
 				48821CD925B8BF3800C9F58A /* FitnessApp.swift in Sources */,
 				48E0E1DB2603C3C10037EEAF /* Ring (unused).swift in Sources */,
 				48BD6E6F274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
+				E901FC202BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */,
 				E90086CA2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
 				4802D49727875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				484BB6882776AAB900E24B1C /* Network.swift in Sources */,
@@ -1105,6 +1119,7 @@
 				48E0E21926041F3D0037EEAF /* TextCollections.swift in Sources */,
 				48E0E20C26041E700037EEAF /* Stats.swift in Sources */,
 				48A0D48725BB72E3007C40ED /* FitnessView.swift in Sources */,
+				E901FC212BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */,
 				E90086CC2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
 				48BD6E70274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				4802D49827875B7F0001BE9D /* ViewExtension.swift in Sources */,
@@ -1155,6 +1170,7 @@
 				E90086CE2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
 				E95C9B7F2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 				48BD6F48274B160F0007AC15 /* Progress Rings.swift in Sources */,
+				E901FC222BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */,
 				48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */,
 				48BD6F47274B16080007AC15 /* RingCollections.swift in Sources */,
 				E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */,
