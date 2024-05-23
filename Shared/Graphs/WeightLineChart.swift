@@ -57,12 +57,64 @@ private class LineChartViewModel: ObservableObject {
     }
 }
 
+extension ChartContent {
+//    @ChartContentBuilder
+//    func conditional(bool: Bool, _ fun: ((some ChartContent) -> some ChartContent)) -> any ChartContent {
+//        if bool {
+//            fun(self)
+//        } else {
+//            self
+//        }
+//    }
+    
+    @ChartContentBuilder
+    func overlayPointWith(text: String) -> some ChartContent {
+        self.annotation(position: .overlay, alignment: .bottom, spacing: 5) {
+            Text(text)
+                .foregroundStyle(.yellow)
+                .fontWeight(.light)
+                .font(.system(size: 10))
+        }
+    }
+}
+
 struct WeightLineChart: View {
     @ObservedObject private var viewModel: LineChartViewModel
     
     init(health: HealthData, timeFrame: TimeFrame) {
         self.viewModel = LineChartViewModel(health: health, timeFrame: timeFrame)
     }
+    
+//    struct M: ViewModifier {
+//        let day: Day
+//        func body(content: Content) -> some View {
+//            content
+////                .annotation(position: .overlay, alignment: .bottom, spacing: 5) {
+////                Text("\(day.dayOfWeek.prefix(1))")
+////                    .foregroundStyle(.yellow)
+////                    .fontWeight(.light)
+////                    .font(.system(size: 10))
+//            }
+//        }
+    
+//    @ChartContentBuilder
+//    func modifier(day: Day, content: some ChartContent) -> some ChartContent {
+//        content.annotation(position: .overlay, alignment: .bottom, spacing: 5) {
+//            Text("\(day.dayOfWeek.prefix(1))")
+//                .foregroundStyle(.yellow)
+//                .fontWeight(.light)
+//                .font(.system(size: 10))
+//        }
+//    }
+    
+//    @ChartContentBuilder
+//    func test(day: Day, conditional: Bool) -> some ChartContent {
+//        if conditional {
+//            modifier(day: day, content: expectedWeightPlot(day: day))
+//        } else {
+//            expectedWeightPlot(day: day)
+//        }
+//    }
     
     @ChartContentBuilder
     func expectedWeightPlot(day: Day) -> some ChartContent {
@@ -73,28 +125,51 @@ struct WeightLineChart: View {
                      series: .value("Expected weight", "A"))
             .foregroundStyle(.yellow)
             .opacity(0.8)
-            if viewModel.timeFrame.days == 7 {
+            
+            if viewModel.timeFrame.type == .week {
                 PointMark(
                     x: .value("Days ago", day.date),
                     y: .value("Expected Weight", day.expectedWeight))
                 .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
                 .symbolSize(10)
-                .annotation(position: .overlay, alignment: .bottom, spacing: 5) {
-                    Text("\(day.dayOfWeek.prefix(1))")
-                        .foregroundStyle(.yellow)
-                        .fontWeight(.light)
-                        .font(.system(size: 10))
-                }
+                .overlayPointWith(text: day.firstLetterOfDay)
+            } else if viewModel.timeFrame.type == .month {
+                PointMark(
+                    x: .value("Days ago", day.date),
+                    y: .value("Expected Weight", day.expectedWeight))
+                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
+                .symbolSize(10)
             }
-                    else {
-                        PointMark(
-                            x: .value("Days ago", day.date),
-                            y: .value("Expected Weight", day.expectedWeight))
-                        .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
-                        .symbolSize(10)
-                    }
         }
     }
+    
+//    @ChartContentBuilder
+//    func test(day: Day) -> some ChartContent {
+//        if day.daysAgo >= 0 {
+//            LineMark(x: .value("Days ago", day.date),
+//                     y: .value("Expected Weight", day.expectedWeight),
+//                     series: .value("Expected weight", "A"))
+//            .foregroundStyle(.yellow)
+//            .opacity(0.8)
+//            
+//            if viewModel.timeFrame.type == .week {
+//                PointMark(
+//                    x: .value("Days ago", day.date),
+//                    y: .value("Expected Weight", day.expectedWeight))
+//                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
+//                .symbolSize(10)
+//                .conditional(bool: true) { content in
+//                    content.overlayPointWith(text: day.firstLetterOfDay)
+//                }
+//            } else if viewModel.timeFrame.type == .month {
+//                PointMark(
+//                    x: .value("Days ago", day.date),
+//                    y: .value("Expected Weight", day.expectedWeight))
+//                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
+//                .symbolSize(10)
+//            }
+//        }
+//    }
     
     //TODO: The initial weight doesn't quite match up with the deficit line.
     var body: some View {
@@ -102,6 +177,7 @@ struct WeightLineChart: View {
             Chart(viewModel.days) { day in
                 // Expected Weight graph until tomorrow
                 expectedWeightPlot(day: day)
+//                test(day: day)
                 
                 // Expected weight tomorrow
                 if day.daysAgo <= 0 {

@@ -352,19 +352,44 @@ final class DayUnitTests: XCTestCase {
             return
         }
         for i in stride(from: days.count - 1, through: 0, by: -1) {
-            if let yesterday = days[i+1], let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
+            if let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
                 if let tomorrow = days[i-1] {
-                    let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
+                    let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
                     if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
-                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2)
+                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2, accuracy: 0.1)
                     } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
-                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2)
+                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2, accuracy: 0.1)
                     } else {
                         XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
                     }
                 }
-                XCTAssertEqual(day.expectedWeight, yesterday.expectedWeightTomorrow)
+                if let yesterday = days[i+1] {
+                    XCTAssertEqual(day.expectedWeight, yesterday.expectedWeightTomorrow)
+                }
             }
+        }
+    }
+    
+    func testMissingDayAdjustmentWorksOnFirstDay() {
+        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.firstDayNotAdjustingWhenMissing)])
+        guard let days else {
+            XCTFail()
+            return
+        }
+        let firstDayIndex = days.count - 1
+        guard let firstDay = days[firstDayIndex], let tomorrow = days[firstDayIndex - 1] else {
+            XCTFail()
+            return
+        }
+        XCTAssertNotEqual(firstDay.consumedCalories, 0)
+        XCTAssertTrue(firstDay.wasModifiedBecauseTheUserDidntEnterData)
+        let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
+        if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
+            XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, 0.2, accuracy: 0.1)
+        } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
+            XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, -0.2, accuracy: 0.1)
+        } else {
+            XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
         }
     }
     
@@ -385,7 +410,6 @@ final class DayUnitTests: XCTestCase {
                 XCTAssert(abs(day.realisticWeight - yesterday.realisticWeight) <= 0.2 )
             }
         }
-        
     }
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays

@@ -108,6 +108,10 @@ struct Day: Codable, Identifiable, Plottable, Equatable {
         return dayOfWeekString
     }
     
+    var firstLetterOfDay: String {
+        "\(dayOfWeek.prefix(1))"
+    }
+    
 }
 // MARK: DAYS
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
@@ -431,7 +435,40 @@ extension Days {
         for i in stride(from: self.count - 1, through: 0, by: -1) {
             guard let day = self[i] else { return }
             let didUserEnterData = day.consumedCalories != 0
-            guard let yesterday = self[i+1] else { continue }
+            
+            // TODO: What if only one day
+            
+            // If we're on first day
+            guard let yesterday = self[i+1] else {
+                guard let tomorrow = self[i-1] else {
+                    print("Fail") // TODO
+                    continue
+                }
+                if !didUserEnterData {
+                    var realisticWeightChangeCausedByToday = tomorrow.realisticWeight - day.expectedWeight
+                    var newConsumedCalories: Double = 0
+                    if realisticWeightChangeCausedByToday < 0 {
+                        realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
+                        let totalBurned = day.activeCalories + day.restingCalories
+                        let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
+                        let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
+                        if caloriesLeftToBeBurned {
+                            newConsumedCalories = 0
+                        } else {
+                            newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
+                        }
+                    } else {
+                        realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
+                        let totalBurned = day.activeCalories + day.restingCalories
+                        let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
+                        newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+                    }
+                    self[i]?.consumedCalories = newConsumedCalories
+                    self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+                }
+                continue
+            }
+            
             // If we're on today
             guard let tomorrow = self[i-1] else {
                 if !didUserEnterData {
@@ -443,6 +480,7 @@ extension Days {
                 }
                 continue
             }
+            
             // If the user didnt enter data today
             // We want to see what the realistic weight line did tomorrow, and then make it follow it
             if !didUserEnterData {

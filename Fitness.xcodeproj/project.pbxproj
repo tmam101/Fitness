@@ -148,6 +148,12 @@
 		E901FC0F2BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC0E2BFE4AC800C78104 /* realisticWeightsIssue.json */; };
 		E901FC102BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC0E2BFE4AC800C78104 /* realisticWeightsIssue.json */; };
 		E901FC112BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC0E2BFE4AC800C78104 /* realisticWeightsIssue.json */; };
+		E901FC132BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC122BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json */; };
+		E901FC142BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC122BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json */; };
+		E901FC152BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */ = {isa = PBXBuildFile; fileRef = E901FC122BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json */; };
+		E901FC172BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */; };
+		E901FC182BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */; };
+		E901FC192BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */; };
 		E91D3F4B2AD5D25A001E1397 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
 		E924B7662BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
 		E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
@@ -332,6 +338,8 @@
 		E90086C92AD8935A000F77B8 /* TimeFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFrame.swift; sourceTree = "<group>"; };
 		E901DE1C29B8111700F889D3 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		E901FC0E2BFE4AC800C78104 /* realisticWeightsIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = realisticWeightsIssue.json; sourceTree = "<group>"; };
+		E901FC122BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = firstDayNotAdjustingWhenMissing.json; sourceTree = "<group>"; };
+		E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayNotAdjustingWhenMissing.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E9442CD92BF5346000F56B43 /* activeCalories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = activeCalories.json; sourceTree = "<group>"; };
@@ -638,6 +646,15 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		E901FC1A2BFF83D700C78104 /* First day not adjusting when missing */ = {
+			isa = PBXGroup;
+			children = (
+				E901FC122BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json */,
+				E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */,
+			);
+			path = "First day not adjusting when missing";
+			sourceTree = "<group>";
+		};
 		E91D3F4E2AD73882001E1397 /* Old */ = {
 			isa = PBXGroup;
 			children = (
@@ -686,6 +703,7 @@
 		E99B514C2BE4468F002CEB48 /* Test Case JSON Files */ = {
 			isa = PBXGroup;
 			children = (
+				E901FC1A2BFF83D700C78104 /* First day not adjusting when missing */,
 				E924B76C2BFE3C9600BF00F6 /* Realistic weights not working */,
 				E99B514E2BE446D6002CEB48 /* Today's expected weight going up when it shouldn't */,
 			);
@@ -926,6 +944,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E951EB682BF56ABA004D3CBF /* restingCalories.json in Resources */,
+				E901FC132BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 				E951EB6A2BF56ABA004D3CBF /* upAndDownWeights.json in Resources */,
 				487A95192640F97500627BA3 /* strong.json in Resources */,
 				E951EB672BF56ABA004D3CBF /* weightGoingSteadilyDown.json in Resources */,
@@ -942,6 +961,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E901FC142BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 				E901FC102BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48A0D46F25BB71CC007C40ED /* Assets.xcassets in Resources */,
 			);
@@ -955,6 +975,7 @@
 				48BD6F13274B12CD0007AC15 /* Assets.xcassets in Resources */,
 				E901FC112BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48BD6EFE274B12CB0007AC15 /* Assets.xcassets in Resources */,
+				E901FC152BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1037,6 +1058,7 @@
 				E924B76E2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */,
 				4802D493278584750001BE9D /* CalorieManager.swift in Sources */,
 				4845B79525C0987D003BF999 /* Lines.swift in Sources */,
+				E901FC172BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */,
 				E9391CAB29AD205200D09252 /* TodayView.swift in Sources */,
 				48755A8A267AF13200F7680E /* Weight.swift in Sources */,
 				E95C9B7B2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
@@ -1091,6 +1113,7 @@
 				E924B76F2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */,
 				4802D494278585CE0001BE9D /* CalorieManager.swift in Sources */,
 				48E0E20226041E2F0037EEAF /* RingCollections.swift in Sources */,
+				E901FC182BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */,
 				E9391CAC29AD205200D09252 /* TodayView.swift in Sources */,
 				48755A8D267AF1BF00F7680E /* Weight.swift in Sources */,
 				E95C9B7D2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
@@ -1135,6 +1158,7 @@
 				48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */,
 				48BD6F47274B16080007AC15 /* RingCollections.swift in Sources */,
 				E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */,
+				E901FC192BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */,
 				48BD6F44274B16010007AC15 /* RunningLineGraph.swift in Sources */,
 				48BD6F09274B12CB0007AC15 /* FitnessAppWatch.swift in Sources */,
 				48BD6F59274B16380007AC15 /* Weight.swift in Sources */,

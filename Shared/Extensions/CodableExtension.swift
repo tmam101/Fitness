@@ -32,6 +32,7 @@ enum Filepath {
     enum Days: String {
         case missingDataIssue
         case realisticWeightsIssue
+        case firstDayNotAdjustingWhenMissing
     }
 }
 
