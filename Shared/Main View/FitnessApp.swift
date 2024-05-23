@@ -11,12 +11,14 @@ import WatchConnectivity
 class AppSettings: ObservableObject {
     @Published var healthData: HealthData
     init() {
-        if  ProcessInfo.processInfo.arguments.contains("UITEST") {
-            healthData = HealthData(environment: .debug([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.firstDayNotAdjustingWhenMissing)]))
-        } else {
-            healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
-
+        for path in Filepath.Days.allCases {
+            if ProcessInfo.processInfo.arguments.contains(path.rawValue) {
+                healthData = HealthData(environment: .debug([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(path)]))
+                return
+            }
         }
+        healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
+        
     }
 }
 

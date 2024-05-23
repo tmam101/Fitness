@@ -85,6 +85,7 @@ struct NetEnergyBarChart: View {
                     .foregroundStyle(day.netEnergy > 0 ? Color.red.solidColorGradient() : viewModel.gradient(for: day))
                     .opacity(day.daysAgo == 0 ? 0.5 : 1.0)
                     .accessibilityLabel("bar \(day.daysAgo) days ago")
+                    .accessibilityValue("\(Int(day.netEnergy))")
 
             }
             .backgroundStyle(.yellow)

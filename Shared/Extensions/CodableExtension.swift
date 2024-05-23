@@ -29,7 +29,7 @@ enum Filepath {
         case missingConsumedCalories
         case weightGoingSteadilyDown
     }
-    enum Days: String {
+    enum Days: String, CaseIterable {
         case missingDataIssue
         case realisticWeightsIssue
         case firstDayNotAdjustingWhenMissing

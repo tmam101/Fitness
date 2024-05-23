@@ -125,6 +125,8 @@ struct WeightLineChart: View {
                      series: .value("Expected weight", "A"))
             .foregroundStyle(.yellow)
             .opacity(0.8)
+            .accessibilityLabel("expected weight line \(day.daysAgo) days ago")
+            .accessibilityValue("\(Int(day.expectedWeight))")
             
             if viewModel.timeFrame.type == .week {
                 PointMark(
@@ -133,12 +135,16 @@ struct WeightLineChart: View {
                 .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
                 .symbolSize(10)
                 .overlayPointWith(text: day.firstLetterOfDay)
+                .accessibilityLabel("expected weight point \(day.daysAgo) days ago")
+                .accessibilityValue("\(Int(day.expectedWeight))")
             } else if viewModel.timeFrame.type == .month {
                 PointMark(
                     x: .value("Days ago", day.date),
                     y: .value("Expected Weight", day.expectedWeight))
                 .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
                 .symbolSize(10)
+                .accessibilityLabel("expected weight point \(day.daysAgo) days ago")
+                .accessibilityValue("\(Int(day.expectedWeight))")
             }
         }
     }
