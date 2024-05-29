@@ -84,12 +84,15 @@ class ColorTests: XCTestCase {
     func testCustomColors() {
         // Verify that custom colors are correctly initialized
         XCTAssertNotNil(Color.myGray)
-        XCTAssertNotNil(Color.green1)
-        XCTAssertNotNil(Color.green2)
-        XCTAssertNotNil(Color.green3)
-        XCTAssertNotNil(Color.yellow1)
-        XCTAssertNotNil(Color.yellow2)
-        XCTAssertNotNil(Color.yellow3)
+        XCTAssertNotNil(Color.expectedWeightYellow)
+        XCTAssertNotNil(Color.weightGreen)
+        XCTAssertNotNil(Color.realisticWeightGreen)
+//        XCTAssertNotNil(Color.green1)
+//        XCTAssertNotNil(Color.green2)
+//        XCTAssertNotNil(Color.green3)
+//        XCTAssertNotNil(Color.yellow1)
+//        XCTAssertNotNil(Color.yellow2)
+//        XCTAssertNotNil(Color.yellow3)
     }
     
     func testSolidColorGradient() {

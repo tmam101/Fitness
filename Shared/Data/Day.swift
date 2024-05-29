@@ -11,11 +11,11 @@ import SwiftUI
 
 // MARK: DAY
 
-struct Day: Codable, Identifiable, Plottable, Equatable {
+public struct Day: Codable, Identifiable, Plottable, Equatable {
     
-    var primitivePlottable: String = "Day"
+    public var primitivePlottable: String = "Day"
     
-    init?(primitivePlottable: String) {
+    public init?(primitivePlottable: String) {
         
     }
     
@@ -46,9 +46,9 @@ struct Day: Codable, Identifiable, Plottable, Equatable {
         self.protein = protein
     }
     
-    typealias PrimitivePlottable = String
+    public typealias PrimitivePlottable = String
     
-    var id = UUID()
+    public var id = UUID()
     var date: Date = Date()
     var daysAgo: Int = -1
     var deficit: Double {
@@ -115,7 +115,7 @@ struct Day: Codable, Identifiable, Plottable, Equatable {
 }
 // MARK: DAYS
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
-typealias Days = [Int:Day]
+public typealias Days = [Int:Day]
 
 extension Days {
     

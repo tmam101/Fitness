@@ -8,6 +8,7 @@
 import Foundation
 import HealthKit
 import SwiftUI
+import Charts
 
 class RunManager: ObservableObject {
     var weightManager: WeightManager?

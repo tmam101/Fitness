@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Fitness
+import Combine
 
 // TODO: Put this into HealthData. So it goes through the real process, and can detect errors in HealthData and CalorieManager. 
 
@@ -330,14 +331,11 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days?[0]?.dayOfWeek, "Thursday")
     }
     
-    func testDecodingMissingDataIssue() {
-        days = Days.decode(path: .missingDataIssue)
-        XCTAssertNotNil(days)
-    }
-    
-    func testDecodingRealisticWeightsIssue() {
-        days = Days.decode(path: .realisticWeightsIssue)
-        XCTAssertNotNil(days)
+    func testDecodingTestCases() {
+        for path in Filepath.Days.allCases {
+            days = Days.decode(path: path)
+            XCTAssertNotNil(days)
+        }
     }
     
     func testEncodingJSON() {
@@ -411,6 +409,15 @@ final class DayUnitTests: XCTestCase {
             }
         }
     }
+    
+    //todo not day test
+    // TODO test days have proper high and low values on chart
+    func testLineChartViewModel() async {
+        let days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.twoDaysIssue)])
+        let vm = LineChartViewModel(days: days, timeFrame: TimeFrame.week)
+    }
+    
+    
 //    func testSetRealisticWeights() {
 //        var days = Days.testDays
 //        days.setRealisticWeights()

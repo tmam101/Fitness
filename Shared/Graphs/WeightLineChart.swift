@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 import Combine
 
-private class LineChartViewModel: ObservableObject {
+public class LineChartViewModel: ObservableObject {
     @Published var days: [Day] = []
     @Published var maxValue: Double = 0
     @Published var minValue: Double = 0
@@ -21,35 +21,42 @@ private class LineChartViewModel: ObservableObject {
         self.timeFrame = timeFrame
         switch health.environment {
         case .debug:
-            self.populateDays(for: health)
+            self.populateDays(for: health.days)
         case .release, .widgetRelease:
             health.$hasLoaded.sink { [weak self] hasLoaded in
                 guard let self = self, hasLoaded else { return }
-                self.populateDays(for: health)
+                self.populateDays(for: health.days)
             }.store(in: &cancellables)
         }
     }
     
-    private func populateDays(for health: HealthData) {
-        self.days = self.constructDays(using: health)
-        self.updateMinMaxValues()
+    init(days: Days, timeFrame: TimeFrame) {
+        self.timeFrame = timeFrame
+        self.populateDays(for: days)
+    }
+    
+    public func populateDays(for days: Days) {
+        self.days = self.constructDays(using: days)
+        self.updateMinMaxValues(days: self.days)
     }
 
-    private func constructDays(using health: HealthData) -> [Day] {
-        var days = health.days
+    public func constructDays(using days: Days) -> [Day] {
+        var days = days
         // Add tomorrow for the graph
         if let today = days[0] {
             days[-1] = Day(date: Date.subtract(days: -1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow)
         }
-        return days.filter { $0.key <= timeFrame.days }
+        let values = days.filter { $0.key <= timeFrame.days }
             .values
             .sorted(by: { $0.daysAgo < $1.daysAgo })
+        return values
     }
     
-    private func updateMinMaxValues() {
+    public func updateMinMaxValues(days: [Day]) {
         let expectedWeights = days.map {
             $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
-    }.filter { $0 != 0 }
+        }.filter { $0 != 0 }
+        
         let realWeights = days.map { $0.weight }.filter { $0 != 0 }
         let allValues = [expectedWeights, realWeights]
         maxValue = allValues.compactMap { $0.max() ?? nil }.max() ?? 1 //todo
@@ -123,8 +130,7 @@ struct WeightLineChart: View {
             LineMark(x: .value("Days ago", day.date),
                      y: .value("Expected Weight", day.expectedWeight),
                      series: .value("Expected weight", "A"))
-            .foregroundStyle(.yellow)
-            .opacity(0.8)
+            .foregroundStyle(by: .value("Expected Weight 2", "Expected Weight"))
             .accessibilityLabel("expected weight line \(day.daysAgo) days ago")
             .accessibilityValue("\(Int(day.expectedWeight))")
             
@@ -149,98 +155,92 @@ struct WeightLineChart: View {
         }
     }
     
-//    @ChartContentBuilder
-//    func test(day: Day) -> some ChartContent {
-//        if day.daysAgo >= 0 {
-//            LineMark(x: .value("Days ago", day.date),
-//                     y: .value("Expected Weight", day.expectedWeight),
-//                     series: .value("Expected weight", "A"))
-//            .foregroundStyle(.yellow)
-//            .opacity(0.8)
-//            
-//            if viewModel.timeFrame.type == .week {
-//                PointMark(
-//                    x: .value("Days ago", day.date),
-//                    y: .value("Expected Weight", day.expectedWeight))
-//                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
-//                .symbolSize(10)
-//                .conditional(bool: true) { content in
-//                    content.overlayPointWith(text: day.firstLetterOfDay)
-//                }
-//            } else if viewModel.timeFrame.type == .month {
-//                PointMark(
-//                    x: .value("Days ago", day.date),
-//                    y: .value("Expected Weight", day.expectedWeight))
-//                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
-//                .symbolSize(10)
-//            }
-//        }
-//    }
+    @ChartContentBuilder
+    func expectedWeightTomorrowPlot(day: Day) -> some ChartContent {
+        // Expected weight tomorrow
+        if day.daysAgo <= 0 {
+            LineMark(x: .value("Days ago", day.date),
+                     y: .value("Expected Weight", day.expectedWeight),
+                     series: .value("Tomorrow's expected weight", "B"))
+//            .foregroundStyle(by: .value("Expected Weight Tomorrow", "Expected Weight Tomorrow"))
+            .foregroundStyle(Color.expectedWeightTomorrowYellow)
+            PointMark(
+                x: .value("Days ago", day.date),
+                y: .value("Expected Weight", day.expectedWeight))
+            .foregroundStyle(.yellow)
+            .symbolSize(10)
+            .opacity(0.3)
+        }
+    }
+    
+    @ChartContentBuilder
+    func weightPlot(day: Day) -> some ChartContent {
+        // Weight
+        if day.weight != 0 {
+            LineMark(x: .value("Days ago", day.date),
+                     y: .value("Real Weight", day.weight),
+                     series: .value("Weight", "C"))
+            .foregroundStyle(by: .value("Weight", "Weight"))
+            
+            PointMark(
+                x: .value("Days ago", day.date),
+                y: .value("Real Weight", day.weight))
+            .foregroundStyle(.green)
+            .symbolSize(10)
+        }
+    }
+    @ChartContentBuilder
+    func realisticWeightPlot(day: Day) -> some ChartContent {
+        // Realistic weights
+        if day.weight != 0 {
+            LineMark(x: .value("Days ago", day.date),
+                     y: .value("Real Weight", day.realisticWeight),
+                     series: .value("Weight", "D"))
+            .foregroundStyle(by: .value("Realistic Weight", "Realistic Weight"))
+            
+            PointMark(
+                x: .value("Days ago", day.date),
+                y: .value("Real Weight", day.realisticWeight))
+            .foregroundStyle(.green)
+            .symbolSize(10)
+            .opacity(0.2)
+        }
+    }
+    
+    var chart: some View {
+        Chart(viewModel.days) { day in
+            // Expected Weight graph until tomorrow
+            expectedWeightPlot(day: day)
+            //                test(day: day)
+            
+            // Expected weight tomorrow
+            expectedWeightTomorrowPlot(day: day)
+            
+            // Weight
+            weightPlot(day: day)
+            
+            // Realistic weights
+            realisticWeightPlot(day: day)
+        }
+    }
+    
+    let yAxis: AxisMarks<some AxisMark> = AxisMarks(values: .automatic) { _ in
+        AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
+            .foregroundStyle(Color.white.opacity(0.5))
+        AxisValueLabel()
+            .foregroundStyle(Color.white)
+    }
+    
+    
     
     //TODO: The initial weight doesn't quite match up with the deficit line.
     var body: some View {
         Group {
-            Chart(viewModel.days) { day in
-                // Expected Weight graph until tomorrow
-                expectedWeightPlot(day: day)
-//                test(day: day)
-                
-                // Expected weight tomorrow
-                if day.daysAgo <= 0 {
-                    LineMark(x: .value("Days ago", day.date),
-                             y: .value("Expected Weight", day.expectedWeight),
-                             series: .value("Tomorrow's expected weight", "B"))
-                    .foregroundStyle(.yellow)
-                    .opacity(0.3)
-                    PointMark(
-                        x: .value("Days ago", day.date),
-                        y: .value("Expected Weight", day.expectedWeight))
-                    .foregroundStyle(.yellow)
-                    .symbolSize(10)
-                    .opacity(0.3)
-                }
-                
-                // Weight
-                if day.weight != 0 {
-                    LineMark(x: .value("Days ago", day.date),
-                             y: .value("Real Weight", day.weight),
-                             series: .value("Weight", "C"))
-                    .foregroundStyle(.green)
-                    .opacity(0.5)
-                    
-                    PointMark(
-                        x: .value("Days ago", day.date),
-                        y: .value("Real Weight", day.weight))
-                    .foregroundStyle(.green)
-                    .symbolSize(10)
-                    .opacity(0.5)
-                }
-                
-                // Realistic weights
-                if day.weight != 0 {
-                    LineMark(x: .value("Days ago", day.date),
-                             y: .value("Real Weight", day.realisticWeight),
-                             series: .value("Weight", "D"))
-                    .foregroundStyle(.green)
-                    .opacity(0.2)
-                    
-                    PointMark(
-                        x: .value("Days ago", day.date),
-                        y: .value("Real Weight", day.realisticWeight))
-                    .foregroundStyle(.green)
-                    .symbolSize(10)
-                    .opacity(0.2)
-                }
-            }
+            chart
             .chartYAxis {
-                AxisMarks(values: .automatic) { _ in
-                    AxisGridLine(centered: true, stroke: StrokeStyle(dash: [1, 2]))
-                        .foregroundStyle(Color.white.opacity(0.5))
-                    AxisValueLabel()
-                        .foregroundStyle(Color.white)
-                }
+                yAxis
             }
-            .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue - 1, upper: viewModel.maxValue)))
+            .chartYScale(domain: ClosedRange(uncheckedBounds: (lower: viewModel.minValue - 1, upper: viewModel.maxValue + 1))) // todo round up max value properly
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: viewModel.days.count)) { _ in
                     AxisGridLine()
@@ -248,6 +248,12 @@ struct WeightLineChart: View {
                         .foregroundStyle(Color.white)
                 }
             }
+            .chartForegroundStyleScale([
+                "Weight": Color.weightGreen,
+                "Realistic Weight": Color.realisticWeightGreen,
+                "Expected Weight": Color.expectedWeightYellow
+//                "Expected Weight Tomorrow": Color.expectedWeightTomorrowYellow
+            ])
         }
         .padding()
     }

@@ -175,6 +175,12 @@
 		E951EB682BF56ABA004D3CBF /* restingCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB632BF56ABA004D3CBF /* restingCalories.json */; };
 		E951EB692BF56ABA004D3CBF /* consumedCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB642BF56ABA004D3CBF /* consumedCalories.json */; };
 		E951EB6A2BF56ABA004D3CBF /* upAndDownWeights.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB652BF56ABA004D3CBF /* upAndDownWeights.json */; };
+		E953C53F2C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */ = {isa = PBXBuildFile; fileRef = E953C53E2C0689850087A326 /* inaccurateExpectedWeightToday.json */; };
+		E953C5402C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */ = {isa = PBXBuildFile; fileRef = E953C53E2C0689850087A326 /* inaccurateExpectedWeightToday.json */; };
+		E953C5412C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */ = {isa = PBXBuildFile; fileRef = E953C53E2C0689850087A326 /* inaccurateExpectedWeightToday.json */; };
+		E953C5442C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */ = {isa = PBXBuildFile; fileRef = E953C5432C07A3370087A326 /* InaccurateExpectedWeightToday.swift */; };
+		E953C5452C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */ = {isa = PBXBuildFile; fileRef = E953C5432C07A3370087A326 /* InaccurateExpectedWeightToday.swift */; };
+		E953C5462C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */ = {isa = PBXBuildFile; fileRef = E953C5432C07A3370087A326 /* InaccurateExpectedWeightToday.swift */; };
 		E95C9B7B2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
 		E95C9B7D2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
 		E95C9B7F2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */; };
@@ -346,7 +352,7 @@
 		E901FC0E2BFE4AC800C78104 /* realisticWeightsIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = realisticWeightsIssue.json; sourceTree = "<group>"; };
 		E901FC122BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = firstDayNotAdjustingWhenMissing.json; sourceTree = "<group>"; };
 		E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayNotAdjustingWhenMissing.swift; sourceTree = "<group>"; };
-		E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = twoDaysIssue.json; path = "First day not adjusting when missing/twoDaysIssue.json"; sourceTree = "<group>"; };
+		E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = twoDaysIssue.json; sourceTree = "<group>"; };
 		E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoDaysIssue.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
@@ -356,6 +362,8 @@
 		E951EB632BF56ABA004D3CBF /* restingCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = restingCalories.json; sourceTree = "<group>"; };
 		E951EB642BF56ABA004D3CBF /* consumedCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = consumedCalories.json; sourceTree = "<group>"; };
 		E951EB652BF56ABA004D3CBF /* upAndDownWeights.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = upAndDownWeights.json; sourceTree = "<group>"; };
+		E953C53E2C0689850087A326 /* inaccurateExpectedWeightToday.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = inaccurateExpectedWeightToday.json; sourceTree = "<group>"; };
+		E953C5432C07A3370087A326 /* InaccurateExpectedWeightToday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccurateExpectedWeightToday.swift; sourceTree = "<group>"; };
 		E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUnitTests.swift; sourceTree = "<group>"; };
 		E967015B2AFEBB5A0059E55C /* FitnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -699,6 +707,24 @@
 			path = "Test Data";
 			sourceTree = "<group>";
 		};
+		E953C5422C07A1910087A326 /* Two Days Issue */ = {
+			isa = PBXGroup;
+			children = (
+				E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */,
+				E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */,
+			);
+			path = "Two Days Issue";
+			sourceTree = "<group>";
+		};
+		E953C5472C07A37C0087A326 /* Inaccurate expected weight today */ = {
+			isa = PBXGroup;
+			children = (
+				E953C53E2C0689850087A326 /* inaccurateExpectedWeightToday.json */,
+				E953C5432C07A3370087A326 /* InaccurateExpectedWeightToday.swift */,
+			);
+			path = "Inaccurate expected weight today";
+			sourceTree = "<group>";
+		};
 		E967015C2AFEBB5A0059E55C /* FitnessUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,8 +737,8 @@
 		E99B514C2BE4468F002CEB48 /* Test Case JSON Files */ = {
 			isa = PBXGroup;
 			children = (
-				E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */,
-				E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */,
+				E953C5472C07A37C0087A326 /* Inaccurate expected weight today */,
+				E953C5422C07A1910087A326 /* Two Days Issue */,
 				E901FC1A2BFF83D700C78104 /* First day not adjusting when missing */,
 				E924B76C2BFE3C9600BF00F6 /* Realistic weights not working */,
 				E99B514E2BE446D6002CEB48 /* Today's expected weight going up when it shouldn't */,
@@ -960,6 +986,7 @@
 				487A95192640F97500627BA3 /* strong.json in Resources */,
 				E951EB672BF56ABA004D3CBF /* weightGoingSteadilyDown.json in Resources */,
 				E951EB662BF56ABA004D3CBF /* missingConsumedCalories.json in Resources */,
+				E953C53F2C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */,
 				E9442CDA2BF5346000F56B43 /* activeCalories.json in Resources */,
 				E901FC0F2BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				E951EB692BF56ABA004D3CBF /* consumedCalories.json in Resources */,
@@ -974,6 +1001,7 @@
 			files = (
 				E901FC142BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 				E901FC1D2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */,
+				E953C5402C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */,
 				E901FC102BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48A0D46F25BB71CC007C40ED /* Assets.xcassets in Resources */,
 			);
@@ -986,6 +1014,7 @@
 				48BD6F16274B12CD0007AC15 /* Preview Assets.xcassets in Resources */,
 				E901FC1E2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */,
 				48BD6F13274B12CD0007AC15 /* Assets.xcassets in Resources */,
+				E953C5412C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */,
 				E901FC112BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48BD6EFE274B12CB0007AC15 /* Assets.xcassets in Resources */,
 				E901FC152BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
@@ -1039,6 +1068,7 @@
 				48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */,
 				48E0E1F726041DE50037EEAF /* RingCollections.swift in Sources */,
 				E99B51512BE564F1002CEB48 /* MissingDataIssue.swift in Sources */,
+				E953C5442C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */,
 				E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */,
 				48DE1DE127A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				E901DE1D29B8111700F889D3 /* TestData.swift in Sources */,
@@ -1095,6 +1125,7 @@
 				48BD6E6C274AFAC50007AC15 /* LineGraph.swift in Sources */,
 				485B72802631EBB40070E096 /* Ring (unused).swift in Sources */,
 				E9F83AD929D77F0B00E0C70B /* TodayRingView.swift in Sources */,
+				E953C5452C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */,
 				48DE1DE227A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				E901DE1F29B8111700F889D3 /* TestData.swift in Sources */,
 				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
@@ -1151,6 +1182,7 @@
 				48BD6F4A274B16140007AC15 /* Ring (unused).swift in Sources */,
 				48108132278A34B5008E9AE6 /* FitnessViewWatch.swift in Sources */,
 				E9F83AE029D77F2F00E0C70B /* TodayRingViewModel.swift in Sources */,
+				E953C5462C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */,
 				E9F83ADB29D77F0B00E0C70B /* TodayRingView.swift in Sources */,
 				4802D491278582AE0001BE9D /* RunManager.swift in Sources */,
 				4802D49A27875B7F0001BE9D /* ViewExtension.swift in Sources */,
