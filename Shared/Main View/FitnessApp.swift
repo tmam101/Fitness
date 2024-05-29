@@ -13,11 +13,11 @@ class AppSettings: ObservableObject {
     init() {
         for path in Filepath.Days.allCases {
             if ProcessInfo.processInfo.arguments.contains(path.rawValue) {
-                healthData = HealthData(environment: .debug([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(path)]))
+                healthData = HealthData(environment: .debug([ .isMissingConsumedCalories(.v3), .testCase(path)]))
                 return
             }
         }
-        healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
+        healthData = HealthData(environment: AppEnvironmentConfig.release([ .isMissingConsumedCalories(.v3)]))
         
     }
 }

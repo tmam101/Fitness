@@ -14,7 +14,7 @@ import SwiftUI
 
 extension FitnessPreviewProvider {
     static func missingDataIssue(_ strategy: TestDayOption.MissingConsumedCaloriesStrategy) -> some View {
-        MainPreview(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(strategy), .testCase(.missingDataIssue)])
+        MainPreview(options: [ .isMissingConsumedCalories(strategy), .testCase(.missingDataIssue)])
     }
 }
 

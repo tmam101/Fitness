@@ -282,7 +282,7 @@ final class DayUnitTests: XCTestCase {
     func testEveryDayHasWeight() {
         
         for _ in 0...100 {
-            days = Days.testDays()
+            days = Days.testDays(options: [.dontAddWeightsOnEveryDay])
             guard var days else { 
                 XCTFail()
                 return
@@ -344,7 +344,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDayAdjustment() {
-        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.missingDataIssue)])
+        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.missingDataIssue)])
         guard let days else {
             XCTFail()
             return
@@ -369,7 +369,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDayAdjustmentWorksOnFirstDay() {
-        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.firstDayNotAdjustingWhenMissing)])
+        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.firstDayNotAdjustingWhenMissing)])
         guard let days else {
             XCTFail()
             return
@@ -392,7 +392,7 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testSettingRealisticWeights() {
-        days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
+        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
         guard let days else {
             XCTFail()
             return
@@ -413,8 +413,13 @@ final class DayUnitTests: XCTestCase {
     //todo not day test
     // TODO test days have proper high and low values on chart
     func testLineChartViewModel() async {
-        let days = Days.testDays(options: [.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3), .testCase(.twoDaysIssue)])
+        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.twoDaysIssue)])
         let vm = LineChartViewModel(days: days, timeFrame: TimeFrame.week)
+    }
+    
+    func testInnacurateExpectedWeightToday() {
+        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.inaccurateExpectedWeightToday)])
+        XCTAssertEqual(days[0]?.expectedWeight, 200.0)
     }
     
     
