@@ -76,6 +76,70 @@ class ArrayExtensionTests: XCTestCase {
         ].reversed()
         print(weightGoingSteadilyDown)
     }
+    
+    func testSorting() {
+        struct TestEvent: HasDate {
+            var date: Date
+        }
+        
+        func testSortedMostRecentToLongestAgo() {
+            // Arrange
+            let now = Date()
+            let oneHourAgo = Date(timeIntervalSinceNow: -3600)
+            let twoHoursAgo = Date(timeIntervalSinceNow: -7200)
+            
+            let events = [
+                TestEvent(date: twoHoursAgo),
+                TestEvent(date: now),
+                TestEvent(date: oneHourAgo)
+            ]
+            
+            // Act
+            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            
+            // Assert
+            XCTAssertEqual(sortedEvents[0].date, now, "The most recent date should be first")
+            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second most recent date should be second")
+            XCTAssertEqual(sortedEvents[2].date, twoHoursAgo, "The oldest date should be last")
+            
+            let longestToRecent = events.sortedLongestAgoToMostRecent()
+            
+            // Assert
+            XCTAssertEqual(sortedEvents[0].date, twoHoursAgo, "The most recent date should be first")
+            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second most recent date should be second")
+            XCTAssertEqual(sortedEvents[2].date, now, "The oldest date should be last")
+            
+        }
+        
+        func testSortedMostRecentToLongestAgoWithSameDates() {
+            // Arrange
+            let date = Date()
+            
+            let events = [
+                TestEvent(date: date),
+                TestEvent(date: date),
+                TestEvent(date: date)
+            ]
+            
+            // Act
+            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            
+            // Assert
+            XCTAssertEqual(sortedEvents.count, 3, "All events should be present")
+            XCTAssertTrue(sortedEvents.allSatisfy { $0.date == date }, "All dates should be the same")
+        }
+        
+        func testSortedMostRecentToLongestAgoWithEmptyArray() {
+            // Arrange
+            let events: [TestEvent] = []
+            
+            // Act
+            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            
+            // Assert
+            XCTAssertTrue(sortedEvents.isEmpty, "The sorted array should be empty")
+        }
+    }
 }
 
 

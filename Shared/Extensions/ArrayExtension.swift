@@ -19,3 +19,17 @@ extension Array where Element: BinaryFloatingPoint {
         return self.reduce(0, +) / Element(self.count)
     }
 }
+
+protocol HasDate {
+    var date: Date { get }
+}
+
+extension Array where Element: HasDate {
+    func sortedMostRecentToLongestAgo() -> [Element] {
+        return self.sorted { $0.date > $1.date }
+    }
+    
+    func sortedLongestAgoToMostRecent() -> [Element] {
+        return self.sorted { $0.date < $1.date }
+    }
+}

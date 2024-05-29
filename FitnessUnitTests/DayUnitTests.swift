@@ -279,11 +279,10 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(day.deficit, -500, "Deficit should be set to negative value")
     }
     
-    func testEveryDayHasWeight() {
-        
+    func testSetWeightsOnEveryDay() {
         for _ in 0...100 {
             days = Days.testDays(options: [.dontAddWeightsOnEveryDay])
-            guard var days else { 
+            guard var days else {
                 XCTFail()
                 return
             }
@@ -311,19 +310,23 @@ final class DayUnitTests: XCTestCase {
         }
         // Ensure the calculations are correct
         var d: Days = [:]
-        d[0] = Day(daysAgo: 0, weight: 1)
-        d[1] = Day(daysAgo: 1, weight: 0)
-        d[2] = Day(daysAgo: 2, weight: 3)
-        d[3] = Day(daysAgo: 2, weight: 0)
-        d[4] = Day(daysAgo: 2, weight: 0)
-        d[5] = Day(daysAgo: 5, weight: 3.3)
-        d[6] = Day(daysAgo: 6, weight: 0)
-        d[7] = Day(daysAgo: 7, weight: 1)
+        d[0] = Day(date: daysAgo(0), daysAgo: 0, weight: 1)
+        d[1] = Day(date: daysAgo(1), daysAgo: 1, weight: 0)
+        d[2] = Day(date: daysAgo(2), daysAgo: 2, weight: 3)
+        d[3] = Day(date: daysAgo(2), daysAgo: 2, weight: 0)
+        d[4] = Day(date: daysAgo(2), daysAgo: 2, weight: 0)
+        d[5] = Day(date: daysAgo(5), daysAgo: 5, weight: 3.3)
+        d[6] = Day(date: daysAgo(6), daysAgo: 6, weight: 0)
+        d[7] = Day(date: daysAgo(7), daysAgo: 7, weight: 1)
         d.setWeightOnEveryDay()
         XCTAssertEqual(d[1]?.weight, 2)
         XCTAssertEqual(d[3]?.weight ?? 0.0, 3.1, accuracy: 0.01)
         XCTAssertEqual(d[4]?.weight ?? 0.0, 3.2, accuracy: 0.01)
         XCTAssertEqual(d[6]?.weight ?? 0.0, 2.15, accuracy: 0.01)
+    }
+    
+    func daysAgo(_ num: Int) -> Date {
+        Date.subtract(days: num, from: Date())
     }
     
     func testDayOfWeek() {
@@ -420,6 +423,57 @@ final class DayUnitTests: XCTestCase {
     func testInnacurateExpectedWeightToday() {
         let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.inaccurateExpectedWeightToday)])
         XCTAssertEqual(days[0]?.expectedWeight, 200.0)
+    }
+    
+    func testSortDays() {
+        let oneDayAgo = Date.subtract(days: 1, from: Date())
+        let twoDaysAgo = Date.subtract(days: 2, from: Date())
+                                       
+        days = [
+            1:Day(date: oneDayAgo),
+            2:Day(date: twoDaysAgo)
+        ]
+        var sorted = days?.array().sortedLongestAgoToMostRecent()
+        XCTAssertEqual(sorted?.first?.date, twoDaysAgo)
+        XCTAssertEqual(sorted?.last?.date, oneDayAgo)
+        sorted = days?.array().sortedMostRecentToLongestAgo()
+        XCTAssertEqual(sorted?.first?.date, oneDayAgo)
+        XCTAssertEqual(sorted?.last?.date, twoDaysAgo)
+    }
+    
+    func testEveryDayHasWeightCount() {
+        var days = [
+            1:Day(weight: 0),
+            2:Day(weight:1)
+        ]
+        XCTAssertFalse(days.everyDayHasWeight)
+        days[1]?.weight = 1
+        XCTAssertTrue(days.everyDayHasWeight)
+    }
+    
+    func testFirstDay() {
+        let oneDayAgo = Date.subtract(days: 1, from: Date())
+        let twoDaysAgo = Date.subtract(days: 2, from: Date())
+                                       
+        var days = [
+            1:Day(date: oneDayAgo),
+            2:Day(date: twoDaysAgo)
+        ]
+        var sorted = days.array().sortedLongestAgoToMostRecent()
+        XCTAssertEqual(sorted.first?.date, twoDaysAgo)
+        XCTAssertEqual(sorted.last?.date, oneDayAgo)
+        sorted = days.array().sortedMostRecentToLongestAgo()
+        XCTAssertEqual(sorted.first?.date, oneDayAgo)
+        XCTAssertEqual(sorted.last?.date, twoDaysAgo)
+    }
+    
+    func testDaysWithWeights() {
+        let dayWithWeight = Day(weight: 1)
+        var days = [
+            0:dayWithWeight,
+            1:Day(weight:0)
+            ]
+        XCTAssertEqual(days.daysWithWeights, [dayWithWeight])
     }
     
     

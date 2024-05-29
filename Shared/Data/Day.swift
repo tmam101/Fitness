@@ -11,7 +11,10 @@ import SwiftUI
 
 // MARK: DAY
 
-public struct Day: Codable, Identifiable, Plottable, Equatable {
+public struct Day: Codable, Identifiable, Plottable, Equatable, HasDate {
+//    public static func == (lhs: Day, rhs: Day) -> Bool {
+//        lhs.daysAgo == rhs.daysAgo
+//    }
     
     public var primitivePlottable: String = "Day"
     
@@ -112,12 +115,20 @@ public struct Day: Codable, Identifiable, Plottable, Equatable {
         "\(dayOfWeek.prefix(1))"
     }
     
+//    var dayBefore: Day?
+//    var dayAfter: Day?
+//    
+//    var daysContainer: Days?
 }
 // MARK: DAYS
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
 public typealias Days = [Int:Day]
 
 extension Days {
+    
+    var firstDay: Day? {
+        self.array().sortedMostRecentToLongestAgo().first
+    }
     
 //    enum TestFiles: String {
 //        case missingDataIssue = "missingDataIssue"
@@ -290,11 +301,11 @@ extension Days {
     }
     
     mutating func setWeightOnEveryDay() {
-        let weights = self.array().filter { $0.weight != 0 }.sorted(by: {x, y in x.daysAgo > y.daysAgo })
-        guard weights.count > 0 else { return } //todo test
-        for i in 0..<weights.count-1 {
-            let thisDay = weights[i]
-            let nextDay = weights[i+1]
+        let daysWithWeights = self.daysWithWeights.sortedLongestAgoToMostRecent()
+        guard daysWithWeights.count > 0 else { return } //todo test
+        for i in 0..<daysWithWeights.count-1 {
+            let thisDay = daysWithWeights[i]
+            let nextDay = daysWithWeights[i+1]
             let daysBetween = thisDay.daysAgo - nextDay.daysAgo
             if daysBetween == 1 {
                 continue
@@ -568,7 +579,13 @@ extension Days {
     }
     
     var everyDayHasWeight: Bool {
-        self.array().filter { $0.weight != 0 }.count == 0
+        let weights = self.array().map(\.weight)
+        let weightsThatAreZero = weights.filter { $0 == 0 }
+        return weightsThatAreZero.count == 0
+    }
+    
+    var daysWithWeights: [Day] {
+        self.array().filter { $0.weight != 0 }
     }
     
     enum DayProperty {
