@@ -143,7 +143,7 @@ extension Days {
         
         
         var missingData = false
-        var weightsOnEveryDay = false
+        var weightsOnEveryDay = true
         var weightGoingSteadilyDown = false
         var dayCount = activeCalories.count - 1 /*activeCalories.count - 1*/
         if let options {
@@ -153,14 +153,14 @@ extension Days {
                     missingData = true
                 case .weightGoingSteadilyDown:
                     weightGoingSteadilyDown = true
-                case .shouldAddWeightsOnEveryDay:
-                    weightsOnEveryDay = true
                 case .testCase(let file):
                     var days: Days = Days.decode(path: file) ?? [:] // TODO
                     days.formatAccordingTo(options: options)
                     return days
                 case .dayCount(let count):
                     dayCount = count
+                case .dontAddWeightsOnEveryDay:
+                    weightsOnEveryDay = false
                 }
             }
         }
@@ -179,9 +179,9 @@ extension Days {
         //            days[-1] = Day(date: Date.subtract(days: -1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow)
         //        }
         days.addRunningTotalDeficits()
-        days.setRealisticWeights()
         if weightsOnEveryDay {
             days.setWeightOnEveryDay()
+            days.setRealisticWeights()
         }
         if missingData {
             days.adjustDaysWhereUserDidntEnterDatav2()
@@ -193,10 +193,10 @@ extension Days {
     mutating func formatAccordingTo(options: [TestDayOption]?) {
         self.addRunningTotalDeficits()
         if let options {
-            if options.contains(.shouldAddWeightsOnEveryDay) {
+            if !options.contains(.dontAddWeightsOnEveryDay) {
                 self.setWeightOnEveryDay()
+                self.setRealisticWeights()
             }
-            self.setRealisticWeights()
             for option in options {
                 switch option {
                 case .isMissingConsumedCalories(let version):
@@ -208,12 +208,10 @@ extension Days {
                     case .v3:
                         self.adjustDaysWhereUserDidntEnterDatav3()
                     }
-                case .testCase(_), .dayCount(_), .weightGoingSteadilyDown, .shouldAddWeightsOnEveryDay:
+                case .testCase(_), .dayCount(_), .weightGoingSteadilyDown, .dontAddWeightsOnEveryDay:
                     continue
                 }
             }
-        } else {
-            self.setRealisticWeights()
         }
     }
     
@@ -567,6 +565,10 @@ extension Days {
     
     func array() -> [Day] {
         Array(self.values).sorted(by: { x, y in x.daysAgo > y.daysAgo })
+    }
+    
+    var everyDayHasWeight: Bool {
+        self.array().filter { $0.weight != 0 }.count == 0
     }
     
     enum DayProperty {
