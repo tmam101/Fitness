@@ -347,26 +347,31 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testMissingDayAdjustment() {
-        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.missingDataIssue)])
-        guard let days else {
-            XCTFail()
-            return
-        }
-        for i in stride(from: days.count - 1, through: 0, by: -1) {
-            if let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
-                if let tomorrow = days[i-1] {
-                    let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
-                    if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
-                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2, accuracy: 0.1)
-                    } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
-                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2, accuracy: 0.1)
-                    } else {
-                        XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
+        for path in Filepath.Days.allCases {
+            days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(path)])
+            guard let days else {
+                XCTFail()
+                return
+            }
+            for i in stride(from: days.count - 1, through: 0, by: -1) {
+                if let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
+                    if let tomorrow = days[i-1] {
+                        let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
+                        if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
+                            XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2, accuracy: 0.1)
+                        } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
+                            XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2, accuracy: 0.1)
+                        } else {
+                            XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
+                        }
+                    }
+                    if let yesterday = days[i+1] {
+                        XCTAssertEqual(day.expectedWeight, yesterday.expectedWeightTomorrow)
                     }
                 }
-                if let yesterday = days[i+1] {
-                    XCTAssertEqual(day.expectedWeight, yesterday.expectedWeightTomorrow)
-                }
+            }
+            if let today = days[0], let yesterday = days[1] {
+                XCTAssertEqual(today.expectedWeight, yesterday.expectedWeightTomorrow)
             }
         }
     }

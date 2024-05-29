@@ -269,8 +269,11 @@ extension Days {
      
      Set the realistic weight loss to: 0.2 pounds, unless the expected weight loss is greater, or the actual loss is smaller
      */
-    func setRealisticWeights() {
+    func setRealisticWeights() { // -> Bool?
         var days = self
+        guard days.everyDayHas(.weight) else {
+            return
+        }
         let maximumWeightChangePerDay = 0.2
         
         // Start from the oldest day and work forwards
@@ -476,21 +479,20 @@ extension Days {
                         let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
                         newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                     }
-                    days[i]?.consumedCalories = newConsumedCalories
-                    days[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+                    day.consumedCalories = newConsumedCalories
+                    day.wasModifiedBecauseTheUserDidntEnterData = true
                 }
                 continue
             }
             
             // If we're on today
             guard let tomorrow = days[i-1] else {
-                if !didUserEnterData {
-                    days[i]?.expectedWeight = yesterday.expectedWeightTomorrow
-                } else {
-                    if let expectedWeightChangeBasedOnDeficit = days[i]?.expectedWeightChangeBasedOnDeficit {
-                        days[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
-                    }
-                }
+//                if !didUserEnterData {
+                    day.expectedWeight = yesterday.expectedWeightTomorrow
+//                }
+//                else {
+//                    day.expectedWeight = yesterday.expectedWeightTomorrow + day.expectedWeightChangeBasedOnDeficit
+//                }
                 continue
             }
             
@@ -515,12 +517,12 @@ extension Days {
                     let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
-                days[i]?.consumedCalories = newConsumedCalories
-                days[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+                print(day.expectedWeightTomorrow)
+                day.consumedCalories = newConsumedCalories
+                print(day.expectedWeightTomorrow)
+                day.wasModifiedBecauseTheUserDidntEnterData = true
             }
-            if let expectedWeightChange = days[i]?.expectedWeightChangeBasedOnDeficit {
-                days[i]?.expectedWeight = yesterday.expectedWeightTomorrow
-            }
+            day.expectedWeight = yesterday.expectedWeightTomorrow
         }
 //        print(days)
     }
