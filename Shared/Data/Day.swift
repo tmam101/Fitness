@@ -487,12 +487,7 @@ extension Days {
             
             // If we're on today
             guard let tomorrow = days[i-1] else {
-//                if !didUserEnterData {
-                    day.expectedWeight = yesterday.expectedWeightTomorrow
-//                }
-//                else {
-//                    day.expectedWeight = yesterday.expectedWeightTomorrow + day.expectedWeightChangeBasedOnDeficit
-//                }
+                day.expectedWeight = yesterday.expectedWeightTomorrow
                 continue
             }
             
