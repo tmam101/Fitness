@@ -420,6 +420,7 @@ final class DayUnitTests: XCTestCase {
         let vm = LineChartViewModel(days: days, timeFrame: TimeFrame.week)
     }
     
+    // TODO
     func testInnacurateExpectedWeightToday() {
         let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.inaccurateExpectedWeightToday)])
         XCTAssertEqual(days[0]?.expectedWeight, 200.0)
@@ -441,21 +442,24 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(sorted?.last?.date, twoDaysAgo)
     }
     
-    func testEveryDayHasWeightCount() {
-        var days = [
-            1:Day(weight: 0),
-            2:Day(weight:1)
+    func testEveryDayHasProperty() {
+        let days = [
+            1:Day(realisticWeight: 1, weight: 0),
+            2:Day(realisticWeight: 0, weight:1)
         ]
-        XCTAssertFalse(days.everyDayHasWeight)
+        XCTAssertFalse(days.everyDayHas(.weight))
+        XCTAssertFalse(days.everyDayHas(.realisticWeight))
         days[1]?.weight = 1
-        XCTAssertTrue(days.everyDayHasWeight)
+        days[2]?.realisticWeight = 1
+        XCTAssertTrue(days.everyDayHas(.weight))
+        XCTAssertTrue(days.everyDayHas(.realisticWeight))
     }
     
     func testFirstDay() {
         let oneDayAgo = Date.subtract(days: 1, from: Date())
         let twoDaysAgo = Date.subtract(days: 2, from: Date())
                                        
-        var days = [
+        let days = [
             1:Day(date: oneDayAgo),
             2:Day(date: twoDaysAgo)
         ]
@@ -474,6 +478,16 @@ final class DayUnitTests: XCTestCase {
             1:Day(weight:0)
             ]
         XCTAssertEqual(days.daysWithWeights, [dayWithWeight])
+    }
+    
+    func testEditingDayByReferenceWorks() {
+        let days = [
+            0:Day(weight:10),
+            1:Day(weight:20)
+            ]
+        let firstDay = days[0]
+        firstDay?.weight = 20
+        XCTAssertEqual(days[0]?.weight, 20)
     }
     
     

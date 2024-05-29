@@ -11,14 +11,14 @@ import SwiftUI
 
 // MARK: DAY
 
-public struct Day: Codable, Identifiable, Plottable, Equatable, HasDate {
-//    public static func == (lhs: Day, rhs: Day) -> Bool {
-//        lhs.daysAgo == rhs.daysAgo
-//    }
+public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
+    public static func == (lhs: Day, rhs: Day) -> Bool {
+        lhs.daysAgo == rhs.daysAgo
+    }
     
     public var primitivePlottable: String = "Day"
     
-    public init?(primitivePlottable: String) {
+    required public init?(primitivePlottable: String) {
         
     }
     
@@ -269,20 +269,21 @@ extension Days {
      
      Set the realistic weight loss to: 0.2 pounds, unless the expected weight loss is greater, or the actual loss is smaller
      */
-    mutating func setRealisticWeights() {
+    func setRealisticWeights() {
+        var days = self
         let maximumWeightChangePerDay = 0.2
         
         // Start from the oldest day and work forwards
-        for i in stride(from: self.count - 1, through: 0, by: -1) {
-            guard let currentDay = self[i] else { continue }
+        for i in stride(from: days.count - 1, through: 0, by: -1) {
+            guard let currentDay = days[i] else { continue }
             
             // Oldest day uses its own weight as the realistic weight
-            if i == self.count - 1 {
-                self[i]?.realisticWeight = currentDay.weight
+            if i == days.count - 1 {
+                days[i]?.realisticWeight = currentDay.weight
                 continue
             }
             
-            guard let previousDay = self[i + 1] else { continue }
+            guard let previousDay = days[i + 1] else { continue }
             
             // Calculate the realistic weight difference
             let realWeightDifference = (currentDay.weight - previousDay.realisticWeight)
@@ -296,39 +297,40 @@ extension Days {
             }
             
             // Set the realistic weight for the current day
-            self[i]?.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
+            days[i]?.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
         }
     }
     
-    mutating func setWeightOnEveryDay() {
-        let daysWithWeights = self.daysWithWeights.sortedLongestAgoToMostRecent()
+    func setWeightOnEveryDay() {
+        let days = self
+        let daysWithWeights = days.daysWithWeights.sortedLongestAgoToMostRecent()
         guard daysWithWeights.count > 0 else { return } //todo test
         for i in 0..<daysWithWeights.count-1 {
             let thisDay = daysWithWeights[i]
-            let nextDay = daysWithWeights[i+1]
-            let daysBetween = thisDay.daysAgo - nextDay.daysAgo
+            let nextDayWithWeight = daysWithWeights[i+1]
+            let daysBetween = thisDay.daysAgo - nextDayWithWeight.daysAgo
             if daysBetween == 1 {
                 continue
             }
-            let weightBetween = nextDay.weight - thisDay.weight
+            let weightBetween = nextDayWithWeight.weight - thisDay.weight
             let weightAdjustmentEachDay = weightBetween / Double(daysBetween)
-            for j in stride(from: thisDay.daysAgo - 1, to: nextDay.daysAgo, by: -1) {
-                guard let _ = self[j], let _ = self[j+1] else {
+            for j in stride(from: thisDay.daysAgo - 1, to: nextDayWithWeight.daysAgo, by: -1) {
+                guard let thisDay = days[j], let previousDay = days[j+1] else {
                     // if we are at the longest ago day, and its 0, we set it to the next weight that exists
                     continue
                 }
-                self[j]!.weight = self[j+1]!.weight + weightAdjustmentEachDay
+                thisDay.weight = previousDay.weight + weightAdjustmentEachDay
             }
         }
         // Make the most recent weights, if they are not recorded, equal to the last recorded weight
         var mostRecentWeight: Double? = nil
-        for i in stride(from: self.count - 1, through: 0, by: -1) {
-            if self[i]?.weight == 0 {
+        for i in stride(from: days.count - 1, through: 0, by: -1) {
+            if days[i]?.weight == 0 {
                 if let mostRecentWeight {
-                    self[i]?.weight = mostRecentWeight
+                    days[i]?.weight = mostRecentWeight
                 }
             } else {
-                mostRecentWeight = self[i]?.weight
+                mostRecentWeight = days[i]?.weight
             }
         }
     }
@@ -434,22 +436,23 @@ extension Days {
         print(self)
     }
     
-    mutating func adjustDaysWhereUserDidntEnterDatav3() {
-        if self.array().filter({ $0.weight == 0 }).count != 0 {
-            self.setWeightOnEveryDay()
+    func adjustDaysWhereUserDidntEnterDatav3() {
+        var days = self
+        if !days.everyDayHas(.weight) {
+            days.setWeightOnEveryDay()
         }
-        if self.array().filter({ $0.realisticWeight == 0 }).count != 0 {
-            self.setWeightOnEveryDay()
+        if days.everyDayHas(.realisticWeight) {
+            days.setRealisticWeights()
         }
-        for i in stride(from: self.count - 1, through: 0, by: -1) {
-            guard let day = self[i] else { return }
+        for i in stride(from: days.count - 1, through: 0, by: -1) {
+            guard let day = days[i] else { return }
             let didUserEnterData = day.consumedCalories != 0
             
             // TODO: What if only one day
             
             // If we're on first day
-            guard let yesterday = self[i+1] else {
-                guard let tomorrow = self[i-1] else {
+            guard let yesterday = days[i+1] else {
+                guard let tomorrow = days[i-1] else {
                     print("Fail") // TODO
                     continue
                 }
@@ -473,19 +476,19 @@ extension Days {
                         let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
                         newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                     }
-                    self[i]?.consumedCalories = newConsumedCalories
-                    self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+                    days[i]?.consumedCalories = newConsumedCalories
+                    days[i]?.wasModifiedBecauseTheUserDidntEnterData = true
                 }
                 continue
             }
             
             // If we're on today
-            guard let tomorrow = self[i-1] else {
+            guard let tomorrow = days[i-1] else {
                 if !didUserEnterData {
-                    self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
+                    days[i]?.expectedWeight = yesterday.expectedWeightTomorrow
                 } else {
-                    if let expectedWeightChangeBasedOnDeficit = self[i]?.expectedWeightChangeBasedOnDeficit {
-                        self[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
+                    if let expectedWeightChangeBasedOnDeficit = days[i]?.expectedWeightChangeBasedOnDeficit {
+                        days[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
                     }
                 }
                 continue
@@ -512,14 +515,14 @@ extension Days {
                     let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
-                self[i]?.consumedCalories = newConsumedCalories
-                self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
+                days[i]?.consumedCalories = newConsumedCalories
+                days[i]?.wasModifiedBecauseTheUserDidntEnterData = true
             }
-            if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
-                self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
+            if let expectedWeightChange = days[i]?.expectedWeightChangeBasedOnDeficit {
+                days[i]?.expectedWeight = yesterday.expectedWeightTomorrow
             }
         }
-        print(self)
+//        print(days)
     }
     
     //MARK: REALISTIC WEIGHTS
@@ -578,10 +581,10 @@ extension Days {
         Array(self.values).sorted(by: { x, y in x.daysAgo > y.daysAgo })
     }
     
-    var everyDayHasWeight: Bool {
-        let weights = self.array().map(\.weight)
-        let weightsThatAreZero = weights.filter { $0 == 0 }
-        return weightsThatAreZero.count == 0
+    func everyDayHas(_ property: DayProperty) -> Bool {
+        let properties = mappedToProperty(property: property)
+        let propertiesThatAreZero = properties.filter { $0 == 0 }
+        return propertiesThatAreZero.count == 0
     }
     
     var daysWithWeights: [Day] {
