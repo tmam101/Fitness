@@ -309,85 +309,69 @@ extension Days {
     }
     
     func adjustDaysWhereUserDidntEnterDatav3() {
-        var days = self
+        let days = self
+        
+        // Ensure all days have weights
         if !days.everyDayHas(.weight) {
-            days.setWeightOnEveryDay() // todo return?
+            days.setWeightOnEveryDay()
         }
+        
+        // Ensure all days have realistic weights
         if !days.everyDayHas(.realisticWeight) {
-            days.setRealisticWeights() // todo return?
+            days.setRealisticWeights()
         }
-        for day in self.array().sortedLongestAgoToMostRecent() {
+        
+        // Iterate over days sorted from the oldest to the most recent
+        for day in days.array().sortedLongestAgoToMostRecent() {
             let didUserEnterData = day.consumedCalories != 0
             
-            // TODO: What if only one day
-            
-            // If we're on first day
+            // If we are on the first day, check if user entered data
             guard let yesterday = days.dayBefore(day) else {
                 guard let tomorrow = days.dayAfter(day) else {
-                    print("Fail") // TODO
+                    print("Fail") // TODO: Handle this edge case properly
                     continue
                 }
                 if !didUserEnterData {
-                    var realisticWeightChangeCausedByToday = tomorrow.realisticWeight - day.expectedWeight
-                    // TODO Consolidate with code below
-                    var newConsumedCalories: Double = 0
-                    if realisticWeightChangeCausedByToday < 0 {
-                        realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
-                        let totalBurned = day.activeCalories + day.restingCalories
-                        let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
-                        let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
-                        if caloriesLeftToBeBurned {
-                            newConsumedCalories = 0
-                        } else {
-                            newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
-                        }
-                    } else {
-                        realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
-                        let totalBurned = day.activeCalories + day.restingCalories
-                        let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
-                        newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
-                    }
-                    day.consumedCalories = newConsumedCalories
-                    day.wasModifiedBecauseTheUserDidntEnterData = true
+                    adjust(realisticWeightChangeCausedByToday: tomorrow.realisticWeight - day.expectedWeight, day: day)
                 }
                 continue
             }
             
-            // If we're on today
+            // If we are on today, set expected weight based on yesterday's expected weight tomorrow
             guard let tomorrow = days.dayAfter(day) else {
                 day.expectedWeight = yesterday.expectedWeightTomorrow
                 continue
             }
             
-            // If the user didnt enter data today
-            // We want to see what the realistic weight line did tomorrow, and then make it follow it
+            // Adjust days where user didn't enter data
             if !didUserEnterData {
-                var realisticWeightChangeCausedByToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
-                var newConsumedCalories: Double = 0
-                if realisticWeightChangeCausedByToday < 0 {
-                    realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
-                    let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
-                    let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
-                    if caloriesLeftToBeBurned {
-                        newConsumedCalories = 0
-                    } else {
-                        newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
-                    }
-                } else {
-                    realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
-                    let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
-                    newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
-                }
-                print(day.expectedWeightTomorrow)
-                day.consumedCalories = newConsumedCalories
-                print(day.expectedWeightTomorrow)
-                day.wasModifiedBecauseTheUserDidntEnterData = true
+                adjust(realisticWeightChangeCausedByToday: tomorrow.realisticWeight - yesterday.expectedWeightTomorrow, day: day)
             }
             day.expectedWeight = yesterday.expectedWeightTomorrow
         }
-//        print(days)
+    }
+    
+    private func adjust(realisticWeightChangeCausedByToday: Double, day: Day) {
+        var realisticWeightChangeCausedByToday = realisticWeightChangeCausedByToday
+        var newConsumedCalories: Double = 0
+        if realisticWeightChangeCausedByToday < 0 {
+            realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
+            let totalBurned = day.activeCalories + day.restingCalories
+            let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
+            let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
+            if caloriesLeftToBeBurned {
+                newConsumedCalories = 0
+            } else {
+                newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
+            }
+        } else {
+            realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
+            let totalBurned = day.activeCalories + day.restingCalories
+            let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
+            newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+        }
+        day.consumedCalories = newConsumedCalories
+        day.wasModifiedBecauseTheUserDidntEnterData = true
     }
     
     // MARK: Convenience
