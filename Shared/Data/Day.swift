@@ -33,8 +33,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
          expectedWeight: Double = 0,
          realisticWeight: Double = 0,
          weight: Double = 0,
-         protein: Double = 0,
-         daysContainer: DaysWrapper? = nil
+         protein: Double = 0
     ) {
         self.id = id
         self.date = date ?? Date.subtract(days: daysAgo ?? 0, from: Date())
@@ -52,7 +51,6 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         self.realisticWeight = realisticWeight
         self.weight = weight
         self.protein = protein
-        self.daysContainer = daysContainer
     }
     
     public typealias PrimitivePlottable = String
@@ -120,36 +118,10 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     var firstLetterOfDay: String {
         "\(dayOfWeek.prefix(1))"
     }
-    
-    var dayBefore: Day? {
-        daysContainer?[daysAgo - 1]
-    }
-    var dayAfter: Day? {
-        daysContainer?[daysAgo + 1]
-    }
-    
-    var daysContainer: DaysWrapper?
 }
 // MARK: DAYS
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
 public typealias Days = [Int:Day]
-
-class DaysWrapper: Codable {
-    private var days: Days
-    
-    init(days: Days) {
-        self.days = days
-    }
-    
-    subscript(key: Int) -> Day? {
-        get {
-            return days[key]
-        }
-        set {
-            days[key] = newValue
-        }
-    }
-}
 
 extension Days {
     // TODO Function for adding a new day that pushes everything forward a day
@@ -685,6 +657,14 @@ extension Days {
             self[day.daysAgo] = day
         }
         return true
+    }
+    
+    func dayAfter(_ day: Day) -> Day? {
+        self[day.daysAgo - 1]
+    }
+    
+    func dayBefore(_ day: Day) -> Day? {
+        self[day.daysAgo + 1]
     }
 }
 

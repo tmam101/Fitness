@@ -501,22 +501,27 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(day.daysAgo, 5)
     }
     
-    func testNextDay() {
-        var days: Days = [:]
-        let wrapper = DaysWrapper(days: days)
-        let day = Day(daysAgo: 4, daysContainer: wrapper)
-        let day2 = Day(daysAgo: 5, daysContainer: wrapper)
-        let day3 = Day(daysAgo: 6, daysContainer: wrapper)
-        XCTAssertTrue(days.append([day, day2, day3]))
-        XCTAssertEqual(day2.dayAfter, day)
+    func testDayAfter() {
+        let day1 = Day(daysAgo: 1)
+        let day2 = Day(daysAgo: 2)
+        let day3 = Day(daysAgo: 3)
+        let days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
+        XCTAssertEqual(days.dayAfter(day2), day1)
+    }
+    
+    func testDayBefore() {
+        let day1 = Day(daysAgo: 1)
+        let day2 = Day(daysAgo: 2)
+        let day3 = Day(daysAgo: 3)
+        let days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
+        XCTAssertEqual(days.dayBefore(day2), day3)
     }
     
     func testAppend() {
         var days: Days = [:]
-        let wrapper = DaysWrapper(days: days)
-        let day = Day(daysAgo: 4, daysContainer: wrapper)
-        let day2 = Day(daysAgo: 5, daysContainer: wrapper)
-        let day3 = Day(daysAgo: 6, daysContainer: wrapper)
+        let day = Day(daysAgo: 4)
+        let day2 = Day(daysAgo: 5)
+        let day3 = Day(daysAgo: 6)
         XCTAssertTrue(days.append([day, day2, day3]))
         XCTAssertEqual(days[4], day)
     }
