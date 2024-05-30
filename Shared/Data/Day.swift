@@ -391,6 +391,7 @@ extension Days {
     }
     
     // MARK: Convenience
+    
     func array() -> [Day] {
         Array(self.values).sorted(by: { x, y in x.daysAgo > y.daysAgo })
     }
@@ -492,7 +493,6 @@ extension Days {
     
     func dayAfter(_ day: Day?) -> Day? {
         guard let day else { return nil }
-        // Get all keys and sort them
         let sortedKeys = self.keys.sorted(by: >)
         
         // Iterate through sorted keys to find the next smallest key
@@ -508,7 +508,6 @@ extension Days {
     
     func dayBefore(_ day: Day?) -> Day? {
         guard let day else { return nil }
-        // Get all keys and sort them
         let sortedKeys = self.keys.sorted(by: <)
         
         // Iterate through sorted keys to find the next biggest key
