@@ -13,7 +13,7 @@ import SwiftUI
 
 public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     public static func == (lhs: Day, rhs: Day) -> Bool {
-        lhs.daysAgo == rhs.daysAgo
+        lhs.id == rhs.id
     }
     
     public var primitivePlottable: String = "Day"
@@ -288,6 +288,7 @@ extension Days {
     func setWeightOnEveryDay() {
         let days = self
         let daysWithWeights = days.daysWithWeights.sortedLongestAgoToMostRecent()
+        let daysWithWeights = days.daysWith(.weight).array().sortedLongestAgoToMostRecent()
         guard daysWithWeights.count > 0 else { return } //todo test
         for i in 0..<daysWithWeights.count-1 {
             let thisDay = daysWithWeights[i]
@@ -565,8 +566,8 @@ extension Days {
         return propertiesThatAreZero.count == 0
     }
     
-    var daysWithWeights: [Day] {
-        self.array().filter { $0.weight != 0 }
+    func daysWith(_ property: DayProperty) -> Days {
+        self.filter { $0.value[keyPath: property.keyPath] != 0 }
     }
     
     enum DayProperty {
@@ -578,29 +579,33 @@ extension Days {
         case expectedWeight
         case netEnergy
         case deficit
+        
+        var keyPath: KeyPath<Day, Double> {
+            switch self {
+            case .activeCalories:
+                return \Day.activeCalories
+            case .restingCalories:
+                return \Day.restingCalories
+            case .consumedCalories:
+                return \Day.consumedCalories
+            case .weight:
+                return \Day.weight
+            case .realisticWeight:
+                return \Day.realisticWeight
+            case .expectedWeight:
+                return \Day.expectedWeight
+            case .netEnergy:
+                return \Day.netEnergy
+            case .deficit:
+                return \Day.deficit
+            }
+        }
     }
     
     func mappedToProperty(property: DayProperty) -> [Double] {
         return Array(self.values)
             .map {
-                switch property {
-                case .activeCalories:
-                    return $0.activeCalories
-                case .restingCalories:
-                    return $0.restingCalories
-                case .consumedCalories:
-                    return $0.consumedCalories
-                case .weight:
-                    return $0.weight
-                case .realisticWeight:
-                    return $0.realisticWeight
-                case .expectedWeight:
-                    return $0.expectedWeight
-                case .netEnergy:
-                    return $0.netEnergy
-                case .deficit:
-                    return $0.deficit
-                }
+                $0[keyPath: property.keyPath]
             }
     }
     
@@ -652,12 +657,34 @@ extension Days {
     
     func dayAfter(_ day: Day?) -> Day? {
         guard let day else { return nil }
-        return self[day.daysAgo - 1]
+        // Get all keys and sort them
+        let sortedKeys = self.keys.sorted(by: >)
+        
+        // Iterate through sorted keys to find the next smallest key
+        for sortedKey in sortedKeys {
+            if sortedKey < day.daysAgo {
+                return self[sortedKey]
+            }
+        }
+        
+        // If no smaller key is found, return nil
+        return nil
     }
     
     func dayBefore(_ day: Day?) -> Day? {
         guard let day else { return nil }
-        return self[day.daysAgo + 1]
+        // Get all keys and sort them
+        let sortedKeys = self.keys.sorted(by: <)
+        
+        // Iterate through sorted keys to find the next biggest key
+        for sortedKey in sortedKeys {
+            if sortedKey > day.daysAgo {
+                return self[sortedKey]
+            }
+        }
+        
+        // If no bigger key is found, return nil
+        return nil
     }
 }
 

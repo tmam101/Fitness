@@ -454,13 +454,20 @@ final class DayUnitTests: XCTestCase {
         XCTAssertTrue(days.everyDayHas(.realisticWeight))
     }
     
-    func testDaysWithWeights() {
+    func testDaysWithProperty() {
         let dayWithWeight = Day(weight: 1)
         var days = [
             0:dayWithWeight,
+            2: dayWithWeight,
             1:Day(weight:0)
             ]
-        XCTAssertEqual(days.daysWithWeights, [dayWithWeight])
+        var daysWithProperty = [0:dayWithWeight, 2:dayWithWeight]
+        XCTAssertEqual(days.daysWith(.weight), daysWithProperty)
+        
+        let dayWithRealisticWeight = Day(daysAgo: 3, realisticWeight: 1)
+        let _ = days.append(dayWithRealisticWeight)
+        daysWithProperty = [3: dayWithRealisticWeight]
+        XCTAssertEqual(days.daysWith(.realisticWeight), daysWithProperty)
     }
     
     func testEditingDayByReferenceWorks() {
@@ -505,16 +512,22 @@ final class DayUnitTests: XCTestCase {
         let day1 = Day(daysAgo: 1)
         let day2 = Day(daysAgo: 2)
         let day3 = Day(daysAgo: 3)
-        let days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
+        var days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
         XCTAssertEqual(days.dayAfter(day2), day1)
+        
+        days = [day3.daysAgo: day3, day1.daysAgo:day1]
+        XCTAssertEqual(days.dayAfter(day3), day1)
     }
     
     func testDayBefore() {
         let day1 = Day(daysAgo: 1)
         let day2 = Day(daysAgo: 2)
         let day3 = Day(daysAgo: 3)
-        let days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
+        var days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
         XCTAssertEqual(days.dayBefore(day2), day3)
+        
+        days = [day3.daysAgo: day3, day1.daysAgo:day1]
+        XCTAssertEqual(days.dayBefore(day1), day3)
     }
     
     func testAppend() {
