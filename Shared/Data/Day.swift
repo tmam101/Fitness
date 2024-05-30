@@ -426,20 +426,19 @@ extension Days {
     func adjustDaysWhereUserDidntEnterDatav3() {
         var days = self
         if !days.everyDayHas(.weight) {
-            days.setWeightOnEveryDay()
+            days.setWeightOnEveryDay() // todo return?
         }
         if days.everyDayHas(.realisticWeight) {
-            days.setRealisticWeights()
+            days.setRealisticWeights() // todo return?
         }
-        for i in stride(from: days.count - 1, through: 0, by: -1) {
-            guard let day = days[i] else { return }
+        for day in self.array().sortedLongestAgoToMostRecent() {
             let didUserEnterData = day.consumedCalories != 0
             
             // TODO: What if only one day
             
             // If we're on first day
-            guard let yesterday = days[i+1] else {
-                guard let tomorrow = days[i-1] else {
+            guard let yesterday = days.dayBefore(day) else {
+                guard let tomorrow = days.dayAfter(day) else {
                     print("Fail") // TODO
                     continue
                 }
@@ -470,7 +469,7 @@ extension Days {
             }
             
             // If we're on today
-            guard let tomorrow = days[i-1] else {
+            guard let tomorrow = days.dayAfter(day) else {
                 day.expectedWeight = yesterday.expectedWeightTomorrow
                 continue
             }
