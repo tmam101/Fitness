@@ -287,24 +287,26 @@ extension Days {
     
     func setWeightOnEveryDay() {
         let days = self
-        let daysWithWeights = days.daysWithWeights.sortedLongestAgoToMostRecent()
-        let daysWithWeights = days.daysWith(.weight).array().sortedLongestAgoToMostRecent()
+        let daysWithWeights = days.daysWith(.weight)
         guard daysWithWeights.count > 0 else { return } //todo test
-        for i in 0..<daysWithWeights.count-1 {
-            let thisDay = daysWithWeights[i]
-            let nextDayWithWeight = daysWithWeights[i+1]
+        for day in daysWithWeights {
+            let thisDay = day.value
+            guard let nextDayWithWeight = daysWithWeights.dayAfter(day.value) else {
+                continue
+            }
             let daysBetween = thisDay.daysAgo - nextDayWithWeight.daysAgo
             if daysBetween == 1 {
                 continue
             }
             let weightBetween = nextDayWithWeight.weight - thisDay.weight
             let weightAdjustmentEachDay = weightBetween / Double(daysBetween)
-            for j in stride(from: thisDay.daysAgo - 1, to: nextDayWithWeight.daysAgo, by: -1) {
-                guard let thisDay = days[j], let previousDay = days[j+1] else {
-                    // if we are at the longest ago day, and its 0, we set it to the next weight that exists
+            for day in subset(from: thisDay.daysAgo - 1, through: nextDayWithWeight.daysAgo + 1)
+                .array()
+                .sortedLongestAgoToMostRecent() {
+                guard let previousDay = days.dayBefore(day) else {
                     continue
                 }
-                thisDay.weight = previousDay.weight + weightAdjustmentEachDay
+                day.weight = previousDay.weight + weightAdjustmentEachDay
             }
         }
         // Make the most recent weights, if they are not recorded, equal to the last recorded weight
