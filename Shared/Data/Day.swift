@@ -118,6 +118,30 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     var firstLetterOfDay: String {
         "\(dayOfWeek.prefix(1))"
     }
+    
+    func estimatedConsumedCaloriesToCause(realisticWeightChange: Double) -> Double {
+        var realisticWeightChangeCausedByToday = realisticWeightChange
+        var newConsumedCalories: Double = 0
+        // If you lost weight,
+        if realisticWeightChangeCausedByToday < 0 {
+            // Calculate how few calories you must have eaten to lose that much weight.
+            realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
+            let totalBurned = self.activeCalories + self.restingCalories
+            let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
+            let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
+            // If setting 0 calories eaten still leaves you with weight to lose, just set it to 0 calories eaten.
+            newConsumedCalories = caloriesLeftToBeBurned ? 0 : totalBurned - caloriesAssumedToBeBurned
+        }
+        // If you gained weight or maintained,
+        else {
+            // Calculate how many calories you must have eaten to gain that much weight.
+            realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
+            let totalBurned = self.activeCalories + self.restingCalories
+            let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
+            newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+        }
+        return newConsumedCalories
+    }
 }
 
 
@@ -332,7 +356,9 @@ extension Days {
                     continue
                 }
                 if !didUserEnterData {
-                    adjust(realisticWeightChangeCausedByToday: tomorrow.realisticWeight - day.expectedWeight, day: day)
+                    let realisticWeightChangeCausedByToday = tomorrow.realisticWeight - day.expectedWeight
+                    day.consumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChangeCausedByToday)
+                    day.wasModifiedBecauseTheUserDidntEnterData = true
                 }
                 continue
             }
@@ -345,33 +371,12 @@ extension Days {
             
             // Adjust days where user didn't enter data
             if !didUserEnterData {
-                adjust(realisticWeightChangeCausedByToday: tomorrow.realisticWeight - yesterday.expectedWeightTomorrow, day: day)
+                let realisticWeightChangeCausedByToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
+                day.consumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChangeCausedByToday)
+                day.wasModifiedBecauseTheUserDidntEnterData = true
             }
             day.expectedWeight = yesterday.expectedWeightTomorrow
         }
-    }
-    
-    private func adjust(realisticWeightChangeCausedByToday: Double, day: Day) {
-        var realisticWeightChangeCausedByToday = realisticWeightChangeCausedByToday
-        var newConsumedCalories: Double = 0
-        if realisticWeightChangeCausedByToday < 0 {
-            realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
-            let totalBurned = day.activeCalories + day.restingCalories
-            let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
-            let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
-            if caloriesLeftToBeBurned {
-                newConsumedCalories = 0
-            } else {
-                newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
-            }
-        } else {
-            realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
-            let totalBurned = day.activeCalories + day.restingCalories
-            let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
-            newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
-        }
-        day.consumedCalories = newConsumedCalories
-        day.wasModifiedBecauseTheUserDidntEnterData = true
     }
     
     // MARK: Convenience
