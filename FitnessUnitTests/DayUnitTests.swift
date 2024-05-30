@@ -342,6 +342,25 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(d[6]?.weight ?? 0.0, 2.15, accuracy: 0.01)
     }
     
+    func testRecentDaysKeepRecentWeight() {
+        var d: Days = [:]
+        d[0] = Day(date: daysAgo(0), daysAgo: 0, weight: 0)
+        d[1] = Day(date: daysAgo(1), daysAgo: 1, weight: 1)
+        d[2] = Day(date: daysAgo(2), daysAgo: 2, weight: 0)
+        d[3] = Day(date: daysAgo(3), daysAgo: 3, weight: 3)
+        d[4] = Day(date: daysAgo(4), daysAgo: 4, weight: 0)
+        d[5] = Day(date: daysAgo(5), daysAgo: 5, weight: 0)
+        d[6] = Day(date: daysAgo(6), daysAgo: 6, weight: 3.3)
+        d[7] = Day(date: daysAgo(7), daysAgo: 7, weight: 0)
+        d[8] = Day(date: daysAgo(8), daysAgo: 8, weight: 1)
+        d.setWeightOnEveryDay()
+        XCTAssertEqual(d[0]?.weight, 1)
+        XCTAssertEqual(d[2]?.weight, 2)
+        XCTAssertEqual(d[4]?.weight ?? 0.0, 3.1, accuracy: 0.01)
+        XCTAssertEqual(d[5]?.weight ?? 0.0, 3.2, accuracy: 0.01)
+        XCTAssertEqual(d[7]?.weight ?? 0.0, 2.15, accuracy: 0.01)
+    }
+    
     func daysAgo(_ num: Int) -> Date {
         Date.subtract(days: num, from: Date())
     }

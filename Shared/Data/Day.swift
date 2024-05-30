@@ -311,13 +311,13 @@ extension Days {
         }
         // Make the most recent weights, if they are not recorded, equal to the last recorded weight
         var mostRecentWeight: Double? = nil
-        for i in stride(from: days.count - 1, through: 0, by: -1) {
-            if days[i]?.weight == 0 {
+        for day in days.array().sortedLongestAgoToMostRecent() {
+            if day.weight == 0 {
                 if let mostRecentWeight {
-                    days[i]?.weight = mostRecentWeight
+                    day.weight = mostRecentWeight
                 }
             } else {
-                mostRecentWeight = days[i]?.weight
+                mostRecentWeight = day.weight
             }
         }
     }
