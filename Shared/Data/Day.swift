@@ -11,6 +11,10 @@ import SwiftUI
 
 // MARK: DAY
 
+public class Constants {
+    static let numberOfCaloriesInPound: Double = 3500
+}
+
 public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     public static func == (lhs: Day, rhs: Day) -> Bool {
         lhs.id == rhs.id
@@ -74,7 +78,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         expectedWeight + expectedWeightChangeBasedOnDeficit
     }
     var expectedWeightChangeBasedOnDeficit: Double {
-        0 - (deficit / 3500)
+        0 - (deficit / Constants.numberOfCaloriesInPound)
     }
     var realisticWeight: Double = 0
     var weight: Double = 0
@@ -83,6 +87,9 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     }
     var activeCalorieToDeficitRatio: Double {
         activeCalories / deficit
+    }
+    var allCaloriesBurned: Double {
+        activeCalories + restingCalories
     }
     var protein: Double = 0
     var proteinPercentage: Double {
@@ -127,7 +134,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
             // Calculate how few calories you must have eaten to lose that much weight.
             realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
             let totalBurned = self.activeCalories + self.restingCalories
-            let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * 3500)
+            let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * Constants.numberOfCaloriesInPound)
             let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
             // If setting 0 calories eaten still leaves you with weight to lose, just set it to 0 calories eaten.
             newConsumedCalories = caloriesLeftToBeBurned ? 0 : totalBurned - caloriesAssumedToBeBurned
@@ -137,7 +144,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
             // Calculate how many calories you must have eaten to gain that much weight.
             realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
             let totalBurned = self.activeCalories + self.restingCalories
-            let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * 3500) + totalBurned
+            let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * Constants.numberOfCaloriesInPound) + totalBurned
             newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
         }
         return newConsumedCalories
@@ -558,7 +565,7 @@ extension Days {
                 var newConsumedCalories: Double = 0
                 if todaysWeightMinusYesterdaysExpectedWeight < 0 {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeBurned = 0 - (todaysWeightMinusYesterdaysExpectedWeight * 3500)
+                    let caloriesAssumedToBeBurned = 0 - (todaysWeightMinusYesterdaysExpectedWeight * Constants.numberOfCaloriesInPound)
                     let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
                     if caloriesLeftToBeBurned {
                         newConsumedCalories = 0
@@ -567,7 +574,7 @@ extension Days {
                     }
                 } else {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeEaten = (todaysWeightMinusYesterdaysExpectedWeight * 3500) + totalBurned
+                    let caloriesAssumedToBeEaten = (todaysWeightMinusYesterdaysExpectedWeight * Constants.numberOfCaloriesInPound) + totalBurned
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
                 self[i]?.consumedCalories = newConsumedCalories
@@ -605,7 +612,7 @@ extension Days {
                 var newConsumedCalories: Double = 0
                 if weightChangecausedByToday < 0 {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeBurned = 0 - (weightChangecausedByToday * 3500)
+                    let caloriesAssumedToBeBurned = 0 - (weightChangecausedByToday * Constants.numberOfCaloriesInPound)
                     let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
                     if caloriesLeftToBeBurned {
                         newConsumedCalories = 0
@@ -614,7 +621,7 @@ extension Days {
                     }
                 } else {
                     let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeEaten = (weightChangecausedByToday * 3500) + totalBurned
+                    let caloriesAssumedToBeEaten = (weightChangecausedByToday * Constants.numberOfCaloriesInPound) + totalBurned
                     newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
                 }
                 self[i]?.consumedCalories = newConsumedCalories

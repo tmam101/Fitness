@@ -575,4 +575,28 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days[4], day)
     }
     
+    func estimatedConsumedCaloriesToCauseRealisticWeightChange() {
+        let day = Day(daysAgo: 0, activeCalories: 500, restingCalories: 1000, consumedCalories: 0)
+        let estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: 0.2)
+        // A weight change of 0.2 == 3500 calories * 0.2 == 700
+        // So we need a surplus of 700 == Burned calories + consumed calories == 1500 + 700
+        XCTAssertEqual(1500 + 700, estimatedConsumedCaloriesToCauseRealisticWeightChange)
+        XCTAssertEqual(day.allCaloriesBurned + (3500 * 0.2), estimatedConsumedCaloriesToCauseRealisticWeightChange)
+        
+        for i in 0...50 {
+            let active = Double.random(in: 0...1500)
+            let resting = Double.random(in: 0...3000)
+            let change = Double.random(in: -0.2...0.2)
+            
+            let day = Day(daysAgo: 0, activeCalories: active, restingCalories: resting, consumedCalories: 0)
+            let estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: change)
+            
+            let correct = day.allCaloriesBurned + (3500 * change)
+            XCTAssertEqual(correct, estimatedConsumedCaloriesToCauseRealisticWeightChange)
+            
+            let x = Day(daysAgo: 0, activeCalories: active, restingCalories: resting, consumedCalories: 0)
+            let y = day.estimatedConsumedCaloriesToCause(realisticWeightChange: change)
+        }
+    }
+    
 }
