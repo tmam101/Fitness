@@ -259,7 +259,7 @@ extension Days {
      
      Set the realistic weight loss to: 0.2 pounds, unless the expected weight loss is greater, or the actual loss is smaller
      */
-    func setRealisticWeights() { // -> Bool?
+    func setRealisticWeights() {
         guard self.everyDayHas(.weight) else {
             return
         }
@@ -271,19 +271,14 @@ extension Days {
             if let previousDay = dayBefore(currentDay) {
                 // Calculate the realistic weight difference
                 let realWeightDifference = (currentDay.weight - previousDay.realisticWeight)
-                var adjustedWeightDifference = realWeightDifference
                 
                 // Adjust the weight difference based on the maximum allowed change per day
-                if adjustedWeightDifference < -maximumWeightChangePerDay  {
-                    adjustedWeightDifference = -maximumWeightChangePerDay
-                } else if adjustedWeightDifference > maximumWeightChangePerDay {
-                    adjustedWeightDifference = maximumWeightChangePerDay
-                }
+                let adjustedWeightDifference = Swift.max(Swift.min(realWeightDifference, maximumWeightChangePerDay), -maximumWeightChangePerDay)
                 
                 // Set the realistic weight for the current day
                 currentDay.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
             } else {
-                // The oldest day uses it's own weight as the realistic weight
+                // The oldest day uses its own weight as the realistic weight
                 currentDay.realisticWeight = currentDay.weight
             }
             day = dayAfter(currentDay)
