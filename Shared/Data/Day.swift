@@ -134,7 +134,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         if realisticWeightChangeCausedByToday < 0 {
             // Calculate how few calories you must have eaten to lose that much weight.
             realisticWeightChangeCausedByToday = Swift.max(-Constants.maximumWeightChangePerDay, realisticWeightChangeCausedByToday)
-            let totalBurned = self.activeCalories + self.restingCalories
+            let totalBurned = self.allCaloriesBurned
             let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * Constants.numberOfCaloriesInPound)
             let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
             // If setting 0 calories eaten still leaves you with weight to lose, just set it to 0 calories eaten.

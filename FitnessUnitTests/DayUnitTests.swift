@@ -576,8 +576,8 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testEstimatedConsumedCaloriesToCauseRealisticWeightChange() {
-        let day = Day(daysAgo: 0, activeCalories: 500, restingCalories: 1000, consumedCalories: 0)
-        let estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Constants.maximumWeightChangePerDay)
+        var day = Day(daysAgo: 0, activeCalories: 500, restingCalories: 1000, consumedCalories: 0)
+        var estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Constants.maximumWeightChangePerDay)
         // A weight change of 0.2 == 3500 calories * 0.2 == 700
         // So we need a surplus of 700 == Burned calories + consumed calories == 1500 + 700
         XCTAssertEqual(1500 + 700, estimatedConsumedCaloriesToCauseRealisticWeightChange)
@@ -593,7 +593,31 @@ final class DayUnitTests: XCTestCase {
             
             let correct = day.allCaloriesBurned + (Constants.numberOfCaloriesInPound * change)
             XCTAssertEqual(correct, estimatedConsumedCaloriesToCauseRealisticWeightChange)
+            if correct != estimatedConsumedCaloriesToCauseRealisticWeightChange {
+                print("active: \(active)\n resting: \(resting)\n change: \(change)")
+            }
         }
+        
+        // TODO Make this more general
+        
+        let active = 335.3838953272643
+        let resting = 225.1075588820688
+        let change = -0.19420285213598337
+        
+        day = Day(daysAgo: 0, activeCalories: active, restingCalories: resting, consumedCalories: 0)
+        estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: change)
+        
+        let totalBurned = day.allCaloriesBurned
+        let caloriesAssumedToBeBurned = 0 - (change * Constants.numberOfCaloriesInPound)
+        let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
+        if caloriesLeftToBeBurned {
+            XCTAssertEqual(0, estimatedConsumedCaloriesToCauseRealisticWeightChange)
+        } else {
+            let correct = day.allCaloriesBurned + (Constants.numberOfCaloriesInPound * change)
+            XCTAssertEqual(correct, estimatedConsumedCaloriesToCauseRealisticWeightChange)
+        }
+        
+        
     }
     
 }
