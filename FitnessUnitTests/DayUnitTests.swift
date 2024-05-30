@@ -393,10 +393,10 @@ final class DayUnitTests: XCTestCase {
                 if let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
                     if let tomorrow = days[i-1] {
                         let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
-                        if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
-                            XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, 0.2, accuracy: 0.1)
-                        } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
-                            XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -0.2, accuracy: 0.1)
+                        if realisticWeightChangeTomorrowBasedOnToday > Constants.maximumWeightChangePerDay {
+                            XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, Constants.maximumWeightChangePerDay, accuracy: 0.1)
+                        } else if realisticWeightChangeTomorrowBasedOnToday < -Constants.maximumWeightChangePerDay {
+                            XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, -Constants.maximumWeightChangePerDay, accuracy: 0.1)
                         } else {
                             XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
                         }
@@ -426,10 +426,10 @@ final class DayUnitTests: XCTestCase {
         XCTAssertNotEqual(firstDay.consumedCalories, 0)
         XCTAssertTrue(firstDay.wasModifiedBecauseTheUserDidntEnterData)
         let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
-        if realisticWeightChangeTomorrowBasedOnToday > 0.2 {
-            XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, 0.2, accuracy: 0.1)
-        } else if realisticWeightChangeTomorrowBasedOnToday < -0.2 {
-            XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, -0.2, accuracy: 0.1)
+        if realisticWeightChangeTomorrowBasedOnToday > Constants.maximumWeightChangePerDay {
+            XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, Constants.maximumWeightChangePerDay, accuracy: 0.1)
+        } else if realisticWeightChangeTomorrowBasedOnToday < -Constants.maximumWeightChangePerDay {
+            XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, -Constants.maximumWeightChangePerDay, accuracy: 0.1)
         } else {
             XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
         }
@@ -449,7 +449,7 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(numberOfDaysWithBadExpectedWeights, 0)
         for i in stride(from: days.count - 1, through: 0, by: -1) {
             if let tomorrow = days[i-1], let yesterday = days[i+1], let day = days[i] {
-                XCTAssert(abs(day.realisticWeight - yesterday.realisticWeight) <= 0.2 )
+                XCTAssert(abs(day.realisticWeight - yesterday.realisticWeight) <= Constants.maximumWeightChangePerDay )
             }
         }
     }
@@ -575,27 +575,24 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days[4], day)
     }
     
-    func estimatedConsumedCaloriesToCauseRealisticWeightChange() {
+    func testEstimatedConsumedCaloriesToCauseRealisticWeightChange() {
         let day = Day(daysAgo: 0, activeCalories: 500, restingCalories: 1000, consumedCalories: 0)
-        let estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: 0.2)
+        let estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Constants.maximumWeightChangePerDay)
         // A weight change of 0.2 == 3500 calories * 0.2 == 700
         // So we need a surplus of 700 == Burned calories + consumed calories == 1500 + 700
         XCTAssertEqual(1500 + 700, estimatedConsumedCaloriesToCauseRealisticWeightChange)
-        XCTAssertEqual(day.allCaloriesBurned + (3500 * 0.2), estimatedConsumedCaloriesToCauseRealisticWeightChange)
+        XCTAssertEqual(day.allCaloriesBurned + (Constants.numberOfCaloriesInPound * Constants.maximumWeightChangePerDay), estimatedConsumedCaloriesToCauseRealisticWeightChange)
         
-        for i in 0...50 {
+        for _ in 0...50 {
             let active = Double.random(in: 0...1500)
             let resting = Double.random(in: 0...3000)
-            let change = Double.random(in: -0.2...0.2)
+            let change = Double.random(in: -Constants.maximumWeightChangePerDay...Constants.maximumWeightChangePerDay)
             
             let day = Day(daysAgo: 0, activeCalories: active, restingCalories: resting, consumedCalories: 0)
             let estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: change)
             
-            let correct = day.allCaloriesBurned + (3500 * change)
+            let correct = day.allCaloriesBurned + (Constants.numberOfCaloriesInPound * change)
             XCTAssertEqual(correct, estimatedConsumedCaloriesToCauseRealisticWeightChange)
-            
-            let x = Day(daysAgo: 0, activeCalories: active, restingCalories: resting, consumedCalories: 0)
-            let y = day.estimatedConsumedCaloriesToCause(realisticWeightChange: change)
         }
     }
     

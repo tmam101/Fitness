@@ -13,6 +13,7 @@ import SwiftUI
 
 public class Constants {
     static let numberOfCaloriesInPound: Double = 3500
+    static let maximumWeightChangePerDay = 0.2
 }
 
 public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
@@ -132,7 +133,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         // If you lost weight,
         if realisticWeightChangeCausedByToday < 0 {
             // Calculate how few calories you must have eaten to lose that much weight.
-            realisticWeightChangeCausedByToday = Swift.max(-0.2, realisticWeightChangeCausedByToday)
+            realisticWeightChangeCausedByToday = Swift.max(-Constants.maximumWeightChangePerDay, realisticWeightChangeCausedByToday)
             let totalBurned = self.activeCalories + self.restingCalories
             let caloriesAssumedToBeBurned = 0 - (realisticWeightChangeCausedByToday * Constants.numberOfCaloriesInPound)
             let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
@@ -142,7 +143,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         // If you gained weight or maintained,
         else {
             // Calculate how many calories you must have eaten to gain that much weight.
-            realisticWeightChangeCausedByToday = Swift.min(0.2, realisticWeightChangeCausedByToday)
+            realisticWeightChangeCausedByToday = Swift.min(Constants.maximumWeightChangePerDay, realisticWeightChangeCausedByToday)
             let totalBurned = self.activeCalories + self.restingCalories
             let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * Constants.numberOfCaloriesInPound) + totalBurned
             newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
@@ -280,7 +281,6 @@ extension Days {
         guard self.everyDayHas(.weight) else {
             return
         }
-        let maximumWeightChangePerDay = 0.2
         
         // Start from the oldest day and work forwards
         var day: Day? = oldestDay
@@ -290,7 +290,7 @@ extension Days {
                 let realWeightDifference = (currentDay.weight - previousDay.realisticWeight)
                 
                 // Adjust the weight difference based on the maximum allowed change per day
-                let adjustedWeightDifference = Swift.max(Swift.min(realWeightDifference, maximumWeightChangePerDay), -maximumWeightChangePerDay)
+                let adjustedWeightDifference = Swift.max(Swift.min(realWeightDifference, Constants.maximumWeightChangePerDay), -Constants.maximumWeightChangePerDay)
                 
                 // Set the realistic weight for the current day
                 currentDay.realisticWeight = previousDay.realisticWeight + adjustedWeightDifference
