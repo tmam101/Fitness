@@ -425,42 +425,7 @@ final class DayUnitTests: XCTestCase {
         let vm = LineChartViewModel(days: days, timeFrame: TimeFrame.week)
     }
     
-    // TODO
-    func testInnacurateExpectedWeightToday() {
-        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.inaccurateExpectedWeightToday)])
-        XCTAssertEqual(days[0]?.expectedWeight, 200.0)
-    }
-    
     func testSortDays() {
-        let oneDayAgo = Date.subtract(days: 1, from: Date())
-        let twoDaysAgo = Date.subtract(days: 2, from: Date())
-                                       
-        days = [
-            1:Day(date: oneDayAgo),
-            2:Day(date: twoDaysAgo)
-        ]
-        var sorted = days?.array().sortedLongestAgoToMostRecent()
-        XCTAssertEqual(sorted?.first?.date, twoDaysAgo)
-        XCTAssertEqual(sorted?.last?.date, oneDayAgo)
-        sorted = days?.array().sortedMostRecentToLongestAgo()
-        XCTAssertEqual(sorted?.first?.date, oneDayAgo)
-        XCTAssertEqual(sorted?.last?.date, twoDaysAgo)
-    }
-    
-    func testEveryDayHasProperty() {
-        let days = [
-            1:Day(realisticWeight: 1, weight: 0),
-            2:Day(realisticWeight: 0, weight:1)
-        ]
-        XCTAssertFalse(days.everyDayHas(.weight))
-        XCTAssertFalse(days.everyDayHas(.realisticWeight))
-        days[1]?.weight = 1
-        days[2]?.realisticWeight = 1
-        XCTAssertTrue(days.everyDayHas(.weight))
-        XCTAssertTrue(days.everyDayHas(.realisticWeight))
-    }
-    
-    func testFirstDay() {
         let oneDayAgo = Date.subtract(days: 1, from: Date())
         let twoDaysAgo = Date.subtract(days: 2, from: Date())
                                        
@@ -476,6 +441,19 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(sorted.last?.date, twoDaysAgo)
     }
     
+    func testEveryDayHasProperty() {
+        let days = [
+            1:Day(realisticWeight: 1, weight: 0),
+            2:Day(realisticWeight: 0, weight:1)
+        ]
+        XCTAssertFalse(days.everyDayHas(.weight))
+        XCTAssertFalse(days.everyDayHas(.realisticWeight))
+        days[1]?.weight = 1
+        days[2]?.realisticWeight = 1
+        XCTAssertTrue(days.everyDayHas(.weight))
+        XCTAssertTrue(days.everyDayHas(.realisticWeight))
+    }
+    
     func testDaysWithWeights() {
         let dayWithWeight = Day(weight: 1)
         var days = [
@@ -489,33 +467,58 @@ final class DayUnitTests: XCTestCase {
         let days = [
             0:Day(weight:10),
             1:Day(weight:20)
-            ]
+        ]
         let firstDay = days[0]
         firstDay?.weight = 20
         XCTAssertEqual(days[0]?.weight, 20)
     }
     
+    func testOldestDay() {
+        let day1 = Day(daysAgo: 2)
+        let day2 = Day(daysAgo: 1)
+        let day3 = Day(daysAgo: 3)
+        let days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
+        
+        XCTAssertEqual(days.oldestDay, day3, "The oldest day should be the day with the highest daysAgo value.")
+    }
     
-//    func testSetRealisticWeights() {
-//        var days = Days.testDays
-//        days.setRealisticWeights()
-//        
-//        for i in 0..<days.count - 1 {
-//            guard let currentDay = days[i], let previousDay = days[i + 1] else {
-//                XCTFail()
-//                return
-//            }
-//            XCTAssert(currentDay.realisticWeight != 0)
-//            
-//            let realisticWeightDifference = currentDay.realisticWeight - previousDay.realisticWeight
-//            
-//            if abs(realisticWeightDifference) > 0.2 {
-//                XCTAssertEqual(realisticWeightDifference, previousDay.expectedWeightChangeBasedOnDeficit, accuracy: 0.1, "If weight difference exceeds 0.2, it should equal the previous day's expected weight change based on deficit.")
-//            } else {
-//                XCTAssertEqual(realisticWeightDifference, previousDay.expectedWeightChangeBasedOnDeficit, accuracy: 0.1)
-////                XCTAssertLessThanOrEqual(abs(weightDifference), 0.2, "Realistic weight change should not exceed 0.2 per day.")
-//            }
-//        }
-//    }
+    func testNewestDay() {
+        let day1 = Day(daysAgo: 2)
+        let day2 = Day(daysAgo: 1)
+        let day3 = Day(daysAgo: 3)
+        let days: Days = [day1.daysAgo: day1, day2.daysAgo: day2, day3.daysAgo: day3]
+        
+        XCTAssertEqual(days.newestDay, day2, "The newest day should be the day with the lowest daysAgo value.")
+    }
+    
+    func testDayInit() {
+        // You can use daysAgo and date interchangeably, they both calculate the other
+        // TODO remove the option of creating one day with conflicting information
+        day = Day(daysAgo: 2)
+        XCTAssertEqual(Date.daysBetween(date1: Date(), date2: day.date), 2)
+        
+        day = Day(date: Date.subtract(days: 5, from: Date()))
+        XCTAssertEqual(day.daysAgo, 5)
+    }
+    
+    func testNextDay() {
+        var days: Days = [:]
+        let wrapper = DaysWrapper(days: days)
+        let day = Day(daysAgo: 4, daysContainer: wrapper)
+        let day2 = Day(daysAgo: 5, daysContainer: wrapper)
+        let day3 = Day(daysAgo: 6, daysContainer: wrapper)
+        XCTAssertTrue(days.append([day, day2, day3]))
+        XCTAssertEqual(day2.dayAfter, day)
+    }
+    
+    func testAppend() {
+        var days: Days = [:]
+        let wrapper = DaysWrapper(days: days)
+        let day = Day(daysAgo: 4, daysContainer: wrapper)
+        let day2 = Day(daysAgo: 5, daysContainer: wrapper)
+        let day3 = Day(daysAgo: 6, daysContainer: wrapper)
+        XCTAssertTrue(days.append([day, day2, day3]))
+        XCTAssertEqual(days[4], day)
+    }
     
 }

@@ -23,8 +23,8 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     }
     
     init(id: UUID = UUID(),
-         date: Date = Date(),
-         daysAgo: Int = -1,
+         date: Date? = nil,
+         daysAgo: Int? = nil,
          activeCalories: Double = 0,
          measuredActiveCalories: Double = 0,
          restingCalories: Double = 0,
@@ -33,11 +33,16 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
          expectedWeight: Double = 0,
          realisticWeight: Double = 0,
          weight: Double = 0,
-         protein: Double = 0
+         protein: Double = 0,
+         daysContainer: DaysWrapper? = nil
     ) {
         self.id = id
-        self.date = date
-        self.daysAgo = daysAgo
+        self.date = date ?? Date.subtract(days: daysAgo ?? 0, from: Date())
+        if let date {
+            self.daysAgo = daysAgo ?? (Date.daysBetween(date1: Date(), date2: date) ?? -1)
+        } else {
+            self.daysAgo = daysAgo ?? -1
+        }
         self.activeCalories = activeCalories
         self.measuredActiveCalories = measuredActiveCalories
         self.restingCalories = restingCalories
@@ -47,6 +52,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         self.realisticWeight = realisticWeight
         self.weight = weight
         self.protein = protein
+        self.daysContainer = daysContainer
     }
     
     public typealias PrimitivePlottable = String
@@ -115,25 +121,37 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         "\(dayOfWeek.prefix(1))"
     }
     
-//    var dayBefore: Day?
-//    var dayAfter: Day?
-//    
-//    var daysContainer: Days?
+    var dayBefore: Day? {
+        daysContainer?[daysAgo - 1]
+    }
+    var dayAfter: Day? {
+        daysContainer?[daysAgo + 1]
+    }
+    
+    var daysContainer: DaysWrapper?
 }
 // MARK: DAYS
 /// A collection of days, where passing a number indicates how many days ago the returned day will be.
 public typealias Days = [Int:Day]
 
-extension Days {
+class DaysWrapper: Codable {
+    private var days: Days
     
-    var firstDay: Day? {
-        self.array().sortedMostRecentToLongestAgo().first
+    init(days: Days) {
+        self.days = days
     }
     
-//    enum TestFiles: String {
-//        case missingDataIssue = "missingDataIssue"
-//        case realisticWeightsIssue = "realisticWeightsIssue"
-//    }
+    subscript(key: Int) -> Day? {
+        get {
+            return days[key]
+        }
+        set {
+            days[key] = newValue
+        }
+    }
+}
+
+extension Days {
     // TODO Function for adding a new day that pushes everything forward a day
     static func testDays() -> Days {
         testDays(options: nil)
@@ -640,6 +658,34 @@ extension Days {
         averageOfPrevious(property: .deficit, days: days, endingOnDay: day)
         // TODO This doesn't use runningTotalDeficit. Problem?
     }
+    
+    var oldestDay: Day? {
+        self.array().sortedMostRecentToLongestAgo().last
+    }
+    
+    var newestDay: Day? {
+       self.array().sortedMostRecentToLongestAgo().first
+    }
+    
+    mutating func append(_ day: Day) -> Bool {
+        if self[day.daysAgo] == nil {
+            self[day.daysAgo] = day
+            return true
+        }
+        return false
+    }
+    
+    mutating func append(_ days: [Day]) -> Bool {
+        for day in days {
+            if self[day.daysAgo] != nil {
+                return false
+            }
+        }
+        for day in days {
+            self[day.daysAgo] = day
+        }
+        return true
+    }
 }
 
 // TODO Test
@@ -652,34 +698,3 @@ extension [Day] {
         return days
     }
 }
-
-extension Days {
-    //    func encodeAsString() -> String {
-    //        let jsonEncoder = JSONEncoder()
-    //        jsonEncoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
-    //        guard
-    //            let jsonData = try? jsonEncoder.encode(self),
-    //            let json = String(data: jsonData, encoding: String.Encoding.utf8) else {
-    //            return "Failed"
-    //        }
-    //        print(json)
-    //        return json
-    //    }
-    //
-    //    func encode() -> Data? {
-    //        let jsonEncoder = JSONEncoder()
-    //        guard
-    //            let jsonData = try? jsonEncoder.encode(self) else {
-    //            return nil
-    //        }
-    //        return jsonData
-    //    }
-    
-    //    static func decode(path: String) -> Days? { // Pass in options here? format in here?
-    //        Decoder<Days>.decode(path: path)
-    //    }
-}
-//
-//#Preview("Missing data issue") {
-//    FitnessPreviewProvider.missingDataIssue()
-//}
