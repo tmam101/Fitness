@@ -640,4 +640,34 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(estimatedConsumedCalories, expectedCalories, accuracy: 0.1, "Estimated consumed calories should be adjusted to the maximum weight gain allowed per day.")
     }
     
+    func testSubsetOfDaysOption() {
+        var testCases = [(75, 45),
+                         (75, 50)]
+        testCases.append((50, 75))
+        for subset in testCases {
+            let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue), .subsetOfDays(subset.0, subset.1)])
+            let max = Swift.max(subset.0, subset.1)
+            let min = Swift.min(subset.0, subset.1)
+            XCTAssertEqual(days.count, max - min + 1)
+            //        days.array().sortedLongestAgoToMostRecent()
+            XCTAssertEqual(days.oldestDay?.daysAgo, max)
+            XCTAssertEqual(days.newestDay?.daysAgo, min)
+        }
+    }
+    
+    func testSubset() {
+        var days: Days = [:]
+        let day = Day(daysAgo: 4)
+        let day2 = Day(daysAgo: 5)
+        let day3 = Day(daysAgo: 6)
+        XCTAssertTrue(days.append([day, day2, day3]))
+        
+        var subset = days.subset(from: 4, through: 5)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        subset = days.subset(from: 5, through: 4)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+    }
+    
 }

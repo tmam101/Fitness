@@ -30,6 +30,7 @@ enum TestDayOption: Equatable {
     case dayCount(Int)
     case testCase(Filepath.Days)
     case dontAddWeightsOnEveryDay
+    case subsetOfDays(Int, Int)
     
     enum MissingConsumedCaloriesStrategy {
         case v1

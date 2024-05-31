@@ -8,5 +8,10 @@
 import SwiftUI
 
 #Preview("Realistic weights issue") {
-    FitnessPreviewProvider.MainPreview(options: [.testCase(.realisticWeightsIssue), .isMissingConsumedCalories(.v3)])
+    FitnessPreviewProvider.MainPreview(
+        options: [
+            .testCase(.realisticWeightsIssue),
+            .isMissingConsumedCalories(.v3),
+            .subsetOfDays(63, 55)
+        ])
 }

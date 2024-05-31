@@ -249,9 +249,9 @@ struct WeightLineChart: View {
                 }
             }
             .chartForegroundStyleScale([
+                "Expected Weight": Color.expectedWeightYellow,
                 "Weight": Color.weightGreen,
                 "Realistic Weight": Color.realisticWeightGreen,
-                "Expected Weight": Color.expectedWeightYellow
 //                "Expected Weight Tomorrow": Color.expectedWeightTomorrowYellow
             ])
         }

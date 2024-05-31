@@ -197,6 +197,8 @@ extension Days {
                     dayCount = count
                 case .dontAddWeightsOnEveryDay:
                     weightsOnEveryDay = false
+                case .subsetOfDays(_, _):
+                    print("TODO")
                 }
             }
         }
@@ -236,8 +238,7 @@ extension Days {
                 self.setRealisticWeights()
             }
             for option in options {
-                switch option {
-                case .isMissingConsumedCalories(let version):
+                if case let .isMissingConsumedCalories(version) = option {
                     switch version {
                     case .v1:
                         self.adjustDaysWhereUserDidntEnterData()
@@ -246,8 +247,13 @@ extension Days {
                     case .v3:
                         self.adjustDaysWhereUserDidntEnterDatav3()
                     }
-                case .testCase(_), .dayCount(_), .weightGoingSteadilyDown, .dontAddWeightsOnEveryDay:
-                    continue
+                    break
+                }
+            }
+            // TODO test
+            for option in options {
+                if case let .subsetOfDays(int, int2) = option {
+                    self = subset(from: int, through: int2)
                 }
             }
         }
