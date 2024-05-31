@@ -471,6 +471,16 @@ final class DayUnitTests: XCTestCase {
         // Additional edge case: Ensure no negative realistic weights
         let numberOfDaysWithNegativeRealisticWeight = days.mappedToProperty(property: .realisticWeight).filter { $0 < 0 }.count
         XCTAssertEqual(numberOfDaysWithNegativeRealisticWeight, 0, "There should be no days with a negative realistic weight")
+        
+        // Ensure realistic weights follow the pattern of real weights within the threshold
+        for i in stride(from: days.count - 1, through: 1, by: -1) {
+            if let currentDay = days[i], let previousDay = days[i-1] {
+                let realWeightDifference = currentDay.weight - previousDay.weight
+                let realisticWeightDifference = currentDay.realisticWeight - previousDay.realisticWeight
+                let adjustedWeightDifference = Swift.max(Swift.min(realWeightDifference, Constants.maximumWeightChangePerDay), -Constants.maximumWeightChangePerDay)
+                XCTAssertEqual(realisticWeightDifference, adjustedWeightDifference, accuracy: 0.1, "Realistic weight change should match the adjusted real weight change within the allowed threshold")
+            }
+        }
     }
     
     //todo not day test
