@@ -380,9 +380,9 @@ final class DayUnitTests: XCTestCase {
                 XCTFail()
                 return
             }
-            for i in stride(from: days.count - 1, through: 0, by: -1) {
-                if let day = days[i], day.wasModifiedBecauseTheUserDidntEnterData {
-                    if let tomorrow = days[i-1] {
+            days.forEveryDay { day in
+                if day.wasModifiedBecauseTheUserDidntEnterData {
+                    if let tomorrow = days.dayAfter(day) {
                         let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
                         if realisticWeightChangeTomorrowBasedOnToday > Constants.maximumWeightChangePerDay {
                             XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, Constants.maximumWeightChangePerDay, accuracy: 0.1)
@@ -392,7 +392,7 @@ final class DayUnitTests: XCTestCase {
                             XCTAssertEqual(day.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
                         }
                     }
-                    if let yesterday = days[i+1] {
+                    if let yesterday = days.dayBefore(day) {
                         XCTAssertEqual(day.expectedWeight, yesterday.expectedWeightTomorrow)
                     }
                 }
@@ -405,12 +405,7 @@ final class DayUnitTests: XCTestCase {
     
     func testMissingDayAdjustmentWorksOnFirstDay() {
         days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.firstDayNotAdjustingWhenMissing)])
-        guard let days else {
-            XCTFail()
-            return
-        }
-        let firstDayIndex = days.count - 1
-        guard let firstDay = days[firstDayIndex], let tomorrow = days[firstDayIndex - 1] else {
+        guard let days, let firstDay = days.oldestDay, let tomorrow = days.dayAfter(firstDay) else {
             XCTFail()
             return
         }
@@ -425,6 +420,26 @@ final class DayUnitTests: XCTestCase {
             XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
         }
     }
+//    TODO: should this run on all testcases?
+//    func testMissingDayAdjustmentWorksOnFirstDay() {
+//        for testcase in Filepath.Days.allCases {
+//            days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(testcase)])
+//            guard let days, let firstDay = days.oldestDay, let tomorrow = days.dayAfter(firstDay) else {
+//                XCTFail()
+//                return
+//            }
+//            XCTAssertNotEqual(firstDay.consumedCalories, 0)
+//            XCTAssertTrue(firstDay.wasModifiedBecauseTheUserDidntEnterData)
+//            let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
+//            if realisticWeightChangeTomorrowBasedOnToday > Constants.maximumWeightChangePerDay {
+//                XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, Constants.maximumWeightChangePerDay, accuracy: 0.1)
+//            } else if realisticWeightChangeTomorrowBasedOnToday < -Constants.maximumWeightChangePerDay {
+//                XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, -Constants.maximumWeightChangePerDay, accuracy: 0.1)
+//            } else {
+//                XCTAssertEqual(firstDay.expectedWeightChangeBasedOnDeficit, realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1)
+//            }
+//        }
+//    }
     
     func testSettingRealisticWeights() {
         // Initialize days with missing consumed calories and a specific test case
@@ -441,8 +456,8 @@ final class DayUnitTests: XCTestCase {
         XCTAssertTrue(days.everyDayHas(.weight))
         
         // Ensure the realistic weight change per day does not exceed the maximum allowed change
-        for i in stride(from: days.count - 1, through: 1, by: -1) {
-            if let day = days[i], let previousDay = days[i-1] {
+        days.forEveryDay { day in
+            if let previousDay = days.dayBefore(day) {
                 XCTAssertLessThanOrEqual(abs(day.realisticWeight - previousDay.realisticWeight), Constants.maximumWeightChangePerDay, "Realistic weight change per day should not exceed the maximum allowed change")
             }
         }
@@ -464,10 +479,10 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(numberOfDaysWithNegativeRealisticWeight, 0, "There should be no days with a negative realistic weight")
         
         // Ensure realistic weights follow the pattern of real weights within the threshold
-        for i in stride(from: days.count - 1, through: 1, by: -1) {
-            if let currentDay = days[i], let previousDay = days[i+1] {
-                let realWeightDifference = currentDay.weight - previousDay.realisticWeight
-                let realisticWeightDifference = currentDay.realisticWeight - previousDay.realisticWeight
+        days.forEveryDay { day in
+            if let previousDay = days.dayBefore(day) {
+                let realWeightDifference = day.weight - previousDay.realisticWeight
+                let realisticWeightDifference = day.realisticWeight - previousDay.realisticWeight
                 let adjustedWeightDifference = Swift.max(Swift.min(realWeightDifference, Constants.maximumWeightChangePerDay), -Constants.maximumWeightChangePerDay)
                 XCTAssertEqual(realisticWeightDifference, adjustedWeightDifference, accuracy: 0.1, "Realistic weight change should match the adjusted real weight change within the allowed threshold")
             }
@@ -664,13 +679,14 @@ final class DayUnitTests: XCTestCase {
     
     
     func testForEveryDay() {
-        var days: Days = [:]
         var dayNumbers = [4,5,6]
+        var daysCaptured: [Int] = []
+        
+        var days: Days = [:]
         for num in dayNumbers {
             XCTAssertTrue(days.append(Day(daysAgo: num)))
         }
         XCTAssertEqual(days.count, dayNumbers.count)
-        var daysCaptured: [Int] = []
         days.forEveryDay { day in
             daysCaptured.append(day.daysAgo)
         }
@@ -680,6 +696,18 @@ final class DayUnitTests: XCTestCase {
             daysCaptured.append(day.daysAgo)
         }
         XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: <)))
+        
+        daysCaptured = []
+        days = [:]
+        dayNumbers = [0, 3, 4, 10]
+        for num in dayNumbers {
+            XCTAssertTrue(days.append(Day(daysAgo: num)))
+        }
+        days.forEveryDay { day in
+            daysCaptured.append(day.daysAgo)
+        }
+        XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: >)))
+        
     }
     
 }

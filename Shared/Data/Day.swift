@@ -259,15 +259,11 @@ extension Days {
         }
     }
     
-    // TODO Test?
     mutating func addRunningTotalDeficits() {
-        var i = self.count - 1
         var runningTotalDeficit: Double = 0
-        while i >= 0 {
-            let deficit = self[i]?.deficit ?? 0
-            runningTotalDeficit = runningTotalDeficit + deficit
-            self[i]?.runningTotalDeficit = runningTotalDeficit
-            i -= 1
+        forEveryDay { day in
+            runningTotalDeficit = runningTotalDeficit + day.deficit
+            day.runningTotalDeficit = runningTotalDeficit
         }
     }
     
