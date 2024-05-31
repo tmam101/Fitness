@@ -131,21 +131,12 @@ final class DayUnitTests: XCTestCase {
         }
     }
     
-    // DO i need this?
-    //    func testPreviousWeekAverageDeficit() {
-    //        if let deficit = days.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
-    //            XCTAssertEqual(deficit, 138.71, accuracy: 0.1)
-    //        } else {
-    //            XCTFail()
-    //        }
-    //    }
-    
-    //    //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
-    //    func testSomething() {
-    //        let a = days.averageDeficitOfPrevious(days: 30, endingOnDay: 1)
-    //        let b = days.averageDeficitOfPrevious(days: 30, endingOnDay: 0)
-    ////        XCTAssertEqual(days.averageDeficitOfPrevious(days: 30, endingOnDay: 1), <#T##expression2: Equatable##Equatable#>)
-    //    }
+//        //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
+//        func testSomething() {
+//            let a = days.averageDeficitOfPrevious(days: 30, endingOnDay: 1)
+//            let b = days.averageDeficitOfPrevious(days: 30, endingOnDay: 0)
+//    //        XCTAssertEqual(days.averageDeficitOfPrevious(days: 30, endingOnDay: 1), <#T##expression2: Equatable##Equatable#>)
+//        }
     
     func testExpectedWeightTomorrow() {
         days = Days.testDays()
@@ -668,6 +659,27 @@ final class DayUnitTests: XCTestCase {
         subset = days.subset(from: 5, through: 4)
         XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
         XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+    }
+    
+    
+    
+    func testForEveryDay() {
+        var days: Days = [:]
+        var dayNumbers = [4,5,6]
+        for num in dayNumbers {
+            XCTAssertTrue(days.append(Day(daysAgo: num)))
+        }
+        XCTAssertEqual(days.count, dayNumbers.count)
+        var daysCaptured: [Int] = []
+        days.forEveryDay { day in
+            daysCaptured.append(day.daysAgo)
+        }
+        XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: >)))
+        daysCaptured = []
+        days.forEveryDay(oldestToNewest: false) { day in
+            daysCaptured.append(day.daysAgo)
+        }
+        XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: <)))
     }
     
 }

@@ -222,7 +222,7 @@ extension Days {
             days.setRealisticWeights()
         }
         if missingData {
-            days.adjustDaysWhereUserDidntEnterDatav2()
+            days.adjustDaysWhereUserDidntEnterDatav3()
         }
         print(days.encodeAsString())
         return days
@@ -274,9 +274,9 @@ extension Days {
     /**
      These weights represent a smoothed out version of the real weights, so large weight changes based on water or something are less impactful.
      
-     Start on first weight
+     Start on first day
      
-     Loop through each subsequent day, finding expected weight loss
+     Loop through each subsequent day, finding expected weight change
      
      Find next weight's actual loss
      
@@ -289,8 +289,7 @@ extension Days {
         }
         
         // Start from the oldest day and work forwards
-        var day: Day? = oldestDay
-        while let currentDay = day {
+        forEveryDay { currentDay in
             if let previousDay = dayBefore(currentDay) {
                 // Calculate the realistic weight difference
                 let realWeightDifference = (currentDay.weight - previousDay.realisticWeight)
@@ -304,7 +303,6 @@ extension Days {
                 // The oldest day uses its own weight as the realistic weight
                 currentDay.realisticWeight = currentDay.weight
             }
-            day = dayAfter(currentDay)
         }
     }
     
@@ -323,18 +321,16 @@ extension Days {
             }
             let weightBetween = nextDayWithWeight.weight - thisDay.weight
             let weightAdjustmentEachDay = weightBetween / Double(daysBetween)
-            for day in subset(from: thisDay.daysAgo - 1, through: nextDayWithWeight.daysAgo + 1)
-                .array()
-                .sortedLongestAgoToMostRecent() {
+            subset(from: thisDay.daysAgo - 1, through: nextDayWithWeight.daysAgo + 1).forEveryDay { day in
                 guard let previousDay = days.dayBefore(day) else {
-                    continue
+                    return
                 }
                 day.weight = previousDay.weight + weightAdjustmentEachDay
             }
         }
         // Make the most recent weights, if they are not recorded, equal to the last recorded weight
         var mostRecentWeight: Double? = nil
-        for day in days.array().sortedLongestAgoToMostRecent() {
+        forEveryDay { day in
             if day.weight == 0 {
                 if let mostRecentWeight {
                     day.weight = mostRecentWeight
@@ -359,27 +355,27 @@ extension Days {
         }
         
         // Iterate over days sorted from the oldest to the most recent
-        for day in days.array().sortedLongestAgoToMostRecent() {
+        forEveryDay { day in
             let didUserEnterData = day.consumedCalories != 0
             
             // If we are on the first day, check if user entered data
             guard let yesterday = days.dayBefore(day) else {
                 guard let tomorrow = days.dayAfter(day) else {
                     print("Fail") // TODO: Handle this edge case properly
-                    continue
+                    return
                 }
                 if !didUserEnterData {
                     let realisticWeightChangeCausedByToday = tomorrow.realisticWeight - day.expectedWeight
                     day.consumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChangeCausedByToday)
                     day.wasModifiedBecauseTheUserDidntEnterData = true
                 }
-                continue
+                return
             }
             
             // If we are on today, set expected weight based on yesterday's expected weight tomorrow
             guard let tomorrow = days.dayAfter(day) else {
                 day.expectedWeight = yesterday.expectedWeightTomorrow
-                continue
+                return
             }
             
             // Adjust days where user didn't enter data
@@ -541,6 +537,15 @@ extension Days {
             extractedDays[i] = self[i]
         }
         return extractedDays
+    }
+    
+    /// Iterate over every day, oldest to newest, with the option to go from newest to oldest. Complete the action for every day
+    func forEveryDay(oldestToNewest: Bool = true, _ completion: (Day) -> Void) {
+        var day: Day? = oldestToNewest ? oldestDay : newestDay
+        while let currentDay = day {
+            completion(currentDay)
+            day = oldestToNewest ? dayAfter(currentDay) : dayBefore(currentDay)
+        }
     }
     
     // MARK: OLD WAYS OF ADJUSTING DAYS
