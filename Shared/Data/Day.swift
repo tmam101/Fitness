@@ -144,7 +144,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         else {
             // Calculate how many calories you must have eaten to gain that much weight.
             realisticWeightChangeCausedByToday = Swift.min(Constants.maximumWeightChangePerDay, realisticWeightChangeCausedByToday)
-            let totalBurned = self.activeCalories + self.restingCalories
+            let totalBurned = self.allCaloriesBurned
             let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * Constants.numberOfCaloriesInPound) + totalBurned
             newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
         }

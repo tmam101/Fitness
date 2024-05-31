@@ -9,7 +9,7 @@ import XCTest
 @testable import Fitness
 import Combine
 
-// TODO: Put this into HealthData. So it goes through the real process, and can detect errors in HealthData and CalorieManager. 
+// TODO: Put this into HealthData. So it goes through the real process, and can detect errors in HealthData and CalorieManager.
 
 final class DayUnitTests: XCTestCase {
     
@@ -43,7 +43,7 @@ final class DayUnitTests: XCTestCase {
     
     func testAverage() {
         days = Days.testDays()
-        guard let days else { 
+        guard let days else {
             XCTFail()
             return
         }
@@ -64,7 +64,7 @@ final class DayUnitTests: XCTestCase {
     
     func testExtractedDays() {
         days = Days.testDays()
-        guard let days else { 
+        guard let days else {
             XCTFail()
             return
         }
@@ -77,7 +77,7 @@ final class DayUnitTests: XCTestCase {
     
     func testAllTimeAverage() {
         days = Days.testDays()
-        guard let days else { 
+        guard let days else {
             XCTFail()
             return
         }
@@ -101,7 +101,7 @@ final class DayUnitTests: XCTestCase {
     
     func testWeeklyAverage() {
         days = Days.testDays()
-        guard let days else { 
+        guard let days else {
             XCTFail()
             return
         }
@@ -132,20 +132,20 @@ final class DayUnitTests: XCTestCase {
     }
     
     // DO i need this?
-//    func testPreviousWeekAverageDeficit() {
-//        if let deficit = days.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
-//            XCTAssertEqual(deficit, 138.71, accuracy: 0.1)
-//        } else {
-//            XCTFail()
-//        }
-//    }
+    //    func testPreviousWeekAverageDeficit() {
+    //        if let deficit = days.averageDeficitOfPrevious(days: 7, endingOnDay: 1) {
+    //            XCTAssertEqual(deficit, 138.71, accuracy: 0.1)
+    //        } else {
+    //            XCTFail()
+    //        }
+    //    }
     
-//    //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
-//    func testSomething() {
-//        let a = days.averageDeficitOfPrevious(days: 30, endingOnDay: 1)
-//        let b = days.averageDeficitOfPrevious(days: 30, endingOnDay: 0)
-////        XCTAssertEqual(days.averageDeficitOfPrevious(days: 30, endingOnDay: 1), <#T##expression2: Equatable##Equatable#>)
-//    }
+    //    //TODO: Test that tomorrow's all time equals today's predicted for all time tomorrow
+    //    func testSomething() {
+    //        let a = days.averageDeficitOfPrevious(days: 30, endingOnDay: 1)
+    //        let b = days.averageDeficitOfPrevious(days: 30, endingOnDay: 0)
+    ////        XCTAssertEqual(days.averageDeficitOfPrevious(days: 30, endingOnDay: 1), <#T##expression2: Equatable##Equatable#>)
+    //    }
     
     func testExpectedWeightTomorrow() {
         days = Days.testDays()
@@ -206,7 +206,7 @@ final class DayUnitTests: XCTestCase {
             XCTFail()
             return
         }
-
+        
         // Test that today's runningTotalDeficit is the sum of all deficits
         let todaysRunningTotalDeficit = today.runningTotalDeficit
         let shouldBe = days.sum(property: .deficit)
@@ -464,7 +464,7 @@ final class DayUnitTests: XCTestCase {
     func testSortDays() {
         let oneDayAgo = Date.subtract(days: 1, from: Date())
         let twoDaysAgo = Date.subtract(days: 2, from: Date())
-                                       
+        
         let days = [
             1:Day(date: oneDayAgo),
             2:Day(date: twoDaysAgo)
@@ -496,7 +496,7 @@ final class DayUnitTests: XCTestCase {
             0:dayWithWeight,
             2: dayWithWeight,
             1:Day(weight:0)
-            ]
+        ]
         var daysWithProperty = [0:dayWithWeight, 2:dayWithWeight]
         XCTAssertEqual(days.daysWith(.weight), daysWithProperty)
         
@@ -575,49 +575,40 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days[4], day)
     }
     
-    func testEstimatedConsumedCaloriesToCauseRealisticWeightChange() {
-        var day = Day(daysAgo: 0, activeCalories: 500, restingCalories: 1000, consumedCalories: 0)
-        var estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Constants.maximumWeightChangePerDay)
-        // A weight change of 0.2 == 3500 calories * 0.2 == 700
-        // So we need a surplus of 700 == Burned calories + consumed calories == 1500 + 700
-        XCTAssertEqual(1500 + 700, estimatedConsumedCaloriesToCauseRealisticWeightChange)
-        XCTAssertEqual(day.allCaloriesBurned + (Constants.numberOfCaloriesInPound * Constants.maximumWeightChangePerDay), estimatedConsumedCaloriesToCauseRealisticWeightChange)
+    func testEstimatedConsumedCaloriesToCause_Loss() {
+        let day = Day(activeCalories: 10, restingCalories: 10, consumedCalories: 0, weight: 70)
+        let realisticWeightChange = -0.1 // Assume a weight loss of 0.1 pounds
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
         
-        for _ in 0...50 {
-            let active = Double.random(in: 0...1500)
-            let resting = Double.random(in: 0...3000)
-            let change = Double.random(in: -Constants.maximumWeightChangePerDay...Constants.maximumWeightChangePerDay)
-            
-            let day = Day(daysAgo: 0, activeCalories: active, restingCalories: resting, consumedCalories: 0)
-            let estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: change)
-            
-            let correct = day.allCaloriesBurned + (Constants.numberOfCaloriesInPound * change)
-            XCTAssertEqual(correct, estimatedConsumedCaloriesToCauseRealisticWeightChange)
-            if correct != estimatedConsumedCaloriesToCauseRealisticWeightChange {
-                print("active: \(active)\n resting: \(resting)\n change: \(change)")
-            }
-        }
+        XCTAssertEqual(estimatedConsumedCalories, 0, accuracy: 0.1, "Estimated consumed calories should be zero when the burned calories cause more than that weight loss")
+    }
+    
+    func testEstimatedConsumedCaloriesToCause_NoChange() {
+        let day = Day(activeCalories: 500, restingCalories: 1500, consumedCalories: 0, weight: 70)
+        let realisticWeightChange = 0.0 // No weight change
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
         
-        // TODO Make this more general
+        XCTAssertEqual(estimatedConsumedCalories, day.allCaloriesBurned, accuracy: 0.1, "Estimated consumed calories should match the total burned calories when there is no weight change.")
+    }
+    
+    func testEstimatedConsumedCaloriesToCause_MaxLoss() {
+        let day = Day(activeCalories: 600, restingCalories: 1400, consumedCalories: 0, weight: 70)
+        let realisticWeightChange = -1.0 // Assume a weight loss of 1.0 pounds which is more than the max allowed per day
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
         
-        let active = 335.3838953272643
-        let resting = 225.1075588820688
-        let change = -0.19420285213598337
+        let expectedCalories = day.allCaloriesBurned - (Constants.maximumWeightChangePerDay * Constants.numberOfCaloriesInPound)
         
-        day = Day(daysAgo: 0, activeCalories: active, restingCalories: resting, consumedCalories: 0)
-        estimatedConsumedCaloriesToCauseRealisticWeightChange = day.estimatedConsumedCaloriesToCause(realisticWeightChange: change)
+        XCTAssertEqual(estimatedConsumedCalories, expectedCalories, accuracy: 0.1, "Estimated consumed calories should be adjusted to the maximum weight change allowed per day.")
+    }
+    
+    func testEstimatedConsumedCaloriesToCause_MaxGain() {
+        let day = Day(activeCalories: 600, restingCalories: 1400, consumedCalories: 0, weight: 70)
+        let realisticWeightChange = 1.0 // Assume a weight gain of 1.0 pounds which is more than the max allowed per day
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
         
-        let totalBurned = day.allCaloriesBurned
-        let caloriesAssumedToBeBurned = 0 - (change * Constants.numberOfCaloriesInPound)
-        let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
-        if caloriesLeftToBeBurned {
-            XCTAssertEqual(0, estimatedConsumedCaloriesToCauseRealisticWeightChange)
-        } else {
-            let correct = day.allCaloriesBurned + (Constants.numberOfCaloriesInPound * change)
-            XCTAssertEqual(correct, estimatedConsumedCaloriesToCauseRealisticWeightChange)
-        }
+        let expectedCalories = day.allCaloriesBurned + (Constants.maximumWeightChangePerDay * Constants.numberOfCaloriesInPound)
         
-        
+        XCTAssertEqual(estimatedConsumedCalories, expectedCalories, accuracy: 0.1, "Estimated consumed calories should be adjusted to the maximum weight gain allowed per day.")
     }
     
 }
