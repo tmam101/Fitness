@@ -11,7 +11,7 @@ import SwiftUI
     FitnessPreviewProvider.MainPreview(
         options: [
             .testCase(.realisticWeightsIssue),
-            .isMissingConsumedCalories(.v3),
-            .subsetOfDays(63, 55)
+            .isMissingConsumedCalories(.v3)
+//            .subsetOfDays(63, 55)
         ])
 }

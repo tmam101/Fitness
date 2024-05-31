@@ -474,8 +474,8 @@ final class DayUnitTests: XCTestCase {
         
         // Ensure realistic weights follow the pattern of real weights within the threshold
         for i in stride(from: days.count - 1, through: 1, by: -1) {
-            if let currentDay = days[i], let previousDay = days[i-1] {
-                let realWeightDifference = currentDay.weight - previousDay.weight
+            if let currentDay = days[i], let previousDay = days[i+1] {
+                let realWeightDifference = currentDay.weight - previousDay.realisticWeight
                 let realisticWeightDifference = currentDay.realisticWeight - previousDay.realisticWeight
                 let adjustedWeightDifference = Swift.max(Swift.min(realWeightDifference, Constants.maximumWeightChangePerDay), -Constants.maximumWeightChangePerDay)
                 XCTAssertEqual(realisticWeightDifference, adjustedWeightDifference, accuracy: 0.1, "Realistic weight change should match the adjusted real weight change within the allowed threshold")
