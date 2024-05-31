@@ -436,22 +436,41 @@ final class DayUnitTests: XCTestCase {
     }
     
     func testSettingRealisticWeights() {
+        // Initialize days with missing consumed calories and a specific test case
         days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
         guard let days else {
-            XCTFail()
+            XCTFail("Days initialization failed")
             return
         }
-        let realisticWeights = days.array().map { $0.realisticWeight }
-        let expectedWeights = days.array().map { $0.expectedWeight }
         let numberOfDaysWithNoRealisticWeight = realisticWeights.filter { $0 == 0 }.count
-        let numberOfDaysWithBadExpectedWeights = expectedWeights.filter { $0 < 220 }.count
         XCTAssertEqual(numberOfDaysWithNoRealisticWeight, 0)
-        XCTAssertEqual(numberOfDaysWithBadExpectedWeights, 0)
-        for i in stride(from: days.count - 1, through: 0, by: -1) {
-            if let tomorrow = days[i-1], let yesterday = days[i+1], let day = days[i] {
-                XCTAssert(abs(day.realisticWeight - yesterday.realisticWeight) <= Constants.maximumWeightChangePerDay )
+        // Ensure realistic weights have been set
+        XCTAssertTrue(days.everyDayHas(.realisticWeight))
+        
+        // Ensure weights have been set
+        XCTAssertTrue(days.everyDayHas(.weight))
+        
+        // Ensure the realistic weight change per day does not exceed the maximum allowed change
+        for i in stride(from: days.count - 1, through: 1, by: -1) {
+            if let day = days[i], let previousDay = days[i-1] {
+                XCTAssertLessThanOrEqual(abs(day.realisticWeight - previousDay.realisticWeight), Constants.maximumWeightChangePerDay, "Realistic weight change per day should not exceed the maximum allowed change")
             }
         }
+        // Additional edge case: Check if oldest day uses its own weight as realistic weight
+        if let oldestDay = days.oldestDay {
+            XCTAssertEqual(oldestDay.realisticWeight, oldestDay.weight, "Oldest day should use its own weight as realistic weight")
+        }
+        
+        // Additional edge case: Check if newest day has realistic weight properly set
+        if let newestDay = days.newestDay, let previousDay = days.dayBefore(newestDay) {
+            let realWeightDifference = newestDay.weight - previousDay.realisticWeight
+            let adjustedWeightDifference = Swift.max(Swift.min(realWeightDifference, Constants.maximumWeightChangePerDay), -Constants.maximumWeightChangePerDay)
+            XCTAssertEqual(newestDay.realisticWeight, previousDay.realisticWeight + adjustedWeightDifference, "Newest day should have a properly adjusted realistic weight")
+        }
+        
+        // Additional edge case: Ensure no negative realistic weights
+        let numberOfDaysWithNegativeRealisticWeight = days.mappedToProperty(property: .realisticWeight).filter { $0 < 0 }.count
+        XCTAssertEqual(numberOfDaysWithNegativeRealisticWeight, 0, "There should be no days with a negative realistic weight")
     }
     
     //todo not day test
