@@ -442,8 +442,7 @@ final class DayUnitTests: XCTestCase {
             XCTFail("Days initialization failed")
             return
         }
-        let numberOfDaysWithNoRealisticWeight = realisticWeights.filter { $0 == 0 }.count
-        XCTAssertEqual(numberOfDaysWithNoRealisticWeight, 0)
+        
         // Ensure realistic weights have been set
         XCTAssertTrue(days.everyDayHas(.realisticWeight))
         
@@ -456,6 +455,7 @@ final class DayUnitTests: XCTestCase {
                 XCTAssertLessThanOrEqual(abs(day.realisticWeight - previousDay.realisticWeight), Constants.maximumWeightChangePerDay, "Realistic weight change per day should not exceed the maximum allowed change")
             }
         }
+        
         // Additional edge case: Check if oldest day uses its own weight as realistic weight
         if let oldestDay = days.oldestDay {
             XCTAssertEqual(oldestDay.realisticWeight, oldestDay.weight, "Oldest day should use its own weight as realistic weight")
