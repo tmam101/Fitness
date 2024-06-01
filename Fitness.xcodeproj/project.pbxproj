@@ -170,6 +170,7 @@
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9442CDA2BF5346000F56B43 /* activeCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E9442CD92BF5346000F56B43 /* activeCalories.json */; };
+		E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94E20362C0AC877004480AC /* WeightLineChartTests.swift */; };
 		E951EB662BF56ABA004D3CBF /* missingConsumedCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */; };
 		E951EB672BF56ABA004D3CBF /* weightGoingSteadilyDown.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */; };
 		E951EB682BF56ABA004D3CBF /* restingCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB632BF56ABA004D3CBF /* restingCalories.json */; };
@@ -357,6 +358,7 @@
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E9442CD92BF5346000F56B43 /* activeCalories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = activeCalories.json; sourceTree = "<group>"; };
+		E94E20362C0AC877004480AC /* WeightLineChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightLineChartTests.swift; sourceTree = "<group>"; };
 		E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = missingConsumedCalories.json; sourceTree = "<group>"; };
 		E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weightGoingSteadilyDown.json; sourceTree = "<group>"; };
 		E951EB632BF56ABA004D3CBF /* restingCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = restingCalories.json; sourceTree = "<group>"; };
@@ -761,6 +763,7 @@
 			children = (
 				E9DE68722AD5A60F00320684 /* DayUnitTests.swift */,
 				E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */,
+				E94E20362C0AC877004480AC /* WeightLineChartTests.swift */,
 			);
 			path = FitnessUnitTests;
 			sourceTree = "<group>";
@@ -1260,6 +1263,7 @@
 			files = (
 				E95C9B822ADDC6BF00B2FCC9 /* ColorExtension.swift in Sources */,
 				E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */,
+				E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */,
 				E95C9B812ADDC52C00B2FCC9 /* ExtensionUnitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

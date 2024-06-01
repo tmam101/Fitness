@@ -9,6 +9,157 @@ import SwiftUI
 import Charts
 import Combine
 
+public enum PlotStyle: CaseIterable {
+    case weight
+    case expectedWeight
+    case realisticWeight
+    case expectedWeightTomorrow
+    
+    var foregroundStyle: String {
+        switch self {
+        case .weight:
+            "Weight"
+        case .expectedWeight:
+            "Expected Weight"
+        case .realisticWeight:
+            "Realistic Weight"
+        case .expectedWeightTomorrow:
+            "Expected Weight Tomorrow" // TODO
+        }
+    }
+    
+    var xValue: String {
+        switch self {
+        case .weight, .expectedWeight, .realisticWeight, .expectedWeightTomorrow:
+            "Days ago"
+        }
+    }
+    
+    var yValueLabel: String {
+        switch self {
+        case .weight:
+            "Real Weight"
+        case .expectedWeight:
+            "Expected Weight"
+        case .realisticWeight:
+            "Realistic Weight"
+        case .expectedWeightTomorrow:
+            "Expected Weight Tomorrow"
+        }
+    }
+    
+    func yValue(_ day: Day) -> Double {
+        switch self {
+        case .weight:
+            day.weight
+        case .expectedWeight:
+            day.expectedWeight
+        case .realisticWeight:
+            day.realisticWeight
+        case .expectedWeightTomorrow:
+            day.expectedWeight
+        }
+    }
+    
+    var series: String {
+        switch self {
+        case .weight:
+            "C"
+        case .expectedWeight:
+            "A"
+        case .realisticWeight:
+            "D"
+        case .expectedWeightTomorrow:
+            "B"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .weight:
+            Color.weightGreen
+        case .expectedWeight:
+            Color.expectedWeightYellow
+        case .expectedWeightTomorrow:
+            Color.expectedWeightTomorrowYellow
+        case .realisticWeight:
+            Color.realisticWeightGreen
+        }
+    }
+}
+
+class PlotStyleObject {
+    var type: PlotStyle
+    var day: Day
+    var timeFrame: TimeFrame
+    var xValue: String { type.xValue }
+    var yValue: Double { type.yValue(day) }
+    var yValueLabel: String { type.yValueLabel }
+    var foregroundStyle: String { type.foregroundStyle }
+    var series: String { type.series }
+    
+    init(type: PlotStyle, day: Day, timeFrame: TimeFrame) {
+        self.type = type
+        self.day = day
+        self.timeFrame = timeFrame
+    }
+    
+    var shouldDisplay: Bool {
+        switch type {
+        case .weight, .expectedWeight, .realisticWeight:
+            day.daysAgo >= 0
+        case .expectedWeightTomorrow:
+            true
+        }
+    }
+    
+    var shouldHavePoint: Bool {
+        switch type {
+        case .weight, .expectedWeight, .realisticWeight:
+            true
+        case .expectedWeightTomorrow:
+            false
+        }    }
+    
+    var shouldHaveDayOverlay: Bool {
+        switch type {
+        case .weight, .expectedWeightTomorrow, .realisticWeight:
+            false
+        case .expectedWeight:
+            switch timeFrame.type {
+            case .allTime, .month:
+                false
+            case .week:
+                true
+            }
+        }
+    }
+    
+    var shouldIndicateMissedDays: Bool {
+        if !shouldHavePoint {
+            return false
+        }
+        switch type {
+        case .weight, .expectedWeightTomorrow, .realisticWeight:
+            return false
+        case .expectedWeight:
+            switch timeFrame.type {
+            case .allTime:
+                return false
+            case .week, .month:
+                return true
+            }
+        }
+    }
+    
+    var pointStyle: some ShapeStyle {
+        if shouldIndicateMissedDays && day.wasModifiedBecauseTheUserDidntEnterData {
+            return .red
+        }
+        return type.color
+    }
+}
+
 public class LineChartViewModel: ObservableObject {
     @Published var days: [Day] = []
     @Published var maxValue: Double = 0
@@ -62,17 +213,27 @@ public class LineChartViewModel: ObservableObject {
         maxValue = allValues.compactMap { $0.max() ?? nil }.max() ?? 1 //todo
         minValue = allValues.compactMap { $0.min() ?? nil }.min() ?? 1 //todo
     }
+    
+//    var styles: KeyValuePairs<String, Color> {
+//        let pairs = PlotStyle.allCases.map { ($0.foregroundStyle, $0.color )}
+//        let x = KeyValuePairs(dictionaryLiteral: pairs)
+////        var styles: [String: Color]
+////        for style in PlotStyle.allCases {
+////            styles[style.foregroundStyle] = style.color
+////        }
+////        return KeyValuePairs(dictionaryLiteral: styles)
+//    }
 }
 
 extension ChartContent {
-//    @ChartContentBuilder
-//    func conditional(bool: Bool, _ fun: ((some ChartContent) -> some ChartContent)) -> any ChartContent {
-//        if bool {
-//            fun(self)
-//        } else {
-//            self
-//        }
-//    }
+    @ChartContentBuilder
+    func conditional<Content: ChartContent>(_ condition: Bool, transform: (Self) -> Content) -> some ChartContent {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
     
     @ChartContentBuilder
     func overlayPointWith(text: String) -> some ChartContent {
@@ -92,135 +253,32 @@ struct WeightLineChart: View {
         self.viewModel = LineChartViewModel(health: health, timeFrame: timeFrame)
     }
     
-//    struct M: ViewModifier {
-//        let day: Day
-//        func body(content: Content) -> some View {
-//            content
-////                .annotation(position: .overlay, alignment: .bottom, spacing: 5) {
-////                Text("\(day.dayOfWeek.prefix(1))")
-////                    .foregroundStyle(.yellow)
-////                    .fontWeight(.light)
-////                    .font(.system(size: 10))
-//            }
-//        }
-    
-//    @ChartContentBuilder
-//    func modifier(day: Day, content: some ChartContent) -> some ChartContent {
-//        content.annotation(position: .overlay, alignment: .bottom, spacing: 5) {
-//            Text("\(day.dayOfWeek.prefix(1))")
-//                .foregroundStyle(.yellow)
-//                .fontWeight(.light)
-//                .font(.system(size: 10))
-//        }
-//    }
-    
-//    @ChartContentBuilder
-//    func test(day: Day, conditional: Bool) -> some ChartContent {
-//        if conditional {
-//            modifier(day: day, content: expectedWeightPlot(day: day))
-//        } else {
-//            expectedWeightPlot(day: day)
-//        }
-//    }
-    
     @ChartContentBuilder
-    func expectedWeightPlot(day: Day) -> some ChartContent {
-        // Expected Weight graph until tomorrow
-        if day.daysAgo >= 0 {
-            LineMark(x: .value("Days ago", day.date),
-                     y: .value("Expected Weight", day.expectedWeight),
-                     series: .value("Expected weight", "A"))
-            .foregroundStyle(by: .value("Expected Weight 2", "Expected Weight"))
-            .accessibilityLabel("expected weight line \(day.daysAgo) days ago")
-            .accessibilityValue("\(Int(day.expectedWeight))")
-            
-            if viewModel.timeFrame.type == .week {
+    func lineAndPoint(_ style: PlotStyleObject) -> some ChartContent {
+        if style.shouldDisplay {
+            LineMark(x: .value(style.xValue, style.day.date),
+                     y: .value(style.yValueLabel, style.yValue),
+                     series: .value(style.yValueLabel, style.series))
+            .foregroundStyle(by: .value(style.foregroundStyle, style.foregroundStyle))
+            if style.shouldHavePoint {
                 PointMark(
-                    x: .value("Days ago", day.date),
-                    y: .value("Expected Weight", day.expectedWeight))
-                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
+                    x: .value(style.xValue, style.day.date),
+                    y: .value(style.yValueLabel, style.yValue))
+                .foregroundStyle(style.pointStyle)
                 .symbolSize(10)
-                .overlayPointWith(text: day.firstLetterOfDay)
-                .accessibilityLabel("expected weight point \(day.daysAgo) days ago")
-                .accessibilityValue("\(Int(day.expectedWeight))")
-            } else if viewModel.timeFrame.type == .month {
-                PointMark(
-                    x: .value("Days ago", day.date),
-                    y: .value("Expected Weight", day.expectedWeight))
-                .foregroundStyle(day.wasModifiedBecauseTheUserDidntEnterData ? .red : .yellow)
-                .symbolSize(10)
-                .accessibilityLabel("expected weight point \(day.daysAgo) days ago")
-                .accessibilityValue("\(Int(day.expectedWeight))")
+                .conditional(style.shouldHaveDayOverlay) { view in
+                    view.overlayPointWith(text: style.day.firstLetterOfDay)
+                }
             }
-        }
-    }
-    
-    @ChartContentBuilder
-    func expectedWeightTomorrowPlot(day: Day) -> some ChartContent {
-        // Expected weight tomorrow
-        if day.daysAgo <= 0 {
-            LineMark(x: .value("Days ago", day.date),
-                     y: .value("Expected Weight", day.expectedWeight),
-                     series: .value("Tomorrow's expected weight", "B"))
-//            .foregroundStyle(by: .value("Expected Weight Tomorrow", "Expected Weight Tomorrow"))
-            .foregroundStyle(Color.expectedWeightTomorrowYellow)
-            PointMark(
-                x: .value("Days ago", day.date),
-                y: .value("Expected Weight", day.expectedWeight))
-            .foregroundStyle(.yellow)
-            .symbolSize(10)
-            .opacity(0.3)
-        }
-    }
-    
-    @ChartContentBuilder
-    func weightPlot(day: Day) -> some ChartContent {
-        // Weight
-        if day.weight != 0 {
-            LineMark(x: .value("Days ago", day.date),
-                     y: .value("Real Weight", day.weight),
-                     series: .value("Weight", "C"))
-            .foregroundStyle(by: .value("Weight", "Weight"))
-            
-            PointMark(
-                x: .value("Days ago", day.date),
-                y: .value("Real Weight", day.weight))
-            .foregroundStyle(.green)
-            .symbolSize(10)
-        }
-    }
-    @ChartContentBuilder
-    func realisticWeightPlot(day: Day) -> some ChartContent {
-        // Realistic weights
-        if day.weight != 0 {
-            LineMark(x: .value("Days ago", day.date),
-                     y: .value("Real Weight", day.realisticWeight),
-                     series: .value("Weight", "D"))
-            .foregroundStyle(by: .value("Realistic Weight", "Realistic Weight"))
-            
-            PointMark(
-                x: .value("Days ago", day.date),
-                y: .value("Real Weight", day.realisticWeight))
-            .foregroundStyle(.green)
-            .symbolSize(10)
-            .opacity(0.2)
         }
     }
     
     var chart: some View {
         Chart(viewModel.days) { day in
-            // Expected Weight graph until tomorrow
-            expectedWeightPlot(day: day)
-            //                test(day: day)
-            
-            // Expected weight tomorrow
-            expectedWeightTomorrowPlot(day: day)
-            
-            // Weight
-            weightPlot(day: day)
-            
-            // Realistic weights
-            realisticWeightPlot(day: day)
+            lineAndPoint(PlotStyleObject(type: .expectedWeight, day: day, timeFrame: viewModel.timeFrame))
+            lineAndPoint(PlotStyleObject(type: .weight, day: day, timeFrame: viewModel.timeFrame))
+            lineAndPoint(PlotStyleObject(type: .realisticWeight, day: day, timeFrame: viewModel.timeFrame))
+            lineAndPoint(PlotStyleObject(type: .expectedWeightTomorrow, day: day, timeFrame: viewModel.timeFrame))
         }
     }
     
@@ -251,8 +309,8 @@ struct WeightLineChart: View {
             .chartForegroundStyleScale([
                 "Expected Weight": Color.expectedWeightYellow,
                 "Weight": Color.weightGreen,
-                "Realistic Weight": Color.realisticWeightGreen
-//                "Expected Weight Tomorrow": Color.expectedWeightTomorrowYellow
+                "Realistic Weight": Color.realisticWeightGreen,
+                "Expected Weight Tomorrow": Color.expectedWeightTomorrowYellow
             ])
         }
         .padding()

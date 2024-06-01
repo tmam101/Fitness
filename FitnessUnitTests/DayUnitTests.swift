@@ -676,8 +676,6 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(subset.newestDay?.daysAgo, 4)
     }
     
-    
-    
     func testForEveryDay() {
         var dayNumbers = [4,5,6]
         var daysCaptured: [Int] = []
