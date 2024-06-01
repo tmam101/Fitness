@@ -390,6 +390,14 @@ extension Days {
         Array(self.values).sorted(by: { x, y in x.daysAgo > y.daysAgo })
     }
     
+    func sortedMostRecentToLongestAgo() -> [Day] {
+        self.array().sortedMostRecentToLongestAgo()
+    }
+    
+    func sortedLongestAgoToMostRecent() -> [Day] {
+        self.array().sortedLongestAgoToMostRecent()
+    }
+    
     func everyDayHas(_ property: DayProperty) -> Bool {
         let properties = mappedToProperty(property: property)
         let propertiesThatAreZero = properties.filter { $0 == 0 }

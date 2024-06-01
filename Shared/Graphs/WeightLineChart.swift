@@ -194,11 +194,11 @@ public class LineChartViewModel: ObservableObject {
         var days = days
         // Add tomorrow for the graph
         if let today = days[0] {
-            days[-1] = Day(date: Date.subtract(days: -1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow)
+            let _ = days.append(Day(date: Date.add(days: 1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow))
         }
-        let values = days.filter { $0.key <= timeFrame.days }
-            .values
-            .sorted(by: { $0.daysAgo < $1.daysAgo })
+        let values = days
+            .subset(from: -1, through: timeFrame.days)
+            .sortedMostRecentToLongestAgo()
         return values
     }
     
@@ -223,11 +223,14 @@ struct WeightLineChart: View {
     
     @ChartContentBuilder
     func lineAndPoint(_ viewModel: PlotViewModel) -> some ChartContent {
+        // Add Line
         if viewModel.shouldDisplay {
             LineMark(x: .value(viewModel.xValueLabel, viewModel.xValue),
                      y: .value(viewModel.yValueLabel, viewModel.yValue),
                      series: .value(viewModel.yValueLabel, viewModel.series))
             .foregroundStyle(by: .value(viewModel.foregroundStyle, viewModel.foregroundStyle))
+            
+            // Add Point
             if viewModel.shouldHavePoint {
                 PointMark(
                     x: .value(viewModel.xValueLabel, viewModel.xValue),

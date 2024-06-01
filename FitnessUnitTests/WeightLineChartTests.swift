@@ -132,4 +132,30 @@ final class WeightLineChartTests: XCTestCase {
         XCTAssertEqual(viewModel.minValue, 68)
     }
     
+    func testLineChartViewModel_constructDays() {
+        let day1 = Day(daysAgo: 0, expectedWeight: 68, realisticWeight: 69, weight: 70)
+        let day2 = Day(daysAgo: 1, expectedWeight: 69, realisticWeight: 70, weight: 71)
+        var days = Days()
+        days[0] = day1
+        days[1] = day2
+        let timeFrame = TimeFrame(type: .week)
+        let viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
+        var constructedDays = viewModel.constructDays(using: days)
+        // Ensure tomorrow is added
+        XCTAssertEqual(constructedDays.count, 3)
+        XCTAssertEqual(constructedDays.sortedMostRecentToLongestAgo().first?.daysAgo, -1)
+        // Ensure tomorrow's weight
+        XCTAssertEqual(constructedDays.first?.expectedWeight, constructedDays[1].expectedWeightTomorrow)
+        // Ensure that filtering by timeframe takes place
+        let dayOutsideOfTimeframe = Day(daysAgo: 10, expectedWeight: 68, realisticWeight: 69, weight: 70)
+        let dayInsideOfTimeframe = Day(daysAgo: 7, expectedWeight: 68, realisticWeight: 69, weight: 70)
+        XCTAssertTrue(days.append(dayOutsideOfTimeframe))
+        XCTAssertTrue(days.append(dayInsideOfTimeframe))
+        constructedDays = viewModel.constructDays(using: days)
+        XCTAssertEqual(constructedDays.count, 4)
+        // Ensure proper sorting
+        XCTAssertEqual(constructedDays.first?.daysAgo, -1)
+        XCTAssertEqual(constructedDays.last?.daysAgo, 7)
+    }
+    
 }
