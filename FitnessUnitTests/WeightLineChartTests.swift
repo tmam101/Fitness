@@ -103,6 +103,9 @@ final class WeightLineChartTests: XCTestCase {
         
         day.wasModifiedBecauseTheUserDidntEnterData = true
         XCTAssertEqual(expectedWeightViewModel.pointStyle as! Color, Color.red)
+        XCTAssertEqual(expectedWeightTomorrowViewModel.pointStyle as! Color, expectedWeightTomorrowViewModel.type.color)
+        XCTAssertEqual(realisticWeightViewModel.pointStyle as! Color, realisticWeightViewModel.type.color)
+        XCTAssertEqual(weightViewModel.pointStyle as! Color, weightViewModel.type.color)
     }
     
     func testLineChartViewModel() {
