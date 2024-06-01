@@ -111,7 +111,7 @@ final class WeightLineChartTests: XCTestCase {
         XCTAssertEqual(weightViewModel.pointStyle as! Color, weightViewModel.type.color)
         
         // Ensure dots disappear after a month
-        timeFrame = TimeFrame(type: .month)
+        timeFrame = TimeFrame(type: .allTime)
         let longAgoDay = Day(daysAgo: 34, activeCalories: 3500, expectedWeight: 68, realisticWeight: 69, weight: 70)
         let longAgoWeightViewModel = PlotViewModel(type: .weight, day: longAgoDay, timeFrame: timeFrame)
         XCTAssertFalse(longAgoWeightViewModel.shouldHavePoint)
@@ -165,7 +165,7 @@ final class WeightLineChartTests: XCTestCase {
         // Ensure tomorrow's weight
         XCTAssertEqual(constructedDays.first?.expectedWeight, constructedDays[1].expectedWeightTomorrow)
         // Ensure that filtering by timeframe takes place
-        let dayOutsideOfTimeframe = Day(daysAgo: 10, expectedWeight: 68, realisticWeight: 69, weight: 70)
+        let dayOutsideOfTimeframe = Day(daysAgo: 8, expectedWeight: 68, realisticWeight: 69, weight: 70)
         let dayInsideOfTimeframe = Day(daysAgo: 7, expectedWeight: 68, realisticWeight: 69, weight: 70)
         XCTAssertTrue(days.append(dayOutsideOfTimeframe))
         XCTAssertTrue(days.append(dayInsideOfTimeframe))

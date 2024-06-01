@@ -552,6 +552,10 @@ extension Days {
         }
     }
     
+    func filteredBy(_ timeFrame: TimeFrame) -> Days {
+        return self.subset(from: -1, through: timeFrame.days)
+    }
+    
     // MARK: OLD WAYS OF ADJUSTING DAYS
     
     // Need to look at tomorrow's weight, not yesterday's weight, right?

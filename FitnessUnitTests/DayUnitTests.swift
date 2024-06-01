@@ -705,7 +705,27 @@ final class DayUnitTests: XCTestCase {
             daysCaptured.append(day.daysAgo)
         }
         XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: >)))
-        
+    }
+    
+    func testFilterByTimeFrame() {
+        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
+        XCTAssertEqual(days.count, 136)
+        XCTAssertEqual(days.oldestDay?.daysAgo, 135)
+        // Filter by week
+        var filtered = days.filteredBy(.week)
+        XCTAssertEqual(filtered.count, 8)
+        XCTAssertEqual(filtered.newestDay?.daysAgo, 0)
+        XCTAssertEqual(filtered.oldestDay?.daysAgo, 7)
+        // Filter by month
+        filtered = days.filteredBy(.month)
+        XCTAssertEqual(filtered.count, 31)
+        XCTAssertEqual(filtered.newestDay?.daysAgo, 0)
+        XCTAssertEqual(filtered.oldestDay?.daysAgo, 30)
+        // Filter by all time
+        filtered = days.filteredBy(.allTime)
+        XCTAssertEqual(filtered.count, 136)
+        XCTAssertEqual(filtered.newestDay?.daysAgo, 0)
+        XCTAssertEqual(filtered.oldestDay?.daysAgo, 135)
     }
     
 }

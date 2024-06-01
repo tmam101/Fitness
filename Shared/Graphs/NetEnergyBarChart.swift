@@ -20,7 +20,7 @@ class NetEnergyBarChartViewModel: ObservableObject {
     var timeFrame: TimeFrame
     
     // Constants
-    private let lineInterval: Double = 500
+    public let lineInterval: Double = 500
     
     init(health: HealthData, timeFrame: TimeFrame) {
         self.timeFrame = timeFrame

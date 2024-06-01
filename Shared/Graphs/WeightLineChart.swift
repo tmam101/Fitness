@@ -203,7 +203,7 @@ public class LineChartViewModel: ObservableObject {
             let _ = days.append(Day(date: Date.add(days: 1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow))
         }
         let values = days
-            .subset(from: -1, through: timeFrame.days)
+            .filteredBy(timeFrame)
             .sortedMostRecentToLongestAgo()
         return values
     }
