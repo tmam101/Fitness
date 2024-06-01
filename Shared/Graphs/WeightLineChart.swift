@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 import Combine
 
-public enum PlotStyle: CaseIterable {
+public enum PlotStyleType: CaseIterable {
     case weight
     case expectedWeight
     case realisticWeight
@@ -28,7 +28,7 @@ public enum PlotStyle: CaseIterable {
         }
     }
     
-    var xValue: String {
+    var xValueLabel: String {
         switch self {
         case .weight, .expectedWeight, .realisticWeight, .expectedWeightTomorrow:
             "Days ago"
@@ -45,19 +45,6 @@ public enum PlotStyle: CaseIterable {
             "Realistic Weight"
         case .expectedWeightTomorrow:
             "Expected Weight Tomorrow"
-        }
-    }
-    
-    func yValue(_ day: Day) -> Double {
-        switch self {
-        case .weight:
-            day.weight
-        case .expectedWeight:
-            day.expectedWeight
-        case .realisticWeight:
-            day.realisticWeight
-        case .expectedWeightTomorrow:
-            day.expectedWeight
         }
     }
     
@@ -88,17 +75,30 @@ public enum PlotStyle: CaseIterable {
     }
 }
 
-class PlotStyleObject {
-    var type: PlotStyle
+class PlotViewModel {
+    var type: PlotStyleType
     var day: Day
     var timeFrame: TimeFrame
-    var xValue: String { type.xValue }
-    var yValue: Double { type.yValue(day) }
+    var xValue: Date { day.date }
+    var xValueLabel: String { type.xValueLabel }
+    var dateOverlay: String { day.firstLetterOfDay }
+    var yValue: Double {
+        switch type {
+        case .weight:
+            day.weight
+        case .expectedWeight:
+            day.expectedWeight
+        case .realisticWeight:
+            day.realisticWeight
+        case .expectedWeightTomorrow:
+            day.expectedWeight
+        }
+    }
     var yValueLabel: String { type.yValueLabel }
     var foregroundStyle: String { type.foregroundStyle }
     var series: String { type.series }
     
-    init(type: PlotStyle, day: Day, timeFrame: TimeFrame) {
+    init(type: PlotStyleType, day: Day, timeFrame: TimeFrame) {
         self.type = type
         self.day = day
         self.timeFrame = timeFrame
@@ -165,7 +165,6 @@ public class LineChartViewModel: ObservableObject {
     @Published var maxValue: Double = 0
     @Published var minValue: Double = 0
     private var cancellables: [AnyCancellable] = []
-    private var weights: [Double] = []
     @Published var timeFrame: TimeFrame
     
     init(health: HealthData, timeFrame: TimeFrame) {
@@ -213,16 +212,6 @@ public class LineChartViewModel: ObservableObject {
         maxValue = allValues.compactMap { $0.max() ?? nil }.max() ?? 1 //todo
         minValue = allValues.compactMap { $0.min() ?? nil }.min() ?? 1 //todo
     }
-    
-//    var styles: KeyValuePairs<String, Color> {
-//        let pairs = PlotStyle.allCases.map { ($0.foregroundStyle, $0.color )}
-//        let x = KeyValuePairs(dictionaryLiteral: pairs)
-////        var styles: [String: Color]
-////        for style in PlotStyle.allCases {
-////            styles[style.foregroundStyle] = style.color
-////        }
-////        return KeyValuePairs(dictionaryLiteral: styles)
-//    }
 }
 
 extension ChartContent {
@@ -254,20 +243,20 @@ struct WeightLineChart: View {
     }
     
     @ChartContentBuilder
-    func lineAndPoint(_ style: PlotStyleObject) -> some ChartContent {
-        if style.shouldDisplay {
-            LineMark(x: .value(style.xValue, style.day.date),
-                     y: .value(style.yValueLabel, style.yValue),
-                     series: .value(style.yValueLabel, style.series))
-            .foregroundStyle(by: .value(style.foregroundStyle, style.foregroundStyle))
-            if style.shouldHavePoint {
+    func lineAndPoint(_ viewModel: PlotViewModel) -> some ChartContent {
+        if viewModel.shouldDisplay {
+            LineMark(x: .value(viewModel.xValueLabel, viewModel.xValue),
+                     y: .value(viewModel.yValueLabel, viewModel.yValue),
+                     series: .value(viewModel.yValueLabel, viewModel.series))
+            .foregroundStyle(by: .value(viewModel.foregroundStyle, viewModel.foregroundStyle))
+            if viewModel.shouldHavePoint {
                 PointMark(
-                    x: .value(style.xValue, style.day.date),
-                    y: .value(style.yValueLabel, style.yValue))
-                .foregroundStyle(style.pointStyle)
+                    x: .value(viewModel.xValueLabel, viewModel.xValue),
+                    y: .value(viewModel.yValueLabel, viewModel.yValue))
+                .foregroundStyle(viewModel.pointStyle)
                 .symbolSize(10)
-                .conditional(style.shouldHaveDayOverlay) { view in
-                    view.overlayPointWith(text: style.day.firstLetterOfDay)
+                .conditional(viewModel.shouldHaveDayOverlay) { view in
+                    view.overlayPointWith(text: viewModel.dateOverlay)
                 }
             }
         }
@@ -275,10 +264,10 @@ struct WeightLineChart: View {
     
     var chart: some View {
         Chart(viewModel.days) { day in
-            lineAndPoint(PlotStyleObject(type: .expectedWeight, day: day, timeFrame: viewModel.timeFrame))
-            lineAndPoint(PlotStyleObject(type: .weight, day: day, timeFrame: viewModel.timeFrame))
-            lineAndPoint(PlotStyleObject(type: .realisticWeight, day: day, timeFrame: viewModel.timeFrame))
-            lineAndPoint(PlotStyleObject(type: .expectedWeightTomorrow, day: day, timeFrame: viewModel.timeFrame))
+            lineAndPoint(PlotViewModel(type: .expectedWeight, day: day, timeFrame: viewModel.timeFrame))
+            lineAndPoint(PlotViewModel(type: .weight, day: day, timeFrame: viewModel.timeFrame))
+            lineAndPoint(PlotViewModel(type: .realisticWeight, day: day, timeFrame: viewModel.timeFrame))
+            lineAndPoint(PlotViewModel(type: .expectedWeightTomorrow, day: day, timeFrame: viewModel.timeFrame))
         }
     }
     
@@ -288,8 +277,6 @@ struct WeightLineChart: View {
         AxisValueLabel()
             .foregroundStyle(Color.white)
     }
-    
-    
     
     //TODO: The initial weight doesn't quite match up with the deficit line.
     var body: some View {
@@ -316,11 +303,3 @@ struct WeightLineChart: View {
         .padding()
     }
 }
-
-//struct WeightLineChart_Previews: PreviewProvider {
-//    static var previews: some View {
-////        WeightLineChart(health: HealthData(environment: .debug(nil)), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
-////            .mainBackground()
-////        FitnessPreviewProvider.MainPreview()
-//    }
-//}
