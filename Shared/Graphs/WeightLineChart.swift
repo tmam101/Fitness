@@ -116,10 +116,16 @@ public class PlotViewModel {
     var shouldHavePoint: Bool {
         switch type {
         case .weight, .expectedWeight, .realisticWeight:
-            true
+            switch timeFrame.type {
+            case .allTime:
+                return false
+            case .week, .month:
+                return true
+            }
         case .expectedWeightTomorrow:
-            false
-        }    }
+            return false
+        }
+    }
     
     var shouldHaveDayOverlay: Bool {
         switch type {

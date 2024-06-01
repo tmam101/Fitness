@@ -43,7 +43,9 @@ final class WeightLineChartTests: XCTestCase {
     
     func testPlotViewModel() {
         let day = Day(date: Date(), daysAgo: 0, activeCalories: 3500, expectedWeight: 68, realisticWeight: 69, weight: 70)
-        let timeFrame = TimeFrame(type: .week)
+        
+        // Test for week time frame
+        var timeFrame = TimeFrame(type: .week)
         
         let weightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
         XCTAssertEqual(weightViewModel.xValue, day.date)
@@ -101,11 +103,27 @@ final class WeightLineChartTests: XCTestCase {
         XCTAssertFalse(expectedWeightTomorrowViewModel.shouldHaveDayOverlay)
         XCTAssertFalse(expectedWeightTomorrowViewModel.shouldIndicateMissedDays)
         
+        // Ensure the points become red when they should
         day.wasModifiedBecauseTheUserDidntEnterData = true
         XCTAssertEqual(expectedWeightViewModel.pointStyle as! Color, Color.red)
         XCTAssertEqual(expectedWeightTomorrowViewModel.pointStyle as! Color, expectedWeightTomorrowViewModel.type.color)
         XCTAssertEqual(realisticWeightViewModel.pointStyle as! Color, realisticWeightViewModel.type.color)
         XCTAssertEqual(weightViewModel.pointStyle as! Color, weightViewModel.type.color)
+        
+        // Ensure dots disappear after a month
+        timeFrame = TimeFrame(type: .month)
+        let longAgoDay = Day(daysAgo: 34, activeCalories: 3500, expectedWeight: 68, realisticWeight: 69, weight: 70)
+        let longAgoWeightViewModel = PlotViewModel(type: .weight, day: longAgoDay, timeFrame: timeFrame)
+        XCTAssertFalse(longAgoWeightViewModel.shouldHavePoint)
+        
+        // Ensure day of week labels don't show up after a week
+        timeFrame = TimeFrame(type: .week)
+        let dayOfWeekViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
+        XCTAssertTrue(dayOfWeekViewModel.shouldHaveDayOverlay)
+        
+        timeFrame = TimeFrame(type: .month)
+        let dayOfMonthViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
+        XCTAssertFalse(dayOfMonthViewModel.shouldHaveDayOverlay)
     }
     
     func testLineChartViewModel() {
