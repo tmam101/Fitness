@@ -171,6 +171,9 @@
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9442CDA2BF5346000F56B43 /* activeCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E9442CD92BF5346000F56B43 /* activeCalories.json */; };
 		E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94E20362C0AC877004480AC /* WeightLineChartTests.swift */; };
+		E94E203A2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94E20392C0ACAC4004480AC /* ChartContentExtension.swift */; };
+		E94E203B2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94E20392C0ACAC4004480AC /* ChartContentExtension.swift */; };
+		E94E203C2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94E20392C0ACAC4004480AC /* ChartContentExtension.swift */; };
 		E951EB662BF56ABA004D3CBF /* missingConsumedCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */; };
 		E951EB672BF56ABA004D3CBF /* weightGoingSteadilyDown.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */; };
 		E951EB682BF56ABA004D3CBF /* restingCalories.json in Resources */ = {isa = PBXBuildFile; fileRef = E951EB632BF56ABA004D3CBF /* restingCalories.json */; };
@@ -359,6 +362,7 @@
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E9442CD92BF5346000F56B43 /* activeCalories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = activeCalories.json; sourceTree = "<group>"; };
 		E94E20362C0AC877004480AC /* WeightLineChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightLineChartTests.swift; sourceTree = "<group>"; };
+		E94E20392C0ACAC4004480AC /* ChartContentExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartContentExtension.swift; sourceTree = "<group>"; };
 		E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = missingConsumedCalories.json; sourceTree = "<group>"; };
 		E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weightGoingSteadilyDown.json; sourceTree = "<group>"; };
 		E951EB632BF56ABA004D3CBF /* restingCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = restingCalories.json; sourceTree = "<group>"; };
@@ -559,6 +563,7 @@
 				485B992527CEC29C00C70C81 /* Settings.swift */,
 				E95C9B7A2ADDC14A00B2FCC9 /* ArrayExtension.swift */,
 				E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */,
+				E94E20392C0ACAC4004480AC /* ChartContentExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1063,6 +1068,7 @@
 				48BD6F5D274B17C20007AC15 /* AppView.swift in Sources */,
 				48BD6E73274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				4827C9A126828C18006700A1 /* DoubleExtension.swift in Sources */,
+				E94E203A2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */,
 				48199FB72628D045000247E8 /* LiftingLineGraph.swift in Sources */,
 				48E4B44D262619DE002321B5 /* Environment.swift in Sources */,
 				4832D11727835D3400414573 /* WatchManager.swift in Sources */,
@@ -1120,6 +1126,7 @@
 				48BD6F5E274B17C20007AC15 /* AppView.swift in Sources */,
 				48BD6E74274AFB1E0007AC15 /* TimeExtension.swift in Sources */,
 				4827C9A226828C18006700A1 /* DoubleExtension.swift in Sources */,
+				E94E203B2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */,
 				48A0D46D25BB71CB007C40ED /* FitnessWidget.swift in Sources */,
 				48A7706D260529C3002E5853 /* ColorExtension.swift in Sources */,
 				4832D11827835D3400414573 /* WatchManager.swift in Sources */,
@@ -1197,6 +1204,7 @@
 				48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */,
 				E99B51532BE56C6D002CEB48 /* WeightLineChart.swift in Sources */,
 				48BD6F55274B162E0007AC15 /* WeightManager.swift in Sources */,
+				E94E203C2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */,
 				48108138278A3609008E9AE6 /* FitnessViewViews.swift in Sources */,
 				E924B7702BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */,
 				4802D495278585CF0001BE9D /* CalorieManager.swift in Sources */,

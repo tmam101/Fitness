@@ -75,7 +75,7 @@ public enum PlotStyleType: CaseIterable {
     }
 }
 
-class PlotViewModel {
+public class PlotViewModel {
     var type: PlotStyleType
     var day: Day
     var timeFrame: TimeFrame
@@ -211,27 +211,6 @@ public class LineChartViewModel: ObservableObject {
         let allValues = [expectedWeights, realWeights]
         maxValue = allValues.compactMap { $0.max() ?? nil }.max() ?? 1 //todo
         minValue = allValues.compactMap { $0.min() ?? nil }.min() ?? 1 //todo
-    }
-}
-
-extension ChartContent {
-    @ChartContentBuilder
-    func conditional<Content: ChartContent>(_ condition: Bool, transform: (Self) -> Content) -> some ChartContent {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-    
-    @ChartContentBuilder
-    func overlayPointWith(text: String) -> some ChartContent {
-        self.annotation(position: .overlay, alignment: .bottom, spacing: 5) {
-            Text(text)
-                .foregroundStyle(.yellow)
-                .fontWeight(.light)
-                .font(.system(size: 10))
-        }
     }
 }
 
