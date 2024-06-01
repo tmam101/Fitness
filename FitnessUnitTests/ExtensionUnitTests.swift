@@ -205,6 +205,10 @@ class DoubleTests: XCTestCase {
         let goal: Double = 10.0
         let expected: Double = 130.0
         XCTAssertEqual(value.rounded(toNextSignificant: goal), expected)
+        XCTAssertEqual(450.rounded(toNextSignificant: 500), 500)
+        XCTAssertEqual(-450.rounded(toNextSignificant: 500), -500)
+        XCTAssertEqual(650.rounded(toNextSignificant: 500), 1000)
+        XCTAssertEqual(-650.rounded(toNextSignificant: 500), -1000)
     }
     
     func testRoundedString() {

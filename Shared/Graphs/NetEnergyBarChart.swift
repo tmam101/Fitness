@@ -43,9 +43,8 @@ class NetEnergyBarChartViewModel: ObservableObject {
 
     func setupDays(using health: HealthData) {
         days = health.days
-            .filter { $0.key <= timeFrame.days }
-            .values
-            .sorted { $0.daysAgo < $1.daysAgo }
+            .filteredBy(timeFrame)
+            .sortedMostRecentToLongestAgo()
     }
     
     func updateMinMaxValues() {

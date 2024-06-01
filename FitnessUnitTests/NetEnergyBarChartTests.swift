@@ -35,7 +35,7 @@ class NetEnergyBarChartViewModelTests: XCTestCase {
         mockHealthData.populateMockData(days: days)
         
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
-        
+        // Test for a week
         XCTAssertEqual(viewModel.days.count, 8, "Days count should be 8 for a week timeframe")
         XCTAssertEqual(viewModel.days.first?.date, days.first?.date, "The first day should be the most recent day")
         XCTAssertEqual(viewModel.days.first?.daysAgo, 0)
@@ -47,21 +47,25 @@ class NetEnergyBarChartViewModelTests: XCTestCase {
         // Test for all time
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .allTime)
         XCTAssertEqual(viewModel.days.count, 45, "Days count should be unlimited for all time timeframe")
+        
+        // Test sorting
+        XCTAssertEqual(viewModel.days.last?.daysAgo, 44)
     }
 
     func testUpdateMinMaxValues() {
         let days = createMockDays()
         mockHealthData.populateMockData(days: days)
         
+        // TODO refactor to not take health, but days
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
+                
+        let expectedMaxValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).max() ?? 0
+        let expectedMinValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).min() ?? 0
         
-        viewModel.updateMinMaxValues()
+        XCTAssertEqual(viewModel.maxValue, expectedMaxValue.rounded(toNextSignificant: viewModel.lineInterval), "Max value should be the maximum net energy value")
+        XCTAssertEqual(viewModel.minValue, expectedMinValue.rounded(toNextSignificant: viewModel.lineInterval), "Min value should be the minimum net energy value")
         
-        let expectedMaxValue = days.map(\.netEnergy).max() ?? 0
-        let expectedMinValue = days.map(\.netEnergy).min() ?? 0
-        
-        XCTAssertEqual(viewModel.maxValue, expectedMaxValue, "Max value should be the maximum net energy value")
-        XCTAssertEqual(viewModel.minValue, expectedMinValue, "Min value should be the minimum net energy value")
+        // TODO more examples
     }
 
     func testSetupYValues() {
@@ -69,9 +73,6 @@ class NetEnergyBarChartViewModelTests: XCTestCase {
         mockHealthData.populateMockData(days: days)
         
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
-        
-        viewModel.updateMinMaxValues()
-        viewModel.setupYValues()
         
         let diff = viewModel.maxValue - viewModel.minValue
         let number = Int(diff / viewModel.lineInterval)
