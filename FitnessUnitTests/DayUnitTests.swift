@@ -728,4 +728,11 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(filtered.oldestDay?.daysAgo, 135)
     }
     
+    func testOldestDaysHaveWeightsAdded() {
+        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.missingWeightsAtFirst)])
+        let oldestWeightDay = days?.sortedLongestAgoToMostRecent().first(where: { day in
+            day.weight != 0
+        })
+        XCTAssertEqual(days?.oldestDay?.weight, oldestWeightDay?.weight)
+    }
 }

@@ -335,9 +335,20 @@ extension Days {
                 mostRecentWeight = day.weight
             }
         }
+        
+        // Try to make the first days, if you haven't weighted yourself yet, equal to the first weight you eventually record
+        forEveryDay(oldestToNewest: false) { day in
+            if day.weight == 0 {
+                if let mostRecentWeight {
+                    day.weight = mostRecentWeight
+                }
+            } else {
+                mostRecentWeight = day.weight
+            }
+        }
     }
-    
-    func adjustDaysWhereUserDidntEnterDatav3() {
+
+func adjustDaysWhereUserDidntEnterDatav3() {
         let days = self
         
         // Ensure all days have weights
