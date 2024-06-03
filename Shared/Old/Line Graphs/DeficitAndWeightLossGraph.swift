@@ -60,7 +60,7 @@ struct DeficitAndWeightLossGraph: View {
     
     struct Preview: View {
         @State var days: Double = 20
-        @State var health = HealthData(environment: .debug)
+        @State var health = HealthData(environment: .debug(nil))
         var body: some View {
             DeficitAndWeightLossGraph(daysAgoToReach: $days)
                 .environmentObject(health)

@@ -11,7 +11,7 @@ import HealthKit
 import Combine
 
 struct Provider: TimelineProvider {
-    @ObservedObject var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.debug)
+    @ObservedObject var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.debug(nil))
     private var cancellables = Set<AnyCancellable>()
     
     func placeholder(in context: Context) -> SimpleEntry {

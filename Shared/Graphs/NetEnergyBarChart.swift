@@ -20,7 +20,7 @@ class NetEnergyBarChartViewModel: ObservableObject {
     var timeFrame: TimeFrame
     
     // Constants
-    private let lineInterval: Double = 500
+    public let lineInterval: Double = 500
     
     init(health: HealthData, timeFrame: TimeFrame) {
         self.timeFrame = timeFrame
@@ -43,9 +43,8 @@ class NetEnergyBarChartViewModel: ObservableObject {
 
     func setupDays(using health: HealthData) {
         days = health.days
-            .filter { $0.key <= timeFrame.days }
-            .values
-            .sorted { $0.daysAgo < $1.daysAgo }
+            .filteredBy(timeFrame)
+            .sortedMostRecentToLongestAgo()
     }
     
     func updateMinMaxValues() {
@@ -85,6 +84,7 @@ struct NetEnergyBarChart: View {
                     .foregroundStyle(day.netEnergy > 0 ? Color.red.solidColorGradient() : viewModel.gradient(for: day))
                     .opacity(day.daysAgo == 0 ? 0.5 : 1.0)
                     .accessibilityLabel("bar \(day.daysAgo) days ago")
+                    .accessibilityValue("\(Int(day.netEnergy))")
 
             }
             .backgroundStyle(.yellow)
@@ -121,7 +121,7 @@ struct NetEnergyBarChart: View {
 
 struct NetEnergyBarChart_Previews: PreviewProvider {
     static var previews: some View {
-        NetEnergyBarChart(health: HealthData(environment: .debug), timeFrame: .init(longName: "This Week", name: "Week", days: 7))
+        NetEnergyBarChart(health: HealthData(environment: .debug(nil)), timeFrame: .week)
             .mainBackground()
         // More preview configurations can be added as needed
     }

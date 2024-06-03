@@ -19,7 +19,7 @@ import SwiftUI
 class HealthData: ObservableObject {
     
     //MARK: PROPERTIES
-    var environment: AppEnvironmentConfig = .debug
+    @Published var environment: AppEnvironmentConfig = .debug(nil)
 #if !os(macOS)
     @Published var calorieManager: CalorieManager = CalorieManager()
     @Published var runManager: RunManager = RunManager()
@@ -79,10 +79,16 @@ class HealthData: ObservableObject {
         setupDates()
         
         switch self.environment {
-        case .release:
+        case .release(let options):
 #if os(iOS)
             // Setup managers
             await weightManager.setup()
+            
+            // Set start date to first recorded weight after the original start date
+            if let startDate = weightManager.weights.sorted(by: { x, y in x.date < y.date }).first?.date {
+                setupDates(startDate: startDate)
+            }
+            
             await runManager.setup(weightManager: weightManager, startDate: self.startDate ?? Date())
             await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false)
             //            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
@@ -100,9 +106,11 @@ class HealthData: ObservableObject {
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
-                days.setWeightOnEveryDay()
+                print("JSON of days dictionary: \n")
+                print(days.encodeAsString())
+                days.formatAccordingTo(options: options)
                 self.hasLoaded = true
-                self.realisticWeights = realisticWeights
+//                self.realisticWeights = realisticWeights
             }
             
             // Post the last thirty days. Larger amounts seem to be too much for the network.
@@ -133,9 +141,11 @@ class HealthData: ObservableObject {
             self.hasLoaded = true
             completion?(self)
 #endif
-        case .debug:
+        case .debug(let options):
             //            await self.setValuesFromNetworkWithDays()
-            self.days = Days.testDays()
+            self.days = Days.testDays(options: options)
+//            self.days = Days.testDays(missingData: true, weightsOnEveryDay: true, dayCount: 15)
+
             await calorieManager.setValues(from: self.days)
             completion?(self)
             self.hasLoaded = true
@@ -250,6 +260,15 @@ class HealthData: ObservableObject {
     
     private func setupDates() {
         guard let startDate = Date.dateFromString(startDateString),
+              let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
+        else { return }
+        
+        self.startDate = startDate
+        self.daysBetweenStartAndNow = daysBetweenStartAndNow
+    }
+    
+    private func setupDates(startDate: Date?) {
+        guard let startDate,
               let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
         else { return }
         

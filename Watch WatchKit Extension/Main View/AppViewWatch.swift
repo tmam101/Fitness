@@ -31,7 +31,7 @@ struct AppViewWatch: View {
 struct AppViewWatch_Previews: PreviewProvider {
     static var previews: some View {
         AppViewWatch()
-            .environmentObject(HealthData(environment: .debug))
+            .environmentObject(HealthData(environment: .debug(nil)))
         
     }
 }

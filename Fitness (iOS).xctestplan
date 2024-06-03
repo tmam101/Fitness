@@ -9,7 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:Fitness.xcodeproj",
       "identifier" : "48821CB625B8BF3800C9F58A",

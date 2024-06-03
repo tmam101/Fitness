@@ -112,7 +112,7 @@ struct FitnessViewWeightLossGraphPreview: View {
     @State var deficitLineGraphDaysToShow: Double = 30.0
     var body: some View {
         FitnessViewWeightLossGraph(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
-            .environmentObject(HealthData(environment: .debug))
+            .environmentObject(HealthData(environment: .debug(nil)))
     }
 }
 

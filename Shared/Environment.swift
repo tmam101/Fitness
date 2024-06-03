@@ -19,7 +19,32 @@ struct GlobalEnvironment {
 }
 
 enum AppEnvironmentConfig {
-    case debug
-    case release
+    case debug([TestDayOption]?)
+    case release([TestDayOption]?)
     case widgetRelease
+}
+
+enum TestDayOption: Equatable {
+    case isMissingConsumedCalories(MissingConsumedCaloriesStrategy)
+    case weightGoingSteadilyDown
+    case dayCount(Int)
+    case testCase(Filepath.Days)
+    case dontAddWeightsOnEveryDay
+    case subsetOfDays(Int, Int)
+    
+    enum MissingConsumedCaloriesStrategy {
+        case v1
+        case v2
+        case v3
+    }
+}
+
+struct TestOptionModel {
+    // Default values for options
+    var missingData = false
+    var isMissingConsumedCalories: TestDayOption
+}
+
+extension [TestDayOption] {
+    
 }

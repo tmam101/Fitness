@@ -1,0 +1,38 @@
+{
+  "1" : {
+    "realisticWeight" : 0,
+    "consumedCalories" : 0,
+    "measuredRestingCalories" : 2308.9899999999993,
+    "date" : 738043200,
+    "id" : "450D76E3-0A4C-4918-9EDA-800D3CDC181D",
+    "daysAgo" : 1,
+    "restingCalories" : 2308.9899999999993,
+    "runningTotalDeficit" : 2744.800999999999,
+    "primitivePlottable" : "Day",
+    "wasModifiedBecauseTheUserDidntEnterData" : false,
+    "caloriesPerGramOfProtein" : 4,
+    "measuredActiveCalories" : 435.8109999999997,
+    "activeCalories" : 435.8109999999997,
+    "weight" : 0,
+    "expectedWeight" : 231.8,
+    "protein" : 0
+  },
+  "0" : {
+    "primitivePlottable" : "Day",
+    "runningTotalDeficit" : 4994.8009999999995,
+    "consumedCalories" : 0,
+    "realisticWeight" : 0,
+    "protein" : 0,
+    "weight" : 0,
+    "caloriesPerGramOfProtein" : 4,
+    "wasModifiedBecauseTheUserDidntEnterData" : false,
+    "restingCalories" : 2050,
+    "id" : "C7205D5C-17F4-4C9D-B3E3-B22E8FADE29F",
+    "measuredRestingCalories" : 1021.4150000000005,
+    "activeCalories" : 200,
+    "date" : 738129600,
+    "daysAgo" : 0,
+    "measuredActiveCalories" : 114.11100000000002,
+    "expectedWeight" : 231.01577114285715
+  }
+}

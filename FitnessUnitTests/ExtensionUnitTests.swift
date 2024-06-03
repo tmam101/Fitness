@@ -32,6 +32,114 @@ class ArrayExtensionTests: XCTestCase {
         // Test with empty array (edge case)
         XCTAssertNil([Double]().average)
     }
+    
+    func testDecodingArrayJSON() {
+        if let array: [Double] = .decode(path: .activeCalories) {
+            XCTAssertNotNil(array)
+            
+            let activeCalories: [Double] = [
+                530.484, 426.822, 401.081, 563.949, 329.136, 304.808, 1045.074, 447.229, 1140.485, 287.526,
+                664.498, 729.646, 141.281, 137.878, 185.565, 524.932, 387.086, 206.355, 895.737, 161.954,
+                619.241, 624.191, 284.112, 272.095, 840.536, 158.428, 443.622, 264.205, 1025.872, 394.575,
+                135.940, 696.240, 976.788, 383.816, 1057.616, 1056.868, 741.806, 1145.090, 514.840, 674.655,
+                620.510, 1151.488, 696.858, 724.303, 953.539, 117.319, 207.876, 884.699, 672.569, 659.526,
+                366.072, 672.032, 536.885, 1075.278, 705.510, 362.428, 1157.047, 376.990, 808.443, 1141.884,
+                1047.608, 927.059, 1001.858, 364.928, 694.303, 241.747, 852.663, 564.521, 585.509, 970.332
+            ]
+            
+            XCTAssertEqual(array, activeCalories)
+        } else {
+            XCTFail()
+        }
+    }
+    
+    func testEncodingArrayJSON() {
+        let array: [Double] = [1.0, 2.0, 3.0]
+        XCTAssertEqual(array.encodeAsString(),
+"""
+[
+  1,
+  2,
+  3
+]
+"""
+        )
+    }
+    
+    func testReversingArray() {
+        let weightGoingSteadilyDown: [Double] = [
+            200.00, 199.98, 200.00, 199.73, 199.64, 199.92, 199.52, 199.27, 199.20, 199.09, 198.63, 198.49, 198.76, 198.94, 199.10,
+            199.09, 199.17, 198.95, 198.47, 198.19, 198.34, 198.43, 198.44, 198.73, 198.91, 198.61, 198.90, 198.55, 198.72, 198.73,
+            198.64, 198.80, 199.01, 198.62, 198.57, 198.78, 199.01, 199.13, 199.02, 199.05, 198.73, 198.68, 198.96, 198.75, 198.87,
+            199.02, 199.24, 199.40, 199.24, 198.93, 199.06, 199.13, 198.70, 198.86, 198.87, 198.42, 198.51, 198.53, 198.17, 198.33,
+            198.03, 198.08, 197.96, 198.10, 198.14, 197.87, 197.79, 197.69, 197.65, 197
+        ].reversed()
+        print(weightGoingSteadilyDown)
+    }
+    
+    func testSorting() {
+        struct TestEvent: HasDate {
+            var date: Date
+        }
+        
+        func testSortedMostRecentToLongestAgo() {
+            // Arrange
+            let now = Date()
+            let oneHourAgo = Date(timeIntervalSinceNow: -3600)
+            let twoHoursAgo = Date(timeIntervalSinceNow: -7200)
+            
+            let events = [
+                TestEvent(date: twoHoursAgo),
+                TestEvent(date: now),
+                TestEvent(date: oneHourAgo)
+            ]
+            
+            // Act
+            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            
+            // Assert
+            XCTAssertEqual(sortedEvents[0].date, now, "The most recent date should be first")
+            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second most recent date should be second")
+            XCTAssertEqual(sortedEvents[2].date, twoHoursAgo, "The oldest date should be last")
+            
+            let longestToRecent = events.sortedLongestAgoToMostRecent()
+            
+            // Assert
+            XCTAssertEqual(sortedEvents[0].date, twoHoursAgo, "The most recent date should be first")
+            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second most recent date should be second")
+            XCTAssertEqual(sortedEvents[2].date, now, "The oldest date should be last")
+            
+        }
+        
+        func testSortedMostRecentToLongestAgoWithSameDates() {
+            // Arrange
+            let date = Date()
+            
+            let events = [
+                TestEvent(date: date),
+                TestEvent(date: date),
+                TestEvent(date: date)
+            ]
+            
+            // Act
+            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            
+            // Assert
+            XCTAssertEqual(sortedEvents.count, 3, "All events should be present")
+            XCTAssertTrue(sortedEvents.allSatisfy { $0.date == date }, "All dates should be the same")
+        }
+        
+        func testSortedMostRecentToLongestAgoWithEmptyArray() {
+            // Arrange
+            let events: [TestEvent] = []
+            
+            // Act
+            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            
+            // Assert
+            XCTAssertTrue(sortedEvents.isEmpty, "The sorted array should be empty")
+        }
+    }
 }
 
 
@@ -40,12 +148,15 @@ class ColorTests: XCTestCase {
     func testCustomColors() {
         // Verify that custom colors are correctly initialized
         XCTAssertNotNil(Color.myGray)
-        XCTAssertNotNil(Color.green1)
-        XCTAssertNotNil(Color.green2)
-        XCTAssertNotNil(Color.green3)
-        XCTAssertNotNil(Color.yellow1)
-        XCTAssertNotNil(Color.yellow2)
-        XCTAssertNotNil(Color.yellow3)
+        XCTAssertNotNil(Color.expectedWeightYellow)
+        XCTAssertNotNil(Color.weightGreen)
+        XCTAssertNotNil(Color.realisticWeightGreen)
+//        XCTAssertNotNil(Color.green1)
+//        XCTAssertNotNil(Color.green2)
+//        XCTAssertNotNil(Color.green3)
+//        XCTAssertNotNil(Color.yellow1)
+//        XCTAssertNotNil(Color.yellow2)
+//        XCTAssertNotNil(Color.yellow3)
     }
     
     func testSolidColorGradient() {
@@ -94,6 +205,10 @@ class DoubleTests: XCTestCase {
         let goal: Double = 10.0
         let expected: Double = 130.0
         XCTAssertEqual(value.rounded(toNextSignificant: goal), expected)
+        XCTAssertEqual(450.rounded(toNextSignificant: 500), 500)
+        XCTAssertEqual(-450.rounded(toNextSignificant: 500), -500)
+        XCTAssertEqual(650.rounded(toNextSignificant: 500), 1000)
+        XCTAssertEqual(-650.rounded(toNextSignificant: 500), -1000)
     }
     
     func testRoundedString() {

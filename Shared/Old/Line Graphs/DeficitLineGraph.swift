@@ -71,7 +71,7 @@ struct DeficitLineGraph: View {
 struct DeficitLineGraph_Previews: PreviewProvider {
     static var previews: some View {
         DeficitLineGraph()
-            .environmentObject(HealthData(environment: .debug))
+            .environmentObject(HealthData(environment: .debug(nil)))
             .frame(minWidth: 0, maxWidth: .infinity, maxHeight: 200)
             .padding()
             .background(Color.myGray)

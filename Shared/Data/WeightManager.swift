@@ -160,7 +160,7 @@ class WeightManager: ObservableObject {
                 if let results = results as? [HKQuantitySample] {
                     let weights = results
                         .map{ Weight(weight: $0.quantity.doubleValue(for: HKUnit.pound()), date: $0.endDate) }
-                        .filter { $0.date > Date.dateFromString(self.startDateString)!}
+                        .filter { $0.date >= Date.dateFromString(self.startDateString)!}
                     
                     continuation.resume(returning: weights)
                     return

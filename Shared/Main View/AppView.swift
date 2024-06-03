@@ -38,7 +38,7 @@ struct AppView_Previews: PreviewProvider {
 public struct AppPreviewProvider {
     static func MainPreview() -> some View {
         return AppView()
-            .environmentObject(HealthData(environment: .debug))
+            .environmentObject(HealthData(environment: .debug(nil)))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
     }
 }
