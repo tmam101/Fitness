@@ -161,6 +161,10 @@
 		E901FC212BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */; };
 		E901FC222BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */; };
 		E91D3F4B2AD5D25A001E1397 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
+		E9211EF22C0E49B30079A758 /* missingWeightsAtFirst.json in Resources */ = {isa = PBXBuildFile; fileRef = E9211EF12C0E49B30079A758 /* missingWeightsAtFirst.json */; };
+		E9211EF42C0E61DC0079A758 /* missingWeightsAtFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */; };
+		E9211EF52C0E61EF0079A758 /* missingWeightsAtFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */; };
+		E9211EF62C0E61F00079A758 /* missingWeightsAtFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */; };
 		E924B7662BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
 		E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
 		E924B76E2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */; };
@@ -359,6 +363,8 @@
 		E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayNotAdjustingWhenMissing.swift; sourceTree = "<group>"; };
 		E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = twoDaysIssue.json; sourceTree = "<group>"; };
 		E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoDaysIssue.swift; sourceTree = "<group>"; };
+		E9211EF12C0E49B30079A758 /* missingWeightsAtFirst.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingWeightsAtFirst.json; sourceTree = "<group>"; };
+		E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = missingWeightsAtFirst.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E9442CD92BF5346000F56B43 /* activeCalories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = activeCalories.json; sourceTree = "<group>"; };
@@ -746,6 +752,8 @@
 		E99B514C2BE4468F002CEB48 /* Test Case JSON Files */ = {
 			isa = PBXGroup;
 			children = (
+				E9211EF12C0E49B30079A758 /* missingWeightsAtFirst.json */,
+				E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */,
 				E953C5472C07A37C0087A326 /* Inaccurate expected weight today */,
 				E953C5422C07A1910087A326 /* Two Days Issue */,
 				E901FC1A2BFF83D700C78104 /* First day not adjusting when missing */,
@@ -1002,6 +1010,7 @@
 				E901FC0F2BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				E951EB692BF56ABA004D3CBF /* consumedCalories.json in Resources */,
 				E99B514B2BE435EC002CEB48 /* missingDataIssue.json in Resources */,
+				E9211EF22C0E49B30079A758 /* missingWeightsAtFirst.json in Resources */,
 				48821CDD25B8BF3800C9F58A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1079,6 +1088,7 @@
 				48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */,
 				48E0E1F726041DE50037EEAF /* RingCollections.swift in Sources */,
+				E9211EF42C0E61DC0079A758 /* missingWeightsAtFirst.swift in Sources */,
 				E99B51512BE564F1002CEB48 /* MissingDataIssue.swift in Sources */,
 				E953C5442C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */,
 				E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */,
@@ -1137,6 +1147,7 @@
 				48A0D48D25BB72F8007C40ED /* WeightManager.swift in Sources */,
 				48BD6E6C274AFAC50007AC15 /* LineGraph.swift in Sources */,
 				485B72802631EBB40070E096 /* Ring (unused).swift in Sources */,
+				E9211EF52C0E61EF0079A758 /* missingWeightsAtFirst.swift in Sources */,
 				E9F83AD929D77F0B00E0C70B /* TodayRingView.swift in Sources */,
 				E953C5452C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */,
 				48DE1DE227A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
@@ -1198,6 +1209,7 @@
 				E953C5462C07A3370087A326 /* InaccurateExpectedWeightToday.swift in Sources */,
 				E9F83ADB29D77F0B00E0C70B /* TodayRingView.swift in Sources */,
 				4802D491278582AE0001BE9D /* RunManager.swift in Sources */,
+				E9211EF62C0E61F00079A758 /* missingWeightsAtFirst.swift in Sources */,
 				4802D49A27875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */,
 				48DE1DE927A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
