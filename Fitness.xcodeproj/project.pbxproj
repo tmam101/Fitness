@@ -204,6 +204,7 @@
 		E99F347E2BF6A45C004E84C0 /* CodableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */; };
 		E99F347F2BF6A45C004E84C0 /* CodableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */; };
 		E99F34802BF6A45C004E84C0 /* CodableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */; };
+		E9B948CF2C0F8A09001183BE /* CalorieManagerUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B948CE2C0F8A09001183BE /* CalorieManagerUnitTests.swift */; };
 		E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE68722AD5A60F00320684 /* DayUnitTests.swift */; };
 		E9F83AD829D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
 		E9F83AD929D77F0B00E0C70B /* TodayRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F83AD729D77F0B00E0C70B /* TodayRingView.swift */; };
@@ -388,6 +389,7 @@
 		E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingDataIssue.swift; sourceTree = "<group>"; };
 		E99F347D2BF6A45C004E84C0 /* CodableExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableExtension.swift; sourceTree = "<group>"; };
 		E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Fitness (iOS).xctestplan"; sourceTree = "<group>"; };
+		E9B948CE2C0F8A09001183BE /* CalorieManagerUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieManagerUnitTests.swift; sourceTree = "<group>"; };
 		E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FitnessUITests.xctestplan; sourceTree = "<group>"; };
 		E9DE68702AD5A60F00320684 /* FitnessUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9DE68722AD5A60F00320684 /* DayUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayUnitTests.swift; sourceTree = "<group>"; };
@@ -780,6 +782,7 @@
 				E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */,
 				E94E20362C0AC877004480AC /* WeightLineChartTests.swift */,
 				E94E203D2C0AD964004480AC /* NetEnergyBarChartTests.swift */,
+				E9B948CE2C0F8A09001183BE /* CalorieManagerUnitTests.swift */,
 			);
 			path = FitnessUnitTests;
 			sourceTree = "<group>";
@@ -1289,6 +1292,7 @@
 				E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */,
 				E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */,
 				E95C9B812ADDC52C00B2FCC9 /* ExtensionUnitTests.swift in Sources */,
+				E9B948CF2C0F8A09001183BE /* CalorieManagerUnitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
