@@ -10,6 +10,35 @@ import Foundation
 import HealthKit
 #endif
 
+public enum HealthKitValue: CaseIterable {
+    case dietaryProtein
+    case activeEnergyBurned
+    case basalEnergyBurned
+    case dietaryEnergyConsumed
+    
+    var value: HKQuantityType? {
+        switch self {
+        case .dietaryProtein:
+            HKObjectType.quantityType(forIdentifier: .dietaryProtein)
+        case .activeEnergyBurned:
+            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)
+        case .basalEnergyBurned:
+            HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)
+        case .dietaryEnergyConsumed:
+            HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)
+        }
+    }
+    
+    var unit: HKUnit {
+        switch self {
+        case .dietaryProtein:
+                .gram()
+        case .activeEnergyBurned, .basalEnergyBurned, .dietaryEnergyConsumed:
+                .kilocalorie()
+        }
+    }
+}
+
 //TODO: Should calorie information be stored on the collection of days instead? And then we would have a day manager, which would create that day object?
 class CalorieManager: ObservableObject {
     
@@ -132,6 +161,10 @@ class CalorieManager: ObservableObject {
     /// Retrieve all day information from healthkit.
     private func getEveryDay() async -> Days {
         return await getDays(forPastDays: daysBetweenStartAndNow)
+    }
+    
+    var dietaryProtein: HKQuantityType? {
+        return HKObjectType.quantityType(forIdentifier: .dietaryProtein)
     }
     
     /// Get day information for the past amount of days. Runningtotaldeficit will start from the first day here.
@@ -276,30 +309,33 @@ class CalorieManager: ObservableObject {
         }
     }
     
-    func sumValueForDay(daysAgo: Int, forType type: HKQuantityTypeIdentifier) async -> Double {
+    func sumValueForDay(daysAgo: Int, forType type: HealthKitValue) async -> Double {
         return await withUnsafeContinuation { continuation in
-            guard let quantityType = HKObjectType.quantityType(forIdentifier: type) else {
-                print("*** Unable to create a type ***")
+            guard let quantityType = type.value else {
                 continuation.resume(returning: 0.0)
                 return
             }
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -daysAgo), to: Date())!)
-            let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
+            let predicate = predicate(daysAgo: daysAgo, quantityType: quantityType)
             
-            let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
-                guard let result = result, let sum = result.sumQuantity() else {
-                    continuation.resume(returning: 0.0)
-                    return
-                }
-                if type == .dietaryProtein {
-                    continuation.resume(returning: sum.doubleValue(for: .gram()))
-                } else {
-                    continuation.resume(returning: sum.doubleValue(for: HKUnit.kilocalorie()))
-                }
+            let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { [self] _, result, _ in
+                continuation.resume(returning: convertSumToDouble(sum: result?.sumQuantity(), type: type))
             }
             healthStore.execute(query)
         }
+    }
+    
+    func predicate(daysAgo: Int, quantityType: HKQuantityType) -> NSPredicate {
+        let startDate = Date.subtract(days: daysAgo, from: Date())
+        let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
+        return predicate
+    }
+    
+    func convertSumToDouble(sum: HKQuantity?, type: HealthKitValue) -> Double {
+        guard let sum, sum.is(compatibleWith: type.unit) else {
+            return 0.0
+        }
+        return sum.doubleValue(for: type.unit)
     }
     
     //MARK: SAVING CALORIES EATEN

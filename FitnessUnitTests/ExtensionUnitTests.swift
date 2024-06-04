@@ -295,6 +295,20 @@ class DateTests: XCTestCase {
         // Test subtracting 7 days
         let sevenDaysEarlier = Date.subtract(days: 7, from: currentDate)
         XCTAssertEqual(Date.daysBetween(date1: sevenDaysEarlier, date2: currentDate), 7)
+        XCTAssert(sevenDaysEarlier < currentDate)
+    }
+    
+    func testAddDays() {
+        let currentDate = Date()
+        
+        // Test subtracting zero days
+        let sameDay = Date.add(days: 0, from: currentDate)
+        XCTAssertTrue(Date.sameDay(date1: currentDate, date2: sameDay))
+        
+        // Test subtracting 7 days
+        let sevenDaysLater = Date.add(days: 7, from: currentDate)
+        XCTAssertEqual(Date.daysBetween(date1: sevenDaysLater, date2: currentDate), 7)
+        XCTAssert(sevenDaysLater > currentDate)
     }
     
     func testSameDay() {
