@@ -247,23 +247,6 @@ class CalorieManager: ObservableObject {
         }
     }
     
-    //MARK: GET DEFICIT
-    
-    func getDeficit(resting: Double, active: Double, eaten: Double) -> Double {
-        return (resting + (active * activeCalorieModifier)) - eaten
-    }
-        
-    func getDeficitForDay(daysAgo: Int) async -> Double? {
-        let resting = await sumValueForDay(daysAgo: daysAgo, forType: .basalEnergyBurned)
-        let active = await sumValueForDay(daysAgo: daysAgo, forType: .activeEnergyBurned)
-        let eaten = await sumValueForDay(daysAgo: daysAgo, forType: .dietaryEnergyConsumed)
-        let realResting = max(resting, self.minimumRestingCalories)
-        let realActive = max(active, self.minimumActiveCalories)
-//        print("\(daysAgo) days ago: resting: \(realResting) active: \(realActive) eaten: \(eaten)")
-        let deficit = self.getDeficit(resting: realResting, active: realActive, eaten: eaten)
-        return deficit
-    }
-    
     //MARK: SUMVALUE
         
     func sumValue(forPast days: Int, forType type: HKQuantityTypeIdentifier) async -> Double {
