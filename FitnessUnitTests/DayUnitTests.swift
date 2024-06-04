@@ -504,10 +504,10 @@ final class DayUnitTests: XCTestCase {
             1:Day(date: oneDayAgo),
             2:Day(date: twoDaysAgo)
         ]
-        var sorted = days.array().sortedLongestAgoToMostRecent()
+        var sorted = days.array().sorted(.longestAgoToMostRecent)
         XCTAssertEqual(sorted.first?.date, twoDaysAgo)
         XCTAssertEqual(sorted.last?.date, oneDayAgo)
-        sorted = days.array().sortedMostRecentToLongestAgo()
+        sorted = days.array().sorted(.mostRecentToLongestAgo)
         XCTAssertEqual(sorted.first?.date, oneDayAgo)
         XCTAssertEqual(sorted.last?.date, twoDaysAgo)
     }
@@ -690,7 +690,7 @@ final class DayUnitTests: XCTestCase {
         }
         XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: >)))
         daysCaptured = []
-        days.forEveryDay(oldestToNewest: false) { day in
+        days.forEveryDay(.mostRecentToLongestAgo) { day in
             daysCaptured.append(day.daysAgo)
         }
         XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: <)))
@@ -730,9 +730,52 @@ final class DayUnitTests: XCTestCase {
     
     func testOldestDaysHaveWeightsAdded() {
         days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.missingWeightsAtFirst)])
-        let oldestWeightDay = days?.sortedLongestAgoToMostRecent().first(where: { day in
+        let oldestWeightDay = days?.sorted(.longestAgoToMostRecent).first(where: { day in
             day.weight != 0
         })
         XCTAssertEqual(days?.oldestDay?.weight, oldestWeightDay?.weight)
+    }
+    
+    func testSetTrailingProperty() {
+        var days: Days = [:]
+        let day = Day(daysAgo: 4)
+        let day2 = Day(daysAgo: 5)
+        let day3 = Day(daysAgo: 6)
+        // Test with just weight
+        XCTAssertTrue(days.append([day, day2, day3]))
+        if let day = days[5] {
+            XCTAssertTrue(day.set(.weight, to: 200))
+            XCTAssertEqual(day.weight, 200)
+            XCTAssertEqual(days[6]?.weight, 0)
+        } else {
+            XCTFail()
+        }
+        days.setTrailingDaysPropertyToLastKnown(.weight, .mostRecentToLongestAgo)
+        XCTAssertEqual(days[4]?.weight, 0)
+        XCTAssertEqual(days[6]?.weight, 200)
+        days.setTrailingDaysPropertyToLastKnown(.weight, .longestAgoToMostRecent)
+        XCTAssertEqual(days[4]?.weight, 200)
+        XCTAssertEqual(days[5]?.weight, 200)
+        XCTAssertEqual(days[6]?.weight, 200)
+        // Test with keypaths
+        days = [:]
+        XCTAssertTrue(days.append([day, day2, day3]))
+        let property = Day.Property.activeCalories
+        if let day = days[5] {
+            XCTAssertTrue(day.set(property, to: 200))
+            XCTAssertEqual(day[keyPath: property.keyPath], 200)
+            XCTAssertEqual(day.activeCalories, 200)
+            XCTAssertEqual(days[6]?.activeCalories, 0)
+        } else {
+            XCTFail()
+        }
+        days.setTrailingDaysPropertyToLastKnown(property, .mostRecentToLongestAgo)
+        XCTAssertEqual(days[4]?[keyPath: property.keyPath], 0)
+        XCTAssertEqual(days[6]?[keyPath: property.keyPath], 200)
+        days.setTrailingDaysPropertyToLastKnown(property, .longestAgoToMostRecent)
+        XCTAssertEqual(days[4]?[keyPath: property.keyPath], 200)
+        XCTAssertEqual(days[5]?[keyPath: property.keyPath], 200)
+        XCTAssertEqual(days[6]?[keyPath: property.keyPath], 200)
+        
     }
 }

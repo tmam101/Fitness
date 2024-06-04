@@ -25,11 +25,13 @@ protocol HasDate {
 }
 
 extension Array where Element: HasDate {
-    func sortedMostRecentToLongestAgo() -> [Element] {
-        return self.sorted { $0.date > $1.date }
-    }
-    
-    func sortedLongestAgoToMostRecent() -> [Element] {
-        return self.sorted { $0.date < $1.date }
+    func sorted(_ sortOrder: SortOrder) -> [Element] {
+        switch sortOrder {
+        case .longestAgoToMostRecent:
+            self.sorted { $0.date < $1.date }
+        case .mostRecentToLongestAgo:
+            self.sorted { $0.date > $1.date }
+        }
+        
     }
 }

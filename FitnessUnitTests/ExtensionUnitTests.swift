@@ -95,19 +95,19 @@ class ArrayExtensionTests: XCTestCase {
             ]
             
             // Act
-            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            var sortedEvents = events.sorted(.mostRecentToLongestAgo)
             
             // Assert
             XCTAssertEqual(sortedEvents[0].date, now, "The most recent date should be first")
             XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second most recent date should be second")
             XCTAssertEqual(sortedEvents[2].date, twoHoursAgo, "The oldest date should be last")
             
-            let longestToRecent = events.sortedLongestAgoToMostRecent()
+            sortedEvents = events.sorted(.longestAgoToMostRecent)
             
             // Assert
-            XCTAssertEqual(sortedEvents[0].date, twoHoursAgo, "The most recent date should be first")
-            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second most recent date should be second")
-            XCTAssertEqual(sortedEvents[2].date, now, "The oldest date should be last")
+            XCTAssertEqual(sortedEvents[0].date, twoHoursAgo, "The oldest date should be first")
+            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second oldest date should be second")
+            XCTAssertEqual(sortedEvents[2].date, now, "The newest date should be last")
             
         }
         
@@ -122,7 +122,7 @@ class ArrayExtensionTests: XCTestCase {
             ]
             
             // Act
-            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            let sortedEvents = events.sorted(.mostRecentToLongestAgo)
             
             // Assert
             XCTAssertEqual(sortedEvents.count, 3, "All events should be present")
@@ -134,11 +134,14 @@ class ArrayExtensionTests: XCTestCase {
             let events: [TestEvent] = []
             
             // Act
-            let sortedEvents = events.sortedMostRecentToLongestAgo()
+            let sortedEvents = events.sorted(.mostRecentToLongestAgo)
             
             // Assert
             XCTAssertTrue(sortedEvents.isEmpty, "The sorted array should be empty")
         }
+        testSortedMostRecentToLongestAgo()
+        testSortedMostRecentToLongestAgoWithSameDates()
+        testSortedMostRecentToLongestAgoWithEmptyArray()
     }
 }
 
