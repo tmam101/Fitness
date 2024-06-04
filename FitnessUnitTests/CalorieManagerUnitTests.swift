@@ -14,6 +14,7 @@ class CalorieManagerUnitTests: XCTestCase {
     
     override func setUp() {
         calorieManager = CalorieManager()
+        calorieManager.environment = .debug(nil)
     }
     
     func testTypes() {
@@ -72,7 +73,13 @@ class CalorieManagerUnitTests: XCTestCase {
         }
         XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .dietaryProtein), 0)
         XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .activeEnergyBurned), 100)
-        
+    }
+    
+    func testSumValueForDay() async {
+        var result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryEnergyConsumed)
+        XCTAssertEqual(result, 1000)
+        result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryProtein)
+        XCTAssertEqual(result, 0)
     }
 }
 

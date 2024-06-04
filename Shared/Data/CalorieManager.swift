@@ -10,6 +10,19 @@ import Foundation
 import HealthKit
 #endif
 
+// TODO
+public class HealthService {
+var environment: AppEnvironmentConfig
+    
+    init(environment: AppEnvironmentConfig) {
+        self.environment = environment
+    }
+    
+    func sumValueForDay() {
+        
+    }
+}
+
 public enum HealthKitValue: CaseIterable {
     case dietaryProtein
     case activeEnergyBurned
@@ -55,6 +68,7 @@ class CalorieManager: ObservableObject {
     @Published var goalDeficit: Double = 500
     var days: Days = [:]
     var startingWeight: Double = 0
+    var environment: AppEnvironmentConfig = .debug(nil)
     
     @Published public var deficitToGetCorrectDeficit: Double = 0
     @Published public var percentWeeklyDeficit: Int = 0
@@ -63,7 +77,7 @@ class CalorieManager: ObservableObject {
     
     //MARK: SETUP
     
-    func setup(overrideMinimumRestingCalories: Double? = nil, overrideMinimumActiveCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, weightManager: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
+    func setup(overrideMinimumRestingCalories: Double? = nil, overrideMinimumActiveCalories: Double? = nil, shouldGetDays: Bool = true, startingWeight: Double, weightManager: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false, environment: AppEnvironmentConfig) async {
         // Set values from settings
         self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Double ?? self.minimumRestingCalories
         self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Double ?? self.minimumActiveCalories
@@ -73,6 +87,7 @@ class CalorieManager: ObservableObject {
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         self.startingWeight = startingWeight
+        self.environment = environment
         if shouldGetDays {
             self.days = await getDays(forceReload: true, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
             await setValues(from: days)
@@ -317,10 +332,15 @@ class CalorieManager: ObservableObject {
             }
             let predicate = predicate(daysAgo: daysAgo, quantityType: quantityType)
             
-            let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { [self] _, result, _ in
-                continuation.resume(returning: convertSumToDouble(sum: result?.sumQuantity(), type: type))
+            switch environment {
+            case .debug(_): // TODO better test data
+                continuation.resume(returning: convertSumToDouble(sum: .init(unit: .kilocalorie(), doubleValue: 1000), type: type))
+            case .release, .widgetRelease:
+                let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { [self] _, result, _ in
+                    continuation.resume(returning: convertSumToDouble(sum: result?.sumQuantity(), type: type))
+                }
+                healthStore.execute(query)
             }
-            healthStore.execute(query)
         }
     }
     
