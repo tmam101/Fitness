@@ -150,6 +150,58 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         }
         return newConsumedCalories
     }
+    
+    public enum Property {
+        case activeCalories
+        case restingCalories
+        case consumedCalories
+        case weight
+        case realisticWeight
+        case expectedWeight
+        case netEnergy
+        case deficit
+        
+        var keyPath: KeyPath<Day, Double> {
+            switch self {
+            case .activeCalories:
+                return \Day.activeCalories
+            case .restingCalories:
+                return \Day.restingCalories
+            case .consumedCalories:
+                return \Day.consumedCalories
+            case .weight:
+                return \Day.weight
+            case .realisticWeight:
+                return \Day.realisticWeight
+            case .expectedWeight:
+                return \Day.expectedWeight
+            case .netEnergy:
+                return \Day.netEnergy
+            case .deficit:
+                return \Day.deficit
+            }
+        }
+    }
+    
+    public func set(_ property: Property, to newValue: Double) -> Bool {
+        switch property {
+        case .activeCalories:
+            self.activeCalories = newValue
+        case .restingCalories:
+            self.restingCalories = newValue
+        case .consumedCalories:
+            self.consumedCalories = newValue
+        case .weight:
+            self.weight = newValue
+        case .realisticWeight:
+            self.realisticWeight = newValue
+        case .expectedWeight:
+            self.expectedWeight = newValue
+        case .netEnergy, .deficit:
+            return false
+        }
+        return true
+    }
 }
 
 
@@ -325,30 +377,26 @@ extension Days {
             }
         }
         // Make the most recent weights, if they are not recorded, equal to the last recorded weight
-        var mostRecentWeight: Double? = nil
-        forEveryDay { day in
-            if day.weight == 0 {
-                if let mostRecentWeight {
-                    day.weight = mostRecentWeight
-                }
-            } else {
-                mostRecentWeight = day.weight
-            }
-        }
+        setTrailingDaysPropertyToLastKnown(.weight, .longestAgoToMostRecent)
         
         // Try to make the first days, if you haven't weighted yourself yet, equal to the first weight you eventually record
-        forEveryDay(oldestToNewest: false) { day in
-            if day.weight == 0 {
-                if let mostRecentWeight {
-                    day.weight = mostRecentWeight
+        setTrailingDaysPropertyToLastKnown(.weight, .mostRecentToLongestAgo)
+    }
+    
+    func setTrailingDaysPropertyToLastKnown(_ property: Day.Property, _ sortOrder: SortOrder) {
+        var mostRecentProperty: Double? = nil
+        forEveryDay(sortOrder) { day in
+            if day[keyPath: property.keyPath] == 0 {
+                if let mostRecentProperty {
+                    let _ = day.set(property, to: mostRecentProperty)
                 }
             } else {
-                mostRecentWeight = day.weight
+                mostRecentProperty = day[keyPath: property.keyPath]
             }
         }
     }
-
-func adjustDaysWhereUserDidntEnterDatav3() {
+    
+    func adjustDaysWhereUserDidntEnterDatav3() {
         let days = self
         
         // Ensure all days have weights
