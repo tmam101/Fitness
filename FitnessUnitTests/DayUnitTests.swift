@@ -504,10 +504,10 @@ final class DayUnitTests: XCTestCase {
             1:Day(date: oneDayAgo),
             2:Day(date: twoDaysAgo)
         ]
-        var sorted = days.array().sortedLongestAgoToMostRecent()
+        var sorted = days.array().sorted(.longestAgoToMostRecent)
         XCTAssertEqual(sorted.first?.date, twoDaysAgo)
         XCTAssertEqual(sorted.last?.date, oneDayAgo)
-        sorted = days.array().sortedMostRecentToLongestAgo()
+        sorted = days.array().sorted(.mostRecentToLongestAgo)
         XCTAssertEqual(sorted.first?.date, oneDayAgo)
         XCTAssertEqual(sorted.last?.date, twoDaysAgo)
     }
@@ -690,7 +690,7 @@ final class DayUnitTests: XCTestCase {
         }
         XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: >)))
         daysCaptured = []
-        days.forEveryDay(oldestToNewest: false) { day in
+        days.forEveryDay(.mostRecentToLongestAgo) { day in
             daysCaptured.append(day.daysAgo)
         }
         XCTAssert(daysCaptured.elementsEqual(dayNumbers.sorted(by: <)))
@@ -730,7 +730,7 @@ final class DayUnitTests: XCTestCase {
     
     func testOldestDaysHaveWeightsAdded() {
         days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.missingWeightsAtFirst)])
-        let oldestWeightDay = days?.sortedLongestAgoToMostRecent().first(where: { day in
+        let oldestWeightDay = days?.sorted(.longestAgoToMostRecent).first(where: { day in
             day.weight != 0
         })
         XCTAssertEqual(days?.oldestDay?.weight, oldestWeightDay?.weight)

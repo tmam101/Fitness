@@ -161,7 +161,7 @@ final class WeightLineChartTests: XCTestCase {
         var constructedDays = viewModel.constructDays(using: days)
         // Ensure tomorrow is added
         XCTAssertEqual(constructedDays.count, 3)
-        XCTAssertEqual(constructedDays.sortedMostRecentToLongestAgo().first?.daysAgo, -1)
+        XCTAssertEqual(constructedDays.sorted(.mostRecentToLongestAgo).first?.daysAgo, -1)
         // Ensure tomorrow's weight
         XCTAssertEqual(constructedDays.first?.expectedWeight, constructedDays[1].expectedWeightTomorrow)
         // Ensure that filtering by timeframe takes place

@@ -11,6 +11,11 @@ import SwiftUI
 
 // MARK: DAY
 
+public enum SortOrder {
+    case longestAgoToMostRecent
+    case mostRecentToLongestAgo
+}
+
 public class Constants {
     static let numberOfCaloriesInPound: Double = 3500
     static let maximumWeightChangePerDay = 0.2
@@ -449,12 +454,8 @@ extension Days {
         Array(self.values).sorted(by: { x, y in x.daysAgo > y.daysAgo })
     }
     
-    func sortedMostRecentToLongestAgo() -> [Day] {
-        self.array().sortedMostRecentToLongestAgo()
-    }
-    
-    func sortedLongestAgoToMostRecent() -> [Day] {
-        self.array().sortedLongestAgoToMostRecent()
+    func sorted(_ sortOrder: SortOrder) -> [Day] {
+        self.array().sorted(sortOrder)
     }
     
     func everyDayHas(_ property: DayProperty) -> Bool {
@@ -525,11 +526,11 @@ extension Days {
     }
     
     var oldestDay: Day? {
-        self.array().sortedMostRecentToLongestAgo().last
+        self.array().sorted(.mostRecentToLongestAgo).last
     }
     
     var newestDay: Day? {
-       self.array().sortedMostRecentToLongestAgo().first
+        self.array().sorted(.mostRecentToLongestAgo).first
     }
     
     mutating func append(_ day: Day) -> Bool {
@@ -603,11 +604,21 @@ extension Days {
     }
     
     /// Iterate over every day, oldest to newest, with the option to go from newest to oldest. Complete the action for every day
-    func forEveryDay(oldestToNewest: Bool = true, _ completion: (Day) -> Void) {
-        var day: Day? = oldestToNewest ? oldestDay : newestDay
+    func forEveryDay(_ sortOrder: SortOrder = .longestAgoToMostRecent, _ completion: (Day) -> Void) {
+        var day: Day? = switch sortOrder {
+        case .longestAgoToMostRecent:
+            oldestDay
+        case .mostRecentToLongestAgo:
+            newestDay
+        }
         while let currentDay = day {
             completion(currentDay)
-            day = oldestToNewest ? dayAfter(currentDay) : dayBefore(currentDay)
+            day = switch sortOrder {
+            case .longestAgoToMostRecent:
+                dayAfter(currentDay)
+            case .mostRecentToLongestAgo:
+                dayBefore(currentDay)
+            }
         }
     }
     

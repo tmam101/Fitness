@@ -204,7 +204,7 @@ public class LineChartViewModel: ObservableObject {
         }
         let values = days
             .filteredBy(timeFrame)
-            .sortedMostRecentToLongestAgo()
+            .sorted(.mostRecentToLongestAgo)
         return values
     }
     
