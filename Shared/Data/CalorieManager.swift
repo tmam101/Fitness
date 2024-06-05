@@ -62,7 +62,6 @@ class CalorieManager: ObservableObject {
     var daysBetweenStartAndNow: Int = 0
     var weightManager: WeightManager? = nil
     private let healthStore = HKHealthStore()
-    private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     var minimumActiveCalories: Double = 200
     var minimumRestingCalories: Double = 2150
     @Published var goalDeficit: Double = 500
@@ -368,23 +367,13 @@ class CalorieManager: ObservableObject {
     //MARK: SAVING CALORIES EATEN
     
     func saveCaloriesEaten(calories: Double) async -> Bool {
-        return await withUnsafeContinuation { continuation in
-            guard let caloriesEatenType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
+        return await withUnsafeContinuation { [self] continuation in
+            guard let calorieCountSample = healthSample(amount: calories, type: .dietaryEnergyConsumed) else {
                 continuation.resume(returning: false)
                 return
             }
             
-            let calorieCountUnit:HKUnit = HKUnit.kilocalorie()
-            let caloriesEatenQuantity = HKQuantity(unit: calorieCountUnit,
-                                                   doubleValue: calories)
-            
-            let calorieCountSample = HKQuantitySample(type: caloriesEatenType,
-                                                      quantity: caloriesEatenQuantity,
-                                                      start: Date(),
-                                                      end: Date())
-            
             HKHealthStore().save(calorieCountSample) { (success, error) in
-                
                 if let error {
                     continuation.resume(returning: false)
                     print("Error Saving Steps Count Sample: \(error.localizedDescription)")
@@ -394,5 +383,19 @@ class CalorieManager: ObservableObject {
                 }
             }
         }
+    }
+    
+    func healthSample(amount: Double, type: HealthKitValue, start: Date = Date(), end: Date = Date()) -> HKQuantitySample? {
+        // Ensure start and end come in the proper order, or it will crash
+        let dates = [start, end].sorted(.longestAgoToMostRecent)
+        guard let start = dates.first, let end = dates.last else { return nil }
+        let quantity = HKQuantity(unit: type.unit,
+                                  doubleValue: amount)
+        guard let value = type.value else { return nil }
+        let sample = HKQuantitySample(type: value,
+                                      quantity: quantity,
+                                      start: start,
+                                      end: end)
+        return sample
     }
 }

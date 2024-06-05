@@ -97,5 +97,28 @@ class CalorieManagerUnitTests: XCTestCase {
         result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryProtein)
         XCTAssertEqual(result, 1000)
     }
+    
+    func testHealthSample() {
+        let calories: Double = 300
+        let twoDaysAgo = Day(daysAgo: 2).date
+        let threeDaysAgo = Day(daysAgo: 3).date
+        guard let caloriesEatenType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
+            XCTFail()
+            return
+        }
+        let caloriesEatenQuantity = HKQuantity(unit: HealthKitValue.dietaryEnergyConsumed.unit,
+                                               doubleValue: calories)
+        
+        let calorieCountSample = HKQuantitySample(type: caloriesEatenType,
+                                                  quantity: caloriesEatenQuantity,
+                                                  start: threeDaysAgo,
+                                                  end: twoDaysAgo)
+        let sample = calorieManager.healthSample(amount: 300, type: .dietaryEnergyConsumed, start: threeDaysAgo, end: twoDaysAgo)
+        XCTAssertEqual(calorieCountSample.quantity, sample?.quantity)
+        XCTAssertEqual(calorieCountSample.quantityType, sample?.quantityType)
+        XCTAssertEqual(calorieCountSample.endDate, sample?.endDate)
+        XCTAssertEqual(calorieCountSample.startDate, sample?.startDate)
+        XCTAssertEqual(calorieCountSample.count, sample?.count)
+    }
 }
 
