@@ -296,7 +296,7 @@ class CalorieManager: ObservableObject {
     }
     
     //MARK: SUMVALUE
-        
+        // TODO not used
     func sumValue(forPast days: Int, forType type: HKQuantityTypeIdentifier) async -> Double {
         return await withUnsafeContinuation { continuation in
             guard let quantityType = HKObjectType.quantityType(forIdentifier: type) else {
@@ -304,9 +304,7 @@ class CalorieManager: ObservableObject {
                 continuation.resume(returning: 0.0)
                 return
             }
-            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
+            let predicate = pastDaysPredicate(days: days)
             
             let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, error in
                 
@@ -324,13 +322,30 @@ class CalorieManager: ObservableObject {
         }
     }
     
+    func pastDaysPredicate(days: Int) -> NSPredicate {
+        let endDate = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
+        let startDate = Date.subtract(days: days, from: endDate)
+        return predicate(startDate: startDate, endDate: endDate)
+    }
+    
+    func specificDayPredicate(daysAgo: Int, quantityType: HKQuantityType) -> NSPredicate? {
+        let startDate = Date.subtract(days: daysAgo, from: Date())
+        guard let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate) 
+        else { return nil }
+        return predicate(startDate: startDate, endDate: endDate)
+    }
+    
+    func predicate(startDate: Date, endDate: Date) -> NSPredicate {
+        HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
+    }
+    
     func sumValueForDay(daysAgo: Int, forType type: HealthKitValue) async -> Double {
         return await withUnsafeContinuation { continuation in
             guard let quantityType = type.value else {
                 continuation.resume(returning: 0.0)
                 return
             }
-            let predicate = predicate(daysAgo: daysAgo, quantityType: quantityType)
+            let predicate = specificDayPredicate(daysAgo: daysAgo, quantityType: quantityType)
             
             switch environment {
             case .debug(_): // TODO better test data
@@ -342,13 +357,6 @@ class CalorieManager: ObservableObject {
                 healthStore.execute(query)
             }
         }
-    }
-    
-    func predicate(daysAgo: Int, quantityType: HKQuantityType) -> NSPredicate {
-        let startDate = Date.subtract(days: daysAgo, from: Date())
-        let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
-        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
-        return predicate
     }
     
     func convertSumToDouble(sum: HKQuantity?, type: HealthKitValue) -> Double {
