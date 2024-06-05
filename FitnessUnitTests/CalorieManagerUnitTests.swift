@@ -49,26 +49,26 @@ class CalorieManagerUnitTests: XCTestCase {
 //        XCTAssertEqual(predicate, calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
     }
     
-    func testHealthKitValue() {
-        for v in HealthKitValue.allCases {
+    func testHealthKitType() {
+        for v in HealthKitType.allCases {
             XCTAssertNotNil(v.value)
         }
-        XCTAssertEqual(HealthKitValue.allCases.count, 4)
-        XCTAssertEqual(HealthKitValue.dietaryProtein.value, HKQuantityType(.dietaryProtein))
-        XCTAssertEqual(HealthKitValue.dietaryEnergyConsumed.value, HKQuantityType(.dietaryEnergyConsumed))
-        XCTAssertEqual(HealthKitValue.activeEnergyBurned.value, HKQuantityType(.activeEnergyBurned))
-        XCTAssertEqual(HealthKitValue.basalEnergyBurned.value, HKQuantityType(.basalEnergyBurned))
+        XCTAssertEqual(HealthKitType.allCases.count, 4)
+        XCTAssertEqual(HealthKitType.dietaryProtein.value, HKQuantityType(.dietaryProtein))
+        XCTAssertEqual(HealthKitType.dietaryEnergyConsumed.value, HKQuantityType(.dietaryEnergyConsumed))
+        XCTAssertEqual(HealthKitType.activeEnergyBurned.value, HKQuantityType(.activeEnergyBurned))
+        XCTAssertEqual(HealthKitType.basalEnergyBurned.value, HKQuantityType(.basalEnergyBurned))
         
-        XCTAssertEqual(HealthKitValue.activeEnergyBurned.unit, .kilocalorie())
-        XCTAssertEqual(HealthKitValue.dietaryProtein.unit, .gram())
-        XCTAssertEqual(HealthKitValue.dietaryEnergyConsumed.unit, .kilocalorie())
-        XCTAssertEqual(HealthKitValue.basalEnergyBurned.unit, .kilocalorie())
+        XCTAssertEqual(HealthKitType.activeEnergyBurned.unit, .kilocalorie())
+        XCTAssertEqual(HealthKitType.dietaryProtein.unit, .gram())
+        XCTAssertEqual(HealthKitType.dietaryEnergyConsumed.unit, .kilocalorie())
+        XCTAssertEqual(HealthKitType.basalEnergyBurned.unit, .kilocalorie())
         }
     
     func testConvertSumToDouble() {
         var quantity: HKQuantity? = .init(unit: .gram(), doubleValue: 100)
         
-        for h in HealthKitValue.allCases {
+        for h in HealthKitType.allCases {
             switch h {
             case .dietaryProtein:
                 XCTAssert(quantity!.is(compatibleWith: h.unit))
@@ -79,7 +79,7 @@ class CalorieManagerUnitTests: XCTestCase {
         XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .dietaryProtein), 100)
         XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .activeEnergyBurned), 0)
         quantity = .init(unit: .kilocalorie(), doubleValue: 100)
-        for h in HealthKitValue.allCases {
+        for h in HealthKitType.allCases {
             switch h {
             case .dietaryProtein:
                 XCTAssertFalse(quantity!.is(compatibleWith: h.unit))
@@ -106,7 +106,7 @@ class CalorieManagerUnitTests: XCTestCase {
             XCTFail()
             return
         }
-        let caloriesEatenQuantity = HKQuantity(unit: HealthKitValue.dietaryEnergyConsumed.unit,
+        let caloriesEatenQuantity = HKQuantity(unit: HealthKitType.dietaryEnergyConsumed.unit,
                                                doubleValue: calories)
         
         let calorieCountSample = HKQuantitySample(type: caloriesEatenType,

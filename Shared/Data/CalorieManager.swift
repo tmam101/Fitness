@@ -23,7 +23,7 @@ var environment: AppEnvironmentConfig
     }
 }
 
-public enum HealthKitValue: CaseIterable {
+public enum HealthKitType: CaseIterable {
     case dietaryProtein
     case activeEnergyBurned
     case basalEnergyBurned
@@ -49,6 +49,30 @@ public enum HealthKitValue: CaseIterable {
         case .activeEnergyBurned, .basalEnergyBurned, .dietaryEnergyConsumed:
                 .kilocalorie()
         }
+    }
+}
+
+public class HealthKitSomething {
+    var type: HealthKitType
+    var amount: Double
+    
+    init(type: HealthKitType, amount: Double) {
+        self.type = type
+        self.amount = amount
+    }
+    
+    func healthSample(start: Date = Date(), end: Date = Date()) -> HKQuantitySample? {
+        // Ensure start and end come in the proper order, or it will crash
+        let dates = [start, end].sorted(.longestAgoToMostRecent)
+        guard let start = dates.first, let end = dates.last else { return nil }
+        let quantity = HKQuantity(unit: type.unit,
+                                  doubleValue: amount)
+        guard let value = type.value else { return nil }
+        let sample = HKQuantitySample(type: value,
+                                      quantity: quantity,
+                                      start: start,
+                                      end: end)
+        return sample
     }
 }
 
@@ -337,7 +361,7 @@ class CalorieManager: ObservableObject {
         HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
     }
     
-    func sumValueForDay(daysAgo: Int, forType type: HealthKitValue) async -> Double {
+    func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> Double {
         return await withUnsafeContinuation { continuation in
             guard let quantityType = type.value else {
                 continuation.resume(returning: 0.0)
@@ -357,7 +381,7 @@ class CalorieManager: ObservableObject {
         }
     }
     
-    func convertSumToDouble(sum: HKQuantity?, type: HealthKitValue) -> Double {
+    func convertSumToDouble(sum: HKQuantity?, type: HealthKitType) -> Double {
         guard let sum, sum.is(compatibleWith: type.unit) else {
             return 0.0
         }
@@ -385,7 +409,7 @@ class CalorieManager: ObservableObject {
         }
     }
     
-    func healthSample(amount: Double, type: HealthKitValue, start: Date = Date(), end: Date = Date()) -> HKQuantitySample? {
+    func healthSample(amount: Double, type: HealthKitType, start: Date = Date(), end: Date = Date()) -> HKQuantitySample? {
         // Ensure start and end come in the proper order, or it will crash
         let dates = [start, end].sorted(.longestAgoToMostRecent)
         guard let start = dates.first, let end = dates.last else { return nil }
