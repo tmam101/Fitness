@@ -265,6 +265,14 @@ class DateTests: XCTestCase {
         XCTAssertNotEqual(Date.daysBetween(date1: emptyDate, date2: date1), 0)
     }
     
+    func testDaysAgo() {
+        let twoDaysAgo = Day(daysAgo: 2)
+        XCTAssertEqual(twoDaysAgo.daysAgo, twoDaysAgo.date.daysAgo())
+        
+        let date = Date()
+        XCTAssertEqual(date.daysAgo(), 0)
+    }
+    
     func testDateFromString() {
         // Test with valid date string
         XCTAssertNotNil(Date.dateFromString("01.01.2022"))

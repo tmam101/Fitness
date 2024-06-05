@@ -271,8 +271,7 @@ class CalorieManager: ObservableObject {
     func getActiveCalorieModifier(days: Days, weightLost: Double, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Double {
         let lastWeight = weightManager?.weights.first
         let caloriesLost = weightLost * 3500
-        
-        let filtered = days.upTo(date: lastWeight?.date ?? Date())
+        let filtered = days.subset(from: days.oldestDay?.date, through: lastWeight?.date)
         let active = filtered.sum(property: .activeCalories)
         let resting = filtered.sum(property: .restingCalories)
         let eaten = filtered.sum(property: .consumedCalories)
@@ -349,7 +348,7 @@ class CalorieManager: ObservableObject {
             
             switch environment {
             case .debug(_): // TODO better test data
-                continuation.resume(returning: convertSumToDouble(sum: .init(unit: .kilocalorie(), doubleValue: 1000), type: type))
+                continuation.resume(returning: convertSumToDouble(sum: .init(unit: type.unit, doubleValue: 1000), type: type))
             case .release, .widgetRelease:
                 let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { [self] _, result, _ in
                     continuation.resume(returning: convertSumToDouble(sum: result?.sumQuantity(), type: type))

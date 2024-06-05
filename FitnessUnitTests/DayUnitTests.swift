@@ -663,15 +663,46 @@ final class DayUnitTests: XCTestCase {
     
     func testSubset() {
         var days: Days = [:]
-        let day = Day(daysAgo: 4)
-        let day2 = Day(daysAgo: 5)
-        let day3 = Day(daysAgo: 6)
-        XCTAssertTrue(days.append([day, day2, day3]))
+        let fourDaysAgo = Day(daysAgo: 4)
+        let fiveDaysAgo = Day(daysAgo: 5)
+        let sixDaysAgo = Day(daysAgo: 6)
+        XCTAssertTrue(days.append([fourDaysAgo, fiveDaysAgo, sixDaysAgo]))
         
+        // Test using day numbers
         var subset = days.subset(from: 4, through: 5)
         XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
         XCTAssertEqual(subset.newestDay?.daysAgo, 4)
         subset = days.subset(from: 5, through: 4)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        
+        // Test using days
+        subset = days.subset(from: fourDaysAgo, through: fiveDaysAgo)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        subset = days.subset(from: fiveDaysAgo, through: fourDaysAgo)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        
+        // Test not inclusive
+        subset = days.subset(from: fourDaysAgo, through: sixDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: true)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        subset = days.subset(from: sixDaysAgo, through: fourDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: true)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)  
+        subset = days.subset(from: fourDaysAgo, through: sixDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: false)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 5)
+        subset = days.subset(from: fourDaysAgo, through: fiveDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: false)
+        XCTAssertEqual(subset.newestDay?.daysAgo, nil)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, nil)
+        
+        //Test using dates
+        subset = days.subset(from: fourDaysAgo, through: fiveDaysAgo)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        subset = days.subset(from: fiveDaysAgo, through: fourDaysAgo)
         XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
         XCTAssertEqual(subset.newestDay?.daysAgo, 4)
     }
@@ -776,6 +807,5 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days[4]?[keyPath: property.keyPath], 200)
         XCTAssertEqual(days[5]?[keyPath: property.keyPath], 200)
         XCTAssertEqual(days[6]?[keyPath: property.keyPath], 200)
-        
     }
 }

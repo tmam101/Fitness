@@ -95,7 +95,7 @@ class CalorieManagerUnitTests: XCTestCase {
         var result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryEnergyConsumed)
         XCTAssertEqual(result, 1000)
         result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryProtein)
-        XCTAssertEqual(result, 0)
+        XCTAssertEqual(result, 1000)
     }
 }
 

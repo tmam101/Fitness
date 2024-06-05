@@ -53,6 +53,10 @@ extension Date {
         Calendar.current.startOfDay(for: date)
     }
     
+    func daysAgo() -> Int? {
+        Date.daysBetween(date1: Date.startOfDay(Date()), date2: Date.startOfDay(self))
+    }
+    
     func dayOfWeek() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"

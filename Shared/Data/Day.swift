@@ -583,24 +583,29 @@ extension Days {
         return nil
     }
     
-    //TODO: Test
-    func upTo(date: Date) -> Days {
-        return self.filter {
-            let days = $0.key - 1
-            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-            return startDate <= date
+    func subset(from: Int, through: Int, inclusiveOfOldestDay: Bool = true, inclusiveOfNewestDay: Bool = true) -> Days {
+        var subset = Days()
+        // Sort to find the
+        var min = Swift.min(from, through)
+        var max = Swift.max(from, through)
+        min = inclusiveOfNewestDay ? min : min + 1
+        max = inclusiveOfOldestDay ? max : max - 1
+        if min > max {
+            return subset
         }
+        for i in min...max {
+            subset[i] = self[i]
+        }
+        return subset
     }
     
-    func subset(from: Int, through: Int) -> Days {
-        var extractedDays = Days()
-        let min = Swift.min(from, through)
-        let max = Swift.max(from, through)
-        for i in min...max {
-            extractedDays[i] = self[i]
-        }
-        return extractedDays
+    func subset(from: Day, through: Day, inclusiveOfOldestDay: Bool = true, inclusiveOfNewestDay: Bool = true) -> Days {
+        return subset(from: from.daysAgo, through: through.daysAgo, inclusiveOfOldestDay: inclusiveOfOldestDay, inclusiveOfNewestDay: inclusiveOfNewestDay)
+    }
+    
+    func subset(from: Date?, through: Date?, inclusiveOfOldestDay: Bool = true, inclusiveOfNewestDay: Bool = true) -> Days {
+        guard let from = from?.daysAgo(), let through = through?.daysAgo() else { return Days() }
+        return subset(from: from, through: through, inclusiveOfOldestDay: inclusiveOfOldestDay, inclusiveOfNewestDay: inclusiveOfNewestDay)
     }
     
     /// Iterate over every day, oldest to newest, with the option to go from newest to oldest. Complete the action for every day
