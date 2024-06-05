@@ -139,9 +139,27 @@ class ArrayExtensionTests: XCTestCase {
             // Assert
             XCTAssertTrue(sortedEvents.isEmpty, "The sorted array should be empty")
         }
+        
+        func testSortingDates() {
+            let oneDayAgo = Day(daysAgo: 1)
+            let twoDayAgo = Day(daysAgo: 2)
+            let threeDayAgo = Day(daysAgo: 3)
+            XCTAssertEqual(oneDayAgo.date.daysAgo(), 1)
+            XCTAssertEqual(twoDayAgo.date.daysAgo(), 2)
+            XCTAssertEqual(threeDayAgo.date.daysAgo(), 3)
+            let dates = [oneDayAgo, twoDayAgo, threeDayAgo]
+            XCTAssertEqual(dates.first, oneDayAgo)
+            var sorted = dates.sorted(.longestAgoToMostRecent)
+            XCTAssertEqual(sorted.first, threeDayAgo)
+            XCTAssertEqual(sorted.last, oneDayAgo)
+            sorted = dates.sorted(.mostRecentToLongestAgo)
+            XCTAssertEqual(sorted.first, oneDayAgo)
+            XCTAssertEqual(sorted.last, threeDayAgo)
+        }
         testSortedMostRecentToLongestAgo()
         testSortedMostRecentToLongestAgoWithSameDates()
         testSortedMostRecentToLongestAgoWithEmptyArray()
+        testSortingDates()
     }
 }
 
