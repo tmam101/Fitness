@@ -178,6 +178,7 @@ class CalorieManager: ObservableObject {
         return days
     }
     
+    // TODO Does this make sense? Because it goes based off of keys, but those don't change as time goes on
     /// Only load as many new days as necessary, and push the existing days back appropriately.
     private func loadNecessaryDays(days: Days) async -> Days {
         var days = days
@@ -374,13 +375,18 @@ class CalorieManager: ObservableObject {
                 return
             }
             
-            HKHealthStore().save(calorieCountSample) { (success, error) in
-                if let error {
-                    continuation.resume(returning: false)
-                    print("Error Saving Steps Count Sample: \(error.localizedDescription)")
-                } else {
-                    continuation.resume(returning: true)
-                    print("Successfully saved Steps Count Sample")
+            switch environment {
+            case .debug:
+                continuation.resume(returning: true)
+            case .release, .widgetRelease:
+                HKHealthStore().save(calorieCountSample) { (success, error) in
+                    if let error {
+                        continuation.resume(returning: false)
+                        print("Error Saving Steps Count Sample: \(error.localizedDescription)")
+                    } else {
+                        continuation.resume(returning: true)
+                        print("Successfully saved Steps Count Sample")
+                    }
                 }
             }
         }
