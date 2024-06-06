@@ -85,13 +85,13 @@ public class PlotViewModel {
     var yValue: Double {
         switch type {
         case .weight:
-            day.weight
+            Double(day.weight)
         case .expectedWeight:
-            day.expectedWeight
+            Double(day.expectedWeight)
         case .realisticWeight:
-            day.realisticWeight
+            Double(day.realisticWeight)
         case .expectedWeightTomorrow:
-            day.expectedWeight
+            Double(day.expectedWeight)
         }
     }
     var yValueLabel: String { type.yValueLabel }
@@ -168,8 +168,8 @@ public class PlotViewModel {
 
 public class LineChartViewModel: ObservableObject {
     @Published var days: [Day] = []
-    @Published var maxValue: Double = 0
-    @Published var minValue: Double = 0
+    @Published var maxValue: Decimal = 0
+    @Published var minValue: Decimal = 0
     private var cancellables: [AnyCancellable] = []
     @Published var timeFrame: TimeFrame
     

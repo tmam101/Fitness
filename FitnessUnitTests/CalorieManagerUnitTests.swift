@@ -72,7 +72,7 @@ class CalorieManagerUnitTests: XCTestCase {
         XCTAssertEqual(HealthKitType.basalEnergyBurned.unit, .kilocalorie())
         }
     
-    func testConvertSumToDouble() {
+    func testConvertSumToDecimal() {
         var quantity: HKQuantity? = .init(unit: .gram(), doubleValue: 100)
         
         for h in HealthKitType.allCases {
@@ -83,8 +83,8 @@ class CalorieManagerUnitTests: XCTestCase {
                 XCTAssertFalse(quantity!.is(compatibleWith: h.unit))
             }
         }
-        XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .dietaryProtein), 100)
-        XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .activeEnergyBurned), 0)
+        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .dietaryProtein), 100)
+        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .activeEnergyBurned), 0)
         quantity = .init(unit: .kilocalorie(), doubleValue: 100)
         for h in HealthKitType.allCases {
             switch h {
@@ -94,8 +94,8 @@ class CalorieManagerUnitTests: XCTestCase {
                 XCTAssert(quantity!.is(compatibleWith: h.unit))
             }
         }
-        XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .dietaryProtein), 0)
-        XCTAssertEqual(calorieManager.convertSumToDouble(sum: quantity, type: .activeEnergyBurned), 100)
+        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .dietaryProtein), 0)
+        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .activeEnergyBurned), 100)
     }
     
     func testSumValueForDay() async {
@@ -106,7 +106,7 @@ class CalorieManagerUnitTests: XCTestCase {
     }
     
     func testHealthSample() {
-        let calories: Double = 300
+        let calories: Decimal = 300
         let twoDaysAgo = Day(daysAgo: 2).date
         let threeDaysAgo = Day(daysAgo: 3).date
         guard let caloriesEatenType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
@@ -114,7 +114,7 @@ class CalorieManagerUnitTests: XCTestCase {
             return
         }
         let caloriesEatenQuantity = HKQuantity(unit: HealthKitType.dietaryEnergyConsumed.unit,
-                                               doubleValue: calories)
+                                               doubleValue: Double(calories))
         
         let calorieCountSample = HKQuantitySample(type: caloriesEatenType,
                                                   quantity: caloriesEatenQuantity,
@@ -146,11 +146,11 @@ class CalorieManagerUnitTests: XCTestCase {
         XCTAssertEqual(newestDay.restingCalories, 2150)
         XCTAssertEqual(newestDay.consumedCalories, 1000)
         let expectedTotalDeficit = days.sum(property: .deficit)
-        XCTAssertEqual(expectedTotalDeficit, Double(days.count) * Double(2150))
+        XCTAssertEqual(expectedTotalDeficit, Decimal(days.count) * Decimal(2150))
         XCTAssertEqual(expectedTotalDeficit, 45150)
         XCTAssertEqual(expectedTotalDeficit, days.newestDay?.runningTotalDeficit)
         let expectedTotalNetEnergy = days.sum(property: .netEnergy)
-        XCTAssertEqual(expectedTotalNetEnergy, Double(days.count) * Double(-2150))
+        XCTAssertEqual(expectedTotalNetEnergy, Decimal(days.count) * Decimal(-2150))
         XCTAssertEqual(expectedTotalNetEnergy, -45150)
         let expectedWeightChange = expectedTotalNetEnergy / Constants.numberOfCaloriesInPound
         XCTAssertEqual(expectedWeightChange, -12.9)

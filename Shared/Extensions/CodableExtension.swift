@@ -45,6 +45,12 @@ extension Array where Element == Double {
     }
 }
 
+extension Array where Element == Decimal {
+    static func decode(path: Filepath.Double) -> [Decimal]? {
+        return decodeFromFile(path: path.rawValue)
+    }
+}
+
 extension Days  {
     static func decode(path: Filepath.Days) -> Days? {
         return decodeFromFile(path: path.rawValue)

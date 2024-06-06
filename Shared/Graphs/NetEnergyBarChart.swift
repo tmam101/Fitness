@@ -61,7 +61,7 @@ class NetEnergyBarChartViewModel: ObservableObject {
     }
     
     func gradient(for day: Day) -> LinearGradient {
-        let gradientPercentage = CGFloat(day.activeCalorieToDeficitRatio)
+        let gradientPercentage = CGFloat(Double(day.activeCalorieToDeficitRatio))
         let midPoint = UnitPoint(x: 0.5, y: (1 - gradientPercentage))
         return LinearGradient(colors: gradientColors, startPoint: .bottom, endPoint: midPoint)
     }
@@ -84,7 +84,7 @@ struct NetEnergyBarChart: View {
                     .foregroundStyle(day.netEnergy > 0 ? Color.red.solidColorGradient() : viewModel.gradient(for: day))
                     .opacity(day.daysAgo == 0 ? 0.5 : 1.0)
                     .accessibilityLabel("bar \(day.daysAgo) days ago")
-                    .accessibilityValue("\(Int(day.netEnergy))")
+                    .accessibilityValue("\(Int(Double(day.netEnergy)))")
 
             }
             .backgroundStyle(.yellow)

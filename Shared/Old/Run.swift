@@ -9,10 +9,10 @@ import Foundation
 
 struct Run: Codable {
     var date: Date
-    var totalDistance: Double
-    var totalTime: Double
-    var averageMileTime: Double
+    var totalDistance: Decimal
+    var totalTime: Decimal
+    var averageMileTime: Decimal
     var indoor: Bool = false
-    var caloriesBurned: Double
-    var weightAtTime: Double
+    var caloriesBurned: Decimal
+    var weightAtTime: Decimal
 }

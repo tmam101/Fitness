@@ -62,8 +62,8 @@ class NetEnergyBarChartViewModelTests: XCTestCase {
         let expectedMaxValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).max() ?? 0
         let expectedMinValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).min() ?? 0
         
-        XCTAssertEqual(viewModel.maxValue, expectedMaxValue.rounded(toNextSignificant: viewModel.lineInterval), "Max value should be the maximum net energy value")
-        XCTAssertEqual(viewModel.minValue, expectedMinValue.rounded(toNextSignificant: viewModel.lineInterval), "Min value should be the minimum net energy value")
+        XCTAssertEqual(viewModel.maxValue, Double(expectedMaxValue).rounded(toNextSignificant: viewModel.lineInterval), "Max value should be the maximum net energy value")
+        XCTAssertEqual(viewModel.minValue, Double(expectedMinValue).rounded(toNextSignificant: viewModel.lineInterval), "Min value should be the minimum net energy value")
         
         // TODO more examples
     }
@@ -93,7 +93,7 @@ class NetEnergyBarChartViewModelTests: XCTestCase {
     private func createMockDays() -> [Day] {
         var days: [Day] = []
         for i in 0..<45 {
-            let day = Day(daysAgo: i, activeCalories: Double.random(in: 100...500), restingCalories: Double.random(in: 1500...2000), consumedCalories: Double.random(in: 1800...2500), expectedWeight: 70, weight: 70)
+            let day = Day(daysAgo: i, activeCalories: Decimal(Double.random(in: 100...500)), restingCalories: Decimal(Double.random(in: 1500...2000)), consumedCalories: Decimal(Double.random(in: 1800...2500)), expectedWeight: 70, weight: 70)
             days.append(day)
         }
         return days

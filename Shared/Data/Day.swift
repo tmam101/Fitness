@@ -17,8 +17,8 @@ public enum SortOrder {
 }
 
 public class Constants {
-    static let numberOfCaloriesInPound: Double = 3500
-    static let maximumWeightChangePerDay = 0.2
+    static let numberOfCaloriesInPound: Decimal = 3500
+    static let maximumWeightChangePerDay: Decimal = 0.2
 }
 
 public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
@@ -35,15 +35,15 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     init(id: UUID = UUID(),
          date: Date? = nil,
          daysAgo: Int? = nil,
-         activeCalories: Double = 0,
-         measuredActiveCalories: Double = 0,
-         restingCalories: Double = 0,
-         measuredRestingCalories: Double = 0,
-         consumedCalories: Double = 0,
-         expectedWeight: Double = 0,
-         realisticWeight: Double = 0,
-         weight: Double = 0,
-         protein: Double = 0
+         activeCalories: Decimal = 0,
+         measuredActiveCalories: Decimal = 0,
+         restingCalories: Decimal = 0,
+         measuredRestingCalories: Decimal = 0,
+         consumedCalories: Decimal = 0,
+         expectedWeight: Decimal = 0,
+         realisticWeight: Decimal = 0,
+         weight: Decimal = 0,
+         protein: Decimal = 0
     ) {
         self.id = id
         self.date = date ?? Date.subtract(days: daysAgo ?? 0, from: Date())
@@ -68,55 +68,55 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     public var id = UUID()
     var date: Date = Date()
     var daysAgo: Int = -1
-    var deficit: Double {
+    var deficit: Decimal {
         let active = activeCalories // * activeCalorieModifier TODO
         return restingCalories + active - consumedCalories
     }
-    var activeCalories: Double = 0
-    var measuredActiveCalories: Double = 0
-    var restingCalories: Double = 0
-    var measuredRestingCalories: Double = 0
-    var consumedCalories: Double = 0
-    var runningTotalDeficit: Double = 0
-    var expectedWeight: Double = 0
+    var activeCalories: Decimal = 0
+    var measuredActiveCalories: Decimal = 0
+    var restingCalories: Decimal = 0
+    var measuredRestingCalories: Decimal = 0
+    var consumedCalories: Decimal = 0
+    var runningTotalDeficit: Decimal = 0
+    var expectedWeight: Decimal = 0
     var wasModifiedBecauseTheUserDidntEnterData = false
-    var expectedWeightTomorrow: Double {
+    var expectedWeightTomorrow: Decimal {
         expectedWeight + expectedWeightChangeBasedOnDeficit
     }
-    var expectedWeightChangeBasedOnDeficit: Double {
+    var expectedWeightChangeBasedOnDeficit: Decimal {
         0 - (deficit / Constants.numberOfCaloriesInPound)
     }
-    var realisticWeight: Double = 0
-    var weight: Double = 0
-    var netEnergy: Double {
+    var realisticWeight: Decimal = 0
+    var weight: Decimal = 0
+    var netEnergy: Decimal {
         deficit * -1
     }
-    var activeCalorieToDeficitRatio: Double {
+    var activeCalorieToDeficitRatio: Decimal {
         activeCalories / deficit
     }
-    var allCaloriesBurned: Double {
+    var allCaloriesBurned: Decimal {
         activeCalories + restingCalories
     }
-    var protein: Double = 0
-    var proteinPercentage: Double {
+    var protein: Decimal = 0
+    var proteinPercentage: Decimal {
         let p = (protein * caloriesPerGramOfProtein) / consumedCalories
         return p.isNaN ? 0 : p
     }
-    var proteinGoalPercentage: Double {
+    var proteinGoalPercentage: Decimal {
         proteinPercentage / 0.3 // TODO Make settings
     }
-    var caloriesPerGramOfProtein: Double = 4
-    var deficitPercentage: Double {
-        deficit / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000)
+    var caloriesPerGramOfProtein: Decimal = 4
+    var deficitPercentage: Decimal {
+        deficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000)
     }
     
-    var activeCaloriePercentage: Double {
+    var activeCaloriePercentage: Decimal {
         activeCalories / 900 // TODO Make settings
     }
-    var averagePercentage: Double {
+    var averagePercentage: Decimal {
         (deficitPercentage + proteinGoalPercentage + activeCaloriePercentage) / 3
     }
-    var weightChangePercentage: Double {
+    var weightChangePercentage: Decimal {
         expectedWeightChangeBasedOnDeficit / (-2/7) // TODO Make settings
     }
     
@@ -132,9 +132,9 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         "\(dayOfWeek.prefix(1))"
     }
     
-    func estimatedConsumedCaloriesToCause(realisticWeightChange: Double) -> Double {
+    func estimatedConsumedCaloriesToCause(realisticWeightChange: Decimal) -> Decimal {
         var realisticWeightChangeCausedByToday = realisticWeightChange
-        var newConsumedCalories: Double = 0
+        var newConsumedCalories: Decimal = 0
         // If you lost weight,
         if realisticWeightChangeCausedByToday < 0 {
             // Calculate how few calories you must have eaten to lose that much weight.
@@ -151,7 +151,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
             realisticWeightChangeCausedByToday = Swift.min(Constants.maximumWeightChangePerDay, realisticWeightChangeCausedByToday)
             let totalBurned = self.allCaloriesBurned
             let caloriesAssumedToBeEaten = (realisticWeightChangeCausedByToday * Constants.numberOfCaloriesInPound) + totalBurned
-            newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+            newConsumedCalories = Swift.min(5000.0, abs(caloriesAssumedToBeEaten))
         }
         return newConsumedCalories
     }
@@ -166,7 +166,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         case netEnergy
         case deficit
         
-        var keyPath: KeyPath<Day, Double> {
+        var keyPath: KeyPath<Day, Decimal> {
             switch self {
             case .activeCalories:
                 return \Day.activeCalories
@@ -188,7 +188,7 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         }
     }
     
-    public func set(_ property: Property, to newValue: Double) -> Bool {
+    public func set(_ property: Property, to newValue: Decimal) -> Bool {
         switch property {
         case .activeCalories:
             self.activeCalories = newValue
@@ -225,12 +225,12 @@ extension Days {
     static func testDays(options: [TestDayOption]?) -> Days {
         var days: Days = [:]
         guard
-            let activeCalories: [Double] = .decode(path: .activeCalories),
-            let restingCalories: [Double] = .decode(path: .restingCalories),
-            let consumedCalories: [Double] = .decode(path: .consumedCalories),
-            let upAndDownWeights: [Double] = .decode(path: .upAndDownWeights),
-            let missingConsumedCalories: [Double] = .decode(path: .missingConsumedCalories),
-            let weightsGoingSteadilyDown: [Double] = .decode(path: .weightGoingSteadilyDown)
+            let activeCalories: [Decimal] = .decode(path: .activeCalories),
+            let restingCalories: [Decimal] = .decode(path: .restingCalories),
+            let consumedCalories: [Decimal] = .decode(path: .consumedCalories),
+            let upAndDownWeights: [Decimal] = .decode(path: .upAndDownWeights),
+            let missingConsumedCalories: [Decimal] = .decode(path: .missingConsumedCalories),
+            let weightsGoingSteadilyDown: [Decimal] = .decode(path: .weightGoingSteadilyDown)
         else {
             return days
         }
@@ -264,7 +264,7 @@ extension Days {
         for i in (0...dayCount-1).reversed() {
             guard let previousDay = days[i+1] else { return [:] }
             let expectedWeight = previousDay.expectedWeight + previousDay.expectedWeightChangeBasedOnDeficit
-            let realWeight = expectedWeight + Double.random(in: -1.0...1.0)
+            let realWeight = expectedWeight + Decimal(Double.random(in: -1.0...1.0))
             let dayHasWeight = Bool.random()
             var weight = dayHasWeight ? realWeight : 0
             weight = weightGoingSteadilyDown ? weightsGoingSteadilyDown[i] : weight
@@ -333,7 +333,7 @@ extension Days {
     
     // TODO: This is mostly a test function, because it's aready done in CalorieManager. But maybe we should just have it be done here.
     mutating func addRunningTotalDeficits() {
-        var runningTotalDeficit: Double = 0
+        var runningTotalDeficit: Decimal = 0
         forEveryDay { day in
             runningTotalDeficit = runningTotalDeficit + day.deficit
             day.runningTotalDeficit = runningTotalDeficit
@@ -389,7 +389,7 @@ extension Days {
                 continue
             }
             let weightBetween = nextDayWithWeight.weight - thisDay.weight
-            let weightAdjustmentEachDay = weightBetween / Double(daysBetween)
+            let weightAdjustmentEachDay = weightBetween / Decimal(daysBetween)
             subset(from: thisDay.daysAgo - 1, through: nextDayWithWeight.daysAgo + 1).forEveryDay { day in
                 guard let previousDay = days.dayBefore(day) else {
                     return
@@ -405,7 +405,7 @@ extension Days {
     }
     
     func setTrailingDaysPropertyToLastKnown(_ property: Day.Property, _ sortOrder: SortOrder) {
-        var mostRecentProperty: Double? = nil
+        var mostRecentProperty: Decimal? = nil
         forEveryDay(sortOrder) { day in
             if day[keyPath: property.keyPath] == 0 {
                 if let mostRecentProperty {
@@ -494,7 +494,7 @@ extension Days {
         case netEnergy
         case deficit
         
-        var keyPath: KeyPath<Day, Double> {
+        var keyPath: KeyPath<Day, Decimal> {
             switch self {
             case .activeCalories:
                 return \Day.activeCalories
@@ -516,27 +516,27 @@ extension Days {
         }
     }
     
-    func mappedToProperty(property: DayProperty) -> [Double] {
+    func mappedToProperty(property: DayProperty) -> [Decimal] {
         return Array(self.values)
             .map {
                 $0[keyPath: property.keyPath]
             }
     }
     
-    func sum(property: DayProperty) -> Double {
+    func sum(property: DayProperty) -> Decimal {
         return self.mappedToProperty(property: property).sum
     }
     
-    func average(property: DayProperty) -> Double? {
+    func average(property: DayProperty) -> Decimal? {
         return self.mappedToProperty(property: property).average
     }
     
-    func averageOfPrevious(property: DayProperty, days: Int, endingOnDay day: Int) -> Double? {
+    func averageOfPrevious(property: DayProperty, days: Int, endingOnDay day: Int) -> Decimal? {
         let extracted = self.subset(from: day, through: day + days - 1)
         return extracted.average(property: property)
     }
     
-    func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Double? {
+    func averageDeficitOfPrevious(days: Int, endingOnDay day: Int) -> Decimal? {
         averageOfPrevious(property: .deficit, days: days, endingOnDay: day)
         // TODO This doesn't use runningTotalDeficit. Problem?
     }
@@ -672,7 +672,7 @@ extension Days {
             }
             if !didUserEnterData {
                 let todaysWeightMinusYesterdaysExpectedWeight = day.weight - yesterday.expectedWeight
-                var newConsumedCalories: Double = 0
+                var newConsumedCalories: Decimal = 0
                 if todaysWeightMinusYesterdaysExpectedWeight < 0 {
                     let totalBurned = day.activeCalories + day.restingCalories
                     let caloriesAssumedToBeBurned = 0 - (todaysWeightMinusYesterdaysExpectedWeight * Constants.numberOfCaloriesInPound)
@@ -685,7 +685,7 @@ extension Days {
                 } else {
                     let totalBurned = day.activeCalories + day.restingCalories
                     let caloriesAssumedToBeEaten = (todaysWeightMinusYesterdaysExpectedWeight * Constants.numberOfCaloriesInPound) + totalBurned
-                    newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+                    newConsumedCalories = Swift.min(5000.0, abs(caloriesAssumedToBeEaten))
                 }
                 self[i]?.consumedCalories = newConsumedCalories
                 self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
@@ -719,7 +719,7 @@ extension Days {
             }
             if !didUserEnterData {
                 let weightChangecausedByToday = tomorrow.weight - day.weight
-                var newConsumedCalories: Double = 0
+                var newConsumedCalories: Decimal = 0
                 if weightChangecausedByToday < 0 {
                     let totalBurned = day.activeCalories + day.restingCalories
                     let caloriesAssumedToBeBurned = 0 - (weightChangecausedByToday * Constants.numberOfCaloriesInPound)
@@ -732,7 +732,7 @@ extension Days {
                 } else {
                     let totalBurned = day.activeCalories + day.restingCalories
                     let caloriesAssumedToBeEaten = (weightChangecausedByToday * Constants.numberOfCaloriesInPound) + totalBurned
-                    newConsumedCalories = Double.minimum(5000.0, abs(caloriesAssumedToBeEaten))
+                    newConsumedCalories = Swift.min(5000.0, abs(caloriesAssumedToBeEaten))
                 }
                 self[i]?.consumedCalories = newConsumedCalories
                 self[i]?.wasModifiedBecauseTheUserDidntEnterData = true

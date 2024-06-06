@@ -55,13 +55,13 @@ struct FitnessView: View {
                     !thisWeekDeficit.isNaN {
                     let thisWeekNetEnergy = 0 - thisWeekDeficit
                     let sign = thisWeekNetEnergy > 0 ? "+" : ""
-                    let bodyText = "\(sign)\(Int(thisWeekNetEnergy))"
+                    let bodyText = "\(sign)\(Int(Double(thisWeekNetEnergy)))"
                     let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
                     let netEnergyItem = TodayRingViewModel(
                         titleText: "Average\n\(timeFrame.longName)",
                         bodyText: bodyText,
                         subBodyText: "cals",
-                        percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
+                        percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
                         color: .yellow,
                         bodyTextColor: color,
                         subBodyTextColor: color
@@ -69,13 +69,13 @@ struct FitnessView: View {
                     
                     let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
                     let sign2 = weeklyNetEnergyTomorrow > 0 ? "+" : ""
-                    let bodyText2 = "\(sign2)\(Int(weeklyNetEnergyTomorrow))"
+                    let bodyText2 = "\(sign2)\(Int(Double(weeklyNetEnergyTomorrow)))"
                     let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
                     let tomorrowEnergyItem = TodayRingViewModel(
                         titleText: "Tomorrow's Projected Average",
                         bodyText: bodyText2,
                         subBodyText: "cals",
-                        percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Double ?? 1000),
+                        percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
                         color: .yellow,
                         bodyTextColor: color2,
                         subBodyTextColor: color2
@@ -128,17 +128,17 @@ struct FitnessView: View {
         }
     }
     
-    @ViewBuilder
-    private func renderDeficitLineGraphSection() -> some View {
-        Group {
-            Text("Expected Weight This Week")
-                .foregroundColor(.white)
-                .font(.title2)
-            DeficitLineGraph()
-                .frame(maxWidth: .infinity, minHeight: 200)
-                .mainBackground()
-        }
-    }
+//    @ViewBuilder
+//    private func renderDeficitLineGraphSection() -> some View {
+//        Group {
+//            Text("Expected Weight This Week")
+//                .foregroundColor(.white)
+//                .font(.title2)
+//            DeficitLineGraph()
+//                .frame(maxWidth: .infinity, minHeight: 200)
+//                .mainBackground()
+//        }
+//    }
     
     @ViewBuilder
     private func renderWeightRingsAndLineChartSection() -> some View {
@@ -157,25 +157,25 @@ struct FitnessView: View {
         }
     }
     
-    @ViewBuilder
-    private func renderMileTimeSection() -> some View {
-        Group {
-            StatsTitle(title: "Mile Time")
-            MileTimeStats(runsToShow: $runsToShow)
-                .frame(maxWidth: .infinity)
-                .mainBackground()
-            RunningLineGraph(runsToShow: $runsToShow)
-                .frame(maxWidth: .infinity, idealHeight: 400)
-                .padding()
-                .mainBackground()
-            if healthData.runManager.runs.count > 1 {
-                Slider(value: $runsToShow, in: 1...Double(healthData.runManager.runs.count), step: 1)
-                    .tint(.blue)
-                Text("past \(Int(runsToShow)) runs")
-                    .foregroundColor(.blue)
-            }
-        }
-    }
+//    @ViewBuilder
+//    private func renderMileTimeSection() -> some View {
+//        Group {
+//            StatsTitle(title: "Mile Time")
+//            MileTimeStats(runsToShow: $runsToShow)
+//                .frame(maxWidth: .infinity)
+//                .mainBackground()
+//            RunningLineGraph(runsToShow: $runsToShow)
+//                .frame(maxWidth: .infinity, idealHeight: 400)
+//                .padding()
+//                .mainBackground()
+//            if healthData.runManager.runs.count > 1 {
+//                Slider(value: $runsToShow, in: 1...Double(healthData.runManager.runs.count), step: 1)
+//                    .tint(.blue)
+//                Text("past \(Int(runsToShow)) runs")
+//                    .foregroundColor(.blue)
+//            }
+//        }
+//    }
     
     // MARK: - Helper Functions
     
