@@ -52,6 +52,7 @@ public enum HealthKitType: CaseIterable {
     }
 }
 
+// TODO Use or delete
 public class HealthKitSomething {
     var type: HealthKitType
     var amount: Decimal
@@ -217,48 +218,39 @@ class CalorieManager: ObservableObject {
     /// Get day information for the past amount of days. Runningtotaldeficit will start from the first day here.
     func getDays(forPastDays numberOfDays: Int, dealWithWeights: Bool = true) async -> Days {
         var days: Days = [:]
-        for i in stride(from: numberOfDays, through: 0, by: -1) {
-            let protein = await sumValueForDay(daysAgo: i, forType: .dietaryProtein)
-            let measuredActive = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
-            let measuredResting = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
-            let realActive = max(self.minimumActiveCalories, measuredActive)
-            let realResting = max(self.minimumRestingCalories, measuredResting)
+        for i in 0...numberOfDays {
+            days[i] = Day(daysAgo: i)
+        }
+        await days.forEveryDay(.longestAgoToMostRecent) { [self] day in
+            let i = day.daysAgo
+            day.protein = await sumValueForDay(daysAgo: i, forType: .dietaryProtein)
+            day.measuredActiveCalories = await sumValueForDay(daysAgo: i, forType: .activeEnergyBurned) * activeCalorieModifier
+            day.measuredRestingCalories = await sumValueForDay(daysAgo: i, forType: .basalEnergyBurned)
+            day.activeCalories = max(self.minimumActiveCalories, day.measuredActiveCalories)
+            day.restingCalories = max(self.minimumRestingCalories, day.measuredRestingCalories)
             
-            let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
-            let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
-            // TODO figure out runningtotaldeficit
-            let expectedWeight = dealWithWeights ? (oldestWeight?.weight ?? 0) - (i == numberOfDays ? 0 : (days[i+1]!.runningTotalDeficit / 3500)) : 0 //todo delete?
-
-            var day = Day(date: date,
-                          daysAgo: i,
-                          activeCalories: realActive,
-                          measuredActiveCalories: measuredActive,
-                          restingCalories: realResting,
-                          measuredRestingCalories: measuredResting,
-                          consumedCalories: eaten,
-                          expectedWeight: expectedWeight,
-                          protein: protein)
+            day.consumedCalories = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
+            day.date = Date().subtracting(days: i)
             
             let runningTotalDeficit = i == numberOfDays ? day.deficit : days[i+1]!.runningTotalDeficit + day.deficit
             day.runningTotalDeficit = runningTotalDeficit
-            
-            //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
-            if !allowThreeDaysOfFasting {
-                if i < daysBetweenStartAndNow - 1 {
-                    if days[i]?.consumedCalories == 0 &&
-                        days[i+1]?.consumedCalories == 0 &&
-                        days[i+2]?.consumedCalories == 0 {
-                        return [:]
-                    }
-                }
-            }
-            days[i] = day
-//            print("day \(i): \(day)")
-            if days.count == numberOfDays + 1 {
-                return days
-            }
         }
-        return [:]
+        return days
+    }
+    
+    func catchError() {
+        //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
+        // TODO put somehwere else
+//            if !allowThreeDaysOfFasting {
+//                if i < daysBetweenStartAndNow - 1 {
+//                    if days[i]?.consumedCalories == 0 &&
+//                        days[i+1]?.consumedCalories == 0 &&
+//                        days[i+2]?.consumedCalories == 0 {
+//                        return [:]
+//                    }
+//                }
+//            }
+//            print("day \(i): \(day)")
     }
     
     /// Reload the end of the days list. This takes into account the running total deficit.

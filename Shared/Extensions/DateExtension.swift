@@ -63,4 +63,8 @@ extension Date {
         return dateFormatter.string(from: self).capitalized
         // or use capitalized(with: locale) if you want
     }
+    
+    func subtracting(days: Int) -> Date {
+        Date.subtract(days: days, from: self)
+    }
 }

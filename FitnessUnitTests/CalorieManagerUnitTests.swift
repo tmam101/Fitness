@@ -135,16 +135,24 @@ class CalorieManagerUnitTests: XCTestCase {
             XCTFail()
             return
         }
+        // Should have the past x days plus today
+        XCTAssertEqual(days.count, 21)
+        // Test oldest day properties are set
         XCTAssertEqual(oldestDay.activeCalories, 1000)
         XCTAssertEqual(oldestDay.restingCalories, 2150)
         XCTAssertEqual(oldestDay.consumedCalories, 1000)
-        XCTAssertEqual(oldestDay.expectedWeight, 230)
+//        XCTAssertEqual(oldestDay.expectedWeight, 230)
+        // TODO We are now moving expected weight calculation into the Days object. TBD if i want this long term
         XCTAssertEqual(oldestDay.runningTotalDeficit, 2150)
+        XCTAssertEqual(oldestDay.date, Date().subtracting(days: 20))
+        XCTAssertEqual(oldestDay.protein, 1000)
         XCTAssertEqual(oldestDay.deficit, oldestDay.runningTotalDeficit)
         
+        // Test newest day properties are set
         XCTAssertEqual(newestDay.activeCalories, 1000)
         XCTAssertEqual(newestDay.restingCalories, 2150)
         XCTAssertEqual(newestDay.consumedCalories, 1000)
+        // Test deficit, net energy, and expected weight change
         let expectedTotalDeficit = days.sum(property: .deficit)
         XCTAssertEqual(expectedTotalDeficit, Decimal(days.count) * Decimal(2150))
         XCTAssertEqual(expectedTotalDeficit, 45150)
@@ -154,7 +162,8 @@ class CalorieManagerUnitTests: XCTestCase {
         XCTAssertEqual(expectedTotalNetEnergy, -43000)
         let expectedWeightChange = expectedTotalNetEnergy / Constants.numberOfCaloriesInPound
         XCTAssertEqual(expectedWeightChange, -12.285714, accuracy: 0.001)
-        XCTAssertEqual(newestDay.expectedWeight, oldestDay.expectedWeight + expectedWeightChange)
+//        XCTAssertEqual(newestDay.expectedWeight, oldestDay.expectedWeight + expectedWeightChange)
+        XCTAssertEqual(newestDay.date, Date().subtracting(days: 0))
     }
 }
 

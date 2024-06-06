@@ -337,6 +337,7 @@ extension Days {
     func setInitialExpectedWeights() -> Bool {
         guard let oldestDay, let newestDay else { return false }
         oldestDay.expectedWeight = oldestDay.weight // not sure about this, but fine for now
+        // fallback to settings
         let subset = subset(from: oldestDay, through: newestDay)
         subset.forEveryDay(.longestAgoToMostRecent) { day in
             guard let dayBefore = subset.dayBefore(day) else {
@@ -669,6 +670,25 @@ extension Days {
         }
         while let currentDay = day {
             completion(currentDay)
+            day = switch sortOrder {
+            case .longestAgoToMostRecent:
+                dayAfter(currentDay)
+            case .mostRecentToLongestAgo:
+                dayBefore(currentDay)
+            }
+        }
+    }
+    
+    /// Iterate over every day, oldest to newest, with the option to go from newest to oldest. Complete the action for every day
+    func forEveryDay(_ sortOrder: SortOrder = .longestAgoToMostRecent, _ completion: @escaping (Day) async -> Void) async {
+        var day: Day? = switch sortOrder {
+        case .longestAgoToMostRecent:
+            oldestDay
+        case .mostRecentToLongestAgo:
+            newestDay
+        }
+        while let currentDay = day {
+            await completion(currentDay)
             day = switch sortOrder {
             case .longestAgoToMostRecent:
                 dayAfter(currentDay)
