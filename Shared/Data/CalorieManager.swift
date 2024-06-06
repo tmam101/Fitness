@@ -85,12 +85,14 @@ class CalorieManager: ObservableObject {
     var allowThreeDaysOfFasting = false
     var daysBetweenStartAndNow: Int = 0
     var weightManager: WeightManager? = nil
+    var oldestWeight: Weight?
+    var newestWeight: Weight?
     private let healthStore = HKHealthStore()
     var minimumActiveCalories: Double = 200
     var minimumRestingCalories: Double = 2150
     @Published var goalDeficit: Double = 500
     var days: Days = [:]
-    var startingWeight: Double = 0
+    var startingWeight: Double = 0 // TODO deprecated
     var environment: AppEnvironmentConfig = .debug(nil)
     
     @Published public var deficitToGetCorrectDeficit: Double = 0
@@ -116,6 +118,26 @@ class CalorieManager: ObservableObject {
             await setValues(from: days)
         }
     }
+    
+    func setup(overrideMinimumRestingCalories: Double? = nil, overrideMinimumActiveCalories: Double? = nil, shouldGetDays: Bool = true, oldestWeight: Weight, newestWeight: Weight, daysBetweenStartAndNow: Int, forceLoad: Bool = false, environment: AppEnvironmentConfig) async {
+        // Set values from settings
+        self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Double ?? self.minimumRestingCalories
+        self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Double ?? self.minimumActiveCalories
+        self.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? self.adjustActiveCalorieModifier
+        
+        self.oldestWeight = oldestWeight
+        self.newestWeight = newestWeight
+        self.goalDeficit = goalDeficit
+        self.daysBetweenStartAndNow = daysBetweenStartAndNow
+        self.startingWeight = oldestWeight.weight // TODO
+        self.environment = environment
+        if shouldGetDays {
+            self.days = await getDays(forceReload: true, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
+            await setValues(from: days)
+        }
+    }
+    
+    
     
     func setValues(from days: Days) async {
         if days.count < 8 { return }
@@ -218,7 +240,7 @@ class CalorieManager: ObservableObject {
             let eaten = await sumValueForDay(daysAgo: i, forType: .dietaryEnergyConsumed)
             let date = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -i), to: Date())!)
             // TODO figure out runningtotaldeficit
-            let expectedWeight = dealWithWeights ? ((weightManager?.startingWeight ?? 0) - (i == numberOfDays ? 0 : (days[i+1]!.runningTotalDeficit / 3500))) : 0 //todo delete?
+            let expectedWeight = dealWithWeights ? (oldestWeight?.weight ?? 0) - (i == numberOfDays ? 0 : (days[i+1]!.runningTotalDeficit / 3500)) : 0 //todo delete?
 
             var day = Day(date: date,
                           daysAgo: i,
@@ -253,6 +275,7 @@ class CalorieManager: ObservableObject {
     }
     
     /// Reload the end of the days list. This takes into account the running total deficit.
+    // TODO Test
     func reload(days: inout Days, fromDay daysAgo: Int) async -> Days {
         var reloadedDays = await getDays(forPastDays: daysAgo)
         let earliestDeficit = (days[daysAgo + 1]?.runningTotalDeficit ?? 0) + (reloadedDays[daysAgo]?.deficit ?? 0)
@@ -291,6 +314,7 @@ class CalorieManager: ObservableObject {
     
     //MARK: ACTIVE CALORIE MODFIER
     
+    // TODO Test, and use
     func getActiveCalorieModifier(days: Days, weightLost: Double, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Double {
         let lastWeight = weightManager?.weights.first
         let caloriesLost = weightLost * 3500
@@ -317,50 +341,7 @@ class CalorieManager: ObservableObject {
         }
     }
     
-    //MARK: SUMVALUE
-        // TODO not used
-    func sumValue(forPast days: Int, forType type: HKQuantityTypeIdentifier) async -> Double {
-        return await withUnsafeContinuation { continuation in
-            guard let quantityType = HKObjectType.quantityType(forIdentifier: type) else {
-                print("*** Unable to create a type ***")
-                continuation.resume(returning: 0.0)
-                return
-            }
-            let predicate = pastDaysPredicate(days: days)
-            
-            let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, error in
-                
-                if error != nil {
-                    continuation.resume(returning: 0.0)
-                } else {
-                    guard let result = result, let sum = result.sumQuantity() else {
-                        continuation.resume(returning: 0.0)
-                        return
-                    }
-                    continuation.resume(returning: sum.doubleValue(for: HKUnit.kilocalorie()))
-                }
-            }
-            healthStore.execute(query)
-        }
-    }
-    
-    func pastDaysPredicate(days: Int) -> NSPredicate {
-        let endDate = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
-        let startDate = Date.subtract(days: days, from: endDate)
-        return predicate(startDate: startDate, endDate: endDate)
-    }
-    
-    func specificDayPredicate(daysAgo: Int, quantityType: HKQuantityType) -> NSPredicate? {
-        let startDate = Date.subtract(days: daysAgo, from: Date())
-        guard let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate) 
-        else { return nil }
-        return predicate(startDate: startDate, endDate: endDate)
-    }
-    
-    func predicate(startDate: Date, endDate: Date) -> NSPredicate {
-        HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
-    }
-    
+    //MARK: SUM VALUE FOR DAY
     func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> Double {
         return await withUnsafeContinuation { continuation in
             guard let quantityType = type.value else {
@@ -379,6 +360,23 @@ class CalorieManager: ObservableObject {
                 healthStore.execute(query)
             }
         }
+    }
+    
+    func pastDaysPredicate(days: Int) -> NSPredicate {
+        let endDate = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
+        let startDate = Date.subtract(days: days, from: endDate)
+        return predicate(startDate: startDate, endDate: endDate)
+    }
+    
+    func specificDayPredicate(daysAgo: Int, quantityType: HKQuantityType) -> NSPredicate? {
+        let startDate = Date.subtract(days: daysAgo, from: Date())
+        guard let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate) 
+        else { return nil }
+        return predicate(startDate: startDate, endDate: endDate)
+    }
+    
+    func predicate(startDate: Date, endDate: Date) -> NSPredicate {
+        HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
     }
     
     func convertSumToDouble(sum: HKQuantity?, type: HealthKitType) -> Double {

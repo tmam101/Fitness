@@ -17,6 +17,13 @@ class CalorieManagerUnitTests: XCTestCase {
         calorieManager.environment = .debug(nil)
     }
     
+    func setup() async {
+        let date = Date()
+        let twentyDaysAgo = Date.subtract(days: 20, from: date)
+        let tenDaysAgo = Date.subtract(days: 10, from: date)
+        await calorieManager.setup(oldestWeight: Weight(weight: 230, date: twentyDaysAgo), newestWeight: Weight(weight: 200, date: tenDaysAgo), daysBetweenStartAndNow: 20, environment: .debug(nil))
+    }
+    
     func testTypes() {
         XCTAssertNotNil(calorieManager.dietaryProtein)
     }
@@ -119,6 +126,36 @@ class CalorieManagerUnitTests: XCTestCase {
         XCTAssertEqual(calorieCountSample.endDate, sample?.endDate)
         XCTAssertEqual(calorieCountSample.startDate, sample?.startDate)
         XCTAssertEqual(calorieCountSample.count, sample?.count)
+    }
+    
+    func testGetDays() async {
+        await setup()
+        let days = await calorieManager.getDays(forPastDays: 20)
+        guard let oldestDay = days.oldestDay, let newestDay = days.newestDay else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(oldestDay.activeCalories, 1000)
+        XCTAssertEqual(oldestDay.restingCalories, 2150)
+        XCTAssertEqual(oldestDay.consumedCalories, 1000)
+        XCTAssertEqual(oldestDay.expectedWeight, 230)
+        XCTAssertEqual(oldestDay.runningTotalDeficit, 2150)
+        XCTAssertEqual(oldestDay.deficit, oldestDay.runningTotalDeficit)
+        
+        XCTAssertEqual(newestDay.activeCalories, 1000)
+        XCTAssertEqual(newestDay.restingCalories, 2150)
+        XCTAssertEqual(newestDay.consumedCalories, 1000)
+        let expectedTotalDeficit = days.sum(property: .deficit)
+        XCTAssertEqual(expectedTotalDeficit, Double(days.count) * Double(2150))
+        XCTAssertEqual(expectedTotalDeficit, 45150)
+        XCTAssertEqual(expectedTotalDeficit, days.newestDay?.runningTotalDeficit)
+        let expectedTotalNetEnergy = days.sum(property: .netEnergy)
+        XCTAssertEqual(expectedTotalNetEnergy, Double(days.count) * Double(-2150))
+        XCTAssertEqual(expectedTotalNetEnergy, -45150)
+        let expectedWeightChange = expectedTotalNetEnergy / Constants.numberOfCaloriesInPound
+        XCTAssertEqual(expectedWeightChange, -12.9)
+        XCTAssertEqual(newestDay.expectedWeight, oldestDay.expectedWeight + expectedWeightChange)
+//        XCTAssertEqual(newestDay.expectedWeight, 230 - expectedWeight)
     }
 }
 

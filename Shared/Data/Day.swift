@@ -274,6 +274,7 @@ extension Days {
         //            days[-1] = Day(date: Date.subtract(days: -1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow)
         //        }
         days.addRunningTotalDeficits()
+        days.setInitialExpectedWeights()
         if weightsOnEveryDay {
             days.setWeightOnEveryDay()
             days.setRealisticWeights()
@@ -289,6 +290,7 @@ extension Days {
     
     mutating func formatAccordingTo(options: [TestDayOption]?) {
         self.addRunningTotalDeficits()
+        let _ = self.setInitialExpectedWeights()
         if let options {
             if !options.contains(.dontAddWeightsOnEveryDay) {
                 self.setWeightOnEveryDay()
@@ -316,6 +318,20 @@ extension Days {
         }
     }
     
+    func setInitialExpectedWeights() -> Bool {
+        guard let oldestDay, let newestDay else { return false }
+        oldestDay.expectedWeight = oldestDay.weight // not sure about this, but fine for now
+        let subset = subset(from: oldestDay, through: newestDay)
+        subset.forEveryDay(.longestAgoToMostRecent) { day in
+            guard let dayBefore = subset.dayBefore(day) else {
+                return
+            } //Good?
+            day.expectedWeight = oldestDay.expectedWeight - (dayBefore.runningTotalDeficit / Constants.numberOfCaloriesInPound)
+        }
+        return true
+    }
+    
+    // TODO: This is mostly a test function, because it's aready done in CalorieManager. But maybe we should just have it be done here.
     mutating func addRunningTotalDeficits() {
         var runningTotalDeficit: Double = 0
         forEveryDay { day in

@@ -808,4 +808,38 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days[5]?[keyPath: property.keyPath], 200)
         XCTAssertEqual(days[6]?[keyPath: property.keyPath], 200)
     }
+    
+    func testExpectedWeightMatchesRunningTotalDeficit() {
+        var days = Days.testDays(options: [.testCase(.realisticWeightsIssue)])
+        XCTAssertEqual(days.array().filter { $0.wasModifiedBecauseTheUserDidntEnterData }.count, 0)
+        XCTAssertEqual(days.array().filter { $0.consumedCalories == 0 }.count, 111)
+        XCTAssertEqual(days.count, 136)
+        guard let oldestDay = days.oldestDay, let newestDay = days.newestDay else {
+            XCTFail()
+            return
+        }
+        // Test total weight change matches total energy change
+        XCTAssertEqual(oldestDay.expectedWeight, 229.2)
+        XCTAssertEqual(newestDay.expectedWeight, 130.23, accuracy: 0.1)
+        var totalEnergyChange = days.sum(property: .netEnergy)
+        XCTAssertEqual(totalEnergyChange, -348633.8944145516, accuracy: 0.01)
+        var expectedWeightChange = totalEnergyChange / Constants.numberOfCaloriesInPound
+        XCTAssertEqual(expectedWeightChange, newestDay.expectedWeight - oldestDay.expectedWeight)
+        
+        // Test for subsets
+        days = days.subset(from: 137, through: 70)
+        XCTAssertEqual(days.count, 66)
+        guard let oldestDay = days.oldestDay, let newestDay = days.newestDay else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(oldestDay.expectedWeight, 229.2)
+        XCTAssertEqual(newestDay.expectedWeight, 179.17, accuracy: 0.1)
+        totalEnergyChange = days.sum(property: .netEnergy)
+        XCTAssertEqual(totalEnergyChange, -178500.43393652365, accuracy: 0.01)
+        expectedWeightChange = totalEnergyChange / Constants.numberOfCaloriesInPound
+        XCTAssertEqual(expectedWeightChange, newestDay.expectedWeight - oldestDay.expectedWeight)
+        
+        
+    }
 }
