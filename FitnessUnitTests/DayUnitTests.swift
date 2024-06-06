@@ -145,7 +145,7 @@ final class DayUnitTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(days[1]?.expectedWeight, days[2]?.expectedWeightTomorrow)
+        XCTAssertEqual(days[1]!.expectedWeight, days[2]!.expectedWeightTomorrow, accuracy: 0.001)
     }
     
     func testDeficitProperty() {
@@ -821,9 +821,9 @@ final class DayUnitTests: XCTestCase {
         // Test total weight change matches total energy change
         XCTAssertEqual(oldestDay.expectedWeight, 229.2)
         XCTAssertEqual(newestDay.expectedWeight, 130.23, accuracy: 0.1)
-        var totalEnergyChange = days.sum(property: .netEnergy)
-        XCTAssertEqual(totalEnergyChange, -348633.8944145516, accuracy: 0.01)
-        var expectedWeightChange = totalEnergyChange / Constants.numberOfCaloriesInPound
+        var allNetEnergyChageExceptToday = days.subset(from: 200, through: 1).sum(property: .netEnergy)
+        XCTAssertEqual(allNetEnergyChageExceptToday, -346383.89441455155785, accuracy: 0.01)
+        var expectedWeightChange = allNetEnergyChageExceptToday / Constants.numberOfCaloriesInPound
         XCTAssertEqual(expectedWeightChange, newestDay.expectedWeight - oldestDay.expectedWeight)
         
         // Test for subsets
@@ -836,10 +836,10 @@ final class DayUnitTests: XCTestCase {
         // i think the issue is we are taking into account the last day, and it shouldnt
         XCTAssertEqual(oldestDay.expectedWeight, 229.2)
         XCTAssertEqual(newestDay.expectedWeight, 179.17, accuracy: 0.1)
-        totalEnergyChange = days.sum(property: .netEnergy)
-        XCTAssertEqual(totalEnergyChange, -178500.43393652365, accuracy: 0.01)
-        XCTAssertEqual(totalEnergyChange, -newestDay.runningTotalDeficit)
-        expectedWeightChange = totalEnergyChange / Constants.numberOfCaloriesInPound
+        allNetEnergyChageExceptToday = days.subset(from: 137, through: 71).sum(property: .netEnergy)
+        XCTAssertEqual(allNetEnergyChageExceptToday, -175094.86993652357856, accuracy: 0.01)
+        XCTAssertEqual(allNetEnergyChageExceptToday, -days.dayBefore(newestDay)!.runningTotalDeficit)
+        expectedWeightChange = allNetEnergyChageExceptToday / Constants.numberOfCaloriesInPound
         XCTAssertEqual(expectedWeightChange, newestDay.expectedWeight - oldestDay.expectedWeight)
         
         

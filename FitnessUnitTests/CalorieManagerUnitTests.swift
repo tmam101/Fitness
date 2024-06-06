@@ -149,13 +149,12 @@ class CalorieManagerUnitTests: XCTestCase {
         XCTAssertEqual(expectedTotalDeficit, Decimal(days.count) * Decimal(2150))
         XCTAssertEqual(expectedTotalDeficit, 45150)
         XCTAssertEqual(expectedTotalDeficit, days.newestDay?.runningTotalDeficit)
-        let expectedTotalNetEnergy = days.sum(property: .netEnergy)
-        XCTAssertEqual(expectedTotalNetEnergy, Decimal(days.count) * Decimal(-2150))
-        XCTAssertEqual(expectedTotalNetEnergy, -45150)
+        let expectedTotalNetEnergy = days.subset(from: 21, through: 1).sum(property: .netEnergy)
+        XCTAssertEqual(expectedTotalNetEnergy, Decimal(days.count - 1) * Decimal(-2150))
+        XCTAssertEqual(expectedTotalNetEnergy, -43000)
         let expectedWeightChange = expectedTotalNetEnergy / Constants.numberOfCaloriesInPound
-        XCTAssertEqual(expectedWeightChange, -12.9)
+        XCTAssertEqual(expectedWeightChange, -12.285714, accuracy: 0.001)
         XCTAssertEqual(newestDay.expectedWeight, oldestDay.expectedWeight + expectedWeightChange)
-//        XCTAssertEqual(newestDay.expectedWeight, 230 - expectedWeight)
     }
 }
 
