@@ -63,6 +63,22 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
         self.protein = protein
     }
     
+    func copy() -> Day {
+        return Day(id: UUID(),
+                   date: self.date,
+                   daysAgo: self.daysAgo,
+                   activeCalories: self.activeCalories,
+                   measuredActiveCalories: self.measuredActiveCalories,
+                   restingCalories: self.restingCalories,
+                   measuredRestingCalories: self.measuredRestingCalories,
+                   consumedCalories: self.consumedCalories,
+                   expectedWeight: self.expectedWeight,
+                   realisticWeight: self.realisticWeight,
+                   weight: self.weight,
+                   protein: self.protein
+                   )
+    }
+    
     public typealias PrimitivePlottable = String
     
     public var id = UUID()
@@ -569,6 +585,24 @@ extension Days {
         return true
     }
     
+    func dropping(_ day: Day) -> Days {
+        dropping(day.daysAgo)
+    }
+    
+    func dropping(_ day: Int) -> Days {
+        var copy = self.copy()
+        copy[day] = nil
+        return copy
+    }
+    
+    func copy() -> Days {
+        var days = Days()
+        forEveryDay { day in
+            days[day.daysAgo] = day.copy()
+        }
+        return days
+    }
+    
     func dayAfter(_ day: Day?) -> Day? {
         guard let day else { return nil }
         let sortedKeys = self.keys.sorted(by: >)
@@ -599,6 +633,7 @@ extension Days {
         return nil
     }
     
+    // TODO should this copy the days? Right now editing a day in the subset edits a day in the original.
     func subset(from: Int, through: Int, inclusiveOfOldestDay: Bool = true, inclusiveOfNewestDay: Bool = true) -> Days {
         var subset = Days()
         // Sort to find the

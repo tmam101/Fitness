@@ -833,15 +833,41 @@ final class DayUnitTests: XCTestCase {
             XCTFail()
             return
         }
-        // i think the issue is we are taking into account the last day, and it shouldnt
         XCTAssertEqual(oldestDay.expectedWeight, 229.2)
         XCTAssertEqual(newestDay.expectedWeight, 179.17, accuracy: 0.1)
-        allNetEnergyChageExceptToday = days.subset(from: 137, through: 71).sum(property: .netEnergy)
+        allNetEnergyChageExceptToday = days.dropping(70).sum(property: .netEnergy)
         XCTAssertEqual(allNetEnergyChageExceptToday, -175094.86993652357856, accuracy: 0.01)
         XCTAssertEqual(allNetEnergyChageExceptToday, -days.dayBefore(newestDay)!.runningTotalDeficit)
         expectedWeightChange = allNetEnergyChageExceptToday / Constants.numberOfCaloriesInPound
         XCTAssertEqual(expectedWeightChange, newestDay.expectedWeight - oldestDay.expectedWeight)
+    }
+    
+    func testCopy() {
+        var days: Days = [:]
+        let day = Day(daysAgo: 4)
+        let day2 = Day(daysAgo: 5)
+        let day3 = Day(daysAgo: 6)
+        XCTAssertTrue(days.append([day, day2, day3]))
         
+        let copy = days.copy()
+        for i in 0..<days.count {
+            XCTAssert(copy[i] == days[i])
+        }
         
+        copy[4]?.weight = 1234
+        XCTAssertNotEqual(days[4]?.weight, copy[4]?.weight)
+    }
+    
+    func testDropping() {
+        var days: Days = [:]
+        let day = Day(daysAgo: 4)
+        let day2 = Day(daysAgo: 5)
+        let day3 = Day(daysAgo: 6)
+        XCTAssertTrue(days.append([day, day2, day3]))
+        let dropped = days.dropping(day)
+        XCTAssertEqual(dropped.count, 2)
+        XCTAssertEqual(days.count, 3)
+        dropped[5]?.weight = 1234
+        XCTAssertNotEqual(dropped[5]?.weight, days[5]?.weight)
     }
 }
