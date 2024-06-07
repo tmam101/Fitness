@@ -18,7 +18,6 @@ class AppSettings: ObservableObject {
             }
         }
         healthData = HealthData(environment: AppEnvironmentConfig.release([ .isMissingConsumedCalories(.v3)]))
-        
     }
 }
 

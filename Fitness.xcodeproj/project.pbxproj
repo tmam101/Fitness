@@ -197,6 +197,7 @@
 		E95C9B822ADDC6BF00B2FCC9 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		E967015E2AFEBB5A0059E55C /* FitnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */; };
 		E96701602AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */; };
+		E97C54472C1389E800E85C82 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
 		E99B514B2BE435EC002CEB48 /* missingDataIssue.json in Resources */ = {isa = PBXBuildFile; fileRef = E99B514A2BE435EC002CEB48 /* missingDataIssue.json */; };
 		E99B51512BE564F1002CEB48 /* MissingDataIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99B51502BE564F1002CEB48 /* MissingDataIssue.swift */; };
 		E99B51522BE56C18002CEB48 /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D45225BB6605007C40ED /* FitnessView.swift */; };
@@ -1201,6 +1202,7 @@
 				48BD6F53274B162A0007AC15 /* Stats.swift in Sources */,
 				E91D3F4B2AD5D25A001E1397 /* NetEnergyBarChart.swift in Sources */,
 				48BD6F5A274B169D0007AC15 /* Environment.swift in Sources */,
+				E97C54472C1389E800E85C82 /* AppView.swift in Sources */,
 				48BD6F4B274B16190007AC15 /* DateExtension.swift in Sources */,
 				48813F5C2798A9BF0045859C /* DeficitLineGraph.swift in Sources */,
 				48BD6F57274B162E0007AC15 /* WorkoutManager.swift in Sources */,

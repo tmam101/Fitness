@@ -7,14 +7,26 @@
 
 import SwiftUI
 
+public struct InnerContentSize: PreferenceKey {
+  public typealias Value = [CGRect]
+
+  public static var defaultValue: [CGRect] = []
+  public static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {
+    value.append(contentsOf: nextValue())
+  }
+}
+
 struct AppView: View {
     @EnvironmentObject var healthData: HealthData
     //    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
     //    @State var day = Day()
+    @State private var selectedPeriod = 2
+    @State private var playerOffset: CGFloat = 0
+
     var body: some View {
-        VStack {
+        GeometryReader { geometry in
             TabView {
-                FitnessView()
+                FitnessView(timeFrame: $selectedPeriod)
                     .environmentObject(healthData)
                     .tabItem { Label("Over Time", systemImage: "calendar") }
                 TodayView()
@@ -25,9 +37,46 @@ struct AppView: View {
                     .tabItem { Label("Settings", systemImage: "gear") }
                 
             }
+            .onPreferenceChange(InnerContentSize.self, perform: { value in
+                self.playerOffset = geometry.size.height - (value.last?.height ?? 0)
+            })
+#if !os(watchOS)
+            .onAppear(perform: {
+                let appearance = UITabBarAppearance()
+                appearance.backgroundColor = .black
+                appearance.configureWithOpaqueBackground()
+                appearance.stackedLayoutAppearance.normal.iconColor = .white
+                appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+                
+                appearance.stackedLayoutAppearance.selected.iconColor = .yellow
+                appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(Color.yellow)]
+                
+                UITabBar.appearance().standardAppearance = appearance
+                UITabBar.appearance().scrollEdgeAppearance = appearance
+            })
+            .overlay(
+                PickerOverlay(offset: playerOffset, selectedPeriod: $selectedPeriod), alignment: .bottom)
+#endif
         }
     }
 }
+
+#if !os(watchOS)
+struct PickerOverlay: View {
+    var offset: CGFloat
+    @Binding var selectedPeriod: Int
+    
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(.black)
+                .frame(maxHeight: 50)
+            TimeFramePicker(selectedPeriod: $selectedPeriod)
+                .background(.black)
+        }.offset(y: -offset)
+    }
+}
+#endif
 
 struct AppView_Previews: PreviewProvider {
     static var previews: some View {
@@ -50,7 +99,7 @@ struct SettingsView: View {
     @State var startDate = "1.23.2021"
     @State var showLinesOnWeightGraph = true
     @State var useActiveCalorieModifier = true
-
+    
     var body: some View {
         VStack {
             Text("Settings")
