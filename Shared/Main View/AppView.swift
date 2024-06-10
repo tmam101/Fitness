@@ -55,7 +55,8 @@ struct AppView: View {
                 UITabBar.appearance().scrollEdgeAppearance = appearance
             })
             .overlay(
-                PickerOverlay(offset: playerOffset, selectedPeriod: $selectedPeriod), alignment: .bottom)
+                PickerOverlay(offset: playerOffset, selectedPeriod: $selectedPeriod), alignment: .bottom
+            )
 #endif
         }
     }
