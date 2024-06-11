@@ -112,14 +112,10 @@ public struct FitnessView: View {
                 }
                 .padding()
 //                .padding(.bottom, bottomPadding)
-                .padding(.bottom, 49)
             }
-            .onPreferenceChange(InnerContentSize.self, perform: { value in
-                self.bottomPadding = proxy.size.height - (value.last?.height ?? 0)
-            })
             .onChange(of: scenePhase) {
                 handleSceneChange()
-            }.preference(key: InnerContentSize.self, value: [proxy.frame(in: CoordinateSpace.global)])
+            }
 
         }
     }

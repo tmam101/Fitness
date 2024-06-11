@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-public struct InnerContentSize: PreferenceKey {
-  public typealias Value = [CGRect]
-
-  public static var defaultValue: [CGRect] = []
-  public static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {
-    value.append(contentsOf: nextValue())
-  }
-}
-
 struct AppView: View {
     @EnvironmentObject var healthData: HealthData
     //    @EnvironmentObject var watchConnectivityIphone: WatchConnectivityIphone
@@ -24,11 +15,17 @@ struct AppView: View {
     @State private var playerOffset: CGFloat = 0
 
     var body: some View {
+#if !os(watchOS)
         GeometryReader { geometry in
             TabView {
+                
                 FitnessView(timeFrame: $selectedPeriod)
                     .environmentObject(healthData)
                     .tabItem { Label("Over Time", systemImage: "calendar") }
+                
+                .safeAreaInset(edge: .bottom) {
+                    PickerOverlay(offset: playerOffset, selectedPeriod: $selectedPeriod)
+                }
                 TodayView()
                     .environmentObject(healthData)
                     .tabItem { Label("Today", systemImage: "clock") }
@@ -37,10 +34,6 @@ struct AppView: View {
                     .tabItem { Label("Settings", systemImage: "gear") }
                 
             }
-            .onPreferenceChange(InnerContentSize.self, perform: { value in
-                self.playerOffset = geometry.size.height - (value.last?.height ?? 0)
-            })
-#if !os(watchOS)
             .onAppear(perform: {
                 let appearance = UITabBarAppearance()
                 appearance.backgroundColor = .black
@@ -54,11 +47,12 @@ struct AppView: View {
                 UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
             })
-            .overlay(
-                PickerOverlay(offset: playerOffset, selectedPeriod: $selectedPeriod), alignment: .bottom
-            )
-#endif
+//            .overlay(
+//                PickerOverlay(offset: playerOffset, selectedPeriod: $selectedPeriod), alignment: .bottom
+//            )
         }
+#endif
+
     }
 }
 
@@ -74,7 +68,8 @@ struct PickerOverlay: View {
                 .frame(maxHeight: 50)
             TimeFramePicker(selectedPeriod: $selectedPeriod)
                 .background(.black)
-        }.offset(y: -offset)
+                .frame(maxHeight: 50)
+        }
     }
 }
 #endif
