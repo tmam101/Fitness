@@ -14,6 +14,7 @@
     "measuredActiveCalories" : 435.8109999999997,
     "activeCalories" : 435.8109999999997,
     "weight" : 0,
+    "weightWasEstimated": false,
     "expectedWeight" : 231.8,
     "protein" : 0
   },
@@ -24,6 +25,7 @@
     "realisticWeight" : 0,
     "protein" : 0,
     "weight" : 0,
+    "weightWasEstimated": false,
     "caloriesPerGramOfProtein" : 4,
     "wasModifiedBecauseTheUserDidntEnterData" : false,
     "restingCalories" : 2050,

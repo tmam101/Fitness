@@ -116,6 +116,10 @@ final class WeightLineChartTests: XCTestCase {
         let longAgoWeightViewModel = PlotViewModel(type: .weight, day: longAgoDay, timeFrame: timeFrame)
         XCTAssertFalse(longAgoWeightViewModel.shouldHavePoint)
         
+        // Ensure don't indicate missed days for All Time
+        let longAgoExpectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: longAgoDay, timeFrame: timeFrame)
+        XCTAssertFalse(longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
+        
         // Ensure day of week labels don't show up after a week
         timeFrame = TimeFrame(type: .week)
         let dayOfWeekViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
@@ -124,6 +128,19 @@ final class WeightLineChartTests: XCTestCase {
         timeFrame = TimeFrame(type: .month)
         let dayOfMonthViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
         XCTAssertFalse(dayOfMonthViewModel.shouldHaveDayOverlay)
+        
+        //Ensure dots on weight don't show if it's an estimated weight
+        let day1 = Day(daysAgo: 0, weight: 70)
+        let day2 = Day(daysAgo: 1)
+        let day3 = Day(daysAgo: 2, weight: 72)
+        
+        var days = Days()
+        XCTAssert(days.append([day1, day2, day3]))
+        days.setWeightOnEveryDay()
+        XCTAssertEqual(day2.weight, 71)
+        let vm = PlotViewModel(type: .weight, day: day2, timeFrame: timeFrame)
+        XCTAssertFalse(vm.shouldHavePoint)
+        
     }
     
     func testLineChartViewModel() {

@@ -120,7 +120,12 @@ public class PlotViewModel {
             case .allTime:
                 return false
             case .week, .month:
-                return true
+                switch type {
+                case .weight:
+                    return !day.weightWasEstimated
+                case .expectedWeight, .realisticWeight, .expectedWeightTomorrow:
+                    return true
+                }
             }
         case .expectedWeightTomorrow:
             return false

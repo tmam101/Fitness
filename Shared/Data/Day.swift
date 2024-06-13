@@ -21,15 +21,9 @@ public class Constants {
     static let maximumWeightChangePerDay: Decimal = 0.2
 }
 
-public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
+public class Day: Codable, Identifiable, Equatable, HasDate {
     public static func == (lhs: Day, rhs: Day) -> Bool {
         lhs.id == rhs.id
-    }
-    
-    public var primitivePlottable: String = "Day"
-    
-    required public init?(primitivePlottable: String) {
-        
     }
     
     init(id: UUID = UUID(),
@@ -135,6 +129,8 @@ public class Day: Codable, Identifiable, Plottable, Equatable, HasDate {
     var weightChangePercentage: Decimal {
         expectedWeightChangeBasedOnDeficit / (-2/7) // TODO Make settings
     }
+    
+    var weightWasEstimated = false
     
     var dayOfWeek: String {
         let dateFormatter = DateFormatter()
@@ -412,6 +408,7 @@ extension Days {
                     return
                 }
                 day.weight = previousDay.weight + weightAdjustmentEachDay
+                day.weightWasEstimated = true
             }
         }
         // Make the most recent weights, if they are not recorded, equal to the last recorded weight
