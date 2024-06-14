@@ -20,6 +20,13 @@ extension Array where Element: BinaryFloatingPoint {
     }
 }
 
+extension Array where Element == Decimal {
+    var average: Element? {
+        guard !self.isEmpty else { return nil }
+        return self.reduce(0, +) / Element(self.count)
+    }
+}
+
 protocol HasDate {
     var date: Date { get }
 }
@@ -33,5 +40,23 @@ extension Array where Element: HasDate {
             self.sorted { $0.date > $1.date }
         }
         
+    }
+}
+
+extension Array where Element == Date {
+    func sorted(_ sortOrder: SortOrder) -> [Element] {
+        switch sortOrder {
+        case .longestAgoToMostRecent:
+            self.sorted { $0 < $1 }
+        case .mostRecentToLongestAgo:
+            self.sorted { $0 > $1 }
+        }
+    }
+}
+
+//TODO Move and test
+extension Double {
+    init(_ decimal: Decimal) {
+        self = NSDecimalNumber(decimal: decimal).doubleValue
     }
 }

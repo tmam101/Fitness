@@ -18,7 +18,6 @@ class AppSettings: ObservableObject {
             }
         }
         healthData = HealthData(environment: AppEnvironmentConfig.release([ .isMissingConsumedCalories(.v3)]))
-        
     }
 }
 
@@ -57,7 +56,7 @@ struct FitnessApp_Previews: PreviewProvider {
     
     static var previews: some View {
         AppView()
-            .environmentObject(HealthData(environment: .debug(nil)))
+            .environmentObject(HealthData(environment: .debug([.testCase(.firstDayNotAdjustingWhenMissing), .isMissingConsumedCalories(.v3)])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
 //            .environmentObject(WatchConnectivityIphone())
     }

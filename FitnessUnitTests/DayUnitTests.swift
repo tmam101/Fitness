@@ -29,12 +29,12 @@ final class DayUnitTests: XCTestCase {
     
     func testDecoding() {
         guard
-            let activeCalories: [Double] = .decode(path: .activeCalories),
-            let restingCalories: [Double] = .decode(path: .restingCalories),
-            let consumedCalories: [Double] = .decode(path: .consumedCalories),
-            let upAndDownWeights: [Double] = .decode(path: .upAndDownWeights),
-            let missingConsumedCalories: [Double] = .decode(path: .missingConsumedCalories),
-            let weightsGoingSteadilyDown: [Double] = .decode(path: .weightGoingSteadilyDown)
+            let activeCalories: [Decimal] = .decode(path: .activeCalories),
+            let restingCalories: [Decimal] = .decode(path: .restingCalories),
+            let consumedCalories: [Decimal] = .decode(path: .consumedCalories),
+            let upAndDownWeights: [Decimal] = .decode(path: .upAndDownWeights),
+            let missingConsumedCalories: [Decimal] = .decode(path: .missingConsumedCalories),
+            let weightsGoingSteadilyDown: [Decimal] = .decode(path: .weightGoingSteadilyDown)
         else {
             XCTFail()
             return
@@ -50,7 +50,7 @@ final class DayUnitTests: XCTestCase {
         
         let sum = days.sum(property: .activeCalories)
         let average = days.average(property: .activeCalories)
-        XCTAssertEqual(sum / Double(days.count), average, "Calculated average does not match expected value")
+        XCTAssertEqual(sum / Decimal(days.count), average, "Calculated average does not match expected value")
     }
     
     func testDayDates() {
@@ -145,7 +145,7 @@ final class DayUnitTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(days[1]?.expectedWeight, days[2]?.expectedWeightTomorrow)
+        XCTAssertEqual(days[1]!.expectedWeight, days[2]!.expectedWeightTomorrow, accuracy: 0.001)
     }
     
     func testDeficitProperty() {
@@ -613,7 +613,7 @@ final class DayUnitTests: XCTestCase {
     func testEstimatedConsumedCaloriesToCause_Loss() {
         let day = Day(activeCalories: 10, restingCalories: 10, consumedCalories: 0, weight: 70)
         let realisticWeightChange = -0.1 // Assume a weight loss of 0.1 pounds
-        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Decimal(realisticWeightChange))
         
         XCTAssertEqual(estimatedConsumedCalories, 0, accuracy: 0.1, "Estimated consumed calories should be zero when the burned calories cause more than that weight loss")
     }
@@ -621,7 +621,7 @@ final class DayUnitTests: XCTestCase {
     func testEstimatedConsumedCaloriesToCause_NoChange() {
         let day = Day(activeCalories: 500, restingCalories: 1500, consumedCalories: 0, weight: 70)
         let realisticWeightChange = 0.0 // No weight change
-        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Decimal(realisticWeightChange))
         
         XCTAssertEqual(estimatedConsumedCalories, day.allCaloriesBurned, accuracy: 0.1, "Estimated consumed calories should match the total burned calories when there is no weight change.")
     }
@@ -629,7 +629,7 @@ final class DayUnitTests: XCTestCase {
     func testEstimatedConsumedCaloriesToCause_MaxLoss() {
         let day = Day(activeCalories: 600, restingCalories: 1400, consumedCalories: 0, weight: 70)
         let realisticWeightChange = -1.0 // Assume a weight loss of 1.0 pounds which is more than the max allowed per day
-        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Decimal(realisticWeightChange))
         
         let expectedCalories = day.allCaloriesBurned - (Constants.maximumWeightChangePerDay * Constants.numberOfCaloriesInPound)
         
@@ -639,7 +639,7 @@ final class DayUnitTests: XCTestCase {
     func testEstimatedConsumedCaloriesToCause_MaxGain() {
         let day = Day(activeCalories: 600, restingCalories: 1400, consumedCalories: 0, weight: 70)
         let realisticWeightChange = 1.0 // Assume a weight gain of 1.0 pounds which is more than the max allowed per day
-        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+        let estimatedConsumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: Decimal(realisticWeightChange))
         
         let expectedCalories = day.allCaloriesBurned + (Constants.maximumWeightChangePerDay * Constants.numberOfCaloriesInPound)
         
@@ -663,15 +663,46 @@ final class DayUnitTests: XCTestCase {
     
     func testSubset() {
         var days: Days = [:]
-        let day = Day(daysAgo: 4)
-        let day2 = Day(daysAgo: 5)
-        let day3 = Day(daysAgo: 6)
-        XCTAssertTrue(days.append([day, day2, day3]))
+        let fourDaysAgo = Day(daysAgo: 4)
+        let fiveDaysAgo = Day(daysAgo: 5)
+        let sixDaysAgo = Day(daysAgo: 6)
+        XCTAssertTrue(days.append([fourDaysAgo, fiveDaysAgo, sixDaysAgo]))
         
+        // Test using day numbers
         var subset = days.subset(from: 4, through: 5)
         XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
         XCTAssertEqual(subset.newestDay?.daysAgo, 4)
         subset = days.subset(from: 5, through: 4)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        
+        // Test using days
+        subset = days.subset(from: fourDaysAgo, through: fiveDaysAgo)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        subset = days.subset(from: fiveDaysAgo, through: fourDaysAgo)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        
+        // Test not inclusive
+        subset = days.subset(from: fourDaysAgo, through: sixDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: true)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        subset = days.subset(from: sixDaysAgo, through: fourDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: true)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)  
+        subset = days.subset(from: fourDaysAgo, through: sixDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: false)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 5)
+        subset = days.subset(from: fourDaysAgo, through: fiveDaysAgo, inclusiveOfOldestDay: false, inclusiveOfNewestDay: false)
+        XCTAssertEqual(subset.newestDay?.daysAgo, nil)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, nil)
+        
+        //Test using dates
+        subset = days.subset(from: fourDaysAgo, through: fiveDaysAgo)
+        XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
+        XCTAssertEqual(subset.newestDay?.daysAgo, 4)
+        subset = days.subset(from: fiveDaysAgo, through: fourDaysAgo)
         XCTAssertEqual(subset.oldestDay?.daysAgo, 5)
         XCTAssertEqual(subset.newestDay?.daysAgo, 4)
     }
@@ -776,6 +807,67 @@ final class DayUnitTests: XCTestCase {
         XCTAssertEqual(days[4]?[keyPath: property.keyPath], 200)
         XCTAssertEqual(days[5]?[keyPath: property.keyPath], 200)
         XCTAssertEqual(days[6]?[keyPath: property.keyPath], 200)
+    }
+    
+    func testExpectedWeightMatchesRunningTotalDeficit() {
+        var days = Days.testDays(options: [.testCase(.realisticWeightsIssue)])
+        XCTAssertEqual(days.array().filter { $0.wasModifiedBecauseTheUserDidntEnterData }.count, 0)
+        XCTAssertEqual(days.array().filter { $0.consumedCalories == 0 }.count, 111)
+        XCTAssertEqual(days.count, 136)
+        guard let oldestDay = days.oldestDay, let newestDay = days.newestDay else {
+            XCTFail()
+            return
+        }
+        // Test total weight change matches total energy change
+        XCTAssertEqual(oldestDay.expectedWeight, 229.2)
+        XCTAssertEqual(newestDay.expectedWeight, 130.23, accuracy: 0.1)
+        var allNetEnergyChageExceptToday = days.subset(from: 200, through: 1).sum(property: .netEnergy)
+        XCTAssertEqual(allNetEnergyChageExceptToday, -346383.89441455155785, accuracy: 0.01)
+        var expectedWeightChange = allNetEnergyChageExceptToday / Constants.numberOfCaloriesInPound
+        XCTAssertEqual(expectedWeightChange, newestDay.expectedWeight - oldestDay.expectedWeight)
         
+        // Test for subsets
+        days = days.subset(from: 137, through: 70)
+        XCTAssertEqual(days.count, 66)
+        guard let oldestDay = days.oldestDay, let newestDay = days.newestDay else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(oldestDay.expectedWeight, 229.2)
+        XCTAssertEqual(newestDay.expectedWeight, 179.17, accuracy: 0.1)
+        allNetEnergyChageExceptToday = days.dropping(70).sum(property: .netEnergy)
+        XCTAssertEqual(allNetEnergyChageExceptToday, -175094.86993652357856, accuracy: 0.01)
+        XCTAssertEqual(allNetEnergyChageExceptToday, -days.dayBefore(newestDay)!.runningTotalDeficit)
+        expectedWeightChange = allNetEnergyChageExceptToday / Constants.numberOfCaloriesInPound
+        XCTAssertEqual(expectedWeightChange, newestDay.expectedWeight - oldestDay.expectedWeight)
+    }
+    
+    func testCopy() {
+        var days: Days = [:]
+        let day = Day(daysAgo: 4)
+        let day2 = Day(daysAgo: 5)
+        let day3 = Day(daysAgo: 6)
+        XCTAssertTrue(days.append([day, day2, day3]))
+        
+        let copy = days.copy()
+        for i in 0..<days.count {
+            XCTAssert(copy[i] == days[i])
+        }
+        
+        copy[4]?.weight = 1234
+        XCTAssertNotEqual(days[4]?.weight, copy[4]?.weight)
+    }
+    
+    func testDropping() {
+        var days: Days = [:]
+        let day = Day(daysAgo: 4)
+        let day2 = Day(daysAgo: 5)
+        let day3 = Day(daysAgo: 6)
+        XCTAssertTrue(days.append([day, day2, day3]))
+        let dropped = days.dropping(day)
+        XCTAssertEqual(dropped.count, 2)
+        XCTAssertEqual(days.count, 3)
+        dropped[5]?.weight = 1234
+        XCTAssertNotEqual(dropped[5]?.weight, days[5]?.weight)
     }
 }

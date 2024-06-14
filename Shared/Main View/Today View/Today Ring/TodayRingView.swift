@@ -40,7 +40,7 @@ struct TodayRingView: View {
                         .stroke(style: .init(lineWidth: 1))
                         .foregroundColor(.gray)
                     Circle()
-                        .trim(from: 0, to: vm.percentage)
+                        .trim(from: 0, to: Double(vm.percentage))
                         .stroke(style: StrokeStyle(lineWidth: vm.lineWidth, lineCap: .round, lineJoin: .round))
                         .fill(gradient)
                         .rotationEffect(Angle(degrees: 270.0))
@@ -50,7 +50,7 @@ struct TodayRingView: View {
                     Circle()
                         .stroke(style: .init(lineWidth: 1))
                         .foregroundColor(.gray)
-                    GenericCircle(color: vm.color.color, starting: 0, ending: vm.percentage, opacity: 1)
+                    GenericCircle(color: vm.color.color, starting: 0, ending: Double(vm.percentage), opacity: 1)
                 }
             }
         }

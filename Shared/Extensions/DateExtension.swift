@@ -53,10 +53,18 @@ extension Date {
         Calendar.current.startOfDay(for: date)
     }
     
+    func daysAgo() -> Int? {
+        Date.daysBetween(date1: Date.startOfDay(Date()), date2: Date.startOfDay(self))
+    }
+    
     func dayOfWeek() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
         return dateFormatter.string(from: self).capitalized
         // or use capitalized(with: locale) if you want
+    }
+    
+    func subtracting(days: Int) -> Date {
+        Date.subtract(days: days, from: self)
     }
 }

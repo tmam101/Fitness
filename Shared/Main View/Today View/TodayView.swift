@@ -71,7 +71,7 @@ struct TodayView: View {
 
         let overallItem = TodayRingViewModel(
             titleText: "Overall Score",
-            bodyText: "\(Int(today.averagePercentage * 100))%",
+            bodyText: "\(Int(Double(today.averagePercentage * 100)))%",
             subBodyText: "overall",
             percentage: today.averagePercentage,
             bodyTextColor: .white,
@@ -79,7 +79,7 @@ struct TodayView: View {
         )
         
         let sign = today.netEnergy > 0 ? "+" : ""
-        let bodyText = "\(sign)\(Int(today.netEnergy))"
+        let bodyText = "\(sign)\(Int(Double(today.netEnergy)))"
         let color: TodayRingColor = today.netEnergy > 0 ? .red : .yellow
         let netEnergyItem = TodayRingViewModel(
             titleText: "Net Energy",
@@ -93,7 +93,7 @@ struct TodayView: View {
         
         let proteinItem = TodayRingViewModel(
             titleText: "Protein",
-            bodyText: today.proteinPercentage.percentageToWholeNumber() + "/30%",
+            bodyText: Double(today.proteinPercentage).percentageToWholeNumber() + "/30%",
             subBodyText: "cals",
             percentage: today.proteinGoalPercentage,
             color: .purple,
@@ -103,7 +103,7 @@ struct TodayView: View {
         
         let activeCalorieItem = TodayRingViewModel(
             titleText: "Active Calories",
-            bodyText: "\(Int(today.activeCalories))",
+            bodyText: "\(Int(Double(today.activeCalories)))",
             subBodyText: "cals",
             percentage: today.activeCaloriePercentage,
             color: .orange,
@@ -113,7 +113,7 @@ struct TodayView: View {
         
         let weightChangeItem = TodayRingViewModel(
             titleText: "Weight Change",
-            bodyText: today.expectedWeightChangeBasedOnDeficit.roundedString(),
+            bodyText: Double(today.expectedWeightChangeBasedOnDeficit).roundedString(),
             subBodyText: "pounds",
             percentage: today.weightChangePercentage,
             color: .green,
@@ -140,7 +140,7 @@ struct TestRing: View {
             if let today = health.days[0] {
                 let vm = TodayRingViewModel(
                     titleText: "Weight Change",
-                    bodyText: today.expectedWeightChangeBasedOnDeficit.roundedString(),
+                    bodyText: Double(today.expectedWeightChangeBasedOnDeficit).roundedString(),
                     subBodyText: "pounds",
                     percentage: today.weightChangePercentage,
                     color: .green,

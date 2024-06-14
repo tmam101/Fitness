@@ -139,9 +139,27 @@ class ArrayExtensionTests: XCTestCase {
             // Assert
             XCTAssertTrue(sortedEvents.isEmpty, "The sorted array should be empty")
         }
+        
+        func testSortingDates() {
+            let oneDayAgo = Day(daysAgo: 1)
+            let twoDayAgo = Day(daysAgo: 2)
+            let threeDayAgo = Day(daysAgo: 3)
+            XCTAssertEqual(oneDayAgo.date.daysAgo(), 1)
+            XCTAssertEqual(twoDayAgo.date.daysAgo(), 2)
+            XCTAssertEqual(threeDayAgo.date.daysAgo(), 3)
+            let dates = [oneDayAgo, twoDayAgo, threeDayAgo]
+            XCTAssertEqual(dates.first, oneDayAgo)
+            var sorted = dates.sorted(.longestAgoToMostRecent)
+            XCTAssertEqual(sorted.first, threeDayAgo)
+            XCTAssertEqual(sorted.last, oneDayAgo)
+            sorted = dates.sorted(.mostRecentToLongestAgo)
+            XCTAssertEqual(sorted.first, oneDayAgo)
+            XCTAssertEqual(sorted.last, threeDayAgo)
+        }
         testSortedMostRecentToLongestAgo()
         testSortedMostRecentToLongestAgoWithSameDates()
         testSortedMostRecentToLongestAgoWithEmptyArray()
+        testSortingDates()
     }
 }
 
@@ -265,6 +283,14 @@ class DateTests: XCTestCase {
         XCTAssertNotEqual(Date.daysBetween(date1: emptyDate, date2: date1), 0)
     }
     
+    func testDaysAgo() {
+        let twoDaysAgo = Day(daysAgo: 2)
+        XCTAssertEqual(twoDaysAgo.daysAgo, twoDaysAgo.date.daysAgo())
+        
+        let date = Date()
+        XCTAssertEqual(date.daysAgo(), 0)
+    }
+    
     func testDateFromString() {
         // Test with valid date string
         XCTAssertNotNil(Date.dateFromString("01.01.2022"))
@@ -295,6 +321,20 @@ class DateTests: XCTestCase {
         // Test subtracting 7 days
         let sevenDaysEarlier = Date.subtract(days: 7, from: currentDate)
         XCTAssertEqual(Date.daysBetween(date1: sevenDaysEarlier, date2: currentDate), 7)
+        XCTAssert(sevenDaysEarlier < currentDate)
+    }
+    
+    func testAddDays() {
+        let currentDate = Date()
+        
+        // Test subtracting zero days
+        let sameDay = Date.add(days: 0, from: currentDate)
+        XCTAssertTrue(Date.sameDay(date1: currentDate, date2: sameDay))
+        
+        // Test subtracting 7 days
+        let sevenDaysLater = Date.add(days: 7, from: currentDate)
+        XCTAssertEqual(Date.daysBetween(date1: sevenDaysLater, date2: currentDate), 7)
+        XCTAssert(sevenDaysLater > currentDate)
     }
     
     func testSameDay() {

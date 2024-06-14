@@ -19,16 +19,16 @@ class WeightManager: ObservableObject {
     
     var startDateString = "01.23.2021"
     let endDateString = "05.01.2021"
-    @Published var startingWeight: Double = 231.8
-    @Published var currentWeight: Double = 231.8
-    @Published var endingWeight: Double = 190
-    @Published var progressToWeight: Double = 0
-    @Published var weightLost: Double = 0
-    @Published var percentWeightLost: Int = 0
-    @Published var weightToLose: Double = 0
-    @Published var averageWeightLostPerWeek: Double = 0
+    @Published var startingWeight: Decimal = 231.8
+    @Published var currentWeight: Decimal = 231.8
+    @Published var endingWeight: Decimal = 190
+    @Published var progressToWeight: Decimal = 0
+    @Published var weightLost: Decimal = 0
+//    @Published var percentWeightLost: Int = 0
+    @Published var weightToLose: Decimal = 0
+    @Published var averageWeightLostPerWeek: Decimal = 0
     @Published var weights: [Weight] = []
-    @Published var averageWeightLostPerWeekThisMonth: Double = 0
+    @Published var averageWeightLostPerWeekThisMonth: Decimal = 0
     
     @Published var shouldShowBars = true
     
@@ -47,15 +47,15 @@ class WeightManager: ObservableObject {
     init() {
     }
     
-    func getProgressToWeight() -> Double {
+    func getProgressToWeight() -> Decimal {
         let lost = startingWeight - currentWeight
         let totalToLose = startingWeight - endingWeight
         let progress = lost / totalToLose
         return progress
     }
     
-    func progressString(from float: Double) -> String {
-        return String(format: "%.2f", float * 100)
+    func progressString(from float: Decimal) -> String {
+        return String(format: "%.2f", Double(float) * 100)
     }
     
     func setup() async {
@@ -67,13 +67,13 @@ class WeightManager: ObservableObject {
         self.progressToWeight = self.getProgressToWeight()
         self.weightLost = self.startingWeight - self.currentWeight
         self.weightToLose = self.startingWeight - self.endingWeight
-        self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
+//        self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
         guard
             let startDate = Date.dateFromString(self.startDateString),
             let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
         else { return }
         
-        let weeks: Double = Double(daysBetweenStartAndNow) / Double(7)
+        let weeks: Decimal = Decimal(daysBetweenStartAndNow) / Decimal(7)
         self.averageWeightLostPerWeek = self.weightLost / weeks
     }
     
@@ -113,12 +113,12 @@ class WeightManager: ObservableObject {
             days = newDays
         }
         let difference = finalWeight.weight - self.weights.first!.weight
-        let weeklyAverageThisMonth = (difference / Double(days)) * Double(7)
-        self.averageWeightLostPerWeekThisMonth = Double(weeklyAverageThisMonth)
+        let weeklyAverageThisMonth = (difference / Decimal(days)) * Decimal(7)
+        self.averageWeightLostPerWeekThisMonth = weeklyAverageThisMonth
         
     }
     
-    func weight(at date: Date) -> Double {
+    func weight(at date: Date) -> Decimal {
         let d = Date.startOfDay(date)
         var weight1: Weight?
         var weight2: Weight?
@@ -143,7 +143,7 @@ class WeightManager: ObservableObject {
         let weightDifference = weight1.weight - weight2.weight
         let dayDifferenceBetweenWeights = Date.daysBetween(date1: weight1.date, date2: weight2.date) ?? 0
         let dayDifferenceBetweenWeightAndDate = Date.daysBetween(date1: weight1.date, date2: date) ?? 0
-        let proportion = weightDifference * (Double(dayDifferenceBetweenWeightAndDate) / Double(dayDifferenceBetweenWeights))
+        let proportion = weightDifference * (Decimal(dayDifferenceBetweenWeightAndDate) / Decimal(dayDifferenceBetweenWeights))
         let weightAtDate = weight1.weight - proportion
         return weightAtDate
     }
@@ -159,7 +159,7 @@ class WeightManager: ObservableObject {
             let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 3000, sortDescriptors: [sortDescriptor]) { (query, results, error) in
                 if let results = results as? [HKQuantitySample] {
                     let weights = results
-                        .map{ Weight(weight: $0.quantity.doubleValue(for: HKUnit.pound()), date: $0.endDate) }
+                        .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }
                         .filter { $0.date >= Date.dateFromString(self.startDateString)!}
                     
                     continuation.resume(returning: weights)

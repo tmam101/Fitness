@@ -8,16 +8,16 @@
 import Foundation
 
 struct Weight: Codable, HasDate {
-    var weight: Double
+    var weight: Decimal
     var date: Date
     
-    static func weightBetweenTwoWeights(date: Date, weight1: Weight?, weight2: Weight?) -> Double {
+    static func weightBetweenTwoWeights(date: Date, weight1: Weight?, weight2: Weight?) -> Decimal {
         guard let weight1 = weight1, let weight2 = weight2 else { return 0 }
         let days = Date.daysBetween(date1: weight1.date, date2: weight2.date)
-        guard days != 0 else { return Double(weight1.weight) }
-        let progress = Double(Date.daysBetween(date1: weight1.date, date2: date) ?? 1) / Double(days ?? 1)
-        let weightProgress = Double(weight2.weight - weight1.weight) * progress
-        let weight = Double(weight1.weight) + weightProgress
+        guard days != 0 else { return weight1.weight }
+        let progress = Decimal(Date.daysBetween(date1: weight1.date, date2: date) ?? 1) / Decimal(days ?? 1)
+        let weightProgress = (weight2.weight - weight1.weight) * progress
+        let weight = weight1.weight + weightProgress
         return weight
     }
     

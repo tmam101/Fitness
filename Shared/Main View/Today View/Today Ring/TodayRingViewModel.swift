@@ -16,7 +16,7 @@ struct TodayRingViewModel: Hashable, Identifiable {
     var titleText: String
     var bodyText: String
     var subBodyText: String
-    var percentage: Double
+    var percentage: Decimal
     var color: TodayRingColor = .yellow
     var bodyTextColor: TodayRingColor = .white
     var subBodyTextColor: TodayRingColor = .white

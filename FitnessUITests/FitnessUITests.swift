@@ -18,6 +18,7 @@ final class FitnessUITests: XCTestCase {
     }
 
     override func setUpWithError() throws {
+        try super.setUpWithError()
 //        let app = XCUIApplication()
 //        let x = Filepath.Days.firstDayNotAdjustingWhenMissing
 //        app.launchArguments = ["UITEST"]
