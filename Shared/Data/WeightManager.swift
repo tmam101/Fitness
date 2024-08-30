@@ -14,8 +14,25 @@ import WidgetKit
 #endif
 import ClockKit
 
+protocol WeightProcessorProtocol {
+    func processWeights(continuation: CheckedContinuation<[Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) -> Void
+}
+
+class WeightProcessor: WeightProcessorProtocol {
+    func processWeights(continuation: CheckedContinuation<[Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) {
+        if let results = results as? [HKQuantitySample] {
+            let weights = results
+                .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }
+            
+            continuation.resume(returning: weights)
+            return
+        }
+    }
+}
+
 class WeightManager: ObservableObject {
     var environment: AppEnvironmentConfig?
+    var weightProcessor: WeightProcessorProtocol?
     
     var startDateString = "01.23.2021"
     let endDateString = "05.01.2021"
@@ -28,11 +45,8 @@ class WeightManager: ObservableObject {
     @Published var weightToLose: Decimal = 0
     @Published var averageWeightLostPerWeek: Decimal = 0
     @Published var weights: [Weight] = []
+    @Published var weightsAfterStartDate: [Weight] = []
     @Published var averageWeightLostPerWeekThisMonth: Decimal = 0
-    
-    @Published var shouldShowBars = true
-    
-
     
     init(environment: AppEnvironmentConfig) {
         self.environment = environment
@@ -47,6 +61,7 @@ class WeightManager: ObservableObject {
     init() {
     }
     
+    // TODO use better
     func getProgressToWeight() -> Decimal {
         let lost = startingWeight - currentWeight
         let totalToLose = startingWeight - endingWeight
@@ -54,156 +69,107 @@ class WeightManager: ObservableObject {
         return progress
     }
     
-    func progressString(from float: Decimal) -> String {
-        return String(format: "%.2f", Double(float) * 100)
-    }
-    
-    func setup() async {
-        self.startDateString = Settings.get(key: .startDate) as? String ?? self.startDateString
-        self.weights = await getWeights()
+    @discardableResult
+    func setup(startDate: Date? = nil, startDateString: String? = nil, weightProcessor: WeightProcessorProtocol = WeightProcessor()) async -> Bool {
+        guard let startDate: Date =
+                startDate ??
+                startDateString?.toDate() ??
+                (Settings.get(key: .startDate) as? String)?.toDate()
+         else {
+            return false
+        }
+        self.startDateString = startDate.toString() // TODO is this right
+        self.weightProcessor = weightProcessor
+        self.weights = await getWeights().sorted { $0.date < $1.date }
+        self.weightsAfterStartDate = self.weights.filter { $0.date >= Date.dateFromString(self.startDateString)!}
+        
         self.currentWeight = self.weights.first?.weight ?? 1
-        self.startingWeight = self.weights.last?.weight ?? self.startingWeight
+        
+        self.startingWeight = weight(at: startDate) ?? 1 //TODO
         
         self.progressToWeight = self.getProgressToWeight()
         self.weightLost = self.startingWeight - self.currentWeight
         self.weightToLose = self.startingWeight - self.endingWeight
-//        self.percentWeightLost = Int((self.weightLost / self.weightToLose) * 100)
         guard
-            let startDate = Date.dateFromString(self.startDateString),
             let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
-        else { return }
+        else { return false }
         
         let weeks: Decimal = Decimal(daysBetweenStartAndNow) / Decimal(7)
         self.averageWeightLostPerWeek = self.weightLost / weeks
+        return true
     }
     
-    func getWeightFromAMonthAgo() {
-        var index: Int = 0
-        var days: Int = 0
-        var finalWeight: Weight
-        
-        for i in stride(from: 0, to: self.weights.count, by: 1) {
-            let weight = self.weights[i]
-            let date = weight.date
-            guard
-                let dayCount = Date.daysBetween(date1: date, date2: Date())
-            else {
-                print("Date that's fucked: \(date)")
-                return
+    func weight(at date: Date) -> Decimal? {
+        // If the user has recorded weights before (and after) the set start date, then calculate what their what on the start date should be
+        let firstRecordedWeightAfterDate = self.weights.first(where: { $0.date >= date })
+        let lastRecordedWeightBeforeDate = self.weights.first(where: { $0.date < date })
+        guard let firstRecordedWeightAfterDate else {
+            guard let lastRecordedWeightBeforeDate else {
+                return nil
             }
-            print("dayCount: \(dayCount)")
-            if dayCount >= 30 {
-                index = i
-                days = dayCount
-                break
-            }
+            return lastRecordedWeightBeforeDate.weight
         }
-        let newIndex = index - 1
-        print(newIndex)
-        print(weights)
-        print(weights.count)
-        let newDays = Date.daysBetween(date1: self.weights[newIndex].date, date2: Date())!
-        let between1 = abs(days - 30)
-        let between2 = abs(newDays - 30)
-        
-        if between1 <= between2 {
-            finalWeight = self.weights[index]
-        } else {
-            finalWeight = self.weights[newIndex]
-            days = newDays
+        guard let lastRecordedWeightBeforeDate else {
+            return firstRecordedWeightAfterDate.weight
         }
-        let difference = finalWeight.weight - self.weights.first!.weight
-        let weeklyAverageThisMonth = (difference / Decimal(days)) * Decimal(7)
-        self.averageWeightLostPerWeekThisMonth = weeklyAverageThisMonth
-        
+       
+        let weightDiff = firstRecordedWeightAfterDate.weight - lastRecordedWeightBeforeDate.weight
+        guard let dayDiff = Date.daysBetween(date1: firstRecordedWeightAfterDate.date, date2: lastRecordedWeightBeforeDate.date) else {
+            return nil
+        }
+        let weightDiffPerDay = weightDiff / Decimal(dayDiff)
+        guard let daysBetweenWeightBeforeAndAfterDate = Date.daysBetween(date1: lastRecordedWeightBeforeDate.date, date2: date) else {
+            return nil
+        }
+        return lastRecordedWeightBeforeDate.weight + (weightDiffPerDay * Decimal(daysBetweenWeightBeforeAndAfterDate))
     }
     
-    func weight(at date: Date) -> Decimal {
-        let d = Date.startOfDay(date)
-        var weight1: Weight?
-        var weight2: Weight?
-        
-        for i in stride(from: 0, to: self.weights.count, by: 1) {
-            let w = Date.startOfDay(weights[i].date)
-            if w == d {
-                return weights[i].weight
-            }
-            if Date.startOfDay(weights[0].date) < d {
-                return weights[0].weight
-            }
-            if w < d {
-                weight1 = weights[i]
-                weight2 = weights[i-1]
-                break
-            }
-        }
-        guard let weight1 = weight1, let weight2 = weight2 else { return 0 }
-//        let maxWeight = max(weight1.weight, weight2.weight)
-//        let minWeight = min(weight1.weight, weight2.weight)
-        let weightDifference = weight1.weight - weight2.weight
-        let dayDifferenceBetweenWeights = Date.daysBetween(date1: weight1.date, date2: weight2.date) ?? 0
-        let dayDifferenceBetweenWeightAndDate = Date.daysBetween(date1: weight1.date, date2: date) ?? 0
-        let proportion = weightDifference * (Decimal(dayDifferenceBetweenWeightAndDate) / Decimal(dayDifferenceBetweenWeights))
-        let weightAtDate = weight1.weight - proportion
-        return weightAtDate
-    }
-    
-    // MARK - weight
-    #if !os(macOS)
     private let healthStore = HKHealthStore()
     private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
-    private func getWeights() async -> [Weight] {
-        return await withUnsafeContinuation { continuation in
+#if !os(macOS)
+    func getWeights() async -> [Weight] {
+        return await withCheckedContinuation { continuation in
             let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
             let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 3000, sortDescriptors: [sortDescriptor]) { (query, results, error) in
-                if let results = results as? [HKQuantitySample] {
-                    let weights = results
-                        .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }
-                        .filter { $0.date >= Date.dateFromString(self.startDateString)!}
-                    
-                    continuation.resume(returning: weights)
-                    return
-                }
-                
-                continuation.resume(returning: [])
+                self.weightProcessor?.processWeights(continuation: continuation, query, results, error)
             }
             healthStore.execute(query)
         }
     }
-    #endif
-    
-    //TODO: Get this working
-    private func observeCalories() {
-#if os(watchOS)
-        // Create the calorie type.
-        let calorie = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
-
-        // Set up the background delivery rate.
-        healthStore.enableBackgroundDelivery(for: calorie,
-                                          frequency: .immediate) { success, error in
-            if !success {
-                print("Unable to set up background delivery from HealthKit: \(error!.localizedDescription)")
-            } else {
-                print("observing calories")
-            }
-        }
-        // Set up the observer query.
-        let backgroundObserver =
-        HKObserverQuery(sampleType: calorie, predicate: nil)
-        { (query: HKObserverQuery, completionHandler: @escaping () -> Void, error: Error?) in
-            // Query for actual updates here.
-            // When you're done processing the changes, be sure to call the completion handler.
-            let server = CLKComplicationServer.sharedInstance()
-            server.activeComplications?.forEach { complication in
-                server.reloadTimeline(for: complication)
-            }
-            completionHandler()
-        }
-        
-        // If you successfully created the query,  execute it.
-        healthStore.execute(backgroundObserver)
 #endif
-    }
+    
+//    //TODO: Get this working
+//    private func observeCalories() {
+//#if os(watchOS)
+//        // Create the calorie type.
+//        let calorie = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
+//
+//        // Set up the background delivery rate.
+//        healthStore.enableBackgroundDelivery(for: calorie,
+//                                          frequency: .immediate) { success, error in
+//            if !success {
+//                print("Unable to set up background delivery from HealthKit: \(error!.localizedDescription)")
+//            } else {
+//                print("observing calories")
+//            }
+//        }
+//        // Set up the observer query.
+//        let backgroundObserver =
+//        HKObserverQuery(sampleType: calorie, predicate: nil)
+//        { (query: HKObserverQuery, completionHandler: @escaping () -> Void, error: Error?) in
+//            // Query for actual updates here.
+//            // When you're done processing the changes, be sure to call the completion handler.
+//            let server = CLKComplicationServer.sharedInstance()
+//            server.activeComplications?.forEach { complication in
+//                server.reloadTimeline(for: complication)
+//            }
+//            completionHandler()
+//        }
+//        
+//        // If you successfully created the query,  execute it.
+//        healthStore.execute(backgroundObserver)
+//#endif
+//    }
 }
 

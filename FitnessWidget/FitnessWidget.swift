@@ -78,11 +78,6 @@ struct FitnessWidgetEntryView : View {
                                     .font(.system(size: 10))
                                     .padding([.bottom])
                             }
-//                            BarChart(cornerRadius: 2.0, showCalories: false)
-//                                .environmentObject(entry.healthData)
-//                                .frame(minWidth: 0, maxWidth: .infinity)
-//                                .background(Color.myGray)
-//                                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                         }
                         
                     default:
@@ -90,18 +85,11 @@ struct FitnessWidgetEntryView : View {
                             if let day = entry.healthData.days[0] {
                                 NetEnergyBarChart(health: entry.healthData, timeFrame: .week)
                             }
-//                            DeficitRings(useNewDailyCircle: true)
-//                            .environmentObject(entry.healthData)
-//                            .padding([.top, .leading, .trailing])
-//                            Text("Last updated \(hour):\(minuteString)")
-//                                .foregroundColor(.white)
-//                                .font(.system(size: 10))
-//                                .padding([.bottom])
                         }
                     }
                 }
             }
-        }
+        }.containerBackground(Color.myGray, for: .widget)
     }
 }
 

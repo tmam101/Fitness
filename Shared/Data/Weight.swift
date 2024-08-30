@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Weight: Codable, HasDate {
+struct Weight: Codable, HasDate, Equatable {
     var weight: Decimal
     var date: Date
     
@@ -21,6 +21,7 @@ struct Weight: Codable, HasDate {
         return weight
     }
     
+    // TODO either use this and test or delete
     static func closestTwoWeightsToDate(weights: [Weight], date: Date) -> [Weight]? {
         let sortedWeights = weights.sorted(by: { $0.date < $1.date })
         guard let firstIndex = sortedWeights.firstIndex(where: {$0.date >= date}) else { return [sortedWeights.last ?? Weight(weight: 1, date: Date())] }

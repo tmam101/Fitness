@@ -9,10 +9,10 @@ import Testing
 @testable import Fitness
 import SwiftUI
 
-@Suite 
+@Suite
 
 struct ArrayExtensionTests {
-
+    
     @Test func sum() {
         // Test with integers
         #expect([1, 2, 3, 4, 5].sum == 15)
@@ -23,7 +23,7 @@ struct ArrayExtensionTests {
         // Test with empty array (edge case)
         #expect([Int]().sum == 0)
     }
-
+    
     @Test func average() {
         // Test with integers
         #expect([1, 2, 3, 4, 5].average == 3.0)
@@ -159,7 +159,7 @@ struct ArrayExtensionTests {
 }
 
 
-@Suite 
+@Suite
 
 
 struct ColorTests {
@@ -170,12 +170,12 @@ struct ColorTests {
         #expect(Color.expectedWeightYellow != nil)
         #expect(Color.weightGreen != nil)
         #expect(Color.realisticWeightGreen != nil)
-//        XCTAssertNotNil(Color.green1)
-//        XCTAssertNotNil(Color.green2)
-//        XCTAssertNotNil(Color.green3)
-//        XCTAssertNotNil(Color.yellow1)
-//        XCTAssertNotNil(Color.yellow2)
-//        XCTAssertNotNil(Color.yellow3)
+        //        XCTAssertNotNil(Color.green1)
+        //        XCTAssertNotNil(Color.green2)
+        //        XCTAssertNotNil(Color.green3)
+        //        XCTAssertNotNil(Color.yellow1)
+        //        XCTAssertNotNil(Color.yellow2)
+        //        XCTAssertNotNil(Color.yellow3)
     }
     
     @Test func solidColorGradient() {
@@ -186,7 +186,7 @@ struct ColorTests {
     
 }
 
-@Suite 
+@Suite
 
 struct SettingsTests {
     @Test func userDefaultsStorage() {
@@ -208,7 +208,7 @@ struct SettingsTests {
     
 }
 
-@Suite 
+@Suite
 
 struct DoubleTests {
     
@@ -247,27 +247,27 @@ struct DoubleTests {
     }
 }
 
-@Suite 
+@Suite
 
 struct DateTests {
     // TODO: Dates are stored in UTC, but printed in local time zone. So theres a discrepancy on the pipeline, because it is in UTC time, and the test fails.
-//    func testStringFromDate() {
-//        // Test with a specific date
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy/MM/dd"
-//        let date = formatter.date(from: "2022/01/01")!
-//        XCTAssertEqual(Date.stringFromDate(date: date), "01/01/2022")
-//        
-//        // Test with current date
-//        let currentDate = Date()
-//        let components = Calendar.current.dateComponents([.day, .month, .year], from: currentDate)
-//        let expectedString = "\(components.month!)/\(components.day! < 10 ? "0" : "")\(components.day!)/\(components.year!)"
-//        XCTAssertEqual(Date.stringFromDate(date: currentDate), expectedString)
-//        
-//        // Test with empty date (edge case)
-//        let emptyDate = Date(timeIntervalSince1970: 1000)
-//        XCTAssertEqual(Date.stringFromDate(date: emptyDate), "01/01/1970")
-//    }
+    //    func testStringFromDate() {
+    //        // Test with a specific date
+    //        let formatter = DateFormatter()
+    //        formatter.dateFormat = "yyyy/MM/dd"
+    //        let date = formatter.date(from: "2022/01/01")!
+    //        XCTAssertEqual(Date.stringFromDate(date: date), "01/01/2022")
+    //
+    //        // Test with current date
+    //        let currentDate = Date()
+    //        let components = Calendar.current.dateComponents([.day, .month, .year], from: currentDate)
+    //        let expectedString = "\(components.month!)/\(components.day! < 10 ? "0" : "")\(components.day!)/\(components.year!)"
+    //        XCTAssertEqual(Date.stringFromDate(date: currentDate), expectedString)
+    //
+    //        // Test with empty date (edge case)
+    //        let emptyDate = Date(timeIntervalSince1970: 1000)
+    //        XCTAssertEqual(Date.stringFromDate(date: emptyDate), "01/01/1970")
+    //    }
     
     @Test func daysBetween() {
         // Test with same day
@@ -307,7 +307,24 @@ struct DateTests {
         #expect(expectedDate != nil)
     }
     
-    @Test func dateFromStringComponents() {
+    @Test func testStringToDate() {
+        // Test with valid date string
+        #expect("01.01.2022".toDate() == Date.dateFromString("01.01.2022"))
+        
+        // Test with invalid date string
+        #expect("invalid.date".toDate() == Date.dateFromString("invalid.date"))
+        
+        // Test with another valid date string
+        let expectedDate = Date.dateFromString("12.31.2021")
+        #expect("12.31.2021".toDate() == expectedDate)
+    }
+    
+    @Test func testDateToString() {
+        let date = Date.dateFromString("01.01.2022")
+        #expect(date?.toString() == "01.01.2022")
+    }
+    
+    @Test func testDateFromStringComponents() {
         // Test with valid date components
         #expect(Date.dateFromString(month: "01", day: "01", year: "2022") != nil)
         
@@ -372,7 +389,7 @@ struct DateTests {
     
 }
 
-@Suite 
+@Suite
 
 struct TimeTests {
     @Test func doubleToString() {

@@ -22,6 +22,26 @@ class AppSettings: ObservableObject {
 }
 
 @main
+struct MainEntryPoint {
+    static func main() {
+        guard isProduction() else {
+            TestApp.main()
+            return
+        }
+        FitnessApp.main()
+    }
+    private static func isProduction() -> Bool {
+        return NSClassFromString("XCTest") == nil
+    }
+}
+
+struct TestApp: App {
+    var body: some Scene {
+        WindowGroup {
+        }
+    }
+}
+
 struct FitnessApp: App {
 //    @StateObject var healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
 //    @State var watchConnectivityIphone = WatchConnectivityIphone()
