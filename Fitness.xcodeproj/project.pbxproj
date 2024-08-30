@@ -69,8 +69,6 @@
 		48A0D4A225BB92DE007C40ED /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A0D49A25BB8703007C40ED /* HealthKit.framework */; };
 		48A7706B260529C3002E5853 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48A7706D260529C3002E5853 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
-		48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
-		48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
 		48AF60EB2640F65C00C6CC11 /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* WorkoutManager.swift */; };
 		48AF60ED2640F65C00C6CC11 /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF60EA2640F65C00C6CC11 /* WorkoutManager.swift */; };
 		48B984E12784E47700C0E93A /* ComplicationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B984E02784E47700C0E93A /* ComplicationViews.swift */; };
@@ -102,7 +100,6 @@
 		48BD6F4B274B16190007AC15 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
 		48BD6F4C274B16190007AC15 /* TimeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */; };
 		48BD6F4D274B16190007AC15 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C9A026828C18006700A1 /* DoubleExtension.swift */; };
-		48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7707426053296002E5853 /* FloatingPointExtensions.swift */; };
 		48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A7706A260529C3002E5853 /* ColorExtension.swift */; };
 		48BD6F53274B162A0007AC15 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E20A26041E700037EEAF /* Stats.swift */; };
 		48BD6F54274B162A0007AC15 /* TextCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E21726041F3D0037EEAF /* TextCollections.swift */; };
@@ -323,7 +320,6 @@
 		48A0D49A25BB8703007C40ED /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.3.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		48A0D4A125BB92DE007C40ED /* FitnessWidgetExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FitnessWidgetExtensionDebug.entitlements; sourceTree = "<group>"; };
 		48A7706A260529C3002E5853 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
-		48A7707426053296002E5853 /* FloatingPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPointExtensions.swift; sourceTree = "<group>"; };
 		48AF60EA2640F65C00C6CC11 /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
 		48B984E02784E47700C0E93A /* ComplicationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationViews.swift; sourceTree = "<group>"; };
 		48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundAppRefreshManger.swift; sourceTree = "<group>"; };
@@ -568,7 +564,6 @@
 			isa = PBXGroup;
 			children = (
 				48A7706A260529C3002E5853 /* ColorExtension.swift */,
-				48A7707426053296002E5853 /* FloatingPointExtensions.swift */,
 				4827C99C26828BEF006700A1 /* DateExtension.swift */,
 				4827C9A026828C18006700A1 /* DoubleExtension.swift */,
 				48BD6E72274AFB1E0007AC15 /* TimeExtension.swift */,
@@ -1092,7 +1087,6 @@
 				48E4B44D262619DE002321B5 /* Environment.swift in Sources */,
 				4832D11727835D3400414573 /* WatchManager.swift in Sources */,
 				48E0E20B26041E700037EEAF /* Stats.swift in Sources */,
-				48A7707526053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				48BD6E6B274AFA890007AC15 /* LineGraph.swift in Sources */,
 				48E0E1F726041DE50037EEAF /* RingCollections.swift in Sources */,
 				E9211EF42C0E61DC0079A758 /* missingWeightsAtFirst.swift in Sources */,
@@ -1160,7 +1154,6 @@
 				48DE1DE227A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				E901DE1F29B8111700F889D3 /* TestData.swift in Sources */,
 				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
-				48A7707726053296002E5853 /* FloatingPointExtensions.swift in Sources */,
 				4802D490278582AD0001BE9D /* RunManager.swift in Sources */,
 				48E5F00E2925D92F00ADF691 /* WeightLineChart.swift in Sources */,
 				48DE1DE727A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
@@ -1223,7 +1216,6 @@
 				48DE1DE927A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
 				484BB68C2776AE8200E24B1C /* Network.swift in Sources */,
 				485B992927CEC29C00C70C81 /* Settings.swift in Sources */,
-				48BD6F4E274B16190007AC15 /* FloatingPointExtensions.swift in Sources */,
 				48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */,
 				E99B51532BE56C6D002CEB48 /* WeightLineChart.swift in Sources */,
 				48BD6F55274B162E0007AC15 /* WeightManager.swift in Sources */,

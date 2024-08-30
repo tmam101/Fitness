@@ -5,23 +5,23 @@
 //  Created by Thomas on 8/30/24.
 //
 
-import XCTest
+import Testing
 @testable import Fitness
 import HealthKit
 
-final class WeightManagerTests: XCTestCase {
+struct WeightManagerTests {
     var weightManager: WeightManager!
     
-    override func setUp() {
+    init() {
         weightManager = WeightManager()
     }
     
-    func testMockWorks() async {
+    @Test func mockWorks() async {
         let weightProcessor = MockWeightProcessor()
         let startDate = Date().subtracting(days: 3)
         await weightManager.setup(startDate: startDate, weightProcessor: MockWeightProcessor())
-        XCTAssertEqual(weightManager.weights, weightProcessor.weights)
-        XCTAssertEqual(weightManager.startDateString, startDate.toString())
+        #expect(weightManager.weights == weightProcessor.weights)
+        #expect(weightManager.startDateString == startDate.toString())
     }
     
     func testStartingWeightWithGapInDaysBeforeAndAfterStartDate() async {
@@ -29,25 +29,25 @@ final class WeightManagerTests: XCTestCase {
         let startDate = Date().subtracting(days: 4)
         await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
         let expectedWeights = await weightProcessor.getWeights()
-        XCTAssertEqual(weightManager.weights, expectedWeights)
-        XCTAssertEqual(weightManager.startingWeight, 204)
+        #expect(weightManager.weights == expectedWeights)
+        #expect(weightManager.startingWeight == 204)
     }
     
     func testStartingWeightWithNoWeightsUntilAfterStartDate() async {
         let weightProcessor = MockWeightProcessor()
         let startDate = Date().subtracting(days: 12)
         await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
-        XCTAssertEqual(weightManager.weights, weightProcessor.weights)
-        XCTAssertEqual(weightManager.startingWeight, 206)
+        #expect(weightManager.weights == weightProcessor.weights)
+        #expect(weightManager.startingWeight == 206)
     }
     
     func testHKQuery() async {
         let weightProcessor = MockWeightProcessor()
         let startDate = Date().subtracting(days: 12)
         await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
-        XCTAssertEqual(weightProcessor.query?.sortDescriptors, [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)])
-        XCTAssertEqual(weightProcessor.query?.limit, 3000)
-        XCTAssertEqual(weightProcessor.query?.objectType, HKSampleType.quantityType(forIdentifier: .bodyMass)!)
+        #expect(weightProcessor.query?.sortDescriptors == [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)])
+        #expect(weightProcessor.query?.limit == 3000)
+        #expect(weightProcessor.query?.objectType == HKSampleType.quantityType(forIdentifier: .bodyMass)!)
     }
 }
 
