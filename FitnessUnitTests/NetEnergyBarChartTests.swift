@@ -1,5 +1,6 @@
-import XCTest
+import Testing
 @testable import Fitness
+import Foundation
 
 // Mock HealthData class
 class MockHealthData: HealthData {
@@ -14,45 +15,45 @@ class MockHealthData: HealthData {
     }
 }
 
-class NetEnergyBarChartViewModelTests: XCTestCase {
+@Suite 
+
+final class NetEnergyBarChartViewModelTests {
     
     var viewModel: NetEnergyBarChartViewModel!
     var mockHealthData: MockHealthData!
 
-    override func setUp() {
-        super.setUp()
+    init() {
         mockHealthData = MockHealthData()
     }
 
-    override func tearDown() {
+    deinit {
         viewModel = nil
         mockHealthData = nil
-        super.tearDown()
     }
 
-    func testSetupDays() {
+    @Test func setupDays() {
         let days = createMockDays()
         mockHealthData.populateMockData(days: days)
         
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
         // Test for a week
-        XCTAssertEqual(viewModel.days.count, 8, "Days count should be 8 for a week timeframe")
-        XCTAssertEqual(viewModel.days.first?.date, days.first?.date, "The first day should be the most recent day")
-        XCTAssertEqual(viewModel.days.first?.daysAgo, 0)
+        #expect(viewModel.days.count == 8, "Days count should be 8 for a week timeframe")
+        #expect(viewModel.days.first?.date == days.first?.date, "The first day should be the most recent day")
+        #expect(viewModel.days.first?.daysAgo == 0)
         
         // Test for month
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .month)
-        XCTAssertEqual(viewModel.days.count, 31, "Days count should be 31 for a month timeframe")
+        #expect(viewModel.days.count == 31, "Days count should be 31 for a month timeframe")
 
         // Test for all time
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .allTime)
-        XCTAssertEqual(viewModel.days.count, 45, "Days count should be unlimited for all time timeframe")
+        #expect(viewModel.days.count == 45, "Days count should be unlimited for all time timeframe")
         
         // Test sorting
-        XCTAssertEqual(viewModel.days.last?.daysAgo, 44)
+        #expect(viewModel.days.last?.daysAgo == 44)
     }
 
-    func testUpdateMinMaxValues() {
+    @Test func updateMinMaxValues() {
         let days = createMockDays()
         mockHealthData.populateMockData(days: days)
         
@@ -62,13 +63,13 @@ class NetEnergyBarChartViewModelTests: XCTestCase {
         let expectedMaxValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).max() ?? 0
         let expectedMinValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).min() ?? 0
         
-        XCTAssertEqual(viewModel.maxValue, Double(expectedMaxValue).rounded(toNextSignificant: viewModel.lineInterval), "Max value should be the maximum net energy value")
-        XCTAssertEqual(viewModel.minValue, Double(expectedMinValue).rounded(toNextSignificant: viewModel.lineInterval), "Min value should be the minimum net energy value")
+        #expect(viewModel.maxValue == Double(expectedMaxValue).rounded(toNextSignificant: viewModel.lineInterval), "Max value should be the maximum net energy value")
+        #expect(viewModel.minValue == Double(expectedMinValue).rounded(toNextSignificant: viewModel.lineInterval), "Min value should be the minimum net energy value")
         
         // TODO more examples
     }
 
-    func testSetupYValues() {
+    @Test func setupYValues() {
         let days = createMockDays()
         mockHealthData.populateMockData(days: days)
         
@@ -78,16 +79,16 @@ class NetEnergyBarChartViewModelTests: XCTestCase {
         let number = Int(diff / viewModel.lineInterval)
         let expectedYValues = (0...number).map { viewModel.minValue + (viewModel.lineInterval * Double($0)) }
         
-        XCTAssertEqual(viewModel.yValues, expectedYValues, "Y values should be correctly calculated based on min and max values")
+        #expect(viewModel.yValues == expectedYValues, "Y values should be correctly calculated based on min and max values")
     }
 
-    func testGradient() {
+    @Test func gradient() {
         let day = Day(activeCalories: 500, restingCalories: 1500, consumedCalories: 2000, expectedWeight: 70, weight: 70)
         viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
         
         let gradient = viewModel.gradient(for: day)
         
-        XCTAssertNotNil(gradient, "Gradient should not be nil")
+        #expect(gradient != nil, "Gradient should not be nil")
     }
     
     private func createMockDays() -> [Day] {

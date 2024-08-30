@@ -24,7 +24,7 @@ struct WeightManagerTests {
         #expect(weightManager.startDateString == startDate.toString())
     }
     
-    func testStartingWeightWithGapInDaysBeforeAndAfterStartDate() async {
+    @Test func startingWeightWithGapInDaysBeforeAndAfterStartDate() async {
         let weightProcessor = MockWeightProcessorWithGapInDays()
         let startDate = Date().subtracting(days: 4)
         await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
@@ -33,7 +33,7 @@ struct WeightManagerTests {
         #expect(weightManager.startingWeight == 204)
     }
     
-    func testStartingWeightWithNoWeightsUntilAfterStartDate() async {
+    @Test func startingWeightWithNoWeightsUntilAfterStartDate() async {
         let weightProcessor = MockWeightProcessor()
         let startDate = Date().subtracting(days: 12)
         await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
@@ -41,7 +41,7 @@ struct WeightManagerTests {
         #expect(weightManager.startingWeight == 206)
     }
     
-    func testHKQuery() async {
+    @Test func HKQuery() async {
         let weightProcessor = MockWeightProcessor()
         let startDate = Date().subtracting(days: 12)
         await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)

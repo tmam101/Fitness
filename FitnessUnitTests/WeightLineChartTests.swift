@@ -5,233 +5,231 @@
 //  Created by Thomas on 5/31/24.
 //
 
-import XCTest
+import Testing
 @testable import Fitness
 import SwiftUI
 
-final class WeightLineChartTests: XCTestCase {
+extension Tag {
+  @Tag static var timeFrame: Self
+}
+
+@Suite struct WeightLineChartTests {
     
     var allTimeDay = Day(daysAgo: 34, activeCalories: 3500, expectedWeight: 68, realisticWeight: 69, weight: 70)
     var day: Day!
     
-    override func setUp() {
+    init() {
         self.day = Day(date: Date(), daysAgo: 0, activeCalories: 3500, expectedWeight: 68, realisticWeight: 69, weight: 70)
     }
     
-    func testPlotStyleTypeProperties() {
+    @Test func plotStyleTypeProperties() {
         let weightStyle = PlotStyleType.weight
-        XCTAssertEqual(weightStyle.foregroundStyle, "Weight")
-        XCTAssertEqual(weightStyle.xValueLabel, "Days ago")
-        XCTAssertEqual(weightStyle.yValueLabel, "Real Weight")
-        XCTAssertEqual(weightStyle.series, "C")
-        XCTAssertEqual(weightStyle.color, Color.weightGreen)
+        #expect(weightStyle.foregroundStyle == "Weight")
+        #expect(weightStyle.xValueLabel == "Days ago")
+        #expect(weightStyle.yValueLabel == "Real Weight")
+        #expect(weightStyle.series == "C")
+        #expect(weightStyle.color == Color.weightGreen)
         
         let expectedWeightStyle = PlotStyleType.expectedWeight
-        XCTAssertEqual(expectedWeightStyle.foregroundStyle, "Expected Weight")
-        XCTAssertEqual(expectedWeightStyle.xValueLabel, "Days ago")
-        XCTAssertEqual(expectedWeightStyle.yValueLabel, "Expected Weight")
-        XCTAssertEqual(expectedWeightStyle.series, "A")
-        XCTAssertEqual(expectedWeightStyle.color, Color.expectedWeightYellow)
+        #expect(expectedWeightStyle.foregroundStyle == "Expected Weight")
+        #expect(expectedWeightStyle.xValueLabel == "Days ago")
+        #expect(expectedWeightStyle.yValueLabel == "Expected Weight")
+        #expect(expectedWeightStyle.series == "A")
+        #expect(expectedWeightStyle.color == Color.expectedWeightYellow)
         
         let realisticWeightStyle = PlotStyleType.realisticWeight
-        XCTAssertEqual(realisticWeightStyle.foregroundStyle, "Realistic Weight")
-        XCTAssertEqual(realisticWeightStyle.xValueLabel, "Days ago")
-        XCTAssertEqual(realisticWeightStyle.yValueLabel, "Realistic Weight")
-        XCTAssertEqual(realisticWeightStyle.series, "D")
-        XCTAssertEqual(realisticWeightStyle.color, Color.realisticWeightGreen)
+        #expect(realisticWeightStyle.foregroundStyle == "Realistic Weight")
+        #expect(realisticWeightStyle.xValueLabel == "Days ago")
+        #expect(realisticWeightStyle.yValueLabel == "Realistic Weight")
+        #expect(realisticWeightStyle.series == "D")
+        #expect(realisticWeightStyle.color == Color.realisticWeightGreen)
         
         let expectedWeightTomorrowStyle = PlotStyleType.expectedWeightTomorrow
-        XCTAssertEqual(expectedWeightTomorrowStyle.foregroundStyle, "Expected Weight Tomorrow")
-        XCTAssertEqual(expectedWeightTomorrowStyle.xValueLabel, "Days ago")
-        XCTAssertEqual(expectedWeightTomorrowStyle.yValueLabel, "Expected Weight Tomorrow")
-        XCTAssertEqual(expectedWeightTomorrowStyle.series, "B")
-        XCTAssertEqual(expectedWeightTomorrowStyle.color, Color.expectedWeightTomorrowYellow)
+        #expect(expectedWeightTomorrowStyle.foregroundStyle == "Expected Weight Tomorrow")
+        #expect(expectedWeightTomorrowStyle.xValueLabel == "Days ago")
+        #expect(expectedWeightTomorrowStyle.yValueLabel == "Expected Weight Tomorrow")
+        #expect(expectedWeightTomorrowStyle.series == "B")
+        #expect(expectedWeightTomorrowStyle.color == Color.expectedWeightTomorrowYellow)
     }
     
-    func testWeightPlotViewModel() {
-        for timeFrame in TimeFrame.timeFrames {
-            let weightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
-
-            switch timeFrame.type {
-            case .allTime:
-                XCTAssertFalse(weightViewModel.shouldHavePoint)
-            case .month:
-                XCTAssertTrue(weightViewModel.shouldHavePoint)
-            case .week:
-                XCTAssertTrue(weightViewModel.shouldHavePoint)
-            }
-            XCTAssertEqual(weightViewModel.xValue, day.date)
-            XCTAssertEqual(weightViewModel.xValueLabel, "Days ago")
-            XCTAssertEqual(weightViewModel.yValue, 70)
-            XCTAssertEqual(weightViewModel.yValueLabel, "Real Weight")
-            XCTAssertEqual(weightViewModel.foregroundStyle, "Weight")
-            XCTAssertEqual(weightViewModel.series, "C")
-            XCTAssertEqual(weightViewModel.dateOverlay, day.firstLetterOfDay)
-            XCTAssertEqual(weightViewModel.pointStyle as! Color, weightViewModel.type.color)
-            XCTAssertTrue(weightViewModel.shouldDisplay)
-            XCTAssertFalse(weightViewModel.shouldHaveDayOverlay)
-            XCTAssertFalse(weightViewModel.shouldIndicateMissedDays)
+    @Test("Weight plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    func weightPlotViewModel(timeFrame: TimeFrame) {
+        let weightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
+        
+        switch timeFrame.type {
+        case .allTime:
+            #expect(!weightViewModel.shouldHavePoint)
+        case .month:
+            #expect(weightViewModel.shouldHavePoint)
+        case .week:
+            #expect(weightViewModel.shouldHavePoint)
+        }
+        #expect(weightViewModel.xValue == day.date)
+        #expect(weightViewModel.xValueLabel == "Days ago")
+        #expect(weightViewModel.yValue == 70)
+        #expect(weightViewModel.yValueLabel == "Real Weight")
+        #expect(weightViewModel.foregroundStyle == "Weight")
+        #expect(weightViewModel.series == "C")
+        #expect(weightViewModel.dateOverlay == day.firstLetterOfDay)
+        #expect(weightViewModel.pointStyle as! Color == weightViewModel.type.color)
+        #expect(weightViewModel.shouldDisplay)
+        #expect(!weightViewModel.shouldHaveDayOverlay)
+        #expect(!weightViewModel.shouldIndicateMissedDays)
+    }
+    
+    
+    @Test("Exepected weight plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    func expectedWeightPlotViewModel(timeFrame: TimeFrame) {
+        let expectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
+        switch timeFrame.type {
+        case .allTime:
+            #expect(!expectedWeightViewModel.shouldHavePoint)
+            #expect(!expectedWeightViewModel.shouldHaveDayOverlay)
+            #expect(!expectedWeightViewModel.shouldIndicateMissedDays)
+        case .month:
+            #expect(expectedWeightViewModel.shouldHavePoint)
+            #expect(!expectedWeightViewModel.shouldHaveDayOverlay)
+            #expect(expectedWeightViewModel.shouldIndicateMissedDays)
+        case .week:
+            #expect(expectedWeightViewModel.shouldHavePoint)
+            #expect(expectedWeightViewModel.shouldHaveDayOverlay)
+            #expect(expectedWeightViewModel.shouldIndicateMissedDays)
+        }
+        
+        #expect(expectedWeightViewModel.xValue == day.date)
+        #expect(expectedWeightViewModel.xValueLabel == "Days ago")
+        #expect(expectedWeightViewModel.yValue == 68)
+        #expect(expectedWeightViewModel.yValueLabel == "Expected Weight")
+        #expect(expectedWeightViewModel.foregroundStyle == "Expected Weight")
+        #expect(expectedWeightViewModel.series == "A")
+        #expect(expectedWeightViewModel.dateOverlay == day.firstLetterOfDay)
+        #expect(expectedWeightViewModel.pointStyle as! Color == expectedWeightViewModel.type.color)
+        #expect(expectedWeightViewModel.shouldDisplay)
+    }
+    
+    @Test("Expected weight tomorrow plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    func expectedWeightTomorrowPlotViewModel(timeFrame: TimeFrame) {
+        let expectedWeightTomorrowViewModel = PlotViewModel(type: .expectedWeightTomorrow, day: day, timeFrame: timeFrame)
+        #expect(expectedWeightTomorrowViewModel.xValue == day.date)
+        #expect(expectedWeightTomorrowViewModel.xValueLabel == "Days ago")
+        #expect(expectedWeightTomorrowViewModel.yValue == 68)
+        #expect(expectedWeightTomorrowViewModel.yValueLabel == "Expected Weight Tomorrow")
+        #expect(expectedWeightTomorrowViewModel.foregroundStyle == "Expected Weight Tomorrow")
+        #expect(expectedWeightTomorrowViewModel.series == "B")
+        #expect(expectedWeightTomorrowViewModel.dateOverlay == day.firstLetterOfDay)
+        #expect(expectedWeightTomorrowViewModel.pointStyle as! Color == expectedWeightTomorrowViewModel.type.color)
+        #expect(expectedWeightTomorrowViewModel.shouldDisplay)
+        #expect(!expectedWeightTomorrowViewModel.shouldHavePoint)
+        #expect(!expectedWeightTomorrowViewModel.shouldHaveDayOverlay)
+        #expect(!expectedWeightTomorrowViewModel.shouldIndicateMissedDays)
+    }
+    
+    @Test("Realistic weight plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    func realisticWeightPlotViewModel(timeFrame: TimeFrame) {
+        let realisticWeightViewModel = PlotViewModel(type: .realisticWeight, day: day, timeFrame: timeFrame)
+        switch timeFrame.type {
+        case .allTime:
+            #expect(!realisticWeightViewModel.shouldHavePoint)
+        case .month:
+            #expect(realisticWeightViewModel.shouldHavePoint)
+        case .week:
+            #expect(realisticWeightViewModel.shouldHavePoint)
+        }
+        #expect(realisticWeightViewModel.xValue == day.date)
+        #expect(realisticWeightViewModel.xValueLabel == "Days ago")
+        #expect(realisticWeightViewModel.yValue == 69)
+        #expect(realisticWeightViewModel.yValueLabel == "Realistic Weight")
+        #expect(realisticWeightViewModel.foregroundStyle == "Realistic Weight")
+        #expect(realisticWeightViewModel.series == "D")
+        #expect(realisticWeightViewModel.dateOverlay == day.firstLetterOfDay)
+        #expect(realisticWeightViewModel.pointStyle as! Color == realisticWeightViewModel.type.color)
+        #expect(realisticWeightViewModel.shouldDisplay)
+        #expect(!realisticWeightViewModel.shouldHaveDayOverlay)
+        #expect(!realisticWeightViewModel.shouldIndicateMissedDays)
+    }
+    
+    @Test("Points become red when they should", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    func pointsBecomeRedWhenTheyShould(timeFrame: TimeFrame) {
+        let expectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
+        let expectedWeightTomorrowViewModel = PlotViewModel(type: .expectedWeightTomorrow, day: day, timeFrame: timeFrame)
+        let weightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
+        let realisticWeightViewModel = PlotViewModel(type: .realisticWeight, day: day, timeFrame: timeFrame)
+        
+        day.wasModifiedBecauseTheUserDidntEnterData = true
+        
+        switch timeFrame.type {
+        case .allTime:
+            #expect(expectedWeightViewModel.pointStyle as! Color == expectedWeightViewModel.type.color)
+            #expect(!expectedWeightViewModel.shouldIndicateMissedDays)
+        case .month, .week:
+            #expect(expectedWeightViewModel.pointStyle as! Color == Color.red)
+            #expect(expectedWeightViewModel.shouldIndicateMissedDays)
+        }
+        
+        #expect(!expectedWeightTomorrowViewModel.shouldIndicateMissedDays)
+        #expect(!weightViewModel.shouldIndicateMissedDays)
+        #expect(!realisticWeightViewModel.shouldIndicateMissedDays)
+        
+        #expect(expectedWeightTomorrowViewModel.pointStyle as! Color == expectedWeightTomorrowViewModel.type.color)
+        #expect(realisticWeightViewModel.pointStyle as! Color == realisticWeightViewModel.type.color)
+        #expect(weightViewModel.pointStyle as! Color == weightViewModel.type.color)
+    }
+    
+    @Test("Points dont show after month", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    func pointsDontShowAfterMonth(timeFrame: TimeFrame) {
+        let longAgoWeightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
+        switch timeFrame.type {
+        case .allTime:
+            #expect(!longAgoWeightViewModel.shouldHavePoint)
+        case .month:
+            #expect(longAgoWeightViewModel.shouldHavePoint)
+        case .week:
+            #expect(longAgoWeightViewModel.shouldHavePoint)
         }
     }
     
-    func testExpectedWeightPlotViewModel() {
-        for timeFrame in TimeFrame.timeFrames {
-            let expectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
-            switch timeFrame.type {
-            case .allTime:
-                XCTAssertFalse(expectedWeightViewModel.shouldHavePoint)
-                XCTAssertFalse(expectedWeightViewModel.shouldHaveDayOverlay)
-                XCTAssertFalse(expectedWeightViewModel.shouldIndicateMissedDays)
-            case .month:
-                XCTAssertTrue(expectedWeightViewModel.shouldHavePoint)
-                XCTAssertFalse(expectedWeightViewModel.shouldHaveDayOverlay)
-                XCTAssertTrue(expectedWeightViewModel.shouldIndicateMissedDays)
-            case .week:
-                XCTAssertTrue(expectedWeightViewModel.shouldHavePoint)
-                XCTAssertTrue(expectedWeightViewModel.shouldHaveDayOverlay)
-                XCTAssertTrue(expectedWeightViewModel.shouldIndicateMissedDays)
-            }
-            
-            XCTAssertEqual(expectedWeightViewModel.xValue, day.date)
-            XCTAssertEqual(expectedWeightViewModel.xValueLabel, "Days ago")
-            XCTAssertEqual(expectedWeightViewModel.yValue, 68)
-            XCTAssertEqual(expectedWeightViewModel.yValueLabel, "Expected Weight")
-            XCTAssertEqual(expectedWeightViewModel.foregroundStyle, "Expected Weight")
-            XCTAssertEqual(expectedWeightViewModel.series, "A")
-            XCTAssertEqual(expectedWeightViewModel.dateOverlay, day.firstLetterOfDay)
-            XCTAssertEqual(expectedWeightViewModel.pointStyle as! Color, expectedWeightViewModel.type.color)
-            XCTAssertTrue(expectedWeightViewModel.shouldDisplay)
+    @Test("Dont indicate missed days for all time", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    func dontIndicateMissedDaysForAllTime(timeFrame: TimeFrame) {
+        let longAgoExpectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: allTimeDay, timeFrame: timeFrame)
+        switch timeFrame.type {
+        case .allTime:
+            #expect(!longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
+        case .month:
+            #expect(longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
+        case .week:
+            #expect(longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
         }
     }
     
-    func testExpectedWeightTomorrowPlotViewModel() {
-        for timeFrame in TimeFrame.timeFrames {
-            let expectedWeightTomorrowViewModel = PlotViewModel(type: .expectedWeightTomorrow, day: day, timeFrame: timeFrame)
-            XCTAssertEqual(expectedWeightTomorrowViewModel.xValue, day.date)
-            XCTAssertEqual(expectedWeightTomorrowViewModel.xValueLabel, "Days ago")
-            XCTAssertEqual(expectedWeightTomorrowViewModel.yValue, 68)
-            XCTAssertEqual(expectedWeightTomorrowViewModel.yValueLabel, "Expected Weight Tomorrow")
-            XCTAssertEqual(expectedWeightTomorrowViewModel.foregroundStyle, "Expected Weight Tomorrow")
-            XCTAssertEqual(expectedWeightTomorrowViewModel.series, "B")
-            XCTAssertEqual(expectedWeightTomorrowViewModel.dateOverlay, day.firstLetterOfDay)
-            XCTAssertEqual(expectedWeightTomorrowViewModel.pointStyle as! Color, expectedWeightTomorrowViewModel.type.color)
-            XCTAssertTrue(expectedWeightTomorrowViewModel.shouldDisplay)
-            XCTAssertFalse(expectedWeightTomorrowViewModel.shouldHavePoint)
-            XCTAssertFalse(expectedWeightTomorrowViewModel.shouldHaveDayOverlay)
-            XCTAssertFalse(expectedWeightTomorrowViewModel.shouldIndicateMissedDays)
-        }
-    }
-    
-    func testRealisticWeightPlotViewModel() {
-        for timeFrame in TimeFrame.timeFrames {
-            let realisticWeightViewModel = PlotViewModel(type: .realisticWeight, day: day, timeFrame: timeFrame)
-            switch timeFrame.type {
-            case .allTime:
-                XCTAssertFalse(realisticWeightViewModel.shouldHavePoint)
-            case .month:
-                XCTAssertTrue(realisticWeightViewModel.shouldHavePoint)
-            case .week:
-                XCTAssertTrue(realisticWeightViewModel.shouldHavePoint)
-            }
-            XCTAssertEqual(realisticWeightViewModel.xValue, day.date)
-            XCTAssertEqual(realisticWeightViewModel.xValueLabel, "Days ago")
-            XCTAssertEqual(realisticWeightViewModel.yValue, 69)
-            XCTAssertEqual(realisticWeightViewModel.yValueLabel, "Realistic Weight")
-            XCTAssertEqual(realisticWeightViewModel.foregroundStyle, "Realistic Weight")
-            XCTAssertEqual(realisticWeightViewModel.series, "D")
-            XCTAssertEqual(realisticWeightViewModel.dateOverlay, day.firstLetterOfDay)
-            XCTAssertEqual(realisticWeightViewModel.pointStyle as! Color, realisticWeightViewModel.type.color)
-            XCTAssertTrue(realisticWeightViewModel.shouldDisplay)
-            XCTAssertFalse(realisticWeightViewModel.shouldHaveDayOverlay)
-            XCTAssertFalse(realisticWeightViewModel.shouldIndicateMissedDays)
-        }
-    }
-    
-    func testPointsBecomeRedWhenTheyShould() {
-        for timeFrame in TimeFrame.timeFrames {
-            let expectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
-            let expectedWeightTomorrowViewModel = PlotViewModel(type: .expectedWeightTomorrow, day: day, timeFrame: timeFrame)
-            let weightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
-            let realisticWeightViewModel = PlotViewModel(type: .realisticWeight, day: day, timeFrame: timeFrame)
-            
-            day.wasModifiedBecauseTheUserDidntEnterData = true
-            
-            switch timeFrame.type {
-            case .allTime:
-                XCTAssertEqual(expectedWeightViewModel.pointStyle as! Color, expectedWeightViewModel.type.color)
-                XCTAssertFalse(expectedWeightViewModel.shouldIndicateMissedDays)
-            case .month, .week:
-                XCTAssertEqual(expectedWeightViewModel.pointStyle as! Color, Color.red)
-                XCTAssert(expectedWeightViewModel.shouldIndicateMissedDays)
-            }
-            
-            XCTAssertFalse(expectedWeightTomorrowViewModel.shouldIndicateMissedDays)
-            XCTAssertFalse(weightViewModel.shouldIndicateMissedDays)
-            XCTAssertFalse(realisticWeightViewModel.shouldIndicateMissedDays)
-            
-            XCTAssertEqual(expectedWeightTomorrowViewModel.pointStyle as! Color, expectedWeightTomorrowViewModel.type.color)
-            XCTAssertEqual(realisticWeightViewModel.pointStyle as! Color, realisticWeightViewModel.type.color)
-            XCTAssertEqual(weightViewModel.pointStyle as! Color, weightViewModel.type.color)
-        }
-    }
-    
-    func testPointsDontShowAfterMonth() {
-        for timeFrame in TimeFrame.timeFrames {
-            let longAgoWeightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
-            switch timeFrame.type {
-            case .allTime:
-                XCTAssertFalse(longAgoWeightViewModel.shouldHavePoint)
-            case .month:
-                XCTAssert(longAgoWeightViewModel.shouldHavePoint)
-            case .week:
-                XCTAssert(longAgoWeightViewModel.shouldHavePoint)
-            }
-        }
-    }
-    
-    func testDontIndicateMissedDaysForAllTime() {
-        for timeFrame in TimeFrame.timeFrames {
-            let longAgoExpectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: allTimeDay, timeFrame: timeFrame)
-            switch timeFrame.type {
-            case .allTime:
-                XCTAssertFalse(longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
-            case .month:
-                XCTAssert(longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
-            case .week:
-                XCTAssert(longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
-            }
-        }
-    }
-    
-    func testDayOfWeekLabelsDontShowAfterWeek() {
+    @Test func dayOfWeekLabelsDontShowAfterWeek() {
         let day = Day(date: Date(), daysAgo: 0, activeCalories: 3500, expectedWeight: 68, realisticWeight: 69, weight: 70)
         // Ensure day of week labels don't show up after a week
         var timeFrame = TimeFrame(type: .week)
         let dayOfWeekViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
-        XCTAssertTrue(dayOfWeekViewModel.shouldHaveDayOverlay)
+        #expect(dayOfWeekViewModel.shouldHaveDayOverlay)
         
         timeFrame = TimeFrame(type: .month)
         let dayOfMonthViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
-        XCTAssertFalse(dayOfMonthViewModel.shouldHaveDayOverlay)
+        #expect(!dayOfMonthViewModel.shouldHaveDayOverlay)
     }
     
-    func testPointsDontShowOnEstimatedWeights() {
+    @Test func pointsDontShowOnEstimatedWeights() {
         let day1 = Day(daysAgo: 0, weight: 70)
         let day2 = Day(daysAgo: 1)
         let day3 = Day(daysAgo: 2, weight: 72)
         
         var days = Days()
-        XCTAssert(days.append([day1, day2, day3]))
+        #expect(days.append([day1, day2, day3]) == true)
         days.setWeightOnEveryDay()
-        XCTAssertEqual(day2.weight, 71)
-        XCTAssert(day2.weightWasEstimated)
+        #expect(day2.weight == 71)
+        #expect(day2.weightWasEstimated)
         for timeFrame in TimeFrame.timeFrames {
             let vm = PlotViewModel(type: .weight, day: day2, timeFrame: timeFrame)
-            XCTAssertFalse(vm.shouldHavePoint)
+            #expect(!vm.shouldHavePoint)
         }
     }
     
-    func testLineChartViewModel() {
+    @Test func lineChartViewModel() {
         let day1 = Day(date: Date(), daysAgo: 0, expectedWeight: 68, realisticWeight: 69, weight: 70)
         let day2 = Day(date: Date().addingTimeInterval(-86400), daysAgo: 1, expectedWeight: 69, realisticWeight: 70, weight: 71)
         var days = Days()
@@ -240,22 +238,22 @@ final class WeightLineChartTests: XCTestCase {
         let timeFrame = TimeFrame(type: .week)
         
         let viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
-        XCTAssertEqual(viewModel.days.count, 3)
-        XCTAssertEqual(viewModel.maxValue, 71)
-        XCTAssertEqual(viewModel.minValue, 68)
+        #expect(viewModel.days.count == 3)
+        #expect(viewModel.maxValue == 71)
+        #expect(viewModel.minValue == 68)
         
         viewModel.populateDays(for: days)
-        XCTAssertEqual(viewModel.days.count, 3)
+        #expect(viewModel.days.count == 3)
         
         let constructedDays = viewModel.constructDays(using: days)
-        XCTAssertEqual(constructedDays.count, 3)
+        #expect(constructedDays.count == 3)
         
         viewModel.updateMinMaxValues(days: constructedDays)
-        XCTAssertEqual(viewModel.maxValue, 71)
-        XCTAssertEqual(viewModel.minValue, 68)
+        #expect(viewModel.maxValue == 71)
+        #expect(viewModel.minValue == 68)
     }
     
-    func testLineChartViewModel_constructDays() {
+    @Test func lineChartViewModel_constructDays() {
         let day1 = Day(daysAgo: 0, expectedWeight: 68, realisticWeight: 69, weight: 70)
         let day2 = Day(daysAgo: 1, expectedWeight: 69, realisticWeight: 70, weight: 71)
         var days = Days()
@@ -265,19 +263,19 @@ final class WeightLineChartTests: XCTestCase {
         let viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
         var constructedDays = viewModel.constructDays(using: days)
         // Ensure tomorrow is added
-        XCTAssertEqual(constructedDays.count, 3)
-        XCTAssertEqual(constructedDays.sorted(.mostRecentToLongestAgo).first?.daysAgo, -1)
+        #expect(constructedDays.count == 3)
+        #expect(constructedDays.sorted(.mostRecentToLongestAgo).first?.daysAgo == -1)
         // Ensure tomorrow's weight
-        XCTAssertEqual(constructedDays.first?.expectedWeight, constructedDays[1].expectedWeightTomorrow)
+        #expect(constructedDays.first?.expectedWeight == constructedDays[1].expectedWeightTomorrow)
         // Ensure that filtering by timeframe takes place
         let dayOutsideOfTimeframe = Day(daysAgo: 8, expectedWeight: 68, realisticWeight: 69, weight: 70)
         let dayInsideOfTimeframe = Day(daysAgo: 7, expectedWeight: 68, realisticWeight: 69, weight: 70)
-        XCTAssertTrue(days.append(dayOutsideOfTimeframe))
-        XCTAssertTrue(days.append(dayInsideOfTimeframe))
+        #expect(days.append(dayOutsideOfTimeframe) == true)
+        #expect(days.append(dayInsideOfTimeframe) == true)
         constructedDays = viewModel.constructDays(using: days)
-        XCTAssertEqual(constructedDays.count, 4)
+        #expect(constructedDays.count == 4)
         // Ensure proper sorting
-        XCTAssertEqual(constructedDays.first?.daysAgo, -1)
-        XCTAssertEqual(constructedDays.last?.daysAgo, 7)
+        #expect(constructedDays.first?.daysAgo == -1)
+        #expect(constructedDays.last?.daysAgo == 7)
     }
 }

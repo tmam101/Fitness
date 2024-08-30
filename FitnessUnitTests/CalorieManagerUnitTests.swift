@@ -5,14 +5,17 @@
 //  Created by Thomas on 6/4/24.
 //
 
-import XCTest
+import Testing
 import HealthKit
 @testable import Fitness
+import Numerics
 
-class CalorieManagerUnitTests: XCTestCase {
+@Suite 
+
+struct CalorieManagerUnitTests {
     var calorieManager: CalorieManager!
     
-    override func setUp() {
+    init() {
         calorieManager = CalorieManager()
         calorieManager.environment = .debug(nil)
     }
@@ -24,29 +27,28 @@ class CalorieManagerUnitTests: XCTestCase {
         await calorieManager.setup(oldestWeight: Weight(weight: 230, date: twentyDaysAgo), newestWeight: Weight(weight: 200, date: tenDaysAgo), daysBetweenStartAndNow: 20, environment: .debug(nil))
     }
     
-    func testTypes() {
-        XCTAssertNotNil(calorieManager.dietaryProtein)
+    @Test func types() {
+        #expect(calorieManager.dietaryProtein != nil)
     }
     
-    func testspecificDayPredicate() {
+    @Test func specificDayPredicate() {
         guard let quantityType = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
-            XCTFail()
+            Issue.record()
             return
         }
         let pred = calorieManager.specificDayPredicate(daysAgo: 2, quantityType: quantityType)
         let startDate = Date.subtract(days: 2, from: Date())
         let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
         let testPred = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
-        XCTAssertEqual(pred, testPred)
+        #expect(pred == testPred)
     }
     
-    func testPastDaysPredicate() {
-        for days in 1...100 {
-            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
-            XCTAssertEqual(predicate, calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
-        }
+    @Test("Past Days Predicate", arguments: 1...100)
+    func pastDaysPredicate(days: Int) {
+        let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
+        let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
+        #expect(predicate == calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
         // TODO test day 0. Why are we saying Date() unstead of startofday?
         // TODO you can't because it relies on Date(), which changes between lines of code
 //        let days = 0
@@ -56,61 +58,61 @@ class CalorieManagerUnitTests: XCTestCase {
 //        XCTAssertEqual(predicate, calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
     }
     
-    func testHealthKitType() {
+    @Test func healthKitType() {
         for v in HealthKitType.allCases {
-            XCTAssertNotNil(v.value)
+            #expect(v.value != nil)
         }
-        XCTAssertEqual(HealthKitType.allCases.count, 4)
-        XCTAssertEqual(HealthKitType.dietaryProtein.value, HKQuantityType(.dietaryProtein))
-        XCTAssertEqual(HealthKitType.dietaryEnergyConsumed.value, HKQuantityType(.dietaryEnergyConsumed))
-        XCTAssertEqual(HealthKitType.activeEnergyBurned.value, HKQuantityType(.activeEnergyBurned))
-        XCTAssertEqual(HealthKitType.basalEnergyBurned.value, HKQuantityType(.basalEnergyBurned))
+        #expect(HealthKitType.allCases.count == 4)
+        #expect(HealthKitType.dietaryProtein.value == HKQuantityType(.dietaryProtein))
+        #expect(HealthKitType.dietaryEnergyConsumed.value == HKQuantityType(.dietaryEnergyConsumed))
+        #expect(HealthKitType.activeEnergyBurned.value == HKQuantityType(.activeEnergyBurned))
+        #expect(HealthKitType.basalEnergyBurned.value == HKQuantityType(.basalEnergyBurned))
         
-        XCTAssertEqual(HealthKitType.activeEnergyBurned.unit, .kilocalorie())
-        XCTAssertEqual(HealthKitType.dietaryProtein.unit, .gram())
-        XCTAssertEqual(HealthKitType.dietaryEnergyConsumed.unit, .kilocalorie())
-        XCTAssertEqual(HealthKitType.basalEnergyBurned.unit, .kilocalorie())
+        #expect(HealthKitType.activeEnergyBurned.unit == .kilocalorie())
+        #expect(HealthKitType.dietaryProtein.unit == .gram())
+        #expect(HealthKitType.dietaryEnergyConsumed.unit == .kilocalorie())
+        #expect(HealthKitType.basalEnergyBurned.unit == .kilocalorie())
         }
     
-    func testConvertSumToDecimal() {
+    @Test func convertSumToDecimal() {
         var quantity: HKQuantity? = .init(unit: .gram(), doubleValue: 100)
         
         for h in HealthKitType.allCases {
             switch h {
             case .dietaryProtein:
-                XCTAssert(quantity!.is(compatibleWith: h.unit))
+                #expect(quantity!.is(compatibleWith: h.unit))
             case .activeEnergyBurned, .basalEnergyBurned, .dietaryEnergyConsumed:
-                XCTAssertFalse(quantity!.is(compatibleWith: h.unit))
+                #expect(!quantity!.is(compatibleWith: h.unit))
             }
         }
-        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .dietaryProtein), 100)
-        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .activeEnergyBurned), 0)
+        #expect(calorieManager.convertSumToDecimal(sum: quantity, type: .dietaryProtein) == 100)
+        #expect(calorieManager.convertSumToDecimal(sum: quantity, type: .activeEnergyBurned) == 0)
         quantity = .init(unit: .kilocalorie(), doubleValue: 100)
         for h in HealthKitType.allCases {
             switch h {
             case .dietaryProtein:
-                XCTAssertFalse(quantity!.is(compatibleWith: h.unit))
+                #expect(!quantity!.is(compatibleWith: h.unit))
             case .activeEnergyBurned, .basalEnergyBurned, .dietaryEnergyConsumed:
-                XCTAssert(quantity!.is(compatibleWith: h.unit))
+                #expect(quantity!.is(compatibleWith: h.unit))
             }
         }
-        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .dietaryProtein), 0)
-        XCTAssertEqual(calorieManager.convertSumToDecimal(sum: quantity, type: .activeEnergyBurned), 100)
+        #expect(calorieManager.convertSumToDecimal(sum: quantity, type: .dietaryProtein) == 0)
+        #expect(calorieManager.convertSumToDecimal(sum: quantity, type: .activeEnergyBurned) == 100)
     }
     
-    func testSumValueForDay() async {
+    @Test func sumValueForDay() async {
         var result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryEnergyConsumed)
-        XCTAssertEqual(result, 1000)
+        #expect(result == 1000)
         result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryProtein)
-        XCTAssertEqual(result, 1000)
+        #expect(result == 1000)
     }
     
-    func testHealthSample() {
+    @Test func healthSample() {
         let calories: Decimal = 300
         let twoDaysAgo = Day(daysAgo: 2).date
         let threeDaysAgo = Day(daysAgo: 3).date
         guard let caloriesEatenType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
-            XCTFail()
+            Issue.record()
             return
         }
         let caloriesEatenQuantity = HKQuantity(unit: HealthKitType.dietaryEnergyConsumed.unit,
@@ -121,49 +123,52 @@ class CalorieManagerUnitTests: XCTestCase {
                                                   start: threeDaysAgo,
                                                   end: twoDaysAgo)
         let sample = calorieManager.healthSample(amount: 300, type: .dietaryEnergyConsumed, start: threeDaysAgo, end: twoDaysAgo)
-        XCTAssertEqual(calorieCountSample.quantity, sample?.quantity)
-        XCTAssertEqual(calorieCountSample.quantityType, sample?.quantityType)
-        XCTAssertEqual(calorieCountSample.endDate, sample?.endDate)
-        XCTAssertEqual(calorieCountSample.startDate, sample?.startDate)
-        XCTAssertEqual(calorieCountSample.count, sample?.count)
+        #expect(calorieCountSample.quantity == sample?.quantity)
+        #expect(calorieCountSample.quantityType == sample?.quantityType)
+        #expect(calorieCountSample.endDate == sample?.endDate)
+        #expect(calorieCountSample.startDate == sample?.startDate)
+        #expect(calorieCountSample.count == sample?.count)
     }
     
-    func testGetDays() async {
+    @Test func getDays() async {
         await setup()
         let days = await calorieManager.getDays(forPastDays: 20)
         guard let oldestDay = days.oldestDay, let newestDay = days.newestDay else {
-            XCTFail()
+            Issue.record()
             return
         }
         // Should have the past x days plus today
-        XCTAssertEqual(days.count, 21)
+        #expect(days.count == 21)
         // Test oldest day properties are set
-        XCTAssertEqual(oldestDay.activeCalories, 1000)
-        XCTAssertEqual(oldestDay.restingCalories, 2150)
-        XCTAssertEqual(oldestDay.consumedCalories, 1000)
+        #expect(oldestDay.activeCalories == 1000)
+        #expect(oldestDay.restingCalories == 2150)
+        #expect(oldestDay.consumedCalories == 1000)
 //        XCTAssertEqual(oldestDay.expectedWeight, 230)
         // TODO We are now moving expected weight calculation into the Days object. TBD if i want this long term
-        XCTAssertEqual(oldestDay.runningTotalDeficit, 2150)
-        XCTAssertEqual(oldestDay.date, Date().subtracting(days: 20))
-        XCTAssertEqual(oldestDay.protein, 1000)
-        XCTAssertEqual(oldestDay.deficit, oldestDay.runningTotalDeficit)
+        #expect(oldestDay.runningTotalDeficit == 2150)
+        #expect(oldestDay.date == Date().subtracting(days: 20))
+        #expect(oldestDay.protein == 1000)
+        #expect(oldestDay.deficit == oldestDay.runningTotalDeficit)
         
         // Test newest day properties are set
-        XCTAssertEqual(newestDay.activeCalories, 1000)
-        XCTAssertEqual(newestDay.restingCalories, 2150)
-        XCTAssertEqual(newestDay.consumedCalories, 1000)
+        #expect(newestDay.activeCalories == 1000)
+        #expect(newestDay.restingCalories == 2150)
+        #expect(newestDay.consumedCalories == 1000)
         // Test deficit, net energy, and expected weight change
         let expectedTotalDeficit = days.sum(property: .deficit)
-        XCTAssertEqual(expectedTotalDeficit, Decimal(days.count) * Decimal(2150))
-        XCTAssertEqual(expectedTotalDeficit, 45150)
-        XCTAssertEqual(expectedTotalDeficit, days.newestDay?.runningTotalDeficit)
+        #expect(expectedTotalDeficit == Decimal(days.count) * Decimal(2150))
+        #expect(expectedTotalDeficit == 45150)
+        #expect(expectedTotalDeficit == days.newestDay?.runningTotalDeficit)
         let expectedTotalNetEnergy = days.dropping(0).sum(property: .netEnergy)
-        XCTAssertEqual(expectedTotalNetEnergy, Decimal(days.count - 1) * Decimal(-2150))
-        XCTAssertEqual(expectedTotalNetEnergy, -43000)
+        #expect(expectedTotalNetEnergy == Decimal(days.count - 1) * Decimal(-2150))
+        #expect(expectedTotalNetEnergy == -43000)
         let expectedWeightChange = expectedTotalNetEnergy / Constants.numberOfCaloriesInPound
-        XCTAssertEqual(expectedWeightChange, -12.285714, accuracy: 0.001)
+        #expect(expectedWeightChange.isApproximatelyEqual(to: -12.285714, absoluteTolerance: 0.001, norm: { (x) -> Double in
+            return Double(x)
+        }))
+        let d: Decimal = 0.00500
+        #expect(d.isApproximately(0.00510, accuracy: 0.001))
 //        XCTAssertEqual(newestDay.expectedWeight, oldestDay.expectedWeight + expectedWeightChange)
-        XCTAssertEqual(newestDay.date, Date().subtracting(days: 0))
+        #expect(newestDay.date == Date().subtracting(days: 0))
     }
 }
-
