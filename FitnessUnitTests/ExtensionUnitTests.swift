@@ -5,37 +5,39 @@
 //  Created by Thomas on 10/16/23.
 //
 
-import XCTest
+import Testing
 @testable import Fitness
 import SwiftUI
 
-class ArrayExtensionTests: XCTestCase {
+@Suite 
 
-    func testSum() {
+struct ArrayExtensionTests {
+
+    @Test func sum() {
         // Test with integers
-        XCTAssertEqual([1, 2, 3, 4, 5].sum, 15)
+        #expect([1, 2, 3, 4, 5].sum == 15)
         
         // Test with floating-point numbers
-        XCTAssertEqual([1.0, 2.0, 3.0, 4.0, 5.0].sum, 15.0)
+        #expect([1.0, 2.0, 3.0, 4.0, 5.0].sum as Double == 15.0)
         
         // Test with empty array (edge case)
-        XCTAssertEqual([Int]().sum, 0)
+        #expect([Int]().sum == 0)
     }
 
-    func testAverage() {
+    @Test func average() {
         // Test with integers
-        XCTAssertEqual([1, 2, 3, 4, 5].average, 3.0)
+        #expect([1, 2, 3, 4, 5].average == 3.0)
         
         // Test with floating-point numbers
-        XCTAssertEqual([1.0, 2.0, 3.0, 4.0, 5.0].average, 3.0)
+        #expect([1.0, 2.0, 3.0, 4.0, 5.0].average == 3.0)
         
         // Test with empty array (edge case)
-        XCTAssertNil([Double]().average)
+        #expect([Double]().average == nil)
     }
     
-    func testDecodingArrayJSON() {
+    @Test func decodingArrayJSON() {
         if let array: [Double] = .decode(path: .activeCalories) {
-            XCTAssertNotNil(array)
+            #expect(array != nil)
             
             let activeCalories: [Double] = [
                 530.484, 426.822, 401.081, 563.949, 329.136, 304.808, 1045.074, 447.229, 1140.485, 287.526,
@@ -47,16 +49,15 @@ class ArrayExtensionTests: XCTestCase {
                 1047.608, 927.059, 1001.858, 364.928, 694.303, 241.747, 852.663, 564.521, 585.509, 970.332
             ]
             
-            XCTAssertEqual(array, activeCalories)
+            #expect(array == activeCalories)
         } else {
-            XCTFail()
+            Issue.record()
         }
     }
     
-    func testEncodingArrayJSON() {
+    @Test func encodingArrayJSON() {
         let array: [Double] = [1.0, 2.0, 3.0]
-        XCTAssertEqual(array.encodeAsString(),
-"""
+        #expect(array.encodeAsString() == """
 [
   1,
   2,
@@ -66,7 +67,7 @@ class ArrayExtensionTests: XCTestCase {
         )
     }
     
-    func testReversingArray() {
+    @Test func reversingArray() {
         let weightGoingSteadilyDown: [Double] = [
             200.00, 199.98, 200.00, 199.73, 199.64, 199.92, 199.52, 199.27, 199.20, 199.09, 198.63, 198.49, 198.76, 198.94, 199.10,
             199.09, 199.17, 198.95, 198.47, 198.19, 198.34, 198.43, 198.44, 198.73, 198.91, 198.61, 198.90, 198.55, 198.72, 198.73,
@@ -77,101 +78,98 @@ class ArrayExtensionTests: XCTestCase {
         print(weightGoingSteadilyDown)
     }
     
-    func testSorting() {
-        struct TestEvent: HasDate {
-            var date: Date
-        }
+    struct TestEvent: HasDate {
+        var date: Date
+    }
+    
+    @Test func sortedMostRecentToLongestAgo() {
+        // Arrange
+        let now = Date()
+        let oneHourAgo = Date(timeIntervalSinceNow: -3600)
+        let twoHoursAgo = Date(timeIntervalSinceNow: -7200)
         
-        func testSortedMostRecentToLongestAgo() {
-            // Arrange
-            let now = Date()
-            let oneHourAgo = Date(timeIntervalSinceNow: -3600)
-            let twoHoursAgo = Date(timeIntervalSinceNow: -7200)
-            
-            let events = [
-                TestEvent(date: twoHoursAgo),
-                TestEvent(date: now),
-                TestEvent(date: oneHourAgo)
-            ]
-            
-            // Act
-            var sortedEvents = events.sorted(.mostRecentToLongestAgo)
-            
-            // Assert
-            XCTAssertEqual(sortedEvents[0].date, now, "The most recent date should be first")
-            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second most recent date should be second")
-            XCTAssertEqual(sortedEvents[2].date, twoHoursAgo, "The oldest date should be last")
-            
-            sortedEvents = events.sorted(.longestAgoToMostRecent)
-            
-            // Assert
-            XCTAssertEqual(sortedEvents[0].date, twoHoursAgo, "The oldest date should be first")
-            XCTAssertEqual(sortedEvents[1].date, oneHourAgo, "The second oldest date should be second")
-            XCTAssertEqual(sortedEvents[2].date, now, "The newest date should be last")
-            
-        }
+        let events = [
+            TestEvent(date: twoHoursAgo),
+            TestEvent(date: now),
+            TestEvent(date: oneHourAgo)
+        ]
         
-        func testSortedMostRecentToLongestAgoWithSameDates() {
-            // Arrange
-            let date = Date()
-            
-            let events = [
-                TestEvent(date: date),
-                TestEvent(date: date),
-                TestEvent(date: date)
-            ]
-            
-            // Act
-            let sortedEvents = events.sorted(.mostRecentToLongestAgo)
-            
-            // Assert
-            XCTAssertEqual(sortedEvents.count, 3, "All events should be present")
-            XCTAssertTrue(sortedEvents.allSatisfy { $0.date == date }, "All dates should be the same")
-        }
+        // Act
+        var sortedEvents = events.sorted(.mostRecentToLongestAgo)
         
-        func testSortedMostRecentToLongestAgoWithEmptyArray() {
-            // Arrange
-            let events: [TestEvent] = []
-            
-            // Act
-            let sortedEvents = events.sorted(.mostRecentToLongestAgo)
-            
-            // Assert
-            XCTAssertTrue(sortedEvents.isEmpty, "The sorted array should be empty")
-        }
+        // Assert
+        #expect(sortedEvents[0].date == now, "The most recent date should be first")
+        #expect(sortedEvents[1].date == oneHourAgo, "The second most recent date should be second")
+        #expect(sortedEvents[2].date == twoHoursAgo, "The oldest date should be last")
         
-        func testSortingDates() {
-            let oneDayAgo = Day(daysAgo: 1)
-            let twoDayAgo = Day(daysAgo: 2)
-            let threeDayAgo = Day(daysAgo: 3)
-            XCTAssertEqual(oneDayAgo.date.daysAgo(), 1)
-            XCTAssertEqual(twoDayAgo.date.daysAgo(), 2)
-            XCTAssertEqual(threeDayAgo.date.daysAgo(), 3)
-            let dates = [oneDayAgo, twoDayAgo, threeDayAgo]
-            XCTAssertEqual(dates.first, oneDayAgo)
-            var sorted = dates.sorted(.longestAgoToMostRecent)
-            XCTAssertEqual(sorted.first, threeDayAgo)
-            XCTAssertEqual(sorted.last, oneDayAgo)
-            sorted = dates.sorted(.mostRecentToLongestAgo)
-            XCTAssertEqual(sorted.first, oneDayAgo)
-            XCTAssertEqual(sorted.last, threeDayAgo)
-        }
-        testSortedMostRecentToLongestAgo()
-        testSortedMostRecentToLongestAgoWithSameDates()
-        testSortedMostRecentToLongestAgoWithEmptyArray()
-        testSortingDates()
+        sortedEvents = events.sorted(.longestAgoToMostRecent)
+        
+        // Assert
+        #expect(sortedEvents[0].date == twoHoursAgo, "The oldest date should be first")
+        #expect(sortedEvents[1].date == oneHourAgo, "The second oldest date should be second")
+        #expect(sortedEvents[2].date == now, "The newest date should be last")
+        
+    }
+    
+    @Test func sortedMostRecentToLongestAgoWithSameDates() {
+        // Arrange
+        let date = Date()
+        
+        let events = [
+            TestEvent(date: date),
+            TestEvent(date: date),
+            TestEvent(date: date)
+        ]
+        
+        // Act
+        let sortedEvents = events.sorted(.mostRecentToLongestAgo)
+        
+        // Assert
+        #expect(sortedEvents.count == 3, "All events should be present")
+        #expect(sortedEvents.allSatisfy { $0.date == date }, "All dates should be the same")
+    }
+    
+    @Test func sortedMostRecentToLongestAgoWithEmptyArray() {
+        // Arrange
+        let events: [TestEvent] = []
+        
+        // Act
+        let sortedEvents = events.sorted(.mostRecentToLongestAgo)
+        
+        // Assert
+        #expect(sortedEvents.isEmpty, "The sorted array should be empty")
+    }
+    
+    @Test func sortingDates() {
+        let oneDayAgo = Day(daysAgo: 1)
+        let twoDayAgo = Day(daysAgo: 2)
+        let threeDayAgo = Day(daysAgo: 3)
+        #expect(oneDayAgo.date.daysAgo() == 1)
+        #expect(twoDayAgo.date.daysAgo() == 2)
+        #expect(threeDayAgo.date.daysAgo() == 3)
+        let dates = [oneDayAgo, twoDayAgo, threeDayAgo]
+        #expect(dates.first == oneDayAgo)
+        var sorted = dates.sorted(.longestAgoToMostRecent)
+        #expect(sorted.first == threeDayAgo)
+        #expect(sorted.last == oneDayAgo)
+        sorted = dates.sorted(.mostRecentToLongestAgo)
+        #expect(sorted.first == oneDayAgo)
+        #expect(sorted.last == threeDayAgo)
     }
 }
 
 
-class ColorTests: XCTestCase {
+@Suite 
+
+
+struct ColorTests {
     
-    func testCustomColors() {
+    @Test func customColors() {
         // Verify that custom colors are correctly initialized
-        XCTAssertNotNil(Color.myGray)
-        XCTAssertNotNil(Color.expectedWeightYellow)
-        XCTAssertNotNil(Color.weightGreen)
-        XCTAssertNotNil(Color.realisticWeightGreen)
+        #expect(Color.myGray != nil)
+        #expect(Color.expectedWeightYellow != nil)
+        #expect(Color.weightGreen != nil)
+        #expect(Color.realisticWeightGreen != nil)
 //        XCTAssertNotNil(Color.green1)
 //        XCTAssertNotNil(Color.green2)
 //        XCTAssertNotNil(Color.green3)
@@ -180,72 +178,78 @@ class ColorTests: XCTestCase {
 //        XCTAssertNotNil(Color.yellow3)
     }
     
-    func testSolidColorGradient() {
+    @Test func solidColorGradient() {
         // Test the solidColorGradient() function
         let gradient = Color.myGray.solidColorGradient()
-        XCTAssertNotNil(gradient)
+        #expect(gradient != nil)
     }
     
 }
 
-class SettingsTests: XCTestCase {
-    func testUserDefaultsStorage() {
+@Suite 
+
+struct SettingsTests {
+    @Test func userDefaultsStorage() {
         // Test storing and retrieving a basic value
         let testValue = "TestValue"
         Settings.set(key: .active, value: testValue)
         let retrievedValue = Settings.get(key: .active) as? String
-        XCTAssertEqual(testValue, retrievedValue)
+        #expect(testValue == retrievedValue)
     }
     
     // Assuming Days is defined or can be mocked for testing
-    func testDaysEncodingAndDecoding() {
+    @Test func daysEncodingAndDecoding() {
         // Mock a Days object (assuming it's a dictionary for simplicity)
         let mockDays: Days = [1: Day()]  // This needs to be adjusted based on the actual Days and Day types
         Settings.setDays(days: mockDays)
         let retrievedDays = Settings.getDays()
-        XCTAssertEqual(mockDays, retrievedDays)
+        #expect(mockDays == retrievedDays)
     }
     
 }
 
-class DoubleTests: XCTestCase {
+@Suite 
+
+struct DoubleTests {
     
-    func testToRadians() {
+    @Test func toRadians() {
         let degrees: Double = 180
-        XCTAssertEqual(degrees.toRadians(), Double.pi, accuracy: 1e-10)
+        #expect(degrees.toRadians() == Double.pi) // TODO swift-numerics isapproximatelyequal from docs
     }
     
-    func testToCGFloat() {
+    @Test func toCGFloat() {
         let doubleValue: Double = 123.45
         let expected: CGFloat = 123.45
-        XCTAssertEqual(doubleValue.toCGFloat(), expected)
+        #expect(doubleValue.toCGFloat() == expected)
     }
     
-    func testRoundedToNextSignificant() {
+    @Test func roundedToNextSignificant() {
         let value: Double = 123.45
         let goal: Double = 10.0
         let expected: Double = 130.0
-        XCTAssertEqual(value.rounded(toNextSignificant: goal), expected)
-        XCTAssertEqual(450.rounded(toNextSignificant: 500), 500)
-        XCTAssertEqual(-450.rounded(toNextSignificant: 500), -500)
-        XCTAssertEqual(650.rounded(toNextSignificant: 500), 1000)
-        XCTAssertEqual(-650.rounded(toNextSignificant: 500), -1000)
+        #expect(value.rounded(toNextSignificant: goal) == expected)
+        #expect(450.rounded(toNextSignificant: 500) == 500)
+        #expect(-450.rounded(toNextSignificant: 500) == -500)
+        #expect(650.rounded(toNextSignificant: 500) == 1000)
+        #expect(-650.rounded(toNextSignificant: 500) == -1000)
     }
     
-    func testRoundedString() {
+    @Test func roundedString() {
         let value: Double = 123.4567
         let expected: String = "123.46"
-        XCTAssertEqual(value.roundedString(), expected)
+        #expect(value.roundedString() == expected)
     }
     
-    func testPercentageToWholeNumber() {
+    @Test func percentageToWholeNumber() {
         let value: Double = 0.45
         let expected: String = "45"
-        XCTAssertEqual(value.percentageToWholeNumber(), expected)
+        #expect(value.percentageToWholeNumber() == expected)
     }
 }
 
-class DateTests: XCTestCase {
+@Suite 
+
+struct DateTests {
     // TODO: Dates are stored in UTC, but printed in local time zone. So theres a discrepancy on the pipeline, because it is in UTC time, and the test fails.
 //    func testStringFromDate() {
 //        // Test with a specific date
@@ -265,128 +269,130 @@ class DateTests: XCTestCase {
 //        XCTAssertEqual(Date.stringFromDate(date: emptyDate), "01/01/1970")
 //    }
     
-    func testDaysBetween() {
+    @Test func daysBetween() {
         // Test with same day
         let date1 = Date()
         let date2 = Date()
-        XCTAssertEqual(Date.daysBetween(date1: date1, date2: date2), 0)
+        #expect(Date.daysBetween(date1: date1, date2: date2) == 0)
         
         // Test with one day difference
         let oneDayLater = Calendar.current.date(byAdding: .day, value: 1, to: date1)!
-        XCTAssertEqual(Date.daysBetween(date1: date1, date2: oneDayLater), 1)
+        #expect(Date.daysBetween(date1: date1, date2: oneDayLater) == 1)
         
         // Test with negative days (date2 is earlier than date1)
-        XCTAssertEqual(Date.daysBetween(date1: oneDayLater, date2: date1), 1)
+        #expect(Date.daysBetween(date1: oneDayLater, date2: date1) == 1)
         
         // Test with empty date (edge case)
         let emptyDate = Date(timeIntervalSince1970: 0)
-        XCTAssertNotEqual(Date.daysBetween(date1: emptyDate, date2: date1), 0)
+        #expect(Date.daysBetween(date1: emptyDate, date2: date1) != 0)
     }
     
-    func testDaysAgo() {
+    @Test func daysAgo() {
         let twoDaysAgo = Day(daysAgo: 2)
-        XCTAssertEqual(twoDaysAgo.daysAgo, twoDaysAgo.date.daysAgo())
+        #expect(twoDaysAgo.daysAgo == twoDaysAgo.date.daysAgo())
         
         let date = Date()
-        XCTAssertEqual(date.daysAgo(), 0)
+        #expect(date.daysAgo() == 0)
     }
     
-    func testDateFromString() {
+    @Test func dateFromString() {
         // Test with valid date string
-        XCTAssertNotNil(Date.dateFromString("01.01.2022"))
+        #expect(Date.dateFromString("01.01.2022") != nil)
         
         // Test with invalid date string
-        XCTAssertNil(Date.dateFromString("invalid.date"))
+        #expect(Date.dateFromString("invalid.date") == nil)
         
         // Test with another valid date string
         let expectedDate = Date.dateFromString("12.31.2021")
-        XCTAssertNotNil(expectedDate)
+        #expect(expectedDate != nil)
     }
     
-    func testDateFromStringComponents() {
+    @Test func dateFromStringComponents() {
         // Test with valid date components
-        XCTAssertNotNil(Date.dateFromString(month: "01", day: "01", year: "2022"))
+        #expect(Date.dateFromString(month: "01", day: "01", year: "2022") != nil)
         
         // Test with invalid date components
-        XCTAssertNil(Date.dateFromString(month: "invalid", day: "date", year: "components"))
+        #expect(Date.dateFromString(month: "invalid", day: "date", year: "components") == nil)
     }
     
-    func testSubtractDays() {
+    @Test func subtractDays() {
         let currentDate = Date()
         
         // Test subtracting zero days
         let sameDay = Date.subtract(days: 0, from: currentDate)
-        XCTAssertTrue(Date.sameDay(date1: currentDate, date2: sameDay))
+        #expect(Date.sameDay(date1: currentDate, date2: sameDay))
         
         // Test subtracting 7 days
         let sevenDaysEarlier = Date.subtract(days: 7, from: currentDate)
-        XCTAssertEqual(Date.daysBetween(date1: sevenDaysEarlier, date2: currentDate), 7)
-        XCTAssert(sevenDaysEarlier < currentDate)
+        #expect(Date.daysBetween(date1: sevenDaysEarlier, date2: currentDate) == 7)
+        #expect(sevenDaysEarlier < currentDate)
     }
     
-    func testAddDays() {
+    @Test func addDays() {
         let currentDate = Date()
         
         // Test subtracting zero days
         let sameDay = Date.add(days: 0, from: currentDate)
-        XCTAssertTrue(Date.sameDay(date1: currentDate, date2: sameDay))
+        #expect(Date.sameDay(date1: currentDate, date2: sameDay))
         
         // Test subtracting 7 days
         let sevenDaysLater = Date.add(days: 7, from: currentDate)
-        XCTAssertEqual(Date.daysBetween(date1: sevenDaysLater, date2: currentDate), 7)
-        XCTAssert(sevenDaysLater > currentDate)
+        #expect(Date.daysBetween(date1: sevenDaysLater, date2: currentDate) == 7)
+        #expect(sevenDaysLater > currentDate)
     }
     
-    func testSameDay() {
+    @Test func sameDay() {
         let date1 = Date()
         
         // Test with the same date
-        XCTAssertTrue(Date.sameDay(date1: date1, date2: date1))
+        #expect(Date.sameDay(date1: date1, date2: date1))
         
         // Test with different date
         let date2 = Date.subtract(days: 1, from: date1)
-        XCTAssertFalse(Date.sameDay(date1: date1, date2: date2))
+        #expect(!Date.sameDay(date1: date1, date2: date2))
     }
     
-    func testStartOfDay() {
+    @Test func startOfDay() {
         let currentDate = Date()
         let startOfDay = Date.startOfDay(currentDate)
         
         // Ensure that the time components are all zero
         let components = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: startOfDay)
-        XCTAssertEqual(components.hour, 0)
-        XCTAssertEqual(components.minute, 0)
-        XCTAssertEqual(components.second, 0)
-        XCTAssertEqual(components.nanosecond, 0)
+        #expect(components.hour == 0)
+        #expect(components.minute == 0)
+        #expect(components.second == 0)
+        #expect(components.nanosecond == 0)
     }
     
-    func testDayOfWeek() {
+    @Test func dayOfWeek() {
         // Test with a known date (e.g., 1st January 2022 was a Saturday)
         let knownDate = Date.dateFromString("01.01.2022")!
-        XCTAssertEqual(knownDate.dayOfWeek(), "Saturday")
+        #expect(knownDate.dayOfWeek() == "Saturday")
     }
     
 }
 
-class TimeTests: XCTestCase {
-    func testDoubleToString() {
+@Suite 
+
+struct TimeTests {
+    @Test func doubleToString() {
         // Test with a normal double value
-        XCTAssertEqual(Time.doubleToString(double: 12.5), "12:30")
+        #expect(Time.doubleToString(double: 12.5) == "12:30")
         
         // Test with a whole number
-        XCTAssertEqual(Time.doubleToString(double: 10.0), "10:00")
+        #expect(Time.doubleToString(double: 10.0) == "10:00")
         
         // Test with a very small value (edge case)
-        XCTAssertEqual(Time.doubleToString(double: 0.01), "0:01")
+        #expect(Time.doubleToString(double: 0.01) == "0:01")
         
         // Test with a negative value (edge case)
-        XCTAssertEqual(Time.doubleToString(double: -12.5), "-12:30")
+        #expect(Time.doubleToString(double: -12.5) == "-12:30")
         
         // Test with zero (edge case)
-        XCTAssertEqual(Time.doubleToString(double: 0.0), "0:00")
+        #expect(Time.doubleToString(double: 0.0) == "0:00")
         
         // Test with a negative whole number (edge case)
-        XCTAssertEqual(Time.doubleToString(double: -10.0), "-10:00")
+        #expect(Time.doubleToString(double: -10.0) == "-10:00")
     }
 }
 
