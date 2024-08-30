@@ -85,9 +85,9 @@ class HealthData: ObservableObject {
             await weightManager.setup()
             
             // Set start date to first recorded weight after the original start date
-            if let startDate = weightManager.weights.sorted(by: { x, y in x.date < y.date }).first?.date {
-                setupDates(startDate: startDate)
-            }
+//            if let startDate = weightManager.weights.sorted(by: { x, y in x.date < y.date }).first?.date {
+//                setupDates(startDate: startDate)
+//            }
             
 //            await runManager.setup(weightManager: weightManager, startDate: self.startDate ?? Date())
             await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow, forceLoad: false, environment: environment)
@@ -99,10 +99,11 @@ class HealthData: ObservableObject {
             }
             
             // Set real weights on days
-            weightManager.weights.forEach {
+            weightManager.weightsAfterStartDate.forEach {
                 let daysAgo = Date.daysBetween(date1: $0.date, date2: Date())!
                 calorieManager.days[daysAgo]?.weight = $0.weight
             }
+            calorieManager.days.oldestDay?.weight = weightManager.startingWeight
             // Set self values
             DispatchQueue.main.async { [self] in
                 self.days = calorieManager.days
