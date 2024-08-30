@@ -374,33 +374,32 @@ final class DayUnitTests {
         #expect(days.encodeAsString() != nil)
     }
     
-    @Test func missingDayAdjustment() {
-        for path in Filepath.Days.allCases {
-            days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(path)])
-            guard let days else {
-                Issue.record()
-                return
-            }
-            days.forEveryDay { day in
-                if day.wasModifiedBecauseTheUserDidntEnterData {
-                    if let tomorrow = days.dayAfter(day) {
-                        let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
-                        if realisticWeightChangeTomorrowBasedOnToday > Constants.maximumWeightChangePerDay {
-                            #expect(day.expectedWeightChangeBasedOnDeficit.isApproximately(Constants.maximumWeightChangePerDay, accuracy: 0.1))
-                        } else if realisticWeightChangeTomorrowBasedOnToday < -Constants.maximumWeightChangePerDay {
-                            #expect(day.expectedWeightChangeBasedOnDeficit.isApproximately( -Constants.maximumWeightChangePerDay, accuracy: 0.1))
-                        } else {
-                            #expect(day.expectedWeightChangeBasedOnDeficit.isApproximately(realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1))
-                        }
-                    }
-                    if let yesterday = days.dayBefore(day) {
-                        #expect(day.expectedWeight == yesterday.expectedWeightTomorrow)
+    @Test("Missing day adjustment", arguments: Filepath.Days.allCases)
+    func missingDayAdjustment(path: Filepath.Days) {
+        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(path)])
+        guard let days else {
+            Issue.record()
+            return
+        }
+        days.forEveryDay { day in
+            if day.wasModifiedBecauseTheUserDidntEnterData {
+                if let tomorrow = days.dayAfter(day) {
+                    let realisticWeightChangeTomorrowBasedOnToday = tomorrow.realisticWeight - day.expectedWeight
+                    if realisticWeightChangeTomorrowBasedOnToday > Constants.maximumWeightChangePerDay {
+                        #expect(day.expectedWeightChangeBasedOnDeficit.isApproximately(Constants.maximumWeightChangePerDay, accuracy: 0.1))
+                    } else if realisticWeightChangeTomorrowBasedOnToday < -Constants.maximumWeightChangePerDay {
+                        #expect(day.expectedWeightChangeBasedOnDeficit.isApproximately( -Constants.maximumWeightChangePerDay, accuracy: 0.1))
+                    } else {
+                        #expect(day.expectedWeightChangeBasedOnDeficit.isApproximately(realisticWeightChangeTomorrowBasedOnToday, accuracy: 0.1))
                     }
                 }
+                if let yesterday = days.dayBefore(day) {
+                    #expect(day.expectedWeight == yesterday.expectedWeightTomorrow)
+                }
             }
-            if let today = days[0], let yesterday = days[1] {
-                #expect(today.expectedWeight == yesterday.expectedWeightTomorrow)
-            }
+        }
+        if let today = days[0], let yesterday = days[1] {
+            #expect(today.expectedWeight == yesterday.expectedWeightTomorrow)
         }
     }
     

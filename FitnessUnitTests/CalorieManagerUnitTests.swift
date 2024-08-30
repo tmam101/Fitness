@@ -43,13 +43,12 @@ struct CalorieManagerUnitTests {
         #expect(pred == testPred)
     }
     
-    @Test func pastDaysPredicate() {
-        for days in 1...100 {
-            let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
-            let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
-            #expect(predicate == calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
-        }
+    @Test("Past Days Predicate", arguments: 1...100)
+    func pastDaysPredicate(days: Int) {
+        let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
+        let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
+        #expect(predicate == calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
         // TODO test day 0. Why are we saying Date() unstead of startofday?
         // TODO you can't because it relies on Date(), which changes between lines of code
 //        let days = 0

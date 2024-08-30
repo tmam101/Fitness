@@ -295,28 +295,22 @@ struct DateTests {
         #expect(date.daysAgo() == 0)
     }
     
-    @Test func dateFromString() {
-        // Test with valid date string
-        #expect(Date.dateFromString("01.01.2022") != nil)
-        
-        // Test with invalid date string
-        #expect(Date.dateFromString("invalid.date") == nil)
-        
-        // Test with another valid date string
-        let expectedDate = Date.dateFromString("12.31.2021")
-        #expect(expectedDate != nil)
+    @Test("Date from string", arguments: [
+        ("08.30.2024", "Friday")
+    ])
+    func dateFromString(string: (String, String)) {
+        #expect(Date.dateFromString(string.0) != nil)
+        #expect(Date.dateFromString(string.0)?.dayOfWeek() == string.1)
     }
     
-    @Test func testStringToDate() {
-        // Test with valid date string
-        #expect("01.01.2022".toDate() == Date.dateFromString("01.01.2022"))
-        
-        // Test with invalid date string
-        #expect("invalid.date".toDate() == Date.dateFromString("invalid.date"))
-        
-        // Test with another valid date string
-        let expectedDate = Date.dateFromString("12.31.2021")
-        #expect("12.31.2021".toDate() == expectedDate)
+    @Test("Date from string", arguments: ["invalid"])
+    func dateFromStringFails(string: String) {
+        #expect(Date.dateFromString(string) == nil)
+    }
+    
+    @Test("String to date", arguments: ["01.01.2022", "12.31.2021", "invalid.date"])
+    func testStringToDate(string: String) {
+        #expect(string.toDate() == Date.dateFromString(string))
     }
     
     @Test func testDateToString() {
