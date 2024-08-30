@@ -172,17 +172,3 @@ struct CalorieManagerUnitTests {
         #expect(newestDay.date == Date().subtracting(days: 0))
     }
 }
-
-extension Decimal {
-    func isApproximately( _ other: Self, accuracy: Decimal) -> Bool {
-        Double(self).isApproximatelyEqual(to: Double(other), absoluteTolerance: Double.Magnitude(accuracy))
-    }
-}
-//
-//extension Optional where Wrapped == Decimal {
-//    func isApproximately( _ other: Self, accuracy: Decimal) -> Bool {
-//        guard let self, let other else { return false }
-//        return Double(self).isApproximatelyEqual(to: Double(other), absoluteTolerance: Double.Magnitude(accuracy))
-//    }
-//}
-//

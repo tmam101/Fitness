@@ -646,19 +646,19 @@ final class DayUnitTests {
         #expect(estimatedConsumedCalories.isApproximately(expectedCalories, accuracy: 0.1), "Estimated consumed calories should be adjusted to the maximum weight gain allowed per day.")
     }
     
-    @Test func subsetOfDaysOption() {
-        var testCases = [(75, 45),
-                         (75, 50)]
-        testCases.append((50, 75))
-        for subset in testCases {
-            let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue), .subsetOfDays(subset.0, subset.1)])
-            let max = Swift.max(subset.0, subset.1)
-            let min = Swift.min(subset.0, subset.1)
-            #expect(days.count == max - min + 1)
-            //        days.array().sortedLongestAgoToMostRecent()
-            #expect(days.oldestDay?.daysAgo == max)
-            #expect(days.newestDay?.daysAgo == min)
-        }
+    @Test("Subset of days", arguments: [
+        (75, 45),
+        (75, 50),
+        (50, 75)
+    ])
+    func subsetOfDaysOption(subset: (Int, Int)) {
+        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue), .subsetOfDays(subset.0, subset.1)])
+        let max = Swift.max(subset.0, subset.1)
+        let min = Swift.min(subset.0, subset.1)
+        #expect(days.count == max - min + 1)
+        //        days.array().sortedLongestAgoToMostRecent()
+        #expect(days.oldestDay?.daysAgo == max)
+        #expect(days.newestDay?.daysAgo == min)
     }
     
     @Test func subset() {
@@ -869,5 +869,11 @@ final class DayUnitTests {
         #expect(days.count == 3)
         dropped[5]?.weight = 1234
         #expect(dropped[5]?.weight != days[5]?.weight)
+    }
+}
+
+public extension Decimal {
+    func isApproximately( _ other: Self, accuracy: Decimal) -> Bool {
+        Double(self).isApproximatelyEqual(to: Double(other), absoluteTolerance: Double.Magnitude(accuracy))
     }
 }

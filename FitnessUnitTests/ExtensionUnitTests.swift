@@ -8,6 +8,7 @@
 import Testing
 @testable import Fitness
 import SwiftUI
+import Numerics
 
 @Suite
 
@@ -244,6 +245,16 @@ struct DoubleTests {
         let value: Double = 0.45
         let expected: String = "45"
         #expect(value.percentageToWholeNumber() == expected)
+    }
+}
+
+@Suite("Decimal Tests")
+struct DecimalTests {
+    @Test func approximate() async throws {
+        let decimal: Decimal = 120.001
+        #expect(decimal.isApproximately(120.001, accuracy: 0.001))
+        #expect(decimal.isApproximately(120.002, accuracy: 0.001))
+        #expect(!decimal.isApproximately(120.003, accuracy: 0.001))
     }
 }
 
