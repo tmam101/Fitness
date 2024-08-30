@@ -9,12 +9,7 @@ import Foundation
 
 extension Date {
     
-    static func stringFromDate(date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
-        return formatter.string(from: date)
-    }
-    
+    // MARK: STATIC
     static func daysBetween(date1: Date, date2: Date) -> Int? {
         let calendar = Calendar.current
         let startOfDay1 = calendar.startOfDay(for: date1)
@@ -53,6 +48,8 @@ extension Date {
         Calendar.current.startOfDay(for: date)
     }
     
+    // MARK: INSTANCE
+    
     func daysAgo() -> Int? {
         Date.daysBetween(date1: Date.startOfDay(Date()), date2: Date.startOfDay(self))
     }
@@ -66,5 +63,20 @@ extension Date {
     
     func subtracting(days: Int) -> Date {
         Date.subtract(days: days, from: self)
+    }
+    
+    func toString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        return formatter.string(from: self)
+    }
+}
+
+extension String {
+    /// If the string is in  "MM.dd.yyyy" format
+    func toDate() -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd.yyyy"
+        return formatter.date(from: self)
     }
 }

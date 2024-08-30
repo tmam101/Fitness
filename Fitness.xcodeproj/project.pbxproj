@@ -161,6 +161,7 @@
 		E901FC212BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */; };
 		E901FC222BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */; };
 		E91D3F4B2AD5D25A001E1397 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
+		E9206ADF2C824669007826AD /* WeightManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9206ADE2C824669007826AD /* WeightManagerTests.swift */; };
 		E9211EF22C0E49B30079A758 /* missingWeightsAtFirst.json in Resources */ = {isa = PBXBuildFile; fileRef = E9211EF12C0E49B30079A758 /* missingWeightsAtFirst.json */; };
 		E9211EF42C0E61DC0079A758 /* missingWeightsAtFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */; };
 		E9211EF52C0E61EF0079A758 /* missingWeightsAtFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */; };
@@ -365,6 +366,7 @@
 		E901FC162BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDayNotAdjustingWhenMissing.swift; sourceTree = "<group>"; };
 		E901FC1B2BFFAD7D00C78104 /* twoDaysIssue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = twoDaysIssue.json; sourceTree = "<group>"; };
 		E901FC1F2BFFAD8800C78104 /* TwoDaysIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoDaysIssue.swift; sourceTree = "<group>"; };
+		E9206ADE2C824669007826AD /* WeightManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightManagerTests.swift; sourceTree = "<group>"; };
 		E9211EF12C0E49B30079A758 /* missingWeightsAtFirst.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingWeightsAtFirst.json; sourceTree = "<group>"; };
 		E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = missingWeightsAtFirst.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
@@ -784,6 +786,7 @@
 				E94E20362C0AC877004480AC /* WeightLineChartTests.swift */,
 				E94E203D2C0AD964004480AC /* NetEnergyBarChartTests.swift */,
 				E9B948CE2C0F8A09001183BE /* CalorieManagerUnitTests.swift */,
+				E9206ADE2C824669007826AD /* WeightManagerTests.swift */,
 			);
 			path = FitnessUnitTests;
 			sourceTree = "<group>";
@@ -1290,6 +1293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E94E203F2C0AD964004480AC /* NetEnergyBarChartTests.swift in Sources */,
+				E9206ADF2C824669007826AD /* WeightManagerTests.swift in Sources */,
 				E95C9B822ADDC6BF00B2FCC9 /* ColorExtension.swift in Sources */,
 				E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */,
 				E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */,

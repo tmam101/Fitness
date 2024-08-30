@@ -303,6 +303,23 @@ class DateTests: XCTestCase {
         XCTAssertNotNil(expectedDate)
     }
     
+    func testStringToDate() {
+        // Test with valid date string
+        XCTAssertEqual("01.01.2022".toDate(), Date.dateFromString("01.01.2022"))
+        
+        // Test with invalid date string
+        XCTAssertEqual("invalid.date".toDate(), Date.dateFromString("invalid.date"))
+        
+        // Test with another valid date string
+        let expectedDate = Date.dateFromString("12.31.2021")
+        XCTAssertEqual("12.31.2021".toDate(), expectedDate)
+    }
+    
+    func testDateToString() {
+        let date = Date.dateFromString("01.01.2022")
+        XCTAssertEqual(date?.toString(), "01.01.2022")
+    }
+    
     func testDateFromStringComponents() {
         // Test with valid date components
         XCTAssertNotNil(Date.dateFromString(month: "01", day: "01", year: "2022"))
