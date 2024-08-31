@@ -43,9 +43,6 @@ public struct FitnessView: View {
         GeometryReader { proxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    //#if !os(watchOS)
-                    //                TimeFramePicker(selectedPeriod: $selectedPeriod)
-                    //#endif
                     let timeFrame = TimeFrame.timeFrames[timeFrame]
                     
                     Text("Net Energy \(timeFrame.longName)")
@@ -94,16 +91,9 @@ public struct FitnessView: View {
                         
                         
                     }
-                    
-                    //                renderDeficitRingsSection()
-                    
+                                        
                     // MARK: Deficit Bar Chart
                     renderDeficitBarChartSection()
-                    
-                    // MARK: Deficit Line Graph
-                    //                if showWeeklyDeficitLine {
-                    //                    renderDeficitLineGraphSection()
-                    //                }
                     
                     renderWeightRingsAndLineChartSection()
                     
@@ -134,30 +124,56 @@ public struct FitnessView: View {
         }
     }
     
-//    @ViewBuilder
-//    private func renderDeficitLineGraphSection() -> some View {
-//        Group {
-//            Text("Expected Weight This Week")
-//                .foregroundColor(.white)
-//                .font(.title2)
-//            DeficitLineGraph()
-//                .frame(maxWidth: .infinity, minHeight: 200)
-//                .mainBackground()
-//        }
-//    }
-    
     @ViewBuilder
     private func renderWeightRingsAndLineChartSection() -> some View {
         Group {
-//            if showWeightRings {
-//                StatsTitle(title: "Weight Loss")
-//                StatsRow(text: { WeightLossText() }, rings: { WeightLossRings() })
-//                    .frame(maxWidth: .infinity)
-//            }
             Text("Expected Weight")
                 .foregroundColor(.white)
                 .font(.title2)
-            WeightLineChart(health: healthData, timeFrame: TimeFrame.timeFrames[timeFrame])
+            
+            let timeFrame = TimeFrame.timeFrames[timeFrame]
+
+            if
+                let thisWeekDeficit = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1),
+                let weeklyDeficitTomorrow = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0),
+                !thisWeekDeficit.isNaN {
+                let thisWeekNetEnergy = 0 - thisWeekDeficit
+                let sign = thisWeekNetEnergy > 0 ? "+" : ""
+                let bodyText = "\(sign)\(Int(Double(thisWeekNetEnergy)))"
+                let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
+                let netEnergyItem = TodayRingViewModel(
+                    titleText: "Average\n\(timeFrame.longName)",
+                    bodyText: bodyText,
+                    subBodyText: "cals",
+                    percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
+                    color: .yellow,
+                    bodyTextColor: color,
+                    subBodyTextColor: color
+                )
+                
+                let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
+                let sign2 = weeklyNetEnergyTomorrow > 0 ? "+" : ""
+                let bodyText2 = "\(sign2)\(Int(Double(weeklyNetEnergyTomorrow)))"
+                let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
+                let tomorrowEnergyItem = TodayRingViewModel(
+                    titleText: "Tomorrow's Projected Average",
+                    bodyText: bodyText2,
+                    subBodyText: "cals",
+                    percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
+                    color: .yellow,
+                    bodyTextColor: color2,
+                    subBodyTextColor: color2
+                )
+                
+                HStack {
+                    TodayRingView(vm: netEnergyItem)
+                        .mainBackground()
+                    TodayRingView(vm: tomorrowEnergyItem)
+                        .mainBackground()
+                }
+                .frame(maxHeight: 300)
+            }
+            WeightLineChart(health: healthData, timeFrame: TimeFrame.timeFrames[self.timeFrame])
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()
         }
@@ -195,12 +211,8 @@ public struct FitnessView: View {
 }
 
 
-
-struct FitnessView_Previews: PreviewProvider {
-    static var previews: some View {
-        FitnessPreviewProvider.MainPreview()
-//        FitnessPreviewProvider.MainPreview(options: [.dayCount(10)])
-    }
+#Preview("Fitness view") {
+    FitnessPreviewProvider.MainPreview()
 }
 
 public struct FitnessPreviewProvider {

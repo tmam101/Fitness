@@ -198,6 +198,15 @@ public class LineChartViewModel: ObservableObject {
     
     public func populateDays(for days: Days) {
         self.days = self.constructDays(using: days)
+        // TODO Trying to get it to still consider it month if you press all time but there's only 15 days, for example. 
+//        let days = self.constructDays(using: days)
+//        if days.count <= TimeFrame.month.days {
+//            self.timeFrame = .month
+//        }
+//        if days.count <= TimeFrame.week.days {
+//            self.timeFrame = .week
+//        }
+//        self.days = days
         self.updateMinMaxValues(days: self.days)
     }
 
