@@ -1,5 +1,5 @@
 //
-//  FitnessView.swift
+//  HomeScreen.swift
 //  Fitness
 //
 //  Created by Thomas Goss on 1/22/21.
@@ -39,7 +39,7 @@ import SwiftUI
 //    }
 //}
 
-struct FitnessViewWatch: View {
+struct HomeScreenWatch: View {
     @EnvironmentObject var healthData: HealthData
     //    @EnvironmentObject var watchConnectivityWatch: WatchConnectivityWatch
     @Environment(\.scenePhase) private var scenePhase
@@ -158,9 +158,9 @@ struct FitnessViewWatch: View {
     }
 }
 
-struct FitnessViewWatch_Previews: PreviewProvider {
+struct HomeScreenWatch_Previews: PreviewProvider {
     static var previews: some View {
-        FitnessViewWatch()
+        HomeScreenWatch()
             .environmentObject(HealthData(environment: AppEnvironmentConfig.debug(nil)))
             .previewDevice(PreviewDevice(rawValue: "Apple Watch Series 7 - 45 mm"))
     }

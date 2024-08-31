@@ -1,5 +1,5 @@
 //
-//  FitnessView.swift
+//  HomeScreen.swift
 //  Fitness
 //
 //  Created by Thomas Goss on 1/22/21.
@@ -22,7 +22,7 @@ struct TimeFramePicker: View {
 }
 #endif
 
-public struct FitnessView: View {
+public struct HomeScreen: View {
     @EnvironmentObject var healthData: HealthData
     @Environment(\.scenePhase) private var scenePhase
     
@@ -211,14 +211,14 @@ public struct FitnessView: View {
 }
 
 
-#Preview("Fitness view") {
+#Preview("Home screen") {
     FitnessPreviewProvider.MainPreview()
 }
 
 public struct FitnessPreviewProvider {
     static func MainPreview(options: [TestDayOption]) -> some View {
         @State var timeFrame = 2
-        return FitnessView(timeFrame: $timeFrame)
+        return HomeScreen(timeFrame: $timeFrame)
             .environmentObject(HealthData(environment: .debug(options)))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
@@ -226,7 +226,7 @@ public struct FitnessPreviewProvider {
     
     static func MainPreview() -> some View {
         @State var timeFrame = 2
-        return FitnessView(timeFrame: $timeFrame)
+        return HomeScreen(timeFrame: $timeFrame)
             .environmentObject(HealthData(environment: .debug([.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)

@@ -19,7 +19,7 @@ struct AppView: View {
         GeometryReader { geometry in
             TabView {
                 
-                FitnessView(timeFrame: $selectedPeriod)
+                HomeScreen(timeFrame: $selectedPeriod)
                     .environmentObject(healthData)
                     .tabItem { Label("Over Time", systemImage: "calendar") }
                 

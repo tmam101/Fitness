@@ -1,5 +1,5 @@
 //
-//  FitnessViewViews.swift
+//  HomeScreenViews.swift
 //  Fitness
 //
 //  Created by Thomas Goss on 1/8/22.
@@ -30,7 +30,7 @@ struct NumberInput: View {
 #endif
 
 // TODO Refactor
-//struct FitnessViewWeightLossGraph: View {
+//struct HomeScreenWeightLossGraph: View {
 //    @EnvironmentObject var healthData: HealthData
 //    @Binding var deficitLineGraphDaysToShow: Double
 //    var sectionHeight: Double = 400
@@ -67,24 +67,24 @@ struct NumberInput: View {
 //                Text("past \(Int(deficitLineGraphDaysToShow)) days")
 //                    .foregroundColor(.green)
 //                HStack {
-//                    FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 7)
-//                    FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 30)
-//                    FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 100)
+//                    HomeScreenWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 7)
+//                    HomeScreenWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 30)
+//                    HomeScreenWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: 100)
 //                    if healthData.days.count > 1 {
 //                        let realisticWeights = healthData.days
 //                            .mapValues { $0.realisticWeight }
 //                            .filter { $0.value != 0 }
 //                        let min = Double(realisticWeights.min { $0.value < $1.value }!.key)
 //                        let max = Double(realisticWeights.max { $0.value < $1.value }!.key)
-//                        FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: min, label: "min")
-//                        FitnessViewWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: max, label: "max")
+//                        HomeScreenWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: min, label: "min")
+//                        HomeScreenWeightLossGraphButton(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow, newValue: max, label: "max")
 //                    }
 //                }
 //            }
 //        }
 //    }
 //    
-//    struct FitnessViewWeightLossGraphButton: View {
+//    struct HomeScreenWeightLossGraphButton: View {
 //        @Binding var deficitLineGraphDaysToShow: Double
 //        var newValue: Double
 //        var label: String?
@@ -109,17 +109,17 @@ struct NumberInput: View {
 //    }
 //}
 
-//struct FitnessViewWeightLossGraphPreview: View {
+//struct HomeScreenWeightLossGraphPreview: View {
 //    @State var deficitLineGraphDaysToShow: Double = 30.0
 //    var body: some View {
-//        FitnessViewWeightLossGraph(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
+//        HomeScreenWeightLossGraph(deficitLineGraphDaysToShow: $deficitLineGraphDaysToShow)
 //            .environmentObject(HealthData(environment: .debug(nil)))
 //    }
 //}
 
-//struct FitnessViewWeightLossGraph_Previews: PreviewProvider {
+//struct HomeScreenWeightLossGraph_Previews: PreviewProvider {
 //    static var previews: some View {
-//        FitnessViewWeightLossGraphPreview()
+//        HomeScreenWeightLossGraphPreview()
 //            .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
 //    }
 //}

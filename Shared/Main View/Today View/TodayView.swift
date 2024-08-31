@@ -28,7 +28,7 @@ struct TodayView: View {
                 displayGridItems()
             }
         }
-        // TODO Make reload like FitnessView
+        // TODO Make reload like HomeScreen
 //        .onAppear {
 //            vm.reloadToday()
 //        }
