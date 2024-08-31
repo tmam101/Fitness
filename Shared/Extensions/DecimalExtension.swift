@@ -20,4 +20,12 @@ extension Decimal {
     var stringWithPlusIfNecessary: String {
         "\(plusIfNecessary)\(toInt)"
     }
+    
+    func roundedString(withSign: Bool) -> String {
+        let rounded = String(format: "%.2f", Double(self))
+        if withSign {
+            return "\(plusIfNecessary)\(rounded)"
+        }
+        return rounded
+    }
 }

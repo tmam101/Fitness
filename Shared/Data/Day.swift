@@ -168,13 +168,13 @@ public class Day: Codable, Identifiable, Equatable, HasDate {
         return newConsumedCalories
     }
     
-    public enum Property {
+    public enum Property: String {
         case activeCalories
         case restingCalories
         case consumedCalories
         case weight
         case realisticWeight
-        case expectedWeight
+        case expectedWeight = "expected weight"
         case netEnergy
         case deficit
         
@@ -196,6 +196,27 @@ public class Day: Codable, Identifiable, Equatable, HasDate {
                 return \Day.netEnergy
             case .deficit:
                 return \Day.deficit
+            }
+        }
+        
+        var color: Color? {
+            switch self {
+            case .expectedWeight:
+                return .yellow
+            case .weight:
+                return .green
+            case .activeCalories:
+                return nil
+            case .restingCalories:
+                return nil
+            case .consumedCalories:
+                return nil
+            case .realisticWeight:
+                return nil
+            case .netEnergy:
+                return nil
+            case .deficit:
+                return nil
             }
         }
     }

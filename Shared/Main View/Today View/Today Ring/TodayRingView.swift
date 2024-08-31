@@ -84,6 +84,18 @@ enum TodayRingColor {
     case white
     case yellow
     
+    // TODO refactor
+    static func fromProperty(_ property: Day.Property) -> Self? {
+        switch property.color {
+        case .green:
+            return .green
+        case .yellow:
+            return .yellow
+        default:
+            return nil
+        }
+    }
+    
     var color: Color {
         switch self {
         case .red:

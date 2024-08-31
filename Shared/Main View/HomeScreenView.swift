@@ -8,9 +8,9 @@
 import SwiftUI
 
 #if !os(watchOS)
-struct TimeFramePicker: View {
+public struct TimeFramePicker: View {
     @Binding var selectedPeriod: Int
-    var body: some View {
+    public var body: some View {
         Picker(selection: $selectedPeriod, label: Text("Select Period")) {
             ForEach(0..<TimeFrame.timeFrames.count) {
                                     Text(TimeFrame.timeFrames[$0].shortName)
@@ -21,6 +21,10 @@ struct TimeFramePicker: View {
     }
 }
 #endif
+
+//class HomeScreenViewModel {
+//    
+//}
 
 public struct HomeScreen: View {
     @EnvironmentObject var healthData: HealthData
@@ -49,47 +53,9 @@ public struct HomeScreen: View {
                         .foregroundStyle(.white)
                         .font(.title)
                     // MARK: Deficit Rings
-                    if
-                        let thisWeekDeficit = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1),
-                        let weeklyDeficitTomorrow = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0),
-                        !thisWeekDeficit.isNaN {
-                        let thisWeekNetEnergy = 0 - thisWeekDeficit
-                        let sign = thisWeekNetEnergy > 0 ? "+" : ""
-                        let bodyText = "\(sign)\(Int(Double(thisWeekNetEnergy)))"
-                        let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
-                        let netEnergyItem = TodayRingViewModel(
-                            titleText: "Average\n\(timeFrame.longName)",
-                            bodyText: bodyText,
-                            subBodyText: "cals",
-                            percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
-                            color: .yellow,
-                            bodyTextColor: color,
-                            subBodyTextColor: color
-                        )
-                        
-                        let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
-                        let sign2 = weeklyNetEnergyTomorrow > 0 ? "+" : ""
-                        let bodyText2 = "\(sign2)\(Int(Double(weeklyNetEnergyTomorrow)))"
-                        let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
-                        let tomorrowEnergyItem = TodayRingViewModel(
-                            titleText: "Tomorrow's Projected Average",
-                            bodyText: bodyText2,
-                            subBodyText: "cals",
-                            percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
-                            color: .yellow,
-                            bodyTextColor: color2,
-                            subBodyTextColor: color2
-                        )
-                        
-                        HStack {
-                            TodayRingView(vm: netEnergyItem)
-                                .mainBackground()
-                            TodayRingView(vm: tomorrowEnergyItem)
-                                .mainBackground()
-                        }
-                        .frame(maxHeight: 300)
-                        
-                        
+                    
+                    if let netEnergyModels = HomeScreen.netEnergyRingModels(days: healthData.days, timeFrame: timeFrame) {
+                        renderNetEnergyRings(netEnergyModels: netEnergyModels)
                     }
                                         
                     // MARK: Deficit Bar Chart
@@ -111,9 +77,54 @@ public struct HomeScreen: View {
     }
     
     // MARK: - View Rendering Functions
+    // TODO what if oldest day doesnt have a weight? or newest?
+    public static func netEnergyRingModels(days: Days, timeFrame: TimeFrame) -> [TodayRingViewModel]? {
+        let daysInTimeFrame = days.filteredBy(timeFrame)
+        if let thisWeekDeficit = daysInTimeFrame.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1),
+           let weeklyDeficitTomorrow = daysInTimeFrame.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0),
+           !thisWeekDeficit.isNaN {
+            let thisWeekNetEnergy = 0 - thisWeekDeficit
+            let bodyText = thisWeekNetEnergy.stringWithPlusIfNecessary
+            let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
+            let netEnergyItem = TodayRingViewModel(
+                titleText: "Average\n\(timeFrame.longName)",
+                bodyText: bodyText,
+                subBodyText: "cals",
+                percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
+                color: color,
+                bodyTextColor: color,
+                subBodyTextColor: color
+            )
+            
+            let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
+            let bodyText2 = weeklyNetEnergyTomorrow.stringWithPlusIfNecessary
+            let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
+            let tomorrowEnergyItem = TodayRingViewModel(
+                titleText: "Tomorrow's Projected Average",
+                bodyText: bodyText2,
+                subBodyText: "cals",
+                percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
+                color: color2,
+                bodyTextColor: color2,
+                subBodyTextColor: color2
+            )
+            return [netEnergyItem, tomorrowEnergyItem]
+        }
+        return nil
+    }
+    
+    func renderNetEnergyRings(netEnergyModels: [TodayRingViewModel]) -> some View {
+        HStack {
+            ForEach(netEnergyModels) { model in
+                TodayRingView(vm: model)
+                    .mainBackground()
+            }
+        }
+        .frame(maxHeight: 300)
+    }
     
     @ViewBuilder
-    private func renderDeficitBarChartSection() -> some View {
+    func renderDeficitBarChartSection() -> some View {
         Group {
             Text("Net Energy By Day")
                 .foregroundColor(.white)
@@ -124,8 +135,37 @@ public struct HomeScreen: View {
         }
     }
     
+   public static func weightRingModels(days: Days, timeFrame: TimeFrame) -> [TodayRingViewModel]? {
+        let daysInTimeFrame = days.filteredBy(timeFrame)
+        if let oldestDay = daysInTimeFrame.oldestDay,
+           let newestDay = daysInTimeFrame.newestDay {
+            let weightChange = newestDay.weight - oldestDay.weight
+            let expectedWeightChange = newestDay.expectedWeight - oldestDay.expectedWeight
+            return [
+                (expectedWeightChange, Day.Property.expectedWeight),
+                (weightChange, Day.Property.weight)
+            ].map { change, property -> TodayRingViewModel in
+                let bodyText = change.roundedString(withSign: true)
+                var color = TodayRingColor.fromProperty(property) ?? .white
+                color = change < 0 ? color : .white
+                var percentage = change / -2.0
+                percentage = percentage < 0 ? 0 : percentage
+                return TodayRingViewModel(
+                    titleText: "\(property.rawValue.capitalized) change",
+                    bodyText: bodyText,
+                    subBodyText: "lbs",
+                    percentage: percentage,
+                    color: color,
+                    bodyTextColor: color,
+                    subBodyTextColor: color
+                )
+            }
+        }
+        return nil
+    }
+    
     @ViewBuilder
-    private func renderWeightRingsAndLineChartSection() -> some View {
+    func renderWeightRingsAndLineChartSection() -> some View {
         Group {
             Text("Expected Weight")
                 .foregroundColor(.white)
@@ -133,71 +173,15 @@ public struct HomeScreen: View {
             
             let timeFrame = TimeFrame.timeFrames[timeFrame]
 
-            if
-                let thisWeekDeficit = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1),
-                let weeklyDeficitTomorrow = healthData.days.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0),
-                !thisWeekDeficit.isNaN {
-                let thisWeekNetEnergy = 0 - thisWeekDeficit
-                let sign = thisWeekNetEnergy > 0 ? "+" : ""
-                let bodyText = "\(sign)\(Int(Double(thisWeekNetEnergy)))"
-                let color: TodayRingColor = thisWeekNetEnergy > 0 ? .red : .yellow
-                let netEnergyItem = TodayRingViewModel(
-                    titleText: "Average\n\(timeFrame.longName)",
-                    bodyText: bodyText,
-                    subBodyText: "cals",
-                    percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
-                    color: .yellow,
-                    bodyTextColor: color,
-                    subBodyTextColor: color
-                )
-                
-                let weeklyNetEnergyTomorrow = 0 - weeklyDeficitTomorrow
-                let sign2 = weeklyNetEnergyTomorrow > 0 ? "+" : ""
-                let bodyText2 = "\(sign2)\(Int(Double(weeklyNetEnergyTomorrow)))"
-                let color2: TodayRingColor = weeklyNetEnergyTomorrow > 0 ? .red : .yellow
-                let tomorrowEnergyItem = TodayRingViewModel(
-                    titleText: "Tomorrow's Projected Average",
-                    bodyText: bodyText2,
-                    subBodyText: "cals",
-                    percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
-                    color: .yellow,
-                    bodyTextColor: color2,
-                    subBodyTextColor: color2
-                )
-                
-                HStack {
-                    TodayRingView(vm: netEnergyItem)
-                        .mainBackground()
-                    TodayRingView(vm: tomorrowEnergyItem)
-                        .mainBackground()
-                }
-                .frame(maxHeight: 300)
+            if let weightModels = HomeScreen.weightRingModels(days: healthData.days, timeFrame: timeFrame) {
+                renderNetEnergyRings(netEnergyModels: weightModels)
             }
+            
             WeightLineChart(health: healthData, timeFrame: TimeFrame.timeFrames[self.timeFrame])
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()
         }
     }
-    
-//    @ViewBuilder
-//    private func renderMileTimeSection() -> some View {
-//        Group {
-//            StatsTitle(title: "Mile Time")
-//            MileTimeStats(runsToShow: $runsToShow)
-//                .frame(maxWidth: .infinity)
-//                .mainBackground()
-//            RunningLineGraph(runsToShow: $runsToShow)
-//                .frame(maxWidth: .infinity, idealHeight: 400)
-//                .padding()
-//                .mainBackground()
-//            if healthData.runManager.runs.count > 1 {
-//                Slider(value: $runsToShow, in: 1...Double(healthData.runManager.runs.count), step: 1)
-//                    .tint(.blue)
-//                Text("past \(Int(runsToShow)) runs")
-//                    .foregroundColor(.blue)
-//            }
-//        }
-//    }
     
     // MARK: - Helper Functions
     

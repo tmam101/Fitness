@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TimeFrameType {
+public enum TimeFrameType {
     case allTime
     case month
     case week
@@ -46,8 +46,8 @@ enum TimeFrameType {
     }
 }
 
-struct TimeFrame: Identifiable {
-    var id = UUID()
+public struct TimeFrame: Identifiable {
+    public var id = UUID()
     var type: TimeFrameType
     
     static let allTime = TimeFrame(type: .allTime)

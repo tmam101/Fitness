@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct TodayRingViewModel: Hashable, Identifiable {
-    static func == (lhs: TodayRingViewModel, rhs: TodayRingViewModel) -> Bool {
+public struct TodayRingViewModel: Hashable, Identifiable {
+    public static func == (lhs: TodayRingViewModel, rhs: TodayRingViewModel) -> Bool {
         lhs.id == rhs.id
     }
     
-    var id: UUID = UUID()
+    public var id: UUID = UUID()
     var titleText: String
     var bodyText: String
     var subBodyText: String
