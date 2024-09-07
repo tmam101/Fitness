@@ -289,6 +289,8 @@ extension Days {
                     weightsOnEveryDay = false
                 case .subsetOfDays(_, _):
                     print("TODO")
+                case .startDate(_):
+                    print("TODO")
                 }
             }
         }

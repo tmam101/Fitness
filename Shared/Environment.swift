@@ -20,10 +20,11 @@ struct GlobalEnvironment {
 
 enum AppEnvironmentConfig {
     case debug([TestDayOption]?)
-    case release([TestDayOption]?)
+    case release(options: [TestDayOption]?, weightProcessor: WeightProcessorProtocol?)
     case widgetRelease
 }
 
+// TODO Refactor to not be an array of options, but an object with properties? 
 enum TestDayOption: Equatable {
     case isMissingConsumedCalories(MissingConsumedCaloriesStrategy)
     case weightGoingSteadilyDown
@@ -31,6 +32,7 @@ enum TestDayOption: Equatable {
     case testCase(Filepath.Days)
     case dontAddWeightsOnEveryDay
     case subsetOfDays(Int, Int)
+    case startDate(Date)
     
     enum MissingConsumedCaloriesStrategy {
         case v1

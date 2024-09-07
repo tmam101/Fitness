@@ -25,22 +25,22 @@ class HealthData: ObservableObject {
 //    @Published var runManager: RunManager = RunManager()
     private let network = Network()
 #endif
-    @Published public var weightManager: WeightManager = WeightManager()
+    @Published public var weightManager: WeightManager
     @Published public var workoutManager: WorkoutManager = WorkoutManager()
     
     @Published public var days: Days = [:]
-    @Published public var daysBetweenStartAndNow: Int = 350
+    @Published public var daysBetweenStartAndNow: Int = 350 // TODO needed?
     @Published public var hasLoaded: Bool = false
     @Published public var realisticWeights: [Int: Double] = [:]
     @Published public var weights: [Double] = []
     
     // Constants
-    var startDateString = "08.23.2023"
     var startDate: Date?
     
     //MARK: INIT
     
     init(environment: AppEnvironmentConfig) {
+        self.weightManager = WeightManager(environment: environment)
         Task {
             if await authorizeHealthKit() {
                 self.environment = environment
@@ -54,23 +54,47 @@ class HealthData: ObservableObject {
         let weightManager = WeightManager()
         let calorieManager = CalorieManager()
         await weightManager.setup()
-        await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: 0, forceLoad: false, environment: .release(nil)) // TODO this shouldnt always be
+        await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: 0, forceLoad: false, environment: .release(options: nil, weightProcessor: nil)) // TODO this shouldnt always be
         var today = await calorieManager.getDays(forPastDays: 0)[0]!
         today.weight = weightManager.currentWeight
         return today
     }
     
-    init() { }
+//    init() { }
     
-    init(environment: AppEnvironmentConfig, _ completion: @escaping ((_ health: HealthData) -> Void)) {
+    init(environment: AppEnvironmentConfig, shouldSetValues: Bool = true, _ completion: @escaping ((_ health: HealthData) -> Void)) {
+        self.weightManager = WeightManager(environment: environment)
         Task {
-            self.environment = environment
-            self.startDateString = Settings.get(key: .startDate) as? String ?? self.startDateString
-            await setValues(forceLoad: true, completion: completion)
+            if await authorizeHealthKit() { // TODO necessary?
+                self.environment = environment
+                self.startDateString = Settings.get(key: .startDate) as? String ?? self.startDateString
+                if shouldSetValues {
+                    await setValues(forceLoad: true, completion: completion)
+                }
+                completion(self)
+            }
         }
     }
     
     //MARK: SET VALUES
+    
+//    func load(forceLoad: Bool = false, haveAlreadyRetried: Bool = false) async -> Self {
+//        await withCheckedContinuation { continuation in
+//            setValues(completion: <#T##((HealthData) -> Void)?##((HealthData) -> Void)?##(_ health: HealthData) -> Void#>)
+//        }
+//    }
+    
+    @MainActor
+    static public func setValues(environment: AppEnvironmentConfig, forceLoad: Bool = false, haveAlreadyRetried: Bool = false) async -> HealthData {
+        let health = await withCheckedContinuation { continuation in
+            _ = HealthData(environment: environment, shouldSetValues: false) { health in
+//                await health.setValues(forceLoad: true, completion: nil)
+                continuation.resume(returning: health)
+            }
+        }
+        await health.setValues(forceLoad: true, completion: nil)
+        return health
+    }
     
     /// Set all values of health data critifal for the app. Returns a reference to itself.
     @MainActor
@@ -79,10 +103,19 @@ class HealthData: ObservableObject {
         setupDates()
         
         switch self.environment {
-        case .release(let options):
+        case .release(let options, let weightProcessor):
 #if os(iOS)
+
+            if let options {
+                for option in options {
+                    switch option {
+                    case .startDate(let date):
+                        
+                    }
+                }
+            }
             // Setup managers
-            await weightManager.setup()
+            await weightManager.setup(weightProcessor: weightProcessor)
             
             // Set start date to first recorded weight after the original start date
 //            if let startDate = weightManager.weights.sorted(by: { x, y in x.date < y.date }).first?.date {
@@ -115,17 +148,17 @@ class HealthData: ObservableObject {
             }
             
             // Post the last thirty days. Larger amounts seem to be too much for the network.
-            if calorieManager.days.count > 30 {
-                let daysToRetrieve = 31
-                let model = getDaysModel(from: calorieManager.days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-                let response = await network.postWithDays(object: model)
-                if !haveAlreadyRetried {
-                    guard response == true else {
-                        await self.setValues(forceLoad: forceLoad, haveAlreadyRetried: true, completion: completion)
-                        return
-                    }
-                }
-            }
+//            if calorieManager.days.count > 30 {
+//                let daysToRetrieve = 31
+//                let model = getDaysModel(from: calorieManager.days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+//                let response = await network.postWithDays(object: model)
+//                if !haveAlreadyRetried {
+//                    guard response == true else {
+//                        await self.setValues(forceLoad: forceLoad, haveAlreadyRetried: true, completion: completion)
+//                        return
+//                    }
+//                }
+//            }
             completion?(self)
             
 #endif
@@ -262,8 +295,19 @@ class HealthData: ObservableObject {
     }
 #endif
     
-    private func setupDates() {
-        guard let startDate = Date.dateFromString(startDateString),
+    private func setupDates(environment: AppEnvironmentConfig) {
+        switch environment {
+        case .release(options: let options, weightProcessor: let w):
+            if let options {
+                for option in options {
+                    switch option {
+                    case let .startDate(let date):
+                        
+                    }
+                }
+            }
+        }
+        guard let startDate = startDate ?? startString ?? Date.dateFromString(startDateString),
               let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
         else { return }
         
@@ -281,6 +325,7 @@ class HealthData: ObservableObject {
     }
     
     private func authorizeHealthKit() async -> Bool {
+        // TODO add a check for if its xctest?
         if !HKHealthStore.isHealthDataAvailable() { return false }
         
         let readDataTypes: Swift.Set<HKSampleType> = [

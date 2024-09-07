@@ -17,7 +17,12 @@ class AppSettings: ObservableObject {
                 return
             }
         }
-        healthData = HealthData(environment: AppEnvironmentConfig.release([ .isMissingConsumedCalories(.v3)]))
+        healthData = HealthData(environment: AppEnvironmentConfig.release(
+            options: [.isMissingConsumedCalories(.v3)], 
+            weightProcessor: WeightProcessor()))
+        Task {
+            await healthData.setValues(forceLoad: true, completion: nil)
+        }
     }
 }
 

@@ -70,7 +70,7 @@ class WeightManager: ObservableObject {
     }
     
     @discardableResult
-    func setup(startDate: Date? = nil, startDateString: String? = nil, weightProcessor: WeightProcessorProtocol = WeightProcessor()) async -> Bool {
+    func setup(startDate: Date? = nil, startDateString: String? = nil, weightProcessor: WeightProcessorProtocol? = WeightProcessor()) async -> Bool {
         guard let startDate: Date =
                 startDate ??
                 startDateString?.toDate() ??
@@ -78,8 +78,9 @@ class WeightManager: ObservableObject {
          else {
             return false
         }
+        let defaultWeightProcessor = WeightProcessor()
         self.startDateString = startDate.toString() // TODO is this right
-        self.weightProcessor = weightProcessor
+        self.weightProcessor = weightProcessor ?? defaultWeightProcessor
         self.weights = await getWeights().sorted { $0.date < $1.date }
         self.weightsAfterStartDate = self.weights.filter { $0.date >= Date.dateFromString(self.startDateString)!}
         

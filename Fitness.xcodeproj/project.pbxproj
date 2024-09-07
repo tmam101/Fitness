@@ -194,6 +194,7 @@
 		E967015E2AFEBB5A0059E55C /* FitnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */; };
 		E96701602AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */; };
 		E97C54472C1389E800E85C82 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
+		E98244502C8399F500F13BDC /* HealthDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E982444F2C8399F000F13BDC /* HealthDataTests.swift */; };
 		E98B6D4F2C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
 		E98B6D502C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
 		E98B6D512C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
@@ -384,6 +385,7 @@
 		E967015B2AFEBB5A0059E55C /* FitnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITests.swift; sourceTree = "<group>"; };
 		E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E982444F2C8399F000F13BDC /* HealthDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataTests.swift; sourceTree = "<group>"; };
 		E98B6D4E2C8361640021E292 /* DecimalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtension.swift; sourceTree = "<group>"; };
 		E98B6D522C8380A80021E292 /* HomeScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenTests.swift; sourceTree = "<group>"; };
 		E99B514A2BE435EC002CEB48 /* missingDataIssue.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingDataIssue.json; sourceTree = "<group>"; };
@@ -780,6 +782,7 @@
 		E9DE68712AD5A60F00320684 /* FitnessUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				E982444F2C8399F000F13BDC /* HealthDataTests.swift */,
 				E98B6D522C8380A80021E292 /* HomeScreenTests.swift */,
 				E9DE68722AD5A60F00320684 /* DayUnitTests.swift */,
 				E95C9B802ADDC52C00B2FCC9 /* ExtensionUnitTests.swift */,
@@ -1298,6 +1301,7 @@
 				E94E203F2C0AD964004480AC /* NetEnergyBarChartTests.swift in Sources */,
 				E9206ADF2C824669007826AD /* WeightManagerTests.swift in Sources */,
 				E95C9B822ADDC6BF00B2FCC9 /* ColorExtension.swift in Sources */,
+				E98244502C8399F500F13BDC /* HealthDataTests.swift in Sources */,
 				E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */,
 				E98B6D532C8380B00021E292 /* HomeScreenTests.swift in Sources */,
 				E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */,
