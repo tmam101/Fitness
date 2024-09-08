@@ -13,44 +13,23 @@ import Foundation
 @Suite
 
 final class HealthDataTests {
-    private var cancellables: [AnyCancellable] = []
-
     
-//    @Test("Health data")
-//    func netEnergy() async throws {
-//        await confirmation("...") { healthLoaded in
-//            let environment = AppEnvironmentConfig.release(options: nil, weightProcessor: MockWeightProcessor())
-//            await withCheckedContinuation { continuation in
-//                Task {
-//                    let healthData = HealthData(environment: environment) { healthData in
-//                        healthLoaded()
-//                        continuation.resume()
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    
-//    @Test("Health data")
-//    func netEnergy() async throws {
-//        await confirmation("...") { healthLoaded in
-//            let environment = AppEnvironmentConfig.release(options: nil, weightProcessor: MockWeightProcessor())
-//            let healthData = HealthData(environment: environment)
-////            healthData.$hasLoaded.sink { [weak self] hasLoaded in
-////                guard let self = self, hasLoaded else { return }
-////                healthLoaded()
-////            }.store(in: &cancellables)
-//            #expect(healthData.weightManager.weights.count == 7)
-//        }
-//    }
+    private var cancellables: [AnyCancellable] = []
     
     @Test("Health data set values")
     func health() async {
-        // TODO finish implementing start date
-        let environment = AppEnvironmentConfig.release(options: [.startDate(Date().subtracting(days: 10))], weightProcessor: MockWeightProcessor())
+        let startDate = Date().subtracting(days: 10)
+        let config = Config.init(startDate: startDate, weightProcessor: MockWeightProcessor(), healthStorage: MockHealthStorage())
+        let environment = AppEnvironmentConfig.release(options: config)
         let healthData = await HealthData.setValues(environment: environment)
         #expect(healthData.weightManager.weights.count == 7)
-        }
-    
+        #expect(healthData.startDate == startDate)
+        #expect(healthData.weightManager.startDate == startDate)
+        #expect(healthData.weightManager.startingWeight == 206)
+        #expect(healthData.weightManager.currentWeight == 200)
+//        #expect(healthData.hasLoaded == true)
+        #expect(healthData.days == healthData.calorieManager.days)
+        #expect(healthData.days.count == 7)
+    }
     
 }

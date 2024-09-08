@@ -11,7 +11,7 @@ import WatchKit
 
 @main
 struct FitnessAppWatch: App {
-    @State var healthData = HealthData(environment: AppEnvironmentConfig.release(options: nil, weightProcessor: nil))
+    @State var healthData = HealthData(environment: AppEnvironmentConfig.release(options: nil))
 //    @State var watchConnectivityWatch = WatchConnectivityWatch()
     
     @Environment(\.scenePhase) private var scenePhase

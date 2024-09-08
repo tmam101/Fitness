@@ -8,5 +8,5 @@
 import SwiftUI
 
 #Preview("MissingWeightsAtFirst") {
-    FitnessPreviewProvider.MainPreview(options: [.testCase(.missingWeightsAtFirst), .isMissingConsumedCalories(.v3)])
+    FitnessPreviewProvider.MainPreview(options: .init([.testCase(.missingWeightsAtFirst), .isMissingConsumedCalories(.v3)]))
 }

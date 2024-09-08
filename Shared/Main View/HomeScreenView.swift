@@ -200,7 +200,7 @@ public struct HomeScreen: View {
 }
 
 public struct FitnessPreviewProvider {
-    static func MainPreview(options: [TestDayOption]) -> some View {
+    static func MainPreview(options: Config) -> some View {
         @State var timeFrame = 2
         return HomeScreen(timeFrame: $timeFrame)
             .environmentObject(HealthData(environment: .debug(options)))
@@ -211,7 +211,7 @@ public struct FitnessPreviewProvider {
     static func MainPreview() -> some View {
         @State var timeFrame = 2
         return HomeScreen(timeFrame: $timeFrame)
-            .environmentObject(HealthData(environment: .debug([.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])))
+            .environmentObject(HealthData(environment: .debug(.init([.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)]))))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
     }

@@ -252,10 +252,15 @@ extension Days {
     
     // MARK: Test days
     static func testDays() -> Days {
-        testDays(options: nil)
+        var config: Config?
+        return testDays(options: config)
     }
     
-    static func testDays(options: [TestDayOption]?) -> Days {
+    static func testDays(options: [ConfigCase]?) -> Days {
+        testDays(options: Config(options))
+    }
+    
+    static func testDays(options: Config?) -> Days {
         var days: Days = [:]
         guard
             let activeCalories: [Decimal] = .decode(path: .activeCalories),
@@ -273,25 +278,22 @@ extension Days {
         var weightGoingSteadilyDown = false
         var dayCount = activeCalories.count - 1
         if let options {
-            for option in options {
-                switch option {
-                case .isMissingConsumedCalories:
-                    missingData = true
-                case .weightGoingSteadilyDown:
-                    weightGoingSteadilyDown = true
-                case .testCase(let file):
-                    var days: Days = Days.decode(path: file) ?? [:] // TODO
-                    days.formatAccordingTo(options: options)
-                    return days
-                case .dayCount(let count):
-                    dayCount = count
-                case .dontAddWeightsOnEveryDay:
-                    weightsOnEveryDay = false
-                case .subsetOfDays(_, _):
-                    print("TODO")
-                case .startDate(_):
-                    print("TODO")
-                }
+            if let m = options.isMissingConsumedCalories {
+                missingData = true
+            }
+            if let w = options.weightGoingSteadilyDown {
+                weightGoingSteadilyDown = w
+            }
+            if let file = options.testCase {
+                var days: Days = Days.decode(path: file) ?? [:] // TODO
+                days.formatAccordingTo(options: options)
+                return days
+            }
+            if let count = options.dayCount {
+                dayCount = count
+            }
+            if let d = options.dontAddWeightsOnEveryDay {
+                weightsOnEveryDay = !d
             }
         }
         
@@ -323,32 +325,27 @@ extension Days {
     
     // MARK: Construction
     
-    mutating func formatAccordingTo(options: [TestDayOption]?) {
+    mutating func formatAccordingTo(options: Config?) {
         self.addRunningTotalDeficits()
         let _ = self.setInitialExpectedWeights()
         if let options {
-            if !options.contains(.dontAddWeightsOnEveryDay) {
+            if let d = options.dontAddWeightsOnEveryDay, !d {
                 self.setWeightOnEveryDay()
                 self.setRealisticWeights()
             }
-            for option in options {
-                if case let .isMissingConsumedCalories(version) = option {
-                    switch version {
-                    case .v1:
-                        self.adjustDaysWhereUserDidntEnterData()
-                    case .v2:
-                        self.adjustDaysWhereUserDidntEnterDatav2()
-                    case .v3:
-                        self.adjustDaysWhereUserDidntEnterDatav3()
-                    }
-                    break
+            if let version = options.isMissingConsumedCalories {
+                switch version {
+                case .v1:
+                    self.adjustDaysWhereUserDidntEnterData()
+                case .v2:
+                    self.adjustDaysWhereUserDidntEnterDatav2()
+                case .v3:
+                    self.adjustDaysWhereUserDidntEnterDatav3()
                 }
             }
             // TODO test
-            for option in options {
-                if case let .subsetOfDays(int, int2) = option {
-                    self = subset(from: int, through: int2)
-                }
+            if let subsetOfDays = options.subsetOfDays {
+                self = subset(from: subsetOfDays.0, through: subsetOfDays.1)
             }
         }
     }
