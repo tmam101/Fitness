@@ -14,30 +14,6 @@ import WidgetKit
 #endif
 import ClockKit
 
-protocol WeightProcessorProtocol {
-    var query: HKSampleQuery? { get }
-    var weights: [Weight] { get }
-    func processWeights(continuation: CheckedContinuation<[Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) -> Void
-}
-
-class WeightProcessor: WeightProcessorProtocol {
-    var query: HKSampleQuery?
-    
-    var weights: [Weight] = [] // TODO necessary?
-    
-    func processWeights(continuation: CheckedContinuation<[Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) {
-        if let results = results as? [HKQuantitySample] {
-            let weights = results
-                .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }
-                .sorted { $0.date < $1.date }
-            self.weights = weights
-            self.query = query
-            continuation.resume(returning: weights)
-            return
-        }
-    }
-}
-
 protocol HealthStorageProtocol {
     func sampleQuery(sampleType: HKSampleType, predicate: NSPredicate?, limit: Int, sortDescriptors: [NSSortDescriptor]?, resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void)
 }
@@ -50,22 +26,10 @@ class HealthStorage: HealthStorageProtocol {
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
         healthStore.execute(query)
     }
-    
-    
-}
-
-class MockHealthStorage: HealthStorageProtocol {
-    func sampleQuery(sampleType: HKSampleType, predicate: NSPredicate?, limit: Int, sortDescriptors: [NSSortDescriptor]?, resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
-        // TODO set up some Days, using testDays probably, then create samples from their weights
-        let x: HKQuantitySample = .init(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: 100), start: Date().subtracting(days: 1), end: Date().subtracting(days: 1))
-        resultsHandler(query, [x], nil)
-    }
 }
 
 class WeightManager: ObservableObject {
     var environment: AppEnvironmentConfig?
-    var weightProcessor: WeightProcessorProtocol
     private var healthStorage: HealthStorageProtocol
     
     var startDate: Date?
@@ -81,23 +45,23 @@ class WeightManager: ObservableObject {
     @Published var weightsAfterStartDate: [Weight] = []
     @Published var averageWeightLostPerWeekThisMonth: Decimal = 0
     
+    var weightLimit = 3000
+    var sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+    var querySampleType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
+    
     init(environment: AppEnvironmentConfig) {
         self.environment = environment
         switch environment {
         case .release(options: let config):
-            weightProcessor = config?.weightProcessor ?? WeightProcessor()
             healthStorage = config?.healthStorage ?? HealthStorage() // TODO this is duplicated in setup
         case .debug(let config):
-            weightProcessor = config?.weightProcessor ?? WeightProcessor()
             healthStorage = config?.healthStorage ?? HealthStorage() // TODO this is duplicated in setup
         case .widgetRelease:
-            weightProcessor = WeightProcessor()
             healthStorage = HealthStorage() // TODO this is duplicated in setup
         }
     }
     
     init() {
-        weightProcessor = WeightProcessor()
         healthStorage = HealthStorage()
     }
     
@@ -165,15 +129,19 @@ class WeightManager: ObservableObject {
         }
         return lastRecordedWeightBeforeDate.weight + (weightDiffPerDay * Decimal(daysBetweenWeightBeforeAndAfterDate))
     }
-    
-    private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    
+        
 #if !os(macOS)
     func getWeights() async -> [Weight] {
         return await withCheckedContinuation { continuation in
-            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-            healthStorage.sampleQuery(sampleType: bodyMassType, predicate: nil, limit: 3000, sortDescriptors: [sortDescriptor]) { query, results, error in
-                self.weightProcessor.processWeights(continuation: continuation, query, results, error)
+            healthStorage.sampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor]) { query, results, error in
+                if let results = results as? [HKQuantitySample] {
+                    let weights = results
+                        .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }
+                        .sorted { $0.date < $1.date }
+                    self.weights = weights
+                    continuation.resume(returning: weights)
+                    return
+                }
             }
         }
     }

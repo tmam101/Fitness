@@ -19,7 +19,7 @@ final class HealthDataTests {
     @Test("Health data set values")
     func health() async {
         let startDate = Date().subtracting(days: 10)
-        let config = Config.init(startDate: startDate, weightProcessor: MockWeightProcessor(), healthStorage: MockHealthStorage())
+        let config = Config.init(startDate: startDate, healthStorage: MockHealthStorage())
         let environment = AppEnvironmentConfig.release(options: config)
         let healthData = await HealthData.setValues(environment: environment)
         #expect(healthData.weightManager.weights.count == 7)

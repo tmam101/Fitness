@@ -44,7 +44,6 @@ class Config {
     var subsetOfDays: (Int, Int)? = nil
     var startDate: Date? = nil
     
-    var weightProcessor: WeightProcessorProtocol?
     var healthStorage: HealthStorageProtocol?
     
     enum MissingConsumedCaloriesStrategy {
@@ -53,7 +52,7 @@ class Config {
         case v3
     }
     
-    init(isMissingConsumedCalories: Config.MissingConsumedCaloriesStrategy? = nil, weightGoingSteadilyDown: Bool? = nil, dayCount: Int? = nil, testCase: Filepath.Days? = nil, dontAddWeightsOnEveryDay: Bool? = nil, subsetOfDays: (Int, Int)? = nil, startDate: Date? = nil, weightProcessor: (any WeightProcessorProtocol)? = nil, healthStorage: (any HealthStorageProtocol)? = nil) {
+    init(isMissingConsumedCalories: Config.MissingConsumedCaloriesStrategy? = nil, weightGoingSteadilyDown: Bool? = nil, dayCount: Int? = nil, testCase: Filepath.Days? = nil, dontAddWeightsOnEveryDay: Bool? = nil, subsetOfDays: (Int, Int)? = nil, startDate: Date? = nil, healthStorage: (any HealthStorageProtocol)? = nil) {
         self.isMissingConsumedCalories = isMissingConsumedCalories
         self.weightGoingSteadilyDown = weightGoingSteadilyDown
         self.dayCount = dayCount
@@ -61,7 +60,6 @@ class Config {
         self.dontAddWeightsOnEveryDay = dontAddWeightsOnEveryDay
         self.subsetOfDays = subsetOfDays
         self.startDate = startDate
-        self.weightProcessor = weightProcessor
         self.healthStorage = healthStorage
     }
     
