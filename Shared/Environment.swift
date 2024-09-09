@@ -18,15 +18,8 @@ struct GlobalEnvironment {
         
 }
 
-enum AppEnvironmentConfig {
-    case debug(Config?)
-    case release(options: Config?)
-    case widgetRelease
-}
-
-// TODO Refactor to not be an array of options, but an object with properties?
 enum ConfigCase: Equatable {
-    case isMissingConsumedCalories(Config.MissingConsumedCaloriesStrategy)
+    case isMissingConsumedCalories(Bool)
     case weightGoingSteadilyDown
     case dayCount(Int)
     case testCase(Filepath.Days)
@@ -35,24 +28,21 @@ enum ConfigCase: Equatable {
     case startDate(Date)
 }
 
-class Config {
-    var isMissingConsumedCalories: MissingConsumedCaloriesStrategy? = nil
+class AppEnvironmentConfig {
+    static var release = AppEnvironmentConfig()
+    static var debug = AppEnvironmentConfig(healthStorage: MockHealthStorage())
+    
+    var isMissingConsumedCalories: Bool = true
     var weightGoingSteadilyDown: Bool? = nil
     var dayCount: Int? = nil
     var testCase: Filepath.Days? = nil
-    var dontAddWeightsOnEveryDay: Bool? = nil
+    var dontAddWeightsOnEveryDay: Bool = false
     var subsetOfDays: (Int, Int)? = nil
     var startDate: Date? = nil
     
-    var healthStorage: HealthStorageProtocol?
+    var healthStorage: HealthStorageProtocol = HealthStorage()
     
-    enum MissingConsumedCaloriesStrategy {
-        case v1
-        case v2
-        case v3
-    }
-    
-    init(isMissingConsumedCalories: Config.MissingConsumedCaloriesStrategy? = nil, weightGoingSteadilyDown: Bool? = nil, dayCount: Int? = nil, testCase: Filepath.Days? = nil, dontAddWeightsOnEveryDay: Bool? = nil, subsetOfDays: (Int, Int)? = nil, startDate: Date? = nil, healthStorage: (any HealthStorageProtocol)? = nil) {
+    init(isMissingConsumedCalories: Bool = true, weightGoingSteadilyDown: Bool? = nil, dayCount: Int? = nil, testCase: Filepath.Days? = nil, dontAddWeightsOnEveryDay: Bool = false, subsetOfDays: (Int, Int)? = nil, startDate: Date? = nil, healthStorage: (any HealthStorageProtocol) = HealthStorage()) {
         self.isMissingConsumedCalories = isMissingConsumedCalories
         self.weightGoingSteadilyDown = weightGoingSteadilyDown
         self.dayCount = dayCount
@@ -67,8 +57,8 @@ class Config {
         if let options {
             for c in options {
                 switch c {
-                case .isMissingConsumedCalories(let strategy):
-                    self.isMissingConsumedCalories = strategy
+                case .isMissingConsumedCalories(let bool):
+                    self.isMissingConsumedCalories = bool
                 case .weightGoingSteadilyDown:
                     self.weightGoingSteadilyDown = true
                 case .dayCount(let count):

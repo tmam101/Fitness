@@ -15,34 +15,25 @@ class NetEnergyBarChartViewModel: ObservableObject {
     @Published var maxValue: Double = 0
     @Published var minValue: Double = 0
     @Published var gradientColors: [Color] = Array(repeating: .orange, count: 101) + [.yellow]
-    private var cancellables: [AnyCancellable] = []
     @Published var yValues: [Double] = []
     var timeFrame: TimeFrame
     
     // Constants
     public let lineInterval: Double = 500
     
-    init(health: HealthData, timeFrame: TimeFrame) {
+    init(days: Days, timeFrame: TimeFrame) {
         self.timeFrame = timeFrame
-        switch health.environment {
-        case .debug:
-            populateDays(for: health)
-        case .release, .widgetRelease:
-            health.$hasLoaded.sink { [weak self] hasLoaded in
-                guard let self = self, hasLoaded else { return }
-                self.populateDays(for: health)
-            }.store(in: &cancellables)
-        }
+        self.populateDays(for: days)
     }
-
-    private func populateDays(for health: HealthData) {
-        setupDays(using: health)
+    
+    private func populateDays(for days: Days) {
+        setupDays(using: days)
         updateMinMaxValues()
         setupYValues()
     }
 
-    func setupDays(using health: HealthData) {
-        days = health.days
+    func setupDays(using days: Days) {
+        self.days = days
             .filteredBy(timeFrame)
             .sorted(.mostRecentToLongestAgo)
     }
@@ -72,8 +63,8 @@ class NetEnergyBarChartViewModel: ObservableObject {
 struct NetEnergyBarChart: View {
     @ObservedObject private var viewModel: NetEnergyBarChartViewModel
     
-    init(health: HealthData, timeFrame: TimeFrame) {
-        viewModel = NetEnergyBarChartViewModel(health: health, timeFrame: timeFrame)
+    init(days: Days, timeFrame: TimeFrame) {
+        viewModel = NetEnergyBarChartViewModel(days: days, timeFrame: timeFrame)
     }
     
     var body: some View {
@@ -118,11 +109,11 @@ struct NetEnergyBarChart: View {
         .padding()
     }
 }
-
-struct NetEnergyBarChart_Previews: PreviewProvider {
-    static var previews: some View {
-        NetEnergyBarChart(health: HealthData(environment: .debug(nil)), timeFrame: .week)
-            .mainBackground()
-        // More preview configurations can be added as needed
-    }
-}
+// TODO
+//struct NetEnergyBarChart_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NetEnergyBarChart(days: HealthData(environment: .debug), timeFrame: .week)
+//            .mainBackground()
+//        // More preview configurations can be added as needed
+//    }
+//}

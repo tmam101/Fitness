@@ -19,14 +19,14 @@ import SwiftUI
 class HealthData: ObservableObject {
     
     //MARK: PROPERTIES
-    @Published var environment: AppEnvironmentConfig = .debug(nil)
+    @Published var environment: AppEnvironmentConfig
 #if !os(macOS)
-    @Published var calorieManager: CalorieManager = CalorieManager()
+    @Published var calorieManager: CalorieManager
 //    @Published var runManager: RunManager = RunManager()
     private let network = Network()
 #endif
     @Published public var weightManager: WeightManager
-    @Published public var workoutManager: WorkoutManager = WorkoutManager()
+//    @Published public var workoutManager: WorkoutManager = WorkoutManager()
     
     @Published public var days: Days = [:]
     @Published public var daysBetweenStartAndNow: Int? = 350 // TODO needed?
@@ -40,21 +40,28 @@ class HealthData: ObservableObject {
     //MARK: INIT
     
     init(environment: AppEnvironmentConfig) {
+        self.environment = environment
         self.weightManager = WeightManager(environment: environment)
+        self.calorieManager = CalorieManager(environment: environment)
         Task {
             if await authorizeHealthKit() {
-                self.environment = environment
                 setupDates(environment: environment)
+                // Use test case if available
+                if let path = environment.testCase {
+                    let days = Days.testDays(options: environment)
+                    self.days = days
+                    return
+                }
                 await setValues(forceLoad: true, completion: nil)
             }
         }
     }
     
-    static func getToday() async -> Day {
-        let weightManager = WeightManager()
-        let calorieManager = CalorieManager()
+    static func getToday(environment: AppEnvironmentConfig) async -> Day {
+        let weightManager = WeightManager(environment: environment)
+        let calorieManager = CalorieManager(environment: environment)
         await weightManager.setup()
-        await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: 0, forceLoad: false, environment: .release(options: nil)) // TODO this shouldnt always be
+        await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: 0, forceLoad: false) // TODO this shouldnt always be
         var today = await calorieManager.getDays(forPastDays: 0)[0]!
         today.weight = weightManager.currentWeight
         return today
@@ -64,10 +71,17 @@ class HealthData: ObservableObject {
     
     init(environment: AppEnvironmentConfig, shouldSetValues: Bool = true, _ completion: @escaping ((_ health: HealthData) -> Void)) {
         self.weightManager = WeightManager(environment: environment)
+        self.calorieManager = CalorieManager(environment: environment)
+        self.environment = environment
         Task {
             if await authorizeHealthKit() { // TODO necessary?
-                self.environment = environment
                 setupDates(environment: environment)
+                // Use test case if available
+                if let path = environment.testCase {
+                    let days = Days.testDays(options: environment)
+                    self.days = days
+                    completion(self)
+                }
                 if shouldSetValues {
                     await setValues(forceLoad: true, completion: completion)
                 }
@@ -83,9 +97,14 @@ class HealthData: ObservableObject {
     static public func setValues(environment: AppEnvironmentConfig, forceLoad: Bool = false, haveAlreadyRetried: Bool = false) async -> HealthData {
         let health = await withCheckedContinuation { continuation in
             _ = HealthData(environment: environment, shouldSetValues: false) { health in
-//                await health.setValues(forceLoad: true, completion: nil)
                 continuation.resume(returning: health)
             }
+        }
+        // Use test case if available
+        if let path = environment.testCase {
+            let days = Days.testDays(options: environment)
+            health.days = days
+            return health
         }
         await health.setValues(forceLoad: true, completion: nil)
         return health
@@ -95,51 +114,46 @@ class HealthData: ObservableObject {
     @MainActor
     func setValues(forceLoad: Bool = false, haveAlreadyRetried: Bool = false, completion: ((_ health: HealthData) -> Void)?) async {
         hasLoaded = false
-        
-        switch self.environment {
-        case .release(let options):
 #if os(iOS)
-            // Setup managers
-            await weightManager.setup(startDate: self.startDate)
-            
-//            await runManager.setup(weightManager: weightManager, startDate: self.startDate ?? Date())
-            await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow ?? 0, forceLoad: false, environment: environment)
-            //            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
-            
-            guard !calorieManager.days.isEmpty else {
-                completion?(self)
-                return
-            }
-            
-            // Set real weights on days
-            weightManager.weightsAfterStartDate.forEach {
-                let daysAgo = Date.daysBetween(date1: $0.date, date2: Date())!
-                calorieManager.days[daysAgo]?.weight = $0.weight
-            }
-            calorieManager.days.oldestDay?.weight = weightManager.startingWeight
-            // Set self values
-            DispatchQueue.main.async { [self] in
-                self.days = calorieManager.days
-                print("JSON of days dictionary: \n")
-                print(days.encodeAsString())
-                days.formatAccordingTo(options: options)
-                self.hasLoaded = true
-//                self.realisticWeights = realisticWeights
-            }
-            
-            // Post the last thirty days. Larger amounts seem to be too much for the network.
-//            if calorieManager.days.count > 30 {
-//                let daysToRetrieve = 31
-//                let model = getDaysModel(from: calorieManager.days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
-//                let response = await network.postWithDays(object: model)
-//                if !haveAlreadyRetried {
-//                    guard response == true else {
-//                        await self.setValues(forceLoad: forceLoad, haveAlreadyRetried: true, completion: completion)
-//                        return
-//                    }
-//                }
-//            }
+        // Setup managers
+        await weightManager.setup(startDate: self.startDate)
+        
+        //            await runManager.setup(weightManager: weightManager, startDate: self.startDate ?? Date())
+        await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: self.daysBetweenStartAndNow ?? 0, forceLoad: false)
+        //            await workoutManager.setup(afterDate: self.startDate ?? Date(), environment: environment)
+        
+        guard !calorieManager.days.isEmpty else {
             completion?(self)
+            return
+        }
+        
+        // Set real weights on days
+        weightManager.weightsAfterStartDate.forEach {
+            let daysAgo = Date.daysBetween(date1: $0.date, date2: Date())!
+            calorieManager.days[daysAgo]?.weight = $0.weight
+        }
+        calorieManager.days.oldestDay?.weight = weightManager.startingWeight
+        // Set self values
+        self.days = calorieManager.days
+        print("JSON of days dictionary: \n")
+        print(days.encodeAsString())
+        days.formatAccordingTo(options: environment)
+        self.hasLoaded = true
+        //                self.realisticWeights = realisticWeights
+        
+        // Post the last thirty days. Larger amounts seem to be too much for the network.
+        //            if calorieManager.days.count > 30 {
+        //                let daysToRetrieve = 31
+        //                let model = getDaysModel(from: calorieManager.days.filter { $0.key <= daysToRetrieve }, activeCalorieModifier: Settings.get(key: .activeCalorieModifier) as? Double ?? 1)
+        //                let response = await network.postWithDays(object: model)
+        //                if !haveAlreadyRetried {
+        //                    guard response == true else {
+        //                        await self.setValues(forceLoad: forceLoad, haveAlreadyRetried: true, completion: completion)
+        //                        return
+        //                    }
+        //                }
+        //            }
+        completion?(self)
             
 #endif
 #if os(watchOS)
@@ -155,21 +169,7 @@ class HealthData: ObservableObject {
             self.hasLoaded = true
             completion?(self)
 #endif
-        case .debug(let options):
-            //            await self.setValuesFromNetworkWithDays()
-            self.days = Days.testDays(options: options)
-//            self.days = Days.testDays(missingData: true, weightsOnEveryDay: true, dayCount: 15)
-
-//            await calorieManager.setValues(from: self.days)
-            completion?(self)
-            self.hasLoaded = true
-        case .widgetRelease:
-//            await setValuesLocally()
-            //            await setValuesFromNetworkWithDays(reloadToday: true)
-            //            self.hasLoaded = true
-            completion?(self)
         }
-    }
     
     // TODO Refactor later
 //    func setValuesLocally() async {
@@ -270,33 +270,19 @@ class HealthData: ObservableObject {
 #if  !os(macOS)
     func saveCaloriesEaten(calories: Double) async -> Bool {
         //        guard let calorieManager = self.calorieManager else { return false }
-        let r = await CalorieManager().saveCaloriesEaten(calories: Decimal(calories))
+        let r = await CalorieManager(environment: environment).saveCaloriesEaten(calories: Decimal(calories))
         return r
     }
 #endif
     
     private func setupDates(environment: AppEnvironmentConfig) {
-        switch environment {
-        case .release(options: let options):
-            if let options {
-                if let startDate = options.startDate {
-                    self.startDate = startDate
-                    self.daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
-                    return
-                }
-            }
-        case .debug(let options):
-            if let options {
-                if let startDate = options.startDate {
-                    self.startDate = startDate
-                    self.daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
-                    return
-                }
-            }
-        case .widgetRelease:
-            // TODO
+        // Use the environment's start date if we have it
+        if let startDate = environment.startDate {
+            self.startDate = startDate
+            self.daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
             return
         }
+        // Otherwise use settings
         guard let startDateString = Settings.get(key: .startDate) as? String,
               let startDate = Date.dateFromString(startDateString),
               let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())

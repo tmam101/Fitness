@@ -2,9 +2,10 @@ import Testing
 @testable import Fitness
 import Foundation
 
+// TODO dont need
 // Mock HealthData class
 class MockHealthData: HealthData {
-    override init(environment: AppEnvironmentConfig = .debug(nil)) {
+    override init(environment: AppEnvironmentConfig = .debug) {
         super.init(environment: environment)
     }
 
@@ -35,18 +36,18 @@ final class NetEnergyBarChartViewModelTests {
         let days = createMockDays()
         mockHealthData.populateMockData(days: days)
         
-        viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
+        viewModel = NetEnergyBarChartViewModel(days: mockHealthData.days, timeFrame: .week)
         // Test for a week
         #expect(viewModel.days.count == 8, "Days count should be 8 for a week timeframe")
         #expect(viewModel.days.first?.date == days.first?.date, "The first day should be the most recent day")
         #expect(viewModel.days.first?.daysAgo == 0)
         
         // Test for month
-        viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .month)
+        viewModel = NetEnergyBarChartViewModel(days: mockHealthData.days, timeFrame: .month)
         #expect(viewModel.days.count == 31, "Days count should be 31 for a month timeframe")
 
         // Test for all time
-        viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .allTime)
+        viewModel = NetEnergyBarChartViewModel(days: mockHealthData.days, timeFrame: .allTime)
         #expect(viewModel.days.count == 45, "Days count should be unlimited for all time timeframe")
         
         // Test sorting
@@ -58,7 +59,7 @@ final class NetEnergyBarChartViewModelTests {
         mockHealthData.populateMockData(days: days)
         
         // TODO refactor to not take health, but days
-        viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
+        viewModel = NetEnergyBarChartViewModel(days: mockHealthData.days, timeFrame: .week)
                 
         let expectedMaxValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).max() ?? 0
         let expectedMinValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).min() ?? 0
@@ -73,7 +74,7 @@ final class NetEnergyBarChartViewModelTests {
         let days = createMockDays()
         mockHealthData.populateMockData(days: days)
         
-        viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
+        viewModel = NetEnergyBarChartViewModel(days: mockHealthData.days, timeFrame: .week)
         
         let diff = viewModel.maxValue - viewModel.minValue
         let number = Int(diff / viewModel.lineInterval)
@@ -84,7 +85,7 @@ final class NetEnergyBarChartViewModelTests {
 
     @Test func gradient() {
         let day = Day(activeCalories: 500, restingCalories: 1500, consumedCalories: 2000, expectedWeight: 70, weight: 70)
-        viewModel = NetEnergyBarChartViewModel(health: mockHealthData, timeFrame: .week)
+        viewModel = NetEnergyBarChartViewModel(days: mockHealthData.days, timeFrame: .week)
         
         let gradient = viewModel.gradient(for: day)
         

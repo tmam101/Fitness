@@ -178,19 +178,6 @@ public class LineChartViewModel: ObservableObject {
     private var cancellables: [AnyCancellable] = []
     @Published var timeFrame: TimeFrame
     
-    init(health: HealthData, timeFrame: TimeFrame) {
-        self.timeFrame = timeFrame
-        switch health.environment {
-        case .debug:
-            self.populateDays(for: health.days)
-        case .release, .widgetRelease:
-            health.$hasLoaded.sink { [weak self] hasLoaded in
-                guard let self = self, hasLoaded else { return }
-                self.populateDays(for: health.days)
-            }.store(in: &cancellables)
-        }
-    }
-    
     init(days: Days, timeFrame: TimeFrame) {
         self.timeFrame = timeFrame
         self.populateDays(for: days)
@@ -237,8 +224,8 @@ public class LineChartViewModel: ObservableObject {
 struct WeightLineChart: View {
     @ObservedObject private var viewModel: LineChartViewModel
     
-    init(health: HealthData, timeFrame: TimeFrame) {
-        self.viewModel = LineChartViewModel(health: health, timeFrame: timeFrame)
+    init(days: Days, timeFrame: TimeFrame) {
+        self.viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
     }
     
     @ChartContentBuilder

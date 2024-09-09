@@ -88,20 +88,23 @@ class CalorieManager: ObservableObject {
     var weightManager: WeightManager? = nil
     var oldestWeight: Weight?
     var newestWeight: Weight?
-    private let healthStore = HKHealthStore()
     var minimumActiveCalories: Decimal = 200
     var minimumRestingCalories: Decimal = 2150
     @Published var goalDeficit: Decimal = 500
     var days: Days = [:]
     var startingWeight: Decimal = 0 // TODO deprecated
-    var environment: AppEnvironmentConfig = .debug(nil)
     
     @Published public var percentWeeklyDeficit: Int = 0
     @Published public var percentDailyDeficit: Int = 0
     
     //MARK: SETUP
+    var healthStorage: HealthStorageProtocol
     
-    func setup(overrideMinimumRestingCalories: Decimal? = nil, overrideMinimumActiveCalories: Decimal? = nil, shouldGetDays: Bool = true, startingWeight: Decimal, weightManager: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false, environment: AppEnvironmentConfig) async {
+    init(environment: AppEnvironmentConfig) {
+        healthStorage = environment.healthStorage
+    }
+    
+    func setup(overrideMinimumRestingCalories: Decimal? = nil, overrideMinimumActiveCalories: Decimal? = nil, shouldGetDays: Bool = true, startingWeight: Decimal, weightManager: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         // Set values from settings
         self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Decimal ?? self.minimumRestingCalories
         self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Decimal ?? self.minimumActiveCalories
@@ -111,13 +114,13 @@ class CalorieManager: ObservableObject {
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         self.startingWeight = startingWeight
-        self.environment = environment
         if shouldGetDays {
             self.days = await getDays(forceReload: true, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
         }
     }
     
-    func setup(overrideMinimumRestingCalories: Decimal? = nil, overrideMinimumActiveCalories: Decimal? = nil, shouldGetDays: Bool = true, oldestWeight: Weight, newestWeight: Weight, daysBetweenStartAndNow: Int, forceLoad: Bool = false, environment: AppEnvironmentConfig) async {
+    // TODO why two setup funcs?
+    func setup(overrideMinimumRestingCalories: Decimal? = nil, overrideMinimumActiveCalories: Decimal? = nil, shouldGetDays: Bool = true, oldestWeight: Weight, newestWeight: Weight, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         // Set values from settings
         self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Decimal ?? self.minimumRestingCalories
         self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Decimal ?? self.minimumActiveCalories
@@ -128,7 +131,6 @@ class CalorieManager: ObservableObject {
         self.goalDeficit = goalDeficit
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
         self.startingWeight = oldestWeight.weight // TODO
-        self.environment = environment
         if shouldGetDays {
             self.days = await getDays(forceReload: true, applyActiveCalorieModifier: self.adjustActiveCalorieModifier)
         }
@@ -295,49 +297,39 @@ class CalorieManager: ObservableObject {
     //MARK: ACTIVE CALORIE MODFIER
     
     // TODO Test, and use
-    func getActiveCalorieModifier(days: Days, weightLost: Decimal, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Decimal {
-        let lastWeight = weightManager?.weights.first
-        let caloriesLost = weightLost * 3500
-        let filtered = days.subset(from: days.oldestDay?.date, through: lastWeight?.date)
-        let active = filtered.sum(property: .activeCalories)
-        let resting = filtered.sum(property: .restingCalories)
-        let eaten = filtered.sum(property: .consumedCalories)
-        
-        var modifier = (caloriesLost + eaten - resting) / active
-        if !forceLoad {
-            if modifier < 0 {
-                modifier = await getActiveCalorieModifier(days: filtered, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: true)
-            }
-        }
-        return modifier
-    }
-    
-    func setActiveCalorieModifier(_ modifier: Decimal) async {
-        return await withUnsafeContinuation { continuation in
-            DispatchQueue.main.async { [self] in
-                self.activeCalorieModifier = modifier
-                continuation.resume()
-            }
-        }
-    }
+//    func getActiveCalorieModifier(days: Days, weightLost: Decimal, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async -> Decimal {
+//        let lastWeight = weightManager?.weights.first
+//        let caloriesLost = weightLost * 3500
+//        let filtered = days.subset(from: days.oldestDay?.date, through: lastWeight?.date)
+//        let active = filtered.sum(property: .activeCalories)
+//        let resting = filtered.sum(property: .restingCalories)
+//        let eaten = filtered.sum(property: .consumedCalories)
+//        
+//        var modifier = (caloriesLost + eaten - resting) / active
+//        if !forceLoad {
+//            if modifier < 0 {
+//                modifier = await getActiveCalorieModifier(days: filtered, weightLost: weightLost, daysBetweenStartAndNow: daysBetweenStartAndNow, forceLoad: true)
+//            }
+//        }
+//        return modifier
+//    }
+//    
+//    func setActiveCalorieModifier(_ modifier: Decimal) async {
+//        return await withUnsafeContinuation { continuation in
+//            DispatchQueue.main.async { [self] in
+//                self.activeCalorieModifier = modifier
+//                continuation.resume()
+//            }
+//        }
+//    }
     
     //MARK: SUM VALUE FOR DAY
     func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> Decimal {
         return await withUnsafeContinuation { continuation in
-            guard let quantityType = type.value else {
-                continuation.resume(returning: 0.0)
-                return
-            }
-            let predicate = specificDayPredicate(daysAgo: daysAgo, quantityType: quantityType)
-            
-            switch environment {
-            case .debug(_): // TODO better test data
-                continuation.resume(returning: convertSumToDecimal(sum: .init(unit: type.unit, doubleValue: 1000), type: type))
-            case .release, .widgetRelease:
-                let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { [self] _, result, _ in
-                    continuation.resume(returning: convertSumToDecimal(sum: result?.sumQuantity(), type: type))
-                }
-                healthStore.execute(query)
+            let predicate = specificDayPredicate(daysAgo: daysAgo)
+           
+            healthStorage.statisticsQuery(type: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { [self] _, result, _ in
+                continuation.resume(returning: convertSumToDecimal(sum: result?.sumQuantity(), type: type))
             }
         }
     }
@@ -348,7 +340,7 @@ class CalorieManager: ObservableObject {
         return predicate(startDate: startDate, endDate: endDate)
     }
     
-    func specificDayPredicate(daysAgo: Int, quantityType: HKQuantityType) -> NSPredicate? {
+    func specificDayPredicate(daysAgo: Int) -> NSPredicate? {
         let startDate = Date.subtract(days: daysAgo, from: Date())
         guard let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate) 
         else { return nil }
@@ -375,18 +367,13 @@ class CalorieManager: ObservableObject {
                 return
             }
             
-            switch environment {
-            case .debug:
-                continuation.resume(returning: true)
-            case .release, .widgetRelease:
-                HKHealthStore().save(calorieCountSample) { (success, error) in
-                    if let error {
-                        continuation.resume(returning: false)
-                        print("Error Saving Steps Count Sample: \(error.localizedDescription)")
-                    } else {
-                        continuation.resume(returning: true)
-                        print("Successfully saved Steps Count Sample")
-                    }
+            healthStorage.save(calorieCountSample) { (success, error) in
+                if let error {
+                    continuation.resume(returning: false)
+                    print("Error Saving Steps Count Sample: \(error.localizedDescription)")
+                } else {
+                    continuation.resume(returning: true)
+                    print("Successfully saved Steps Count Sample")
                 }
             }
         }

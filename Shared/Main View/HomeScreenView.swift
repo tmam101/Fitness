@@ -129,7 +129,7 @@ public struct HomeScreen: View {
             Text("Net Energy By Day")
                 .foregroundColor(.white)
                 .font(.title2)
-            NetEnergyBarChart(health: healthData, timeFrame: TimeFrame.timeFrames[timeFrame])
+            NetEnergyBarChart(days: healthData.days, timeFrame: TimeFrame.timeFrames[timeFrame])
                 .frame(maxWidth: .infinity, minHeight: 300)
                 .mainBackground()
         }
@@ -177,7 +177,7 @@ public struct HomeScreen: View {
                 renderNetEnergyRings(netEnergyModels: weightModels)
             }
             
-            WeightLineChart(health: healthData, timeFrame: TimeFrame.timeFrames[self.timeFrame])
+            WeightLineChart(days: healthData.days, timeFrame: TimeFrame.timeFrames[self.timeFrame])
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()
         }
@@ -200,10 +200,10 @@ public struct HomeScreen: View {
 }
 
 public struct FitnessPreviewProvider {
-    static func MainPreview(options: Config) -> some View {
+    static func MainPreview(options: AppEnvironmentConfig) -> some View {
         @State var timeFrame = 2
         return HomeScreen(timeFrame: $timeFrame)
-            .environmentObject(HealthData(environment: .debug(options)))
+            .environmentObject(HealthData(environment: options))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
     }
@@ -211,7 +211,7 @@ public struct FitnessPreviewProvider {
     static func MainPreview() -> some View {
         @State var timeFrame = 2
         return HomeScreen(timeFrame: $timeFrame)
-            .environmentObject(HealthData(environment: .debug(.init([.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)]))))
+            .environmentObject(HealthData(environment: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
             .background(Color.black)
     }

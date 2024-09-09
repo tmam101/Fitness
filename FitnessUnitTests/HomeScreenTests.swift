@@ -17,7 +17,7 @@ final class HomeScreenTests {
     @Test("Home screen net energy models")
     func netEnergy() throws {
         // TODO Test more thoroughly - create days that I know the difference of, then test against that
-        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
+        let days = Days.testDays(options: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)]))
         
         // Test week
         var models = HomeScreen.netEnergyRingModels(days: days, timeFrame: .week)
@@ -70,7 +70,7 @@ final class HomeScreenTests {
     @Test("Home screen weight models")
     func weight() throws {
         // TODO Test more thoroughly - create days that I know the difference of, then test against that
-        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
+        let days = Days.testDays(options: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)]))
         
         // Test week
         var models = HomeScreen.weightRingModels(days: days, timeFrame: .week)

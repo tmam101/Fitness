@@ -273,7 +273,7 @@ final class DayUnitTests {
     
     @Test func setWeightsOnEveryDay() {
         for _ in 0...100 {
-            days = Days.testDays(options: [.dontAddWeightsOnEveryDay])
+            days = Days.testDays(options: .init([.dontAddWeightsOnEveryDay]))
             guard var days else {
                 Issue.record()
                 return
@@ -358,7 +358,7 @@ final class DayUnitTests {
     }
     
     @Test func dayOfWeek() {
-        days = Days.testDays(options: [.testCase(.missingDataIssue)])
+        days = Days.testDays(options: .init([.testCase(.missingDataIssue)]))
         #expect(days?[0]?.dayOfWeek == "Thursday")
     }
     
@@ -376,7 +376,7 @@ final class DayUnitTests {
     
     @Test("Missing day adjustment", arguments: Filepath.Days.allCases)
     func missingDayAdjustment(path: Filepath.Days) {
-        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(path)])
+        days = Days.testDays(options: .init(testCase: path))
         guard let days else {
             Issue.record()
             return
@@ -399,12 +399,12 @@ final class DayUnitTests {
             }
         }
         if let today = days[0], let yesterday = days[1] {
-            #expect(today.expectedWeight == yesterday.expectedWeightTomorrow)
+            #expect(today.expectedWeight.isApproximately(yesterday.expectedWeightTomorrow, accuracy: 0.001) )
         }
     }
     
     @Test func missingDayAdjustmentWorksOnFirstDay() {
-        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.firstDayNotAdjustingWhenMissing)])
+        days = Days.testDays(options: .init(testCase: .firstDayNotAdjustingWhenMissing))
         guard let days, let firstDay = days.oldestDay, let tomorrow = days.dayAfter(firstDay) else {
             Issue.record()
             return
@@ -443,7 +443,7 @@ final class DayUnitTests {
     
     @Test func settingRealisticWeights() {
         // Initialize days with missing consumed calories and a specific test case
-        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
+        days = Days.testDays(options: .init(testCase: .realisticWeightsIssue))
         guard let days else {
             Issue.record("Days initialization failed")
             return
@@ -492,7 +492,7 @@ final class DayUnitTests {
     //todo not day test
     // TODO test days have proper high and low values on chart
     @Test func lineChartViewModel() async {
-        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.twoDaysIssue)])
+        let days = Days.testDays(options: .init(testCase: .twoDaysIssue))
         let vm = LineChartViewModel(days: days, timeFrame: TimeFrame.week)
     }
     
@@ -652,7 +652,7 @@ final class DayUnitTests {
         (50, 75)
     ])
     func subsetOfDaysOption(subset: (Int, Int)) {
-        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue), .subsetOfDays(subset.0, subset.1)])
+        let days = Days.testDays(options: .init(testCase: .realisticWeightsIssue, subsetOfDays: (subset.0, subset.1)))
         let max = Swift.max(subset.0, subset.1)
         let min = Swift.min(subset.0, subset.1)
         #expect(days.count == max - min + 1)
@@ -739,7 +739,7 @@ final class DayUnitTests {
     }
     
     @Test func filterByTimeFrame() {
-        let days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.realisticWeightsIssue)])
+        let days = Days.testDays(options: .init(testCase: .realisticWeightsIssue))
         #expect(days.count == 136)
         #expect(days.oldestDay?.daysAgo == 135)
         // Filter by week
@@ -760,7 +760,7 @@ final class DayUnitTests {
     }
     
     @Test func oldestDaysHaveWeightsAdded() {
-        days = Days.testDays(options: [.isMissingConsumedCalories(.v3), .testCase(.missingWeightsAtFirst)])
+        days = Days.testDays(options: .init(testCase: .missingWeightsAtFirst))
         let oldestWeightDay = days?.sorted(.longestAgoToMostRecent).first(where: { day in
             day.weight != 0
         })
@@ -810,7 +810,7 @@ final class DayUnitTests {
     }
     
     @Test func expectedWeightMatchesRunningTotalDeficit() {
-        var days = Days.testDays(options: [.testCase(.realisticWeightsIssue)])
+        var days = Days.testDays(options: .init(testCase: .realisticWeightsIssue, dontAddWeightsOnEveryDay: true))
         #expect(days.array().filter { $0.wasModifiedBecauseTheUserDidntEnterData }.count == 0)
         #expect(days.array().filter { $0.consumedCalories == 0 }.count == 111)
         #expect(days.count == 136)

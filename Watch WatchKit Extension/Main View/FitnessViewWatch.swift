@@ -153,7 +153,7 @@ struct HomeScreenWatch: View {
     
     private func reloadToday() {
         Task {
-            self.today = await HealthData.getToday()
+            self.today = await HealthData.getToday(environment: .debug) // TODO
         }
     }
 }
@@ -161,7 +161,7 @@ struct HomeScreenWatch: View {
 struct HomeScreenWatch_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreenWatch()
-            .environmentObject(HealthData(environment: AppEnvironmentConfig.debug(nil)))
+            .environmentObject(HealthData(environment: AppEnvironmentConfig.debug))
             .previewDevice(PreviewDevice(rawValue: "Apple Watch Series 7 - 45 mm"))
     }
 }

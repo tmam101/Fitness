@@ -14,22 +14,7 @@ import WidgetKit
 #endif
 import ClockKit
 
-protocol HealthStorageProtocol {
-    func sampleQuery(sampleType: HKSampleType, predicate: NSPredicate?, limit: Int, sortDescriptors: [NSSortDescriptor]?, resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void)
-}
-
-//TODO: For now, all in one, then separate later
-class HealthStorage: HealthStorageProtocol {
-    private let healthStore = HKHealthStore()
-
-    func sampleQuery(sampleType: HKSampleType, predicate: NSPredicate?, limit: Int, sortDescriptors: [NSSortDescriptor]?, resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
-        healthStore.execute(query)
-    }
-}
-
 class WeightManager: ObservableObject {
-    var environment: AppEnvironmentConfig?
     private var healthStorage: HealthStorageProtocol
     
     var startDate: Date?
@@ -50,19 +35,7 @@ class WeightManager: ObservableObject {
     var querySampleType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
     init(environment: AppEnvironmentConfig) {
-        self.environment = environment
-        switch environment {
-        case .release(options: let config):
-            healthStorage = config?.healthStorage ?? HealthStorage() // TODO this is duplicated in setup
-        case .debug(let config):
-            healthStorage = config?.healthStorage ?? HealthStorage() // TODO this is duplicated in setup
-        case .widgetRelease:
-            healthStorage = HealthStorage() // TODO this is duplicated in setup
-        }
-    }
-    
-    init() {
-        healthStorage = HealthStorage()
+        healthStorage = environment.healthStorage
     }
     
     // TODO use better

@@ -8,5 +8,5 @@
 import SwiftUI
 
 #Preview("inaccurateExpectedWeightToday") {
-    FitnessPreviewProvider.MainPreview(options: .init([.testCase(.inaccurateExpectedWeightToday), .isMissingConsumedCalories(.v3)]))
+    FitnessPreviewProvider.MainPreview(options: .init([.testCase(.inaccurateExpectedWeightToday), .isMissingConsumedCalories(true)]))
 }

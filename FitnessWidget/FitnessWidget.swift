@@ -11,7 +11,7 @@ import HealthKit
 import Combine
 
 struct Provider: TimelineProvider {
-    @ObservedObject var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.debug(nil))
+    @ObservedObject var healthData: HealthData = HealthData(environment: AppEnvironmentConfig.debug)
     private var cancellables = Set<AnyCancellable>()
     
     func placeholder(in context: Context) -> SimpleEntry {
@@ -23,7 +23,7 @@ struct Provider: TimelineProvider {
 //            let entry = SimpleEntry(date: Date(), healthData: healthData)
 //            completion(entry)
 //        }).store(in: &cancellables)
-        let _ = HealthData(environment: AppEnvironmentConfig.widgetRelease) { health in
+        let _ = HealthData(environment: AppEnvironmentConfig.release) { health in
             let entry = SimpleEntry(date: Date(), healthData: health)
             completion(entry)
             //            let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
@@ -33,7 +33,7 @@ struct Provider: TimelineProvider {
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let _ = HealthData(environment: AppEnvironmentConfig.widgetRelease) { health in
+        let _ = HealthData(environment: AppEnvironmentConfig.release) { health in
             let  entryDate = Calendar.current.date(byAdding: .minute, value: 15 , to: Date())!
             let entry = SimpleEntry(date: entryDate, healthData: health)
             let timeline = Timeline(entries: [entry], policy: .atEnd)
@@ -65,12 +65,12 @@ struct FitnessWidgetEntryView : View {
                 VStack(alignment: .leading) {
                     switch family {
                     case WidgetFamily.systemLarge:
-                        NetEnergyBarChart(health: entry.healthData, timeFrame: .week)
+                        NetEnergyBarChart(days: entry.healthData.days, timeFrame: .week)
                             .padding()
                     case WidgetFamily.systemMedium:
                         HStack {
                             VStack {
-                                NetEnergyBarChart(health: entry.healthData, timeFrame: .week)
+                                NetEnergyBarChart(days: entry.healthData.days, timeFrame: .week)
                                     .padding([.top, .bottom, .leading], /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                                     .frame(maxWidth: 125)
                                 Text("Last updated \(hour):\(minuteString)")
@@ -83,7 +83,7 @@ struct FitnessWidgetEntryView : View {
                     default:
                         VStack {
                             if let day = entry.healthData.days[0] {
-                                NetEnergyBarChart(health: entry.healthData, timeFrame: .week)
+                                NetEnergyBarChart(days: entry.healthData.days, timeFrame: .week)
                             }
                         }
                     }

@@ -195,6 +195,9 @@
 		E96701602AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */; };
 		E97C54472C1389E800E85C82 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD6F5C274B17C20007AC15 /* AppView.swift */; };
 		E98244502C8399F500F13BDC /* HealthDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E982444F2C8399F000F13BDC /* HealthDataTests.swift */; };
+		E98244522C8F273500F13BDC /* HealthStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */; };
+		E98244532C8F273500F13BDC /* HealthStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */; };
+		E98244542C8F273500F13BDC /* HealthStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */; };
 		E98B6D4F2C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
 		E98B6D502C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
 		E98B6D512C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
@@ -386,6 +389,7 @@
 		E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITests.swift; sourceTree = "<group>"; };
 		E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E982444F2C8399F000F13BDC /* HealthDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataTests.swift; sourceTree = "<group>"; };
+		E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStorageProtocol.swift; sourceTree = "<group>"; };
 		E98B6D4E2C8361640021E292 /* DecimalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtension.swift; sourceTree = "<group>"; };
 		E98B6D522C8380A80021E292 /* HomeScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenTests.swift; sourceTree = "<group>"; };
 		E99B514A2BE435EC002CEB48 /* missingDataIssue.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingDataIssue.json; sourceTree = "<group>"; };
@@ -671,6 +675,7 @@
 		48E0E20926041E550037EEAF /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */,
 				4845B7A125C0B2AA003BF999 /* HealthData.swift */,
 				48EC266925B8D1280003B455 /* WeightManager.swift */,
 				48AF60EA2640F65C00C6CC11 /* WorkoutManager.swift */,
@@ -1111,6 +1116,7 @@
 				48DE1DE127A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				E901DE1D29B8111700F889D3 /* TestData.swift in Sources */,
 				4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */,
+				E98244542C8F273500F13BDC /* HealthStorageProtocol.swift in Sources */,
 				48E0E1CF2603C3490037EEAF /* GenericCircles.swift in Sources */,
 				48A0D45325BB6605007C40ED /* HomeScreenView.swift in Sources */,
 				4802D48F278581CB0001BE9D /* RunManager.swift in Sources */,
@@ -1169,6 +1175,7 @@
 				48DE1DE227A07EFD00F2EE5B /* DeficitAndWeightLossGraph.swift in Sources */,
 				E901DE1F29B8111700F889D3 /* TestData.swift in Sources */,
 				4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */,
+				E98244522C8F273500F13BDC /* HealthStorageProtocol.swift in Sources */,
 				4802D490278582AD0001BE9D /* RunManager.swift in Sources */,
 				48E5F00E2925D92F00ADF691 /* WeightLineChart.swift in Sources */,
 				48DE1DE727A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
@@ -1243,6 +1250,7 @@
 				E95C9B7F2ADDC14A00B2FCC9 /* ArrayExtension.swift in Sources */,
 				48BD6F48274B160F0007AC15 /* Progress Rings.swift in Sources */,
 				E901FC222BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */,
+				E98244532C8F273500F13BDC /* HealthStorageProtocol.swift in Sources */,
 				48BD6F4F274B16190007AC15 /* ColorExtension.swift in Sources */,
 				48BD6F47274B16080007AC15 /* RingCollections.swift in Sources */,
 				E924B7672BFD3C7800BF00F6 /* MissingDataIssue.swift in Sources */,
