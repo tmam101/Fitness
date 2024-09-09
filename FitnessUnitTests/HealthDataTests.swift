@@ -29,14 +29,26 @@ final class HealthDataTests {
         let daysWithWeights = healthData.days.array().filter { $0.weight != 0}.toDays()
         let oldestDayWithWeight = try #require(daysWithWeights.oldestDay)
         let newestDayWithWeight = try #require(daysWithWeights.newestDay)
-        #expect(oldestDayWithWeight.weight == 206)  // TODO flaky
+        #expect(oldestDayWithWeight.weight == 206)
         #expect(newestDayWithWeight.weight == 200)
         #expect(newestDayWithWeight.protein == 1000)
+        #expect(daysWithWeights.count == healthData.days.count)
         #expect(healthData.hasLoaded == true)
         #expect(healthData.days == healthData.calorieManager.days)
         #expect(healthData.days.count == 11)
     }
     
-    // TODO test different environment things, like adding weights on every day
-    
+    @Test("Health data sets weights on every day when necessary")
+    func health_gaps() async {
+        let startDate = Date().subtracting(days: 10)
+        var environment = AppEnvironmentConfig(startDate: startDate, healthStorage: MockHealthStorageWithGapInDays())
+        var healthData = await HealthData.setValues(environment: environment)
+        #expect(healthData.days[3]?.weight == 203)
+        #expect(healthData.days[4]?.weight == 204)
+        
+        environment = AppEnvironmentConfig(dontAddWeightsOnEveryDay: true, startDate: startDate, healthStorage: MockHealthStorageWithGapInDays())
+        healthData = await HealthData.setValues(environment: environment)
+        #expect(healthData.days[3]?.weight == 203)
+        #expect(healthData.days[4]?.weight == 0)
+    }
 }

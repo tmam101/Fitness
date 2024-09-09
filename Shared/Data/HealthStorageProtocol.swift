@@ -53,7 +53,6 @@ class MockHealthStorage: HealthStorageProtocol {
     }
     
     func statisticsQuery(type: HealthKitType, quantitySamplePredicate: NSPredicate?, options: HKStatisticsOptions, completionHandler handler: @escaping (HKStatisticsQuery?, HKStatisticsProtocol?, (any Error)?) -> Void) {
-        // TODO
         guard let quantityType = type.value else {
             handler(nil, nil, nil) // TODO return error
             return
@@ -84,7 +83,13 @@ class MockHealthStorage: HealthStorageProtocol {
 
 class MockHealthStorageWithGapInDays: HealthStorageProtocol {
     func statisticsQuery(type: HealthKitType, quantitySamplePredicate: NSPredicate?, options: HKStatisticsOptions, completionHandler handler: @escaping (HKStatisticsQuery?, HKStatisticsProtocol?, (any Error)?) -> Void) {
-        // TODO
+        guard let quantityType = type.value else {
+            handler(nil, nil, nil) // TODO return error
+            return
+        }
+        let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: quantitySamplePredicate, options: options, completionHandler: handler)
+        let mock = MockHKStatistics(sumQuantity: .init(unit: type.unit, doubleValue: 1000))
+        handler(query, mock, nil)
     }
     
     func save(_ object: HKObject, withCompletion completion: @escaping (Bool, (any Error)?) -> Void) {

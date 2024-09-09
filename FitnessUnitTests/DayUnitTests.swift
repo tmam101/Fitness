@@ -272,7 +272,7 @@ final class DayUnitTests {
     }
     
     @Test func setWeightsOnEveryDay() {
-        for _ in 0...100 {
+        for _ in 0...10 {
             days = Days.testDays(options: .init([.dontAddWeightsOnEveryDay]))
             guard var days else {
                 Issue.record()

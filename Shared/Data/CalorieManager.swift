@@ -241,7 +241,7 @@ class CalorieManager: ObservableObject {
         return days
     }
     
-    func catchError() {
+//    func catchError() {
         //Catch error where sometimes days will be loaded with empty information. Enforce reloading of days.
         // TODO put somehwere else
 //            if !allowThreeDaysOfFasting {
@@ -254,7 +254,7 @@ class CalorieManager: ObservableObject {
 //                }
 //            }
 //            print("day \(i): \(day)")
-    }
+//    }
     
     /// Reload the end of the days list. This takes into account the running total deficit.
     // TODO Test
@@ -277,22 +277,22 @@ class CalorieManager: ObservableObject {
     // MARK: CATCH ERRORS
     //TODO: Prevent this error from occurring
     /// Catch error where sometimes days will be loaded with empty information.
-    func catchError(in days: Days) -> Bool {
-        if !allowThreeDaysOfFasting {
-            for i in 0..<days.count {
-                if days[i]?.consumedCalories == 0 && i < days.count - 2 {
-                    if days[i+1]?.consumedCalories == 0 &&
-                        days[i+2]?.consumedCalories == 0 {
-                        return true
-                    }
-                }
-            }
-        }
-        if days.count != self.daysBetweenStartAndNow + 1 {
-            return true
-        }
-        return false
-    }
+//    func catchError(in days: Days) -> Bool {
+//        if !allowThreeDaysOfFasting {
+//            for i in 0..<days.count {
+//                if days[i]?.consumedCalories == 0 && i < days.count - 2 {
+//                    if days[i+1]?.consumedCalories == 0 &&
+//                        days[i+2]?.consumedCalories == 0 {
+//                        return true
+//                    }
+//                }
+//            }
+//        }
+//        if days.count != self.daysBetweenStartAndNow + 1 {
+//            return true
+//        }
+//        return false
+//    }
     
     //MARK: ACTIVE CALORIE MODFIER
     

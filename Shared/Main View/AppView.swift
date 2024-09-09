@@ -18,7 +18,9 @@ struct AppView: View {
 #if !os(watchOS)
         GeometryReader { geometry in
             TabView {
-                
+#if !os(watchOS)
+                ChatView()
+                #endif
                 HomeScreen(timeFrame: $selectedPeriod)
                     .environmentObject(healthData)
                     .tabItem { Label("Over Time", systemImage: "calendar") }
@@ -174,4 +176,145 @@ struct SettingsView: View {
             }
         }
     }
+}
+
+#if !os(watchOS)
+
+class ChatGPTService {
+    
+    var apiKey: String? {
+        return ProcessInfo.processInfo.environment["API_KEY"]
+    }
+    
+    func sendMessage(prompt: String, completion: @escaping (String?) -> Void) {
+        guard let apiKey else {
+            completion(nil)
+            return
+        }
+        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = [
+            "model": "gpt-4o-mini",
+            "messages": [
+                [
+                    "role": "system",
+                    "content": """
+                    Expect a question about nutrition. You should respond in json format so that it can be parsed by an app. Like this: 
+{
+calories: <your answer>,
+protein: <your answer>
+}
+
+only respond with calories or protein info, and dont return one if it seems unnecessary to the request.
+"""
+                      ],
+                [
+                    "role": "user",
+                    "content": "\(prompt)"
+                ]
+            ],
+            "max_tokens": 1000,
+            "temperature": 0.7
+        ]
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+            
+            guard let text = self.parseChatResponse(data: data) else {
+                completion(nil)
+                return
+            }
+            completion(text.calories.description.trimmingCharacters(in: .whitespacesAndNewlines))
+        }.resume()
+    }
+    // Function to decode JSON using Codable
+    func parseChatResponse(data: Data) -> NutritionInfo? {
+        do {
+            // Decode the initial chat response
+            let response = try JSONDecoder().decode(ChatResponse.self, from: data)
+            
+            // Extract the content from the message
+            if let content = response.choices.first?.message.content {
+                
+                // Try to decode the content string into a NutritionInfo object
+                let contentData = Data(content.utf8)
+                let nutritionInfo = try JSONDecoder().decode(NutritionInfo.self, from: contentData)
+                
+                return nutritionInfo
+            }
+        } catch {
+            print("Error decoding JSON: \(error)")
+        }
+        return nil
+    }
+}
+
+struct ChatView: View {
+    @State private var userInput: String = ""
+    @State private var chatResponse: String = ""
+    @State private var isLoading = false
+
+    private let chatService = ChatGPTService()
+
+    var body: some View {
+        VStack {
+            TextField("Enter your message", text: $userInput)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            Button(action: sendMessage) {
+                Text("Send")
+            }
+            .disabled(userInput.isEmpty || isLoading)
+            .padding()
+
+            if isLoading {
+                ProgressView()
+                    .padding()
+            }
+
+            Text(chatResponse)
+                .padding()
+        }
+        .padding()
+    }
+
+    private func sendMessage() {
+        isLoading = true
+        chatService.sendMessage(prompt: userInput) { response in
+            DispatchQueue.main.async {
+                chatResponse = response ?? "Failed to get response"
+                isLoading = false
+            }
+        }
+    }
+}
+#endif
+
+// Define Codable structures to represent the JSON response
+struct ChatResponse: Codable {
+    let choices: [Choice]
+}
+
+struct Choice: Codable {
+    let message: Message
+}
+
+struct Message: Codable {
+    let role: String
+    let content: String
+}
+
+struct NutritionInfo: Codable {
+    let calories: Int
+    let protein: Int
 }

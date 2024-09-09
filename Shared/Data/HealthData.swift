@@ -47,7 +47,7 @@ class HealthData: ObservableObject {
             if await authorizeHealthKit() {
                 setupDates(environment: environment)
                 // Use test case if available
-                if let path = environment.testCase {
+                if environment.testCase != nil {
                     let days = Days.testDays(options: environment)
                     self.days = days
                     return
@@ -62,7 +62,7 @@ class HealthData: ObservableObject {
         let calorieManager = CalorieManager(environment: environment)
         await weightManager.setup()
         await calorieManager.setup(startingWeight: weightManager.startingWeight, weightManager: weightManager, daysBetweenStartAndNow: 0, forceLoad: false) // TODO this shouldnt always be
-        var today = await calorieManager.getDays(forPastDays: 0)[0]!
+        let today = await calorieManager.getDays(forPastDays: 0)[0]!
         today.weight = weightManager.currentWeight
         return today
     }
@@ -77,7 +77,7 @@ class HealthData: ObservableObject {
             if await authorizeHealthKit() { // TODO necessary?
                 setupDates(environment: environment)
                 // Use test case if available
-                if let path = environment.testCase {
+                if environment.testCase != nil {
                     let days = Days.testDays(options: environment)
                     self.days = days
                     completion(self)
@@ -101,7 +101,7 @@ class HealthData: ObservableObject {
             }
         }
         // Use test case if available
-        if let path = environment.testCase {
+        if environment.testCase != nil {
             let days = Days.testDays(options: environment)
             health.days = days
             return health
