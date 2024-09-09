@@ -183,7 +183,7 @@ struct SettingsView: View {
 class ChatGPTService {
     
     var apiKey: String? {
-        return ProcessInfo.processInfo.environment["API_KEY"]
+        return Bundle.main.infoDictionary?["API_KEY"] as? String
     }
     
     func sendMessage(prompt: String, completion: @escaping (String?) -> Void) {
