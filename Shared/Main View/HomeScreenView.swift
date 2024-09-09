@@ -139,6 +139,7 @@ public struct HomeScreen: View {
         let daysInTimeFrame = days.filteredBy(timeFrame)
         if let oldestDay = daysInTimeFrame.oldestDay,
            let newestDay = daysInTimeFrame.newestDay {
+            let dayDifference = oldestDay.daysAgo - newestDay.daysAgo
             let weightChange = newestDay.weight - oldestDay.weight
             let expectedWeightChange = newestDay.expectedWeight - oldestDay.expectedWeight
             return [
@@ -148,7 +149,8 @@ public struct HomeScreen: View {
                 let bodyText = change.roundedString(withSign: true)
                 var color = TodayRingColor.fromProperty(property) ?? .white
                 color = change < 0 ? color : .white
-                var percentage = change / -2.0
+                let goalDifference = -(Decimal((2.0/7.0)) * Decimal(dayDifference))
+                var percentage = change / goalDifference
                 percentage = percentage < 0 ? 0 : percentage
                 return TodayRingViewModel(
                     titleText: "\(property.rawValue.capitalized) change",

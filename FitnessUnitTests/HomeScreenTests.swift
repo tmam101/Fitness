@@ -86,8 +86,8 @@ final class HomeScreenTests {
         
         // Test calculations
         let daysWithinTimeframe = days.filteredBy(.week)
-        let oldestDay = try #require(daysWithinTimeframe.oldestDay)
-        let newestDay = try #require(daysWithinTimeframe.newestDay)
+        var oldestDay = try #require(daysWithinTimeframe.oldestDay)
+        var newestDay = try #require(daysWithinTimeframe.newestDay)
 
         let expectedWeightDifference = newestDay.expectedWeight - oldestDay.expectedWeight
         #expect(expectedWeightDifference.isApproximately(0.61, accuracy: 0.01))
@@ -107,15 +107,22 @@ final class HomeScreenTests {
         #expect(weightModel.color == .white)
 
         // Test year
+        oldestDay = try #require(days.oldestDay)
+        newestDay = try #require(days.newestDay)
+        let dayDifference = Decimal(oldestDay.daysAgo - newestDay.daysAgo)
+        let goalDifference = -Decimal(2.0/7.0) * dayDifference
+        #expect(dayDifference == 135)
+        #expect(goalDifference.isApproximately(-38.571, accuracy: 0.001))
+        
         models = HomeScreen.weightRingModels(days: days, timeFrame: .allTime)
         expectedWeightModel = try #require(models?.first)
         #expect(expectedWeightModel.bodyText == "-2.86")
-        #expect(expectedWeightModel.percentage.isApproximately(1.427, accuracy: 0.001))
+        #expect(expectedWeightModel.percentage.isApproximately(-2.86 / goalDifference, accuracy: 0.001))
         #expect(expectedWeightModel.color == .yellow)
 
         weightModel = try #require(models?[1])
         #expect(weightModel.bodyText == "-1.60")
-        #expect(weightModel.percentage.isApproximately(0.8, accuracy: 0.01))
+        #expect(weightModel.percentage.isApproximately(-1.60 / goalDifference, accuracy: 0.01))
         #expect(weightModel.color == .green)
     }
 }
