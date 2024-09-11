@@ -201,6 +201,7 @@
 		E98720372C8F9867003E20D8 /* NutritonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98720362C8F9863003E20D8 /* NutritonAPI.swift */; };
 		E98720382C8F9867003E20D8 /* NutritonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98720362C8F9863003E20D8 /* NutritonAPI.swift */; };
 		E98720392C8F9867003E20D8 /* NutritonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98720362C8F9863003E20D8 /* NutritonAPI.swift */; };
+		E987203B2C9238E6003E20D8 /* NutrotionAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E987203A2C9238E6003E20D8 /* NutrotionAPITests.swift */; };
 		E98B6D4F2C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
 		E98B6D502C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
 		E98B6D512C8361660021E292 /* DecimalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B6D4E2C8361640021E292 /* DecimalExtension.swift */; };
@@ -395,6 +396,7 @@
 		E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStorageProtocol.swift; sourceTree = "<group>"; };
 		E98720352C8F94E4003E20D8 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E98720362C8F9863003E20D8 /* NutritonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritonAPI.swift; sourceTree = "<group>"; };
+		E987203A2C9238E6003E20D8 /* NutrotionAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrotionAPITests.swift; sourceTree = "<group>"; };
 		E98B6D4E2C8361640021E292 /* DecimalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtension.swift; sourceTree = "<group>"; };
 		E98B6D522C8380A80021E292 /* HomeScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenTests.swift; sourceTree = "<group>"; };
 		E99B514A2BE435EC002CEB48 /* missingDataIssue.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingDataIssue.json; sourceTree = "<group>"; };
@@ -802,6 +804,7 @@
 				E94E203D2C0AD964004480AC /* NetEnergyBarChartTests.swift */,
 				E9B948CE2C0F8A09001183BE /* CalorieManagerUnitTests.swift */,
 				E9206ADE2C824669007826AD /* WeightManagerTests.swift */,
+				E987203A2C9238E6003E20D8 /* NutrotionAPITests.swift */,
 			);
 			path = FitnessUnitTests;
 			sourceTree = "<group>";
@@ -1323,6 +1326,7 @@
 				E9DE68732AD5A60F00320684 /* DayUnitTests.swift in Sources */,
 				E98B6D532C8380B00021E292 /* HomeScreenTests.swift in Sources */,
 				E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */,
+				E987203B2C9238E6003E20D8 /* NutrotionAPITests.swift in Sources */,
 				E95C9B812ADDC52C00B2FCC9 /* ExtensionUnitTests.swift in Sources */,
 				E9B948CF2C0F8A09001183BE /* CalorieManagerUnitTests.swift in Sources */,
 			);
