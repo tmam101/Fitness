@@ -81,7 +81,7 @@ public struct HomeScreen: View {
     public static func netEnergyRingModels(days: Days, timeFrame: TimeFrame) -> [TodayRingViewModel]? {
         let daysInTimeFrame = days.filteredBy(timeFrame)
         if let thisWeekDeficit = daysInTimeFrame.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 1),
-           let weeklyDeficitTomorrow = daysInTimeFrame.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0),
+           let weeklyDeficitTomorrow = daysInTimeFrame.averageDeficitOfPrevious(days: timeFrame.days, endingOnDay: 0), // TODO shouldnt it be timeframe.days - 1?
            !thisWeekDeficit.isNaN {
             let thisWeekNetEnergy = 0 - thisWeekDeficit
             let bodyText = thisWeekNetEnergy.stringWithPlusIfNecessary

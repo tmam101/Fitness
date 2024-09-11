@@ -17,8 +17,20 @@ final class HomeScreenTests {
     @Test("Home screen net energy models")
     func netEnergy() throws {
         // TODO Test more thoroughly - create days that I know the difference of, then test against that
-        let days = Days.testDays(options: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)]))
-        
+//        let days = Days.testDays(options: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)]))
+        let days: Days = [
+            0: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 3000),
+            1: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            2: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            3: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            4: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            5:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            6:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            7:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            8:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            9:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
+            10:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900)
+        ]
         // Test week
         var models = HomeScreen.netEnergyRingModels(days: days, timeFrame: .week)
         var netEnergyThisTimeFrameModel = try #require(models?.first)
