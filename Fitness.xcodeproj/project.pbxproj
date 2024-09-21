@@ -37,9 +37,6 @@
 		4845B79525C0987D003BF999 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		4845B7A425C0B2AA003BF999 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
-		484BB6882776AAB900E24B1C /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
-		484BB68B2776AE8100E24B1C /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
-		484BB68C2776AE8200E24B1C /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484BB6872776AAB900E24B1C /* Network.swift */; };
 		485B72802631EBB40070E096 /* Ring (unused).swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0E1DA2603C3C10037EEAF /* Ring (unused).swift */; };
 		485B72992631EBD70070E096 /* Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B78F25C09853003BF999 /* Lines.swift */; };
 		485B992627CEC29C00C70C81 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485B992527CEC29C00C70C81 /* Settings.swift */; };
@@ -315,7 +312,6 @@
 		4832D11627835D3400414573 /* WatchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchManager.swift; sourceTree = "<group>"; };
 		4845B78F25C09853003BF999 /* Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lines.swift; sourceTree = "<group>"; };
 		4845B7A125C0B2AA003BF999 /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
-		484BB6872776AAB900E24B1C /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		485B992527CEC29C00C70C81 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		48755A89267AF13200F7680E /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
 		487A95182640F97500627BA3 /* strong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strong.json; sourceTree = "<group>"; };
@@ -536,7 +532,6 @@
 				E91D3F4E2AD73882001E1397 /* Old */,
 				48821CB225B8BF3800C9F58A /* Assets.xcassets */,
 				487A95182640F97500627BA3 /* strong.json */,
-				484BB6872776AAB900E24B1C /* Network.swift */,
 				48B984E627850CD400C0E93A /* BackgroundAppRefreshManger.swift */,
 				48108120278A0EDC008E9AE6 /* WatchConnectivityIphone.swift */,
 			);
@@ -1162,7 +1157,6 @@
 				E901FC202BFFAD8800C78104 /* TwoDaysIssue.swift in Sources */,
 				E90086CA2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
 				4802D49727875B7F0001BE9D /* ViewExtension.swift in Sources */,
-				484BB6882776AAB900E24B1C /* Network.swift in Sources */,
 				48108121278A0EDC008E9AE6 /* WatchConnectivityIphone.swift in Sources */,
 				48AF60EB2640F65C00C6CC11 /* WorkoutManager.swift in Sources */,
 				E924B76E2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */,
@@ -1225,7 +1219,6 @@
 				E90086CC2AD8935A000F77B8 /* TimeFrame.swift in Sources */,
 				48BD6E70274AFAF90007AC15 /* RunningLineGraph.swift in Sources */,
 				4802D49827875B7F0001BE9D /* ViewExtension.swift in Sources */,
-				484BB68B2776AE8100E24B1C /* Network.swift in Sources */,
 				48AF60ED2640F65C00C6CC11 /* WorkoutManager.swift in Sources */,
 				E924B76F2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */,
 				4802D494278585CE0001BE9D /* CalorieManager.swift in Sources */,
@@ -1262,7 +1255,6 @@
 				4802D49A27875B7F0001BE9D /* ViewExtension.swift in Sources */,
 				48BD6F0D274B12CB0007AC15 /* NotificationController.swift in Sources */,
 				48DE1DE927A086E700F2EE5B /* WeightLossGraph.swift in Sources */,
-				484BB68C2776AE8200E24B1C /* Network.swift in Sources */,
 				485B992927CEC29C00C70C81 /* Settings.swift in Sources */,
 				48B984E727850CD400C0E93A /* BackgroundAppRefreshManger.swift in Sources */,
 				E99B51532BE56C6D002CEB48 /* WeightLineChart.swift in Sources */,

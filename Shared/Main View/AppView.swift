@@ -18,7 +18,7 @@ struct AppView: View {
                 ChatView(chatService: ChatGPTService())
                     .tabItem { Label("Log", systemImage: "square.and.pencil") }
                 
-                WeightView()
+                WeightView(weightManager: healthData.weightManager)
                     .tabItem { Label("Log", systemImage: "scalemass") }
                 
                 HomeScreen(timeFrame: $selectedPeriod)
