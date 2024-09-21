@@ -10,3 +10,7 @@ xcuserdata/
 Fitness.xcodeproj/xcuserdata/thomasgoss.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
 *.xcbkptlist
 Fitness.xcodeproj/xcuserdata/thomasgoss.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+combined_output.txt
+.DS_Store
+Shared/Test Case JSON Files/.DS_Store
+Shared/.DS_Store

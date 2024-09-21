@@ -16,31 +16,26 @@ final class HomeScreenTests {
     
     @Test("Home screen net energy models")
     func netEnergy() throws {
-        // TODO Test more thoroughly - create days that I know the difference of, then test against that
-//        let days = Days.testDays(options: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)]))
-        let days: Days = [
-            0: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 3000),
-            1: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            2: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            3: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            4: Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            5:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            6:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            7:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            8:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            9:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900),
-            10:Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900)
-        ]
+        func days() -> Days {
+            var days: Days = [:]
+            for i in 0...100 {
+                days[i] = Day(activeCalories: 100, restingCalories: 2000, consumedCalories: 1900) // Every day has deficit of -200
+            }
+            return days
+        }
+        
         // Test week
+        let days = days()
+        days[0]?.consumedCalories = 3000
         var models = HomeScreen.netEnergyRingModels(days: days, timeFrame: .week)
         var netEnergyThisTimeFrameModel = try #require(models?.first)
-        #expect(netEnergyThisTimeFrameModel.bodyText == "+307")
-        #expect(netEnergyThisTimeFrameModel.percentage.isApproximately(-0.307, accuracy: 0.001))
-        #expect(netEnergyThisTimeFrameModel.color == .red)
+        #expect(netEnergyThisTimeFrameModel.bodyText == "-200")
+        #expect(netEnergyThisTimeFrameModel.percentage.isApproximately(0.2, accuracy: 0.001))
+        #expect(netEnergyThisTimeFrameModel.color == .yellow)
 
         var netEnergyTomorrowModel = try #require(models?[1])
-        #expect(netEnergyTomorrowModel.bodyText == "-113")
-        #expect(netEnergyTomorrowModel.percentage.isApproximately(0.113, accuracy: 0.001))
+        #expect(netEnergyTomorrowModel.bodyText == "-42")
+        #expect(netEnergyTomorrowModel.percentage.isApproximately(0.042, accuracy: 0.001))
         #expect(netEnergyTomorrowModel.color == .yellow)
         
         // Test calculations

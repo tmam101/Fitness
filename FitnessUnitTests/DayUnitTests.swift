@@ -357,6 +357,7 @@ final class DayUnitTests {
         Date.subtract(days: num, from: Date())
     }
     
+    // TODO i dont understand this test
     @Test func dayOfWeek() {
         days = Days.testDays(options: .init([.testCase(.missingDataIssue)]))
         #expect(days?[0]?.dayOfWeek == "Thursday")

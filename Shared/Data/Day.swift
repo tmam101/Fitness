@@ -442,55 +442,64 @@ extension Days {
     
     @discardableResult
     func adjustDaysWhereUserDidntEnterDatav3() -> Bool {
-        let days = self
-        
-        // TODO this shouldnt happen if the options say dont add weight on every day
-        // Ensure all days have weights
-        if !days.everyDayHas(.weight) {
-//            days.setWeightOnEveryDay()
-            return false
-        }
-        
-        // Ensure all days have realistic weights
-        if !days.everyDayHas(.realisticWeight) {
-//            days.setRealisticWeights()
-            return false
-        }
-        
-        // Iterate over days sorted from the oldest to the most recent
-        forEveryDay { day in
-            let didUserEnterData = day.consumedCalories != 0
+            // Ensure all days have weight and realistic weight data
+            guard self.everyDayHas(.weight) else {
+                print("Cannot adjust missing data: Not all days have weight data.")
+                return false
+            }
             
-            // If we are on the first day, check if user entered data
-            guard let yesterday = days.dayBefore(day) else {
-                guard let tomorrow = days.dayAfter(day) else {
-                    print("Fail") // TODO: Handle this edge case properly
+            guard self.everyDayHas(.realisticWeight) else {
+                print("Cannot adjust missing data: Not all days have realistic weight data.")
+                return false
+            }
+            
+            // Iterate over each day from oldest to newest
+            self.forEveryDay(.longestAgoToMostRecent) { day in
+                let hasUserData = day.consumedCalories != 0
+                
+                if hasUserData {
+                    // User entered data; no adjustment needed
+                    // Update expected weight based on yesterday's data
+                    if let yesterday = self.dayBefore(day) {
+                        day.expectedWeight = yesterday.expectedWeightTomorrow
+                    }
                     return
                 }
-                if !didUserEnterData {
-                    let realisticWeightChangeCausedByToday = tomorrow.realisticWeight - day.expectedWeight
-                    day.consumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChangeCausedByToday)
-                    day.wasModifiedBecauseTheUserDidntEnterData = true
+                
+                // User did not enter data; need to estimate consumedCalories
+                if let yesterday = self.dayBefore(day) {
+                    if let tomorrow = self.dayAfter(day) {
+                        // Estimate based on the difference between tomorrow's realistic weight and yesterday's expected weight
+                        let realisticWeightChange = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
+                        let estimatedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+                        day.consumedCalories = estimatedCalories
+                        day.wasModifiedBecauseTheUserDidntEnterData = true
+                    } else {
+                        // No tomorrow data; cannot estimate accurately
+                        print("Cannot estimate consumed calories for day \(day.daysAgo): Missing tomorrow's weight data.")
+                        // Optionally, set consumedCalories to a default value or skip
+                    }
+                    // Update expected weight
+                    day.expectedWeight = yesterday.expectedWeightTomorrow
+                } else {
+                    // No yesterday data; this is the first day
+                    if let tomorrow = self.dayAfter(day) {
+                        let realisticWeightChange = tomorrow.realisticWeight - day.expectedWeight
+                        let estimatedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+                        day.consumedCalories = estimatedCalories
+                        day.wasModifiedBecauseTheUserDidntEnterData = true
+                    } else {
+                        // Only one day exists; cannot estimate
+                        print("Cannot estimate consumed calories for the first day: Missing surrounding weight data.")
+                        // Optionally, set consumedCalories to a default value or skip
+                    }
+                    // Update expected weight
+                    // Since no yesterday, expectedWeight remains as is or based on other logic
                 }
-                return
             }
             
-            // If we are on today, set expected weight based on yesterday's expected weight tomorrow
-            guard let tomorrow = days.dayAfter(day) else {
-                day.expectedWeight = yesterday.expectedWeightTomorrow
-                return
-            }
-            
-            // Adjust days where user didn't enter data
-            if !didUserEnterData {
-                let realisticWeightChangeCausedByToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
-                day.consumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChangeCausedByToday)
-                day.wasModifiedBecauseTheUserDidntEnterData = true
-            }
-            day.expectedWeight = yesterday.expectedWeightTomorrow
+            return true
         }
-        return true
-    }
     
     // MARK: Convenience
     
@@ -728,5 +737,21 @@ extension [Day] {
             days[day.daysAgo] = day
         }
         return days
+    }
+}
+
+protocol HasDate {
+    var date: Date { get }
+}
+
+extension Array where Element: HasDate {
+    func sorted(_ sortOrder: SortOrder) -> [Element] {
+        switch sortOrder {
+        case .longestAgoToMostRecent:
+            self.sorted { $0.date < $1.date }
+        case .mostRecentToLongestAgo:
+            self.sorted { $0.date > $1.date }
+        }
+        
     }
 }

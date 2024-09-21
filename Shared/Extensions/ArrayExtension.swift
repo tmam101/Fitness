@@ -27,22 +27,6 @@ extension Array where Element == Decimal {
     }
 }
 
-protocol HasDate {
-    var date: Date { get }
-}
-
-extension Array where Element: HasDate {
-    func sorted(_ sortOrder: SortOrder) -> [Element] {
-        switch sortOrder {
-        case .longestAgoToMostRecent:
-            self.sorted { $0.date < $1.date }
-        case .mostRecentToLongestAgo:
-            self.sorted { $0.date > $1.date }
-        }
-        
-    }
-}
-
 extension Array where Element == Date {
     func sorted(_ sortOrder: SortOrder) -> [Element] {
         switch sortOrder {

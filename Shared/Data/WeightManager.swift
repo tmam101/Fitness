@@ -30,10 +30,6 @@ class WeightManager: ObservableObject {
     @Published var weightsAfterStartDate: [Weight] = []
     @Published var averageWeightLostPerWeekThisMonth: Decimal = 0
     
-    var weightLimit = 3000
-    var sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-    var querySampleType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    
     init(environment: AppEnvironmentConfig) {
         healthStorage = environment.healthStorage
     }
@@ -106,7 +102,7 @@ class WeightManager: ObservableObject {
 #if !os(macOS)
     func getWeights() async -> [Weight] {
         return await withCheckedContinuation { continuation in
-            healthStorage.sampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor]) { query, results, error in
+            healthStorage.getAllWeights { query, results, error in
                 if let results = results as? [HKQuantitySample] {
                     let weights = results
                         .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }

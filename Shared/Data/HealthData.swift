@@ -301,6 +301,7 @@ class HealthData: ObservableObject {
         self.daysBetweenStartAndNow = daysBetweenStartAndNow
     }
     
+    // TODO this is running during unit tests
     private func authorizeHealthKit() async -> Bool {
         // TODO add a check for if its xctest?
         if !HKHealthStore.isHealthDataAvailable() { return false }
