@@ -46,7 +46,7 @@ class HealthData: ObservableObject {
                 // Use test case if available
                 if environment.testCase != nil {
                     let days = Days.testDays(options: environment)
-                    self.days = days
+                    self.days = days // TODO publishing change from background thread
                     return
                 }
                 await setValues(forceLoad: true, completion: nil)
