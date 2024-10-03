@@ -16,7 +16,7 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-            Text("Settings")
+            Text("Test")
                 .foregroundColor(.white)
             HStack {
                 Text("Minimum resting calories burned")
