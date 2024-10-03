@@ -13,20 +13,12 @@ import SwiftUI
  */
 
 extension FitnessPreviewProvider {
-    static func missingDataIssue(_ strategy: TestDayOption.MissingConsumedCaloriesStrategy) -> some View {
-        MainPreview(options: [ .isMissingConsumedCalories(strategy), .testCase(.missingDataIssue)])
+    static func missingDataIssue() -> some View {
+        MainPreview(options: .init([ .isMissingConsumedCalories(true), .testCase(.missingDataIssue)]))
     }
 }
 
-#Preview("Missing calories v1") {
-    FitnessPreviewProvider.missingDataIssue(.v1)
-}
-
-#Preview("Missing calories v2") {
-    FitnessPreviewProvider.missingDataIssue(.v2)
-}
-
 #Preview("Missing calories v3") {
-    FitnessPreviewProvider.missingDataIssue(.v3)
+    FitnessPreviewProvider.missingDataIssue()
 }
 

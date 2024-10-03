@@ -28,7 +28,7 @@ struct TodayView: View {
                 displayGridItems()
             }
         }
-        // TODO Make reload like FitnessView
+        // TODO Make reload like HomeScreen
 //        .onAppear {
 //            vm.reloadToday()
 //        }
@@ -154,7 +154,7 @@ struct TestRing: View {
 }
 
 struct TodayViewPreview: View {
-    @State var health: HealthData = HealthData(environment: .debug(nil))
+    @State var health: HealthData = HealthData(environment: .debug)
     var body: some View {
         TodayView()
             .environmentObject(health)
@@ -164,7 +164,7 @@ struct TodayViewPreview: View {
     
 // MARK: PREVIEW
 struct Previews_TodayView_Previews: PreviewProvider {
-    @State var health = HealthData(environment: .debug(nil))
+    @State var health = HealthData(environment: .debug)
 
     static var previews: some View {
         TodayViewPreview()

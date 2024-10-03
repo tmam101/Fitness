@@ -178,19 +178,6 @@ public class LineChartViewModel: ObservableObject {
     private var cancellables: [AnyCancellable] = []
     @Published var timeFrame: TimeFrame
     
-    init(health: HealthData, timeFrame: TimeFrame) {
-        self.timeFrame = timeFrame
-        switch health.environment {
-        case .debug:
-            self.populateDays(for: health.days)
-        case .release, .widgetRelease:
-            health.$hasLoaded.sink { [weak self] hasLoaded in
-                guard let self = self, hasLoaded else { return }
-                self.populateDays(for: health.days)
-            }.store(in: &cancellables)
-        }
-    }
-    
     init(days: Days, timeFrame: TimeFrame) {
         self.timeFrame = timeFrame
         self.populateDays(for: days)
@@ -198,6 +185,15 @@ public class LineChartViewModel: ObservableObject {
     
     public func populateDays(for days: Days) {
         self.days = self.constructDays(using: days)
+        // TODO Trying to get it to still consider it month if you press all time but there's only 15 days, for example. 
+//        let days = self.constructDays(using: days)
+//        if days.count <= TimeFrame.month.days {
+//            self.timeFrame = .month
+//        }
+//        if days.count <= TimeFrame.week.days {
+//            self.timeFrame = .week
+//        }
+//        self.days = days
         self.updateMinMaxValues(days: self.days)
     }
 
@@ -228,8 +224,8 @@ public class LineChartViewModel: ObservableObject {
 struct WeightLineChart: View {
     @ObservedObject private var viewModel: LineChartViewModel
     
-    init(health: HealthData, timeFrame: TimeFrame) {
-        self.viewModel = LineChartViewModel(health: health, timeFrame: timeFrame)
+    init(days: Days, timeFrame: TimeFrame) {
+        self.viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
     }
     
     @ChartContentBuilder

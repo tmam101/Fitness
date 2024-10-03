@@ -168,13 +168,13 @@ public class Day: Codable, Identifiable, Equatable, HasDate {
         return newConsumedCalories
     }
     
-    public enum Property {
+    public enum Property: String {
         case activeCalories
         case restingCalories
         case consumedCalories
         case weight
         case realisticWeight
-        case expectedWeight
+        case expectedWeight = "expected weight"
         case netEnergy
         case deficit
         
@@ -196,6 +196,27 @@ public class Day: Codable, Identifiable, Equatable, HasDate {
                 return \Day.netEnergy
             case .deficit:
                 return \Day.deficit
+            }
+        }
+        
+        var color: Color? {
+            switch self {
+            case .expectedWeight:
+                return .yellow
+            case .weight:
+                return .green
+            case .activeCalories:
+                return nil
+            case .restingCalories:
+                return nil
+            case .consumedCalories:
+                return nil
+            case .realisticWeight:
+                return nil
+            case .netEnergy:
+                return nil
+            case .deficit:
+                return nil
             }
         }
     }
@@ -231,10 +252,11 @@ extension Days {
     
     // MARK: Test days
     static func testDays() -> Days {
-        testDays(options: nil)
+        var config: AppEnvironmentConfig?
+        return testDays(options: config)
     }
     
-    static func testDays(options: [TestDayOption]?) -> Days {
+    static func testDays(options: AppEnvironmentConfig?) -> Days {
         var days: Days = [:]
         guard
             let activeCalories: [Decimal] = .decode(path: .activeCalories),
@@ -252,23 +274,22 @@ extension Days {
         var weightGoingSteadilyDown = false
         var dayCount = activeCalories.count - 1
         if let options {
-            for option in options {
-                switch option {
-                case .isMissingConsumedCalories:
-                    missingData = true
-                case .weightGoingSteadilyDown:
-                    weightGoingSteadilyDown = true
-                case .testCase(let file):
-                    var days: Days = Days.decode(path: file) ?? [:] // TODO
-                    days.formatAccordingTo(options: options)
-                    return days
-                case .dayCount(let count):
-                    dayCount = count
-                case .dontAddWeightsOnEveryDay:
-                    weightsOnEveryDay = false
-                case .subsetOfDays(_, _):
-                    print("TODO")
-                }
+            if options.isMissingConsumedCalories {
+                missingData = true
+            }
+            if let w = options.weightGoingSteadilyDown {
+                weightGoingSteadilyDown = w
+            }
+            if let file = options.testCase {
+                var days: Days = Days.decode(path: file) ?? [:] // TODO
+                days.formatAccordingTo(options: options)
+                return days
+            }
+            if let count = options.dayCount {
+                dayCount = count
+            }
+            if options.dontAddWeightsOnEveryDay {
+                weightsOnEveryDay = false
             }
         }
         
@@ -294,38 +315,25 @@ extension Days {
         if missingData {
             days.adjustDaysWhereUserDidntEnterDatav3()
         }
-        print(days.encodeAsString())
         return days
     }
     
     // MARK: Construction
     
-    mutating func formatAccordingTo(options: [TestDayOption]?) {
+    mutating func formatAccordingTo(options: AppEnvironmentConfig?) {
         self.addRunningTotalDeficits()
         let _ = self.setInitialExpectedWeights()
         if let options {
-            if !options.contains(.dontAddWeightsOnEveryDay) {
+            if !options.dontAddWeightsOnEveryDay {
                 self.setWeightOnEveryDay()
                 self.setRealisticWeights()
-            }
-            for option in options {
-                if case let .isMissingConsumedCalories(version) = option {
-                    switch version {
-                    case .v1:
-                        self.adjustDaysWhereUserDidntEnterData()
-                    case .v2:
-                        self.adjustDaysWhereUserDidntEnterDatav2()
-                    case .v3:
-                        self.adjustDaysWhereUserDidntEnterDatav3()
-                    }
-                    break
+                if options.isMissingConsumedCalories {
+                    self.adjustDaysWhereUserDidntEnterDatav3()
                 }
             }
             // TODO test
-            for option in options {
-                if case let .subsetOfDays(int, int2) = option {
-                    self = subset(from: int, through: int2)
-                }
+            if let subsetOfDays = options.subsetOfDays {
+                self = subset(from: subsetOfDays.0, through: subsetOfDays.1)
             }
         }
     }
@@ -431,52 +439,66 @@ extension Days {
         }
     }
     
-    func adjustDaysWhereUserDidntEnterDatav3() {
-        let days = self
-        
-        // Ensure all days have weights
-        if !days.everyDayHas(.weight) {
-            days.setWeightOnEveryDay()
-        }
-        
-        // Ensure all days have realistic weights
-        if !days.everyDayHas(.realisticWeight) {
-            days.setRealisticWeights()
-        }
-        
-        // Iterate over days sorted from the oldest to the most recent
-        forEveryDay { day in
-            let didUserEnterData = day.consumedCalories != 0
+    @discardableResult
+    func adjustDaysWhereUserDidntEnterDatav3() -> Bool {
+            // Ensure all days have weight and realistic weight data
+            guard self.everyDayHas(.weight) else {
+                print("Cannot adjust missing data: Not all days have weight data.")
+                return false
+            }
             
-            // If we are on the first day, check if user entered data
-            guard let yesterday = days.dayBefore(day) else {
-                guard let tomorrow = days.dayAfter(day) else {
-                    print("Fail") // TODO: Handle this edge case properly
+            guard self.everyDayHas(.realisticWeight) else {
+                print("Cannot adjust missing data: Not all days have realistic weight data.")
+                return false
+            }
+            
+            // Iterate over each day from oldest to newest
+            self.forEveryDay(.longestAgoToMostRecent) { day in
+                let hasUserData = day.consumedCalories != 0
+                
+                if hasUserData {
+                    // User entered data; no adjustment needed
+                    // Update expected weight based on yesterday's data
+                    if let yesterday = self.dayBefore(day) {
+                        day.expectedWeight = yesterday.expectedWeightTomorrow
+                    }
                     return
                 }
-                if !didUserEnterData {
-                    let realisticWeightChangeCausedByToday = tomorrow.realisticWeight - day.expectedWeight
-                    day.consumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChangeCausedByToday)
-                    day.wasModifiedBecauseTheUserDidntEnterData = true
+                
+                // User did not enter data; need to estimate consumedCalories
+                if let yesterday = self.dayBefore(day) {
+                    if let tomorrow = self.dayAfter(day) {
+                        // Estimate based on the difference between tomorrow's realistic weight and yesterday's expected weight
+                        let realisticWeightChange = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
+                        let estimatedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+                        day.consumedCalories = estimatedCalories
+                        day.wasModifiedBecauseTheUserDidntEnterData = true
+                    } else {
+                        // No tomorrow data; cannot estimate accurately
+                        print("Cannot estimate consumed calories for day \(day.daysAgo): Missing tomorrow's weight data.")
+                        // Optionally, set consumedCalories to a default value or skip
+                    }
+                    // Update expected weight
+                    day.expectedWeight = yesterday.expectedWeightTomorrow
+                } else {
+                    // No yesterday data; this is the first day
+                    if let tomorrow = self.dayAfter(day) {
+                        let realisticWeightChange = tomorrow.realisticWeight - day.expectedWeight
+                        let estimatedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChange)
+                        day.consumedCalories = estimatedCalories
+                        day.wasModifiedBecauseTheUserDidntEnterData = true
+                    } else {
+                        // Only one day exists; cannot estimate
+                        print("Cannot estimate consumed calories for the first day: Missing surrounding weight data.")
+                        // Optionally, set consumedCalories to a default value or skip
+                    }
+                    // Update expected weight
+                    // Since no yesterday, expectedWeight remains as is or based on other logic
                 }
-                return
             }
             
-            // If we are on today, set expected weight based on yesterday's expected weight tomorrow
-            guard let tomorrow = days.dayAfter(day) else {
-                day.expectedWeight = yesterday.expectedWeightTomorrow
-                return
-            }
-            
-            // Adjust days where user didn't enter data
-            if !didUserEnterData {
-                let realisticWeightChangeCausedByToday = tomorrow.realisticWeight - yesterday.expectedWeightTomorrow
-                day.consumedCalories = day.estimatedConsumedCaloriesToCause(realisticWeightChange: realisticWeightChangeCausedByToday)
-                day.wasModifiedBecauseTheUserDidntEnterData = true
-            }
-            day.expectedWeight = yesterday.expectedWeightTomorrow
+            return true
         }
-    }
     
     // MARK: Convenience
     
@@ -699,108 +721,11 @@ extension Days {
         return self.subset(from: -1, through: timeFrame.days)
     }
     
-    // MARK: OLD WAYS OF ADJUSTING DAYS
+//    func filter(_ isIncluded: (Dictionary<Key, Value>.Element) throws -> Bool) rethrows -> [Key : Value]
+//    {
+//        self.array().filter(isIncluded).toDays()
+//    }
     
-    // Need to look at tomorrow's weight, not yesterday's weight, right?
-    mutating func adjustDaysWhereUserDidntEnterData() {
-        if self.array().filter({ $0.weight == 0 }).count != 0 {
-            self.setWeightOnEveryDay()
-        }
-        for i in stride(from: self.count - 1, through: 0, by: -1) {
-            guard let day = self[i] else { return }
-            let didUserEnterData = day.consumedCalories != 0
-            guard let yesterday = self[i+1] else { continue }
-            // Tomorrow
-            guard self[i-1] != nil else {
-                // If we're on today
-                if !didUserEnterData {
-                    self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
-                } else {
-                    if let expectedWeightChangeBasedOnDeficit = self[i]?.expectedWeightChangeBasedOnDeficit {
-                        self[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
-                    }
-                }
-                continue
-            }
-            if !didUserEnterData {
-                let todaysWeightMinusYesterdaysExpectedWeight = day.weight - yesterday.expectedWeight
-                var newConsumedCalories: Decimal = 0
-                if todaysWeightMinusYesterdaysExpectedWeight < 0 {
-                    let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeBurned = 0 - (todaysWeightMinusYesterdaysExpectedWeight * Constants.numberOfCaloriesInPound)
-                    let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
-                    if caloriesLeftToBeBurned {
-                        newConsumedCalories = 0
-                    } else {
-                        newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
-                    }
-                } else {
-                    let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeEaten = (todaysWeightMinusYesterdaysExpectedWeight * Constants.numberOfCaloriesInPound) + totalBurned
-                    newConsumedCalories = Swift.min(5000.0, abs(caloriesAssumedToBeEaten))
-                }
-                self[i]?.consumedCalories = newConsumedCalories
-                self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
-            }
-            if let expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
-                self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
-            }
-        }
-        print(self)
-    }
-    
-    mutating func adjustDaysWhereUserDidntEnterDatav2() {
-        if self.array().filter({ $0.weight == 0 }).count != 0 {
-            self.setWeightOnEveryDay()
-        }
-        for i in stride(from: self.count - 1, through: 0, by: -1) {
-            guard let day = self[i] else { return }
-            let didUserEnterData = day.consumedCalories != 0
-            guard let yesterday = self[i+1] else { continue }
-            // Tomorrow
-            guard let tomorrow = self[i-1] else {
-                // If we're on today
-                if !didUserEnterData {
-                    self[i]?.expectedWeight = yesterday.expectedWeightTomorrow
-                } else {
-                    if let expectedWeightChangeBasedOnDeficit = self[i]?.expectedWeightChangeBasedOnDeficit {
-                        self[i]?.expectedWeight = yesterday.expectedWeightTomorrow + expectedWeightChangeBasedOnDeficit
-                    }
-                }
-                continue
-            }
-            if !didUserEnterData {
-                let weightChangecausedByToday = tomorrow.weight - day.weight
-                var newConsumedCalories: Decimal = 0
-                if weightChangecausedByToday < 0 {
-                    let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeBurned = 0 - (weightChangecausedByToday * Constants.numberOfCaloriesInPound)
-                    let caloriesLeftToBeBurned = (caloriesAssumedToBeBurned - totalBurned) > 0
-                    if caloriesLeftToBeBurned {
-                        newConsumedCalories = 0
-                    } else {
-                        newConsumedCalories = totalBurned - caloriesAssumedToBeBurned // maybe
-                    }
-                } else {
-                    let totalBurned = day.activeCalories + day.restingCalories
-                    let caloriesAssumedToBeEaten = (weightChangecausedByToday * Constants.numberOfCaloriesInPound) + totalBurned
-                    newConsumedCalories = Swift.min(5000.0, abs(caloriesAssumedToBeEaten))
-                }
-                self[i]?.consumedCalories = newConsumedCalories
-                self[i]?.wasModifiedBecauseTheUserDidntEnterData = true
-            }
-            // Should make sure this isnt too high or low
-            if var expectedWeightChange = self[i]?.expectedWeightChangeBasedOnDeficit {
-                if expectedWeightChange > 0.5 {
-                    expectedWeightChange = 0.5
-                } else if expectedWeightChange < -0.5 {
-                    expectedWeightChange = -0.5
-                }
-                self[i]?.expectedWeight = yesterday.expectedWeight + expectedWeightChange
-            }
-        }
-        print(self)
-    }
 }
 
 // TODO Test
@@ -811,5 +736,21 @@ extension [Day] {
             days[day.daysAgo] = day
         }
         return days
+    }
+}
+
+protocol HasDate {
+    var date: Date { get }
+}
+
+extension Array where Element: HasDate {
+    func sorted(_ sortOrder: SortOrder) -> [Element] {
+        switch sortOrder {
+        case .longestAgoToMostRecent:
+            self.sorted { $0.date < $1.date }
+        case .mostRecentToLongestAgo:
+            self.sorted { $0.date > $1.date }
+        }
+        
     }
 }

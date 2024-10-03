@@ -14,28 +14,10 @@ import WidgetKit
 #endif
 import ClockKit
 
-protocol WeightProcessorProtocol {
-    func processWeights(continuation: CheckedContinuation<[Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) -> Void
-}
-
-class WeightProcessor: WeightProcessorProtocol {
-    func processWeights(continuation: CheckedContinuation<[Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) {
-        if let results = results as? [HKQuantitySample] {
-            let weights = results
-                .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }
-            
-            continuation.resume(returning: weights)
-            return
-        }
-    }
-}
-
 class WeightManager: ObservableObject {
-    var environment: AppEnvironmentConfig?
-    var weightProcessor: WeightProcessorProtocol?
+    private var healthStorage: HealthStorageProtocol
     
-    var startDateString = "01.23.2021"
-    let endDateString = "05.01.2021"
+    var startDate: Date?
     @Published var startingWeight: Decimal = 231.8
     @Published var currentWeight: Decimal = 231.8
     @Published var endingWeight: Decimal = 190
@@ -49,16 +31,7 @@ class WeightManager: ObservableObject {
     @Published var averageWeightLostPerWeekThisMonth: Decimal = 0
     
     init(environment: AppEnvironmentConfig) {
-        self.environment = environment
-        switch environment {
-//        case .debug:
-//            getAllStatsDebug(completion: nil)
-        default:
-            return
-        }
-    }
-    
-    init() {
+        healthStorage = environment.healthStorage
     }
     
     // TODO use better
@@ -70,7 +43,10 @@ class WeightManager: ObservableObject {
     }
     
     @discardableResult
-    func setup(startDate: Date? = nil, startDateString: String? = nil, weightProcessor: WeightProcessorProtocol = WeightProcessor()) async -> Bool {
+    func setup(
+        startDate: Date? = nil,
+        startDateString: String? = nil
+    ) async -> Bool {
         guard let startDate: Date =
                 startDate ??
                 startDateString?.toDate() ??
@@ -78,12 +54,11 @@ class WeightManager: ObservableObject {
          else {
             return false
         }
-        self.startDateString = startDate.toString() // TODO is this right
-        self.weightProcessor = weightProcessor
-        self.weights = await getWeights().sorted { $0.date < $1.date }
-        self.weightsAfterStartDate = self.weights.filter { $0.date >= Date.dateFromString(self.startDateString)!}
+        self.startDate = startDate
+        self.weights = await getWeights()
+        self.weightsAfterStartDate = self.weights.filter { $0.date >= startDate }
         
-        self.currentWeight = self.weights.first?.weight ?? 1
+        self.currentWeight = self.weights.last?.weight ?? 1
         
         self.startingWeight = weight(at: startDate) ?? 1 //TODO
         
@@ -123,18 +98,20 @@ class WeightManager: ObservableObject {
         }
         return lastRecordedWeightBeforeDate.weight + (weightDiffPerDay * Decimal(daysBetweenWeightBeforeAndAfterDate))
     }
-    
-    private let healthStore = HKHealthStore()
-    private let bodyMassType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    
+        
 #if !os(macOS)
     func getWeights() async -> [Weight] {
         return await withCheckedContinuation { continuation in
-            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-            let query = HKSampleQuery(sampleType: bodyMassType, predicate: nil, limit: 3000, sortDescriptors: [sortDescriptor]) { (query, results, error) in
-                self.weightProcessor?.processWeights(continuation: continuation, query, results, error)
+            healthStorage.getAllWeights { query, results, error in
+                if let results = results as? [HKQuantitySample] {
+                    let weights = results
+                        .map{ Weight(weight: Decimal($0.quantity.doubleValue(for: HKUnit.pound())), date: $0.endDate) }
+                        .sorted { $0.date < $1.date }
+                    self.weights = weights
+                    continuation.resume(returning: weights)
+                    return
+                }
             }
-            healthStore.execute(query)
         }
     }
 #endif

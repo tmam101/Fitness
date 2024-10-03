@@ -13,11 +13,14 @@ class AppSettings: ObservableObject {
     init() {
         for path in Filepath.Days.allCases {
             if ProcessInfo.processInfo.arguments.contains(path.rawValue) {
-                healthData = HealthData(environment: .debug([ .isMissingConsumedCalories(.v3), .testCase(path)]))
+                healthData = HealthData(environment: .init([ .isMissingConsumedCalories(true), .testCase(path)]))
                 return
             }
         }
-        healthData = HealthData(environment: AppEnvironmentConfig.release([ .isMissingConsumedCalories(.v3)]))
+        healthData = HealthData(environment: AppEnvironmentConfig.release)
+        Task {
+            await healthData.setValues(forceLoad: true, completion: nil) // TODO doesnt this happen inside the healthdata init
+        }
     }
 }
 
@@ -43,32 +46,13 @@ struct TestApp: App {
 }
 
 struct FitnessApp: App {
-//    @StateObject var healthData = HealthData(environment: AppEnvironmentConfig.release([.shouldAddWeightsOnEveryDay, .isMissingConsumedCalories(.v3)]))
-//    @State var watchConnectivityIphone = WatchConnectivityIphone()
-//    @Environment(\.scenePhase) private var scenePhase
     @StateObject var settings = AppSettings()
 
     var body: some Scene {
         WindowGroup {
-//            AppView()
-//                .environmentObject(healthData)
-//                .environmentObject(watchConnectivityIphone)
             AppView()
                 .environmentObject(settings.healthData)
-//                .environmentObject(WatchConnectivityIphone())
         }
-//        .onChange(of: scenePhase) {
-//            if scenePhase == .background {
-//                Task {
-//                    WCSession.default.sendMessage(["started":"absolutely"], replyHandler: { response in
-//                        print("watch connectivity iphone received \(response)")
-//                    }, errorHandler: { error in
-//                        print("watch connectivity iphone error \(error)")
-//                    })
-////                    watchConnectivityIphone = WatchConnectivityIphone()
-//                }
-//            }
-//        }
     }
 }
 
@@ -76,8 +60,7 @@ struct FitnessApp_Previews: PreviewProvider {
     
     static var previews: some View {
         AppView()
-            .environmentObject(HealthData(environment: .debug([.testCase(.firstDayNotAdjustingWhenMissing), .isMissingConsumedCalories(.v3)])))
+            .environmentObject(HealthData(environment: .init([.testCase(.firstDayNotAdjustingWhenMissing), .isMissingConsumedCalories(true)])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
-//            .environmentObject(WatchConnectivityIphone())
     }
 }

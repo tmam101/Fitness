@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>API_KEY</key>
+	<string>${API_KEY}</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>Me.Fitness2.setValues</string>
@@ -25,11 +27,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>&quot;Please Please Please Please Please Please&quot;</string>
+	<string>"Please Please Please Please Please Please"</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>&quot;Please Please Please Please Please Please&quot;</string>
-	<key>UIUserInterfaceStyle</key>
-	<string>Dark</string>
+	<string>"Please Please Please Please Please Please"</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -60,5 +60,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
 </dict>
 </plist>

@@ -9,20 +9,20 @@ on:
 jobs:
   build-and-test:
     name: Build and Test on iPhone Simulator
-    runs-on: macos-13
+    runs-on: macos-14
     
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         
       - name: Set Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.0.1.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_16.0.0.app/Contents/Developer
         
       - name: Build and Test
         env:
           scheme: 'Fitness (iOS)'
           platform: 'iOS Simulator'
-          device: 'iPhone 14'
+          device: 'iPhone 15'
         run: |
           # Determine if the project uses a workspace or a project file and set the variables accordingly
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then

@@ -16,15 +16,14 @@ struct CalorieManagerUnitTests {
     var calorieManager: CalorieManager!
     
     init() {
-        calorieManager = CalorieManager()
-        calorieManager.environment = .debug(nil)
+        calorieManager = CalorieManager(environment: .debug)
     }
     
     func setup() async {
         let date = Date()
         let twentyDaysAgo = Date.subtract(days: 20, from: date)
         let tenDaysAgo = Date.subtract(days: 10, from: date)
-        await calorieManager.setup(oldestWeight: Weight(weight: 230, date: twentyDaysAgo), newestWeight: Weight(weight: 200, date: tenDaysAgo), daysBetweenStartAndNow: 20, environment: .debug(nil))
+        await calorieManager.setup(oldestWeight: Weight(weight: 230, date: twentyDaysAgo), newestWeight: Weight(weight: 200, date: tenDaysAgo), daysBetweenStartAndNow: 20)
     }
     
     @Test func types() {
@@ -36,7 +35,7 @@ struct CalorieManagerUnitTests {
             Issue.record()
             return
         }
-        let pred = calorieManager.specificDayPredicate(daysAgo: 2, quantityType: quantityType)
+        let pred = calorieManager.specificDayPredicate(daysAgo: 2)
         let startDate = Date.subtract(days: 2, from: Date())
         let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
         let testPred = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])

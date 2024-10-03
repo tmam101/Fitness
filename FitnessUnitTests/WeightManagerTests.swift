@@ -9,94 +9,52 @@ import Testing
 @testable import Fitness
 import HealthKit
 
-struct WeightManagerTests {
+final class WeightManagerTests {
     var weightManager: WeightManager!
+    var environment: AppEnvironmentConfig!
     
     init() {
-        weightManager = WeightManager()
+        environment = .debug
+        weightManager = WeightManager(environment: environment)
     }
     
-    @Test func mockWorks() async {
-        let weightProcessor = MockWeightProcessor()
+    @Test("Start date filters weights")
+    func startDate() async {
         let startDate = Date().subtracting(days: 3)
-        await weightManager.setup(startDate: startDate, weightProcessor: MockWeightProcessor())
-        #expect(weightManager.weights == weightProcessor.weights)
-        #expect(weightManager.startDateString == startDate.toString())
+        await weightManager.setup(startDate: startDate)
+        #expect(weightManager.weights.first?.weight == 206)
+        #expect(weightManager.weights.last?.weight == 200)
+        #expect(weightManager.weights.first?.date.daysAgo() == 6)
+        #expect(weightManager.weightsAfterStartDate.first?.date.daysAgo() == 3)
+        #expect(weightManager.weightsAfterStartDate.first?.weight == 203)
+        #expect(weightManager.startDate == startDate)
     }
     
     @Test func startingWeightWithGapInDaysBeforeAndAfterStartDate() async {
-        let weightProcessor = MockWeightProcessorWithGapInDays()
+        let weightProcessor = MockHealthStorageWithGapInDays()
+        environment = .init(healthStorage: weightProcessor)
+        weightManager = WeightManager(environment: environment)
         let startDate = Date().subtracting(days: 4)
-        await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
-        let expectedWeights = await weightProcessor.getWeights()
-        #expect(weightManager.weights == expectedWeights)
+        await weightManager.setup(startDate: startDate)
         #expect(weightManager.startingWeight == 204)
     }
     
     @Test func startingWeightWithNoWeightsUntilAfterStartDate() async {
-        let weightProcessor = MockWeightProcessor()
         let startDate = Date().subtracting(days: 12)
-        await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
-        #expect(weightManager.weights == weightProcessor.weights)
+        await weightManager.setup(startDate: startDate)
         #expect(weightManager.startingWeight == 206)
     }
     
-    @Test func HKQuery() async {
-        let weightProcessor = MockWeightProcessor()
+    @Test func currentWeight() async {
         let startDate = Date().subtracting(days: 12)
-        await weightManager.setup(startDate: startDate, weightProcessor: weightProcessor)
-        #expect(weightProcessor.query?.sortDescriptors == [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)])
-        #expect(weightProcessor.query?.limit == 3000)
-        #expect(weightProcessor.query?.objectType == HKSampleType.quantityType(forIdentifier: .bodyMass)!)
-    }
-}
-
-class MockWeightProcessor: WeightProcessorProtocol {
-    var query: HKSampleQuery?
-
-    let weights: [Weight] = [
-        .init(weight: 200, date: Date().subtracting(days: 0)),
-        .init(weight: 201, date: Date().subtracting(days: 1)),
-        .init(weight: 202, date: Date().subtracting(days: 2)),
-        .init(weight: 203, date: Date().subtracting(days: 3)),
-        .init(weight: 204, date: Date().subtracting(days: 4)),
-        .init(weight: 205, date: Date().subtracting(days: 5)),
-        .init(weight: 206, date: Date().subtracting(days: 6))
-    ].sorted { $0.date < $1.date }
-    func processWeights(continuation: CheckedContinuation<[Fitness.Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) {
-        self.query = query
-        continuation.resume(returning: weights)
-    }
-}
-
-class MockWeightProcessorWithGapInDays: WeightProcessorProtocol {
-    let weights: [Weight] = [
-        .init(weight: 200, date: Date().subtracting(days: 0)),
-        .init(weight: 201, date: Date().subtracting(days: 1)),
-        .init(weight: 202, date: Date().subtracting(days: 2)),
-        .init(weight: 203, date: Date().subtracting(days: 3)),
-        .init(weight: 206, date: Date().subtracting(days: 6)),
-        .init(weight: 207, date: Date().subtracting(days: 7)),
-        .init(weight: 208, date: Date().subtracting(days: 8)),
-        .init(weight: 209, date: Date().subtracting(days: 9))
-    ].sorted { $0.date < $1.date }
-    var query: HKSampleQuery?
-    
-    func processWeights(continuation: CheckedContinuation<[Fitness.Weight], Never>, _ query: HKSampleQuery, _ results: [HKSample]?, _ error: (any Error)?) {
-        self.query = query
-        continuation.resume(returning: weights)
+        await weightManager.setup(startDate: startDate)
+        #expect(weightManager.currentWeight == 200)
     }
     
-    func getWeights() async -> [Fitness.Weight] {
-        return [
-            .init(weight: 200, date: Date().subtracting(days: 0)),
-            .init(weight: 201, date: Date().subtracting(days: 1)),
-            .init(weight: 202, date: Date().subtracting(days: 2)),
-            .init(weight: 203, date: Date().subtracting(days: 3)),
-            .init(weight: 206, date: Date().subtracting(days: 6)),
-            .init(weight: 207, date: Date().subtracting(days: 7)),
-            .init(weight: 208, date: Date().subtracting(days: 8)),
-            .init(weight: 209, date: Date().subtracting(days: 9))
-        ].sorted { $0.date < $1.date }
+    @Test("Get weights")
+    func getWeights() async {
+        let weights = await WeightManager(environment: .debug).getWeights()
+        #expect(weights.first?.weight == 206)
+        #expect(weights.last?.weight == 200)
     }
 }
