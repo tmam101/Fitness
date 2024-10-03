@@ -16,3 +16,4 @@ Shared/Test Case JSON Files/.DS_Store
 Shared/.DS_Store
 .DS_Store
 filtered_output.txt
+*.xcconfig
