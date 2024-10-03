@@ -12,8 +12,8 @@ public struct TimeFramePicker: View {
     @Binding var selectedPeriod: Int
     public var body: some View {
         Picker(selection: $selectedPeriod, label: Text("Select Period")) {
-            ForEach(0..<TimeFrame.timeFrames.count) {
-                                    Text(TimeFrame.timeFrames[$0].shortName)
+            ForEach(TimeFrame.timeFrames, id: \.self) { timeFrame in
+                Text(timeFrame.shortName)
             }
         }
         .pickerStyle(SegmentedPickerStyle())

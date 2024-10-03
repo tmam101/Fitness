@@ -82,7 +82,7 @@ struct FitnessWidgetEntryView : View {
                         
                     default:
                         VStack {
-                            if let day = entry.healthData.days[0] {
+                            if entry.healthData.days[0] != nil {
                                 NetEnergyBarChart(days: entry.healthData.days, timeFrame: .week)
                             }
                         }

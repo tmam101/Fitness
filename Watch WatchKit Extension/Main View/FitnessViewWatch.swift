@@ -65,10 +65,10 @@ struct HomeScreenWatch: View {
                     //                        .background(Color.myGray)
                     //                        .cornerRadius(20)
                     
-                    if let today {
+//                    if let today {
                         
 //                        OverallRing(today: today)
-                    }
+//                    }
                 }
                 
                 //                Group {

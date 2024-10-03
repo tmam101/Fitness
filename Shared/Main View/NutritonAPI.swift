@@ -164,7 +164,7 @@ public struct ChatView: View {
     }
     
     private func save() {
-        let c = CalorieManager(environment: .release) // TODO
+        /*let c = CalorieManager(environment: .release)*/ // TODO
 //        c.saveCaloriesEaten(calories: <#T##Decimal#>)
     }
 

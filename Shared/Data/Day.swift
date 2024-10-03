@@ -252,8 +252,7 @@ extension Days {
     
     // MARK: Test days
     static func testDays() -> Days {
-        var config: AppEnvironmentConfig?
-        return testDays(options: config)
+        return testDays(options: nil)
     }
     
     static func testDays(options: AppEnvironmentConfig?) -> Days {
@@ -262,7 +261,7 @@ extension Days {
             let activeCalories: [Decimal] = .decode(path: .activeCalories),
             let restingCalories: [Decimal] = .decode(path: .restingCalories),
             let consumedCalories: [Decimal] = .decode(path: .consumedCalories),
-            let upAndDownWeights: [Decimal] = .decode(path: .upAndDownWeights),
+            let _: [Decimal] = .decode(path: .upAndDownWeights),
             let missingConsumedCalories: [Decimal] = .decode(path: .missingConsumedCalories),
             let weightsGoingSteadilyDown: [Decimal] = .decode(path: .weightGoingSteadilyDown)
         else {

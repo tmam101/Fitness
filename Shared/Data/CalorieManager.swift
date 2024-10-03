@@ -259,7 +259,7 @@ class CalorieManager: ObservableObject {
     /// Reload the end of the days list. This takes into account the running total deficit.
     // TODO Test
     func reload(days: inout Days, fromDay daysAgo: Int) async -> Days {
-        var reloadedDays = await getDays(forPastDays: daysAgo)
+        let reloadedDays = await getDays(forPastDays: daysAgo)
         let earliestDeficit = (days[daysAgo + 1]?.runningTotalDeficit ?? 0) + (reloadedDays[daysAgo]?.deficit ?? 0)
         reloadedDays[daysAgo]?.runningTotalDeficit = earliestDeficit
         reloadedDays[daysAgo]?.expectedWeight = startingWeight - (earliestDeficit / 3500) // TODO Reloaded expected weights are different from the initial calculation
