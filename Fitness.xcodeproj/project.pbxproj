@@ -332,6 +332,7 @@
 		E94E20362C0AC877004480AC /* WeightLineChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightLineChartTests.swift; sourceTree = "<group>"; };
 		E94E20392C0ACAC4004480AC /* ChartContentExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartContentExtension.swift; sourceTree = "<group>"; };
 		E94E203D2C0AD964004480AC /* NetEnergyBarChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetEnergyBarChartTests.swift; sourceTree = "<group>"; };
+		E9508E552CAEF10F00083E8A /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E951EB612BF56ABA004D3CBF /* missingConsumedCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = missingConsumedCalories.json; sourceTree = "<group>"; };
 		E951EB622BF56ABA004D3CBF /* weightGoingSteadilyDown.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weightGoingSteadilyDown.json; sourceTree = "<group>"; };
 		E951EB632BF56ABA004D3CBF /* restingCalories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = restingCalories.json; sourceTree = "<group>"; };
@@ -346,7 +347,6 @@
 		E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E982444F2C8399F000F13BDC /* HealthDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataTests.swift; sourceTree = "<group>"; };
 		E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStorageProtocol.swift; sourceTree = "<group>"; };
-		E98720352C8F94E4003E20D8 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E98720362C8F9863003E20D8 /* NutritonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritonAPI.swift; sourceTree = "<group>"; };
 		E987203A2C9238E6003E20D8 /* NutrotionAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrotionAPITests.swift; sourceTree = "<group>"; };
 		E98B6D4E2C8361640021E292 /* DecimalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtension.swift; sourceTree = "<group>"; };
@@ -446,7 +446,7 @@
 		48821CAA25B8BF3600C9F58A = {
 			isa = PBXGroup;
 			children = (
-				E98720352C8F94E4003E20D8 /* Config.xcconfig */,
+				E9508E552CAEF10F00083E8A /* Config.xcconfig */,
 				E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */,
 				E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */,
 				E9EA45D02AEAE7CF00345CEA /* FitnessUnitTests.xctestplan */,
@@ -1250,7 +1250,6 @@
 /* Begin XCBuildConfiguration section */
 		48821CDF25B8BF3800C9F58A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E98720352C8F94E4003E20D8 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1311,7 +1310,6 @@
 		};
 		48821CE025B8BF3800C9F58A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E98720352C8F94E4003E20D8 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1365,7 +1363,6 @@
 		};
 		48821CE225B8BF3800C9F58A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E98720352C8F94E4003E20D8 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1392,7 +1389,6 @@
 		};
 		48821CE325B8BF3800C9F58A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E98720352C8F94E4003E20D8 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
