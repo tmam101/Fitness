@@ -13,10 +13,12 @@
       "containerPath" : "container:Fitness.xcodeproj",
       "identifier" : "48821CB625B8BF3800C9F58A",
       "name" : "Fitness (iOS)"
-    }
+    },
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Fitness.xcodeproj",
         "identifier" : "E9DE686F2AD5A60F00320684",
