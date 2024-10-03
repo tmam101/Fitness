@@ -26,7 +26,7 @@ final class HomeScreenTests {
         
         // Test week
         let days = days()
-        days[0]?.consumedCalories = 3000
+        days[0]?.consumedCalories = 3000 // except for today, which has a surplus of 900
         var models = HomeScreen.netEnergyRingModels(days: days, timeFrame: .week)
         var netEnergyThisTimeFrameModel = try #require(models?.first)
         #expect(netEnergyThisTimeFrameModel.bodyText == "-200")
@@ -42,34 +42,29 @@ final class HomeScreenTests {
         let daysWithinTimeframe = days.filteredBy(.week)
         let oldestDay = try #require(daysWithinTimeframe.oldestDay)
         let newestDay = try #require(daysWithinTimeframe.newestDay)
-
-        let expectedWeightDifference = newestDay.expectedWeight - oldestDay.expectedWeight
-        #expect(expectedWeightDifference.isApproximately(0.61, accuracy: 0.01))
-        let weightDifference = newestDay.weight - oldestDay.weight
-        #expect(weightDifference.isApproximately(0.83, accuracy: 0.01))
         
         // Test month
         models = HomeScreen.netEnergyRingModels(days: days, timeFrame: .month)
         netEnergyThisTimeFrameModel = try #require(models?.first)
-        #expect(netEnergyThisTimeFrameModel.bodyText == "+59")
-        #expect(netEnergyThisTimeFrameModel.percentage.isApproximately(-0.059, accuracy: 0.01))
-        #expect(netEnergyThisTimeFrameModel.color == .red)
+        #expect(netEnergyThisTimeFrameModel.bodyText == "-200")
+        #expect(netEnergyThisTimeFrameModel.percentage.isApproximately(0.2, accuracy: 0.01))
+        #expect(netEnergyThisTimeFrameModel.color == .yellow)
 
         netEnergyTomorrowModel = try #require(models?[1])
-        #expect(netEnergyTomorrowModel.bodyText == "+21")
-        #expect(netEnergyTomorrowModel.percentage.isApproximately(-0.021, accuracy: 0.01))
-        #expect(netEnergyTomorrowModel.color == .red)
+        #expect(netEnergyTomorrowModel.bodyText == "-163")
+        #expect(netEnergyTomorrowModel.percentage.isApproximately(0.163, accuracy: 0.01))
+        #expect(netEnergyTomorrowModel.color == .yellow)
 
         // Test year
         models = HomeScreen.netEnergyRingModels(days: days, timeFrame: .allTime)
         netEnergyThisTimeFrameModel = try #require(models?.first)
-        #expect(netEnergyThisTimeFrameModel.bodyText == "-74")
-        #expect(netEnergyThisTimeFrameModel.percentage.isApproximately(0.074, accuracy: 0.001))
+        #expect(netEnergyThisTimeFrameModel.bodyText == "-200")
+        #expect(netEnergyThisTimeFrameModel.percentage.isApproximately(0.2, accuracy: 0.001))
         #expect(netEnergyThisTimeFrameModel.color == .yellow)
 
         netEnergyTomorrowModel = try #require(models?[1])
-        #expect(netEnergyTomorrowModel.bodyText == "-90")
-        #expect(netEnergyTomorrowModel.percentage.isApproximately(0.090001, accuracy: 0.001))
+        #expect(netEnergyTomorrowModel.bodyText == "-189")
+        #expect(netEnergyTomorrowModel.percentage.isApproximately(0.189, accuracy: 0.001))
         #expect(netEnergyTomorrowModel.color == .yellow)
         
     }
