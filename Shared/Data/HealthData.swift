@@ -182,7 +182,9 @@ class HealthData: ObservableObject {
     
     // TODO this is running during unit tests
     private func authorizeHealthKit() async -> Bool {
-        // TODO add a check for if its xctest?
+        guard environment.isProduction() else {
+            return true
+        // TODO does this make sense
         if !HKHealthStore.isHealthDataAvailable() { return false }
         
         let readDataTypes: Swift.Set<HKSampleType> = [
