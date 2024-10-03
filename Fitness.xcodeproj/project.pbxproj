@@ -325,6 +325,7 @@
 		E9211EF12C0E49B30079A758 /* missingWeightsAtFirst.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingWeightsAtFirst.json; sourceTree = "<group>"; };
 		E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = missingWeightsAtFirst.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
+		E9375FE02CAF36B3000BCBFD /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E943AE7C2C9F58CC008588A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E943AE802C9F59C4008588A8 /* WeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightView.swift; sourceTree = "<group>"; };
@@ -446,6 +447,7 @@
 		48821CAA25B8BF3600C9F58A = {
 			isa = PBXGroup;
 			children = (
+				E9375FE02CAF36B3000BCBFD /* Config.xcconfig */,
 				E9508E552CAEF10F00083E8A /* Config.xcconfig */,
 				E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */,
 				E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */,
