@@ -184,6 +184,7 @@ class HealthData: ObservableObject {
     private func authorizeHealthKit() async -> Bool {
         guard environment.isProduction() else {
             return true
+        }
         // TODO does this make sense
         if !HKHealthStore.isHealthDataAvailable() { return false }
         
