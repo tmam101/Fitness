@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-test:
     name: Build and Test on iPhone Simulator
-    runs-on: macos-13
+    runs-on: macos-14
     
     steps:
       - name: Checkout
@@ -22,7 +22,7 @@ jobs:
         env:
           scheme: 'Fitness (iOS)'
           platform: 'iOS Simulator'
-          device: 'iPhone 14'
+          device: 'iPhone 15'
         run: |
           # Determine if the project uses a workspace or a project file and set the variables accordingly
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then
