@@ -126,8 +126,6 @@ class HealthData: ObservableObject {
         calorieManager.days.oldestDay?.weight = weightManager.startingWeight
         // Set self values
         self.days = calorieManager.days
-        print("JSON of days dictionary: \n")
-        print(days.encodeAsString())
         days.formatAccordingTo(options: environment)
         self.hasLoaded = true
         completion?(self)

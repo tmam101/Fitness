@@ -315,7 +315,6 @@ extension Days {
         if missingData {
             days.adjustDaysWhereUserDidntEnterDatav3()
         }
-        print(days.encodeAsString())
         return days
     }
     
