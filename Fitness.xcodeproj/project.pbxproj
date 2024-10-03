@@ -1378,7 +1378,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise;
 				PRODUCT_NAME = Fitness;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -1402,7 +1402,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise;
 				PRODUCT_NAME = Fitness;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -1427,7 +1427,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness2.FitnessWidget2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.FitnessWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1442,7 +1442,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				INFOPLIST_FILE = FitnessWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1450,7 +1450,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness2.FitnessWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.FitnessWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1475,18 +1475,18 @@
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Watch;
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = Me.Fitness2;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.Thomas.CalorieWise;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness2.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -1509,21 +1509,21 @@
 				CODE_SIGN_ENTITLEMENTS = "Watch WatchKit Extension/Watch WatchKit ExtensionDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Watch;
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = Me.Fitness2;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.Thomas.CalorieWise;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1551,7 +1551,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.WatchTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.WatchTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1570,7 +1570,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4AFJB5Y6TR;
+				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1578,7 +1578,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Me.Fitness.WatchTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.WatchTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1707,7 +1707,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = test.FitnessUnitTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.FitnessUnitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1733,7 +1733,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = test.FitnessUnitTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Thomas.CalorieWise.FitnessUnitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
