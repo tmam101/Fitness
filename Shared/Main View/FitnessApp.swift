@@ -9,8 +9,9 @@ import SwiftUI
 import WatchConnectivity
 
 class AppSettings: ObservableObject {
-    @Published var healthData: HealthData
-    init() {
+    @Published var healthData: HealthData = HealthData(environment: .debug)
+    
+    func setup(startDate: String) {
         for path in Filepath.Days.allCases {
             if ProcessInfo.processInfo.arguments.contains(path.rawValue) {
                 healthData = HealthData(environment: .init([ .isMissingConsumedCalories(true), .testCase(path)]))
@@ -46,13 +47,17 @@ struct TestApp: App {
 }
 
 struct FitnessApp: App {
+    @AppStorage("startDate") var startDate: String = ""
     @StateObject var settings = AppSettings()
 
     var body: some Scene {
         WindowGroup {
-            AppView()
+                AppView()
                 .environmentObject(settings.healthData)
-        }
+                    .onAppear {
+                        settings.setup(startDate: startDate)
+                    }
+            }
     }
 }
 

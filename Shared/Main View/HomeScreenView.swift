@@ -90,7 +90,7 @@ public struct HomeScreen: View {
                 titleText: "Average\n\(timeFrame.longName)",
                 bodyText: bodyText,
                 subBodyText: "cals",
-                percentage: thisWeekDeficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
+                percentage: thisWeekDeficit / (Settings.get(.netEnergyGoal) ?? 1000),
                 color: color,
                 bodyTextColor: color,
                 subBodyTextColor: color
@@ -103,7 +103,7 @@ public struct HomeScreen: View {
                 titleText: "Tomorrow's Projected Average",
                 bodyText: bodyText2,
                 subBodyText: "cals",
-                percentage: weeklyDeficitTomorrow / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000),
+                percentage: weeklyDeficitTomorrow / (Settings.get(.netEnergyGoal) ?? 1000),
                 color: color2,
                 bodyTextColor: color2,
                 subBodyTextColor: color2

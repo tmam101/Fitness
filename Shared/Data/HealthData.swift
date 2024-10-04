@@ -154,7 +154,7 @@ class HealthData: ObservableObject {
     }
 #endif
     
-    private func setupDates(environment: AppEnvironmentConfig) {
+    func setupDates(environment: AppEnvironmentConfig) {
         // Use the environment's start date if we have it
         if let startDate = environment.startDate {
             self.startDate = startDate
@@ -162,7 +162,7 @@ class HealthData: ObservableObject {
             return
         }
         // Otherwise use settings
-        guard let startDateString = Settings.get(key: .startDate) as? String,
+        guard let startDateString = Settings.get(.startDate),
               let startDate = Date.dateFromString(startDateString),
               let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
         else { return }

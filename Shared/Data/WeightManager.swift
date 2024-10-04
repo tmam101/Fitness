@@ -50,7 +50,7 @@ class WeightManager: ObservableObject {
         guard let startDate: Date =
                 startDate ??
                 startDateString?.toDate() ??
-                (Settings.get(key: .startDate) as? String)?.toDate()
+                (Settings.get(.startDate))?.toDate()
          else {
             return false
         }

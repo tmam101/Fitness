@@ -106,9 +106,9 @@ class CalorieManager: ObservableObject {
     
     func setup(overrideMinimumRestingCalories: Decimal? = nil, overrideMinimumActiveCalories: Decimal? = nil, shouldGetDays: Bool = true, startingWeight: Decimal, weightManager: WeightManager, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         // Set values from settings
-        self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Decimal ?? self.minimumRestingCalories
-        self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Decimal ?? self.minimumActiveCalories
-        self.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? self.adjustActiveCalorieModifier
+        self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(.resting) ?? self.minimumRestingCalories
+        self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(.active) ?? self.minimumActiveCalories
+        self.adjustActiveCalorieModifier = Settings.get(.useActiveCalorieModifier) ?? self.adjustActiveCalorieModifier
         
         self.weightManager = weightManager
         self.goalDeficit = goalDeficit
@@ -122,9 +122,9 @@ class CalorieManager: ObservableObject {
     // TODO why two setup funcs?
     func setup(overrideMinimumRestingCalories: Decimal? = nil, overrideMinimumActiveCalories: Decimal? = nil, shouldGetDays: Bool = true, oldestWeight: Weight, newestWeight: Weight, daysBetweenStartAndNow: Int, forceLoad: Bool = false) async {
         // Set values from settings
-        self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(key: .resting) as? Decimal ?? self.minimumRestingCalories
-        self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(key: .active) as? Decimal ?? self.minimumActiveCalories
-        self.adjustActiveCalorieModifier = Settings.get(key: .useActiveCalorieModifier) as? Bool ?? self.adjustActiveCalorieModifier
+        self.minimumRestingCalories = overrideMinimumRestingCalories ?? Settings.get(.resting) ?? self.minimumRestingCalories
+        self.minimumActiveCalories = overrideMinimumActiveCalories ?? Settings.get(.active) ?? self.minimumActiveCalories
+        self.adjustActiveCalorieModifier = Settings.get(.useActiveCalorieModifier) ?? self.adjustActiveCalorieModifier
         
         self.oldestWeight = oldestWeight
         self.newestWeight = newestWeight
