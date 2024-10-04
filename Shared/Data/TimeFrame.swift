@@ -46,7 +46,7 @@ public enum TimeFrameType {
     }
 }
 
-public struct TimeFrame: Identifiable {
+public struct TimeFrame: Identifiable, Hashable {
     public var id = UUID()
     var type: TimeFrameType
     

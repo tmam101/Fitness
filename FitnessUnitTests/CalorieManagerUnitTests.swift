@@ -31,7 +31,7 @@ struct CalorieManagerUnitTests {
     }
     
     @Test func specificDayPredicate() {
-        guard let quantityType = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
+        guard let _ = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
             Issue.record()
             return
         }
