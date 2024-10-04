@@ -30,12 +30,12 @@ final class DayUnitTests {
     
     @Test func decoding() {
         guard
-            let activeCalories: [Decimal] = .decode(path: .activeCalories),
-            let restingCalories: [Decimal] = .decode(path: .restingCalories),
-            let consumedCalories: [Decimal] = .decode(path: .consumedCalories),
-            let upAndDownWeights: [Decimal] = .decode(path: .upAndDownWeights),
-            let missingConsumedCalories: [Decimal] = .decode(path: .missingConsumedCalories),
-            let weightsGoingSteadilyDown: [Decimal] = .decode(path: .weightGoingSteadilyDown)
+            let _: [Decimal] = .decode(path: .activeCalories),
+            let _: [Decimal] = .decode(path: .restingCalories),
+            let _: [Decimal] = .decode(path: .consumedCalories),
+            let _: [Decimal] = .decode(path: .upAndDownWeights),
+            let _: [Decimal] = .decode(path: .missingConsumedCalories),
+            let _: [Decimal] = .decode(path: .weightGoingSteadilyDown)
         else {
             Issue.record()
             return
@@ -211,15 +211,15 @@ final class DayUnitTests {
     }
     
     // TODO Finish
-    @Test func averageProperties() {
-        days = Days.testDays()
-        guard let days else {
-            Issue.record()
-            return
-        }
-        
-        let averageActiveCalories = days.averageDeficitOfPrevious(days: 7, endingOnDay: 0)
-    }
+//    @Test func averageProperties() {
+//        days = Days.testDays()
+//        guard let days else {
+//            Issue.record()
+//            return
+//        }
+//        
+//        let averageActiveCalories = days.averageDeficitOfPrevious(days: 7, endingOnDay: 0)
+//    }
     
     @Test func sumPropertyActiveCalories() {
         days = Days.testDays()
@@ -274,7 +274,7 @@ final class DayUnitTests {
     @Test func setWeightsOnEveryDay() {
         for _ in 0...10 {
             days = Days.testDays(options: .init([.dontAddWeightsOnEveryDay]))
-            guard var days else {
+            guard let days else {
                 Issue.record()
                 return
             }
@@ -492,10 +492,10 @@ final class DayUnitTests {
     
     //todo not day test
     // TODO test days have proper high and low values on chart
-    @Test func lineChartViewModel() async {
-        let days = Days.testDays(options: .init(testCase: .twoDaysIssue))
-        let vm = LineChartViewModel(days: days, timeFrame: TimeFrame.week)
-    }
+//    @Test func lineChartViewModel() async {
+//        let days = Days.testDays(options: .init(testCase: .twoDaysIssue))
+//        let vm = LineChartViewModel(days: days, timeFrame: TimeFrame.week)
+//    }
     
     @Test func sortDays() {
         let oneDayAgo = Date.subtract(days: 1, from: Date())

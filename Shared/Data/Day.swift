@@ -306,7 +306,7 @@ extension Days {
         //            days[-1] = Day(date: Date.subtract(days: -1, from: today.date), daysAgo: -1, expectedWeight: today.expectedWeightTomorrow)
         //        }
         days.addRunningTotalDeficits()
-        days.setInitialExpectedWeights()
+        let _ = days.setInitialExpectedWeights()
         if weightsOnEveryDay {
             days.setWeightOnEveryDay()
             days.setRealisticWeights()
