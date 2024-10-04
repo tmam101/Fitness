@@ -36,7 +36,8 @@ struct SettingsView: View {
                     HStack {
                         Text("Minimum active calories burned")
                             .foregroundColor(.white)
-                        TextField("", text: $active)
+                        Spacer()
+                        TextField("Minimum active calories burned", text: $active)
                             .onSubmit {
                                 print(active)
                                 if let activeValue = Decimal(active) {

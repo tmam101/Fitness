@@ -189,7 +189,12 @@ struct ColorTests {
 
 @Suite
 
-struct SettingsTests {
+class SettingsTests {
+    
+    deinit {
+        Settings.set(.active, value: 1000)
+    }
+    
     @Test func userDefaultsStorage() {
         // Test storing and retrieving a basic value
         let testValue: Decimal = 2300
