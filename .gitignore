@@ -17,4 +17,4 @@ Shared/.DS_Store
 .DS_Store
 filtered_output.txt
 *.xcconfig
-*.DS_Store
+**/.DS_Store
