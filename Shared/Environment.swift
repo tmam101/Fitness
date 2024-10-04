@@ -75,4 +75,8 @@ class AppEnvironmentConfig {
             }
         }
     }
+    
+    func isProduction() -> Bool {
+        return NSClassFromString("XCTest") == nil
+    }
 }

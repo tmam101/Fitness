@@ -38,11 +38,6 @@ final class HomeScreenTests {
         #expect(netEnergyTomorrowModel.percentage.isApproximately(0.042, accuracy: 0.001))
         #expect(netEnergyTomorrowModel.color == .yellow)
         
-        // Test calculations
-        let daysWithinTimeframe = days.filteredBy(.week)
-        let oldestDay = try #require(daysWithinTimeframe.oldestDay)
-        let newestDay = try #require(daysWithinTimeframe.newestDay)
-        
         // Test month
         models = HomeScreen.netEnergyRingModels(days: days, timeFrame: .month)
         netEnergyThisTimeFrameModel = try #require(models?.first)
