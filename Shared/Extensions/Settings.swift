@@ -25,7 +25,7 @@ struct Settings {
         case showLinesOnWeightGraph
         case useActiveCalorieModifier
     }
-    enum UserDefaultsString: String {
+    enum UserDefaultsDate: String {
         case startDate
     }
     enum UserDefaultsData: String {
@@ -37,8 +37,8 @@ struct Settings {
     static func get(_ key: UserDefaultsBool) -> Bool? {
         UserDefaults.standard.value(forKey: key.rawValue) as? Bool
     }
-    static func get(_ key: UserDefaultsString) -> String? {
-        UserDefaults.standard.value(forKey: key.rawValue) as? String
+    static func get(_ key: UserDefaultsDate) -> Date? {
+        UserDefaults.standard.value(forKey: key.rawValue) as? Date
     }
     static func get(_ key: UserDefaultsData) -> Data? {
         UserDefaults.standard.value(forKey: key.rawValue) as? Data
@@ -50,7 +50,7 @@ struct Settings {
     static func set(_ key: UserDefaultsBool, value: Bool) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }
-    static func set(_ key: UserDefaultsString, value: String) {
+    static func set(_ key: UserDefaultsDate, value: Date) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }
     static func set(_ key: UserDefaultsData, value: Data) {

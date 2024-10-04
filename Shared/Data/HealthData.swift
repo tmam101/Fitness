@@ -36,7 +36,7 @@ class HealthData: ObservableObject {
     
     //MARK: INIT
     
-    init(environment: AppEnvironmentConfig) {
+    init(environment: AppEnvironmentConfig, shouldSetValues: Bool = true) {
         self.environment = environment
         self.weightManager = WeightManager(environment: environment)
         self.calorieManager = CalorieManager(environment: environment)
@@ -49,7 +49,9 @@ class HealthData: ObservableObject {
                     self.days = days // TODO publishing change from background thread
                     return
                 }
-                await setValues(forceLoad: true, completion: nil)
+                if shouldSetValues {
+                    await setValues(forceLoad: true, completion: nil)
+                }
             }
         }
     }
@@ -162,8 +164,7 @@ class HealthData: ObservableObject {
             return
         }
         // Otherwise use settings
-        guard let startDateString = Settings.get(.startDate),
-              let startDate = Date.dateFromString(startDateString),
+        guard let startDate = Settings.get(.startDate),
               let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
         else { return }
         

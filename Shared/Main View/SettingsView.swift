@@ -11,9 +11,9 @@ struct SettingsView: View {
     @EnvironmentObject var healthData: HealthData
     @State var resting = "2200"
     @State var active = "200"
-    @State var startDate = "1.23.2021"
     @State var showLinesOnWeightGraph = true
     @State var useActiveCalorieModifier = true
+    @State var startDate: Date = Date.dateFromString("1.23.2021") ?? Date().subtracting(days: 10)
     
     var body: some View {
         VStack {
@@ -56,20 +56,14 @@ struct SettingsView: View {
                     }
                 }
                 Section(header: Text("Start date")) {
-                    HStack {
-                        Text("Start Date")
-                            .foregroundColor(.white)
-                        TextField("", text: $startDate)
-                            .onSubmit {
-                                Task {
-                                    print(startDate)
-                                    Settings.set(.startDate, value: startDate)
-                                    healthData.setupDates(environment: healthData.environment)
-                                    await healthData.setValues(completion: nil)
-                                }
+                    DatePicker("Start date", selection: $startDate, displayedComponents: .date)
+                        .onChange(of: startDate) {
+                            Task {
+                                Settings.set(.startDate, value: startDate)
+                                healthData.setupDates(environment: healthData.environment)
+                                await healthData.setValues(completion: nil)
                             }
-                            .foregroundColor(.white)
-                    }
+                        }
                 }
                 Section(header: Text("UI")) {
                     HStack {
