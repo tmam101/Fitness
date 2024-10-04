@@ -32,7 +32,10 @@ struct Settings {
         case days
     }
     static func get(_ key: UserDefaultsDecimal) -> Decimal? {
-        UserDefaults.standard.value(forKey: key.rawValue) as? Decimal
+        guard let double = UserDefaults.standard.value(forKey: key.rawValue) as? Double else {
+            return nil
+        }
+        return Decimal(double)
     }
     static func get(_ key: UserDefaultsBool) -> Bool? {
         UserDefaults.standard.value(forKey: key.rawValue) as? Bool

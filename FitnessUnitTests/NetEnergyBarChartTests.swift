@@ -5,7 +5,7 @@ import Foundation
 // TODO dont need
 // Mock HealthData class
 class MockHealthData: HealthData {
-    override init(environment: AppEnvironmentConfig = .debug) {
+     init(environment: AppEnvironmentConfig = .debug) {
         super.init(environment: environment)
     }
 

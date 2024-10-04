@@ -192,9 +192,17 @@ struct ColorTests {
 struct SettingsTests {
     @Test func userDefaultsStorage() {
         // Test storing and retrieving a basic value
-        let testValue = "TestValue"
-        Settings.set(key: .active, value: testValue)
-        let retrievedValue = Settings.get(key: .active) as? String
+        let testValue: Decimal = 2300
+        Settings.set(.active, value: testValue)
+        let retrievedValue = Settings.get(.active)
+        #expect(testValue == retrievedValue)
+    }
+    
+    @Test func userDefaultsStorageDate() {
+        // Test storing and retrieving a basic value
+        let testValue: Date = Date().subtracting(days: 3)
+        Settings.set(.startDate, value: testValue)
+        let retrievedValue = Settings.get(.startDate)
         #expect(testValue == retrievedValue)
     }
     
