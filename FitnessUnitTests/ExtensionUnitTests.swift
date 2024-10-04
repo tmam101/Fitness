@@ -196,25 +196,20 @@ class SettingsTests {
     }
     
     @Test func userDefaultsStorage() {
-        // Test storing and retrieving a basic value
-        let testValue: Decimal = 2300
+        // Test storing and retrieving a decimal
+        var testValue: Decimal = 2300
         Settings.set(.active, value: testValue)
-        let retrievedValue = Settings.get(.active)
+        var retrievedValue = Settings.get(.active)
         #expect(testValue == retrievedValue)
-    }
-    
-    @Test func userDefaultsStorageDate() {
-        // Test storing and retrieving a basic value
-        let testValue: Date = Date().subtracting(days: 3)
-        Settings.set(.startDate, value: testValue)
-        let retrievedValue = Settings.get(.startDate)
-        #expect(testValue == retrievedValue)
-    }
-    
-    // Assuming Days is defined or can be mocked for testing
-    @Test func daysEncodingAndDecoding() {
-        // Mock a Days object (assuming it's a dictionary for simplicity)
-        let mockDays: Days = [1: Day()]  // This needs to be adjusted based on the actual Days and Day types
+        
+        // Test storing and retrieving a date
+        let testDate = Date().subtracting(days: 3)
+        Settings.set(.startDate, value: testDate)
+        let retrievedDate = Settings.get(.startDate)
+        #expect(testDate == retrievedDate)
+        
+        // Test days
+        let mockDays: Days = [1: Day()]  // This needs to be adjusted based on the actual Days and Day types // TODO Improve
         Settings.setDays(days: mockDays)
         let retrievedDays = Settings.getDays()
         #expect(mockDays == retrievedDays)
