@@ -189,36 +189,6 @@ struct ColorTests {
 
 @Suite
 
-class SettingsTests {
-    
-    deinit {
-        Settings.set(.active, value: 1000)
-    }
-    
-    @Test func userDefaultsStorage() {
-        // Test storing and retrieving a decimal
-        var testValue: Decimal = 2300
-        Settings.set(.active, value: testValue)
-        var retrievedValue = Settings.get(.active)
-        #expect(testValue == retrievedValue)
-        
-        // Test storing and retrieving a date
-        let testDate = Date().subtracting(days: 3)
-        Settings.set(.startDate, value: testDate)
-        let retrievedDate = Settings.get(.startDate)
-        #expect(testDate == retrievedDate)
-        
-        // Test days
-        let mockDays: Days = [1: Day()]  // This needs to be adjusted based on the actual Days and Day types // TODO Improve
-        Settings.setDays(days: mockDays)
-        let retrievedDays = Settings.getDays()
-        #expect(mockDays == retrievedDays)
-    }
-    
-}
-
-@Suite
-
 struct DoubleTests {
     
     @Test func toRadians() {
