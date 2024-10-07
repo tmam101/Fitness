@@ -9,7 +9,7 @@ import SwiftUI
 import WatchConnectivity
 
 class AppSettings: ObservableObject {
-    @Published var healthData: HealthData
+    @Published var healthData: HealthData = HealthData(environment: .debug, shouldSetValues: false)
     init() {
         for path in Filepath.Days.allCases {
             if ProcessInfo.processInfo.arguments.contains(path.rawValue) {

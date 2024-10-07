@@ -117,7 +117,7 @@ public class Day: Codable, Identifiable, Equatable, HasDate {
     }
     var caloriesPerGramOfProtein: Decimal = 4
     var deficitPercentage: Decimal {
-        deficit / (Settings.get(key: .netEnergyGoal) as? Decimal ?? 1000)
+        deficit / (Settings.get(.netEnergyGoal) ?? 1000)
     }
     
     var activeCaloriePercentage: Decimal {

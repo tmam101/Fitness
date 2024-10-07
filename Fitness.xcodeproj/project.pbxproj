@@ -124,6 +124,9 @@
 		E924B76F2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */; };
 		E924B7702BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */; };
 		E92D933F2C8264AC00B68E7E /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = E92D933E2C8264AC00B68E7E /* Numerics */; };
+		E92F38F32CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
+		E92F38F42CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
+		E92F38F52CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
 		E9391CAB29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
@@ -325,6 +328,7 @@
 		E9211EF12C0E49B30079A758 /* missingWeightsAtFirst.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = missingWeightsAtFirst.json; sourceTree = "<group>"; };
 		E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = missingWeightsAtFirst.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
+		E92F38F22CB0411300B59499 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		E9375FE02CAF36B3000BCBFD /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E943AE7C2C9F58CC008588A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -534,6 +538,7 @@
 			isa = PBXGroup;
 			children = (
 				E98B6D4E2C8361640021E292 /* DecimalExtension.swift */,
+				E92F38F22CB0411300B59499 /* File.swift */,
 				48A7706A260529C3002E5853 /* ColorExtension.swift */,
 				4827C99C26828BEF006700A1 /* DateExtension.swift */,
 				4827C9A026828C18006700A1 /* DoubleExtension.swift */,
@@ -1062,6 +1067,7 @@
 				48AF60EB2640F65C00C6CC11 /* WorkoutManager.swift in Sources */,
 				E924B76E2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */,
 				4802D493278584750001BE9D /* CalorieManager.swift in Sources */,
+				E92F38F42CB0411300B59499 /* File.swift in Sources */,
 				E901FC172BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */,
 				E9391CAB29AD205200D09252 /* TodayView.swift in Sources */,
 				48755A8A267AF13200F7680E /* Weight.swift in Sources */,
@@ -1110,6 +1116,7 @@
 				48AF60ED2640F65C00C6CC11 /* WorkoutManager.swift in Sources */,
 				E924B76F2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift in Sources */,
 				4802D494278585CE0001BE9D /* CalorieManager.swift in Sources */,
+				E92F38F32CB0411300B59499 /* File.swift in Sources */,
 				E901FC182BFF83CC00C78104 /* FirstDayNotAdjustingWhenMissing.swift in Sources */,
 				E9391CAC29AD205200D09252 /* TodayView.swift in Sources */,
 				48755A8D267AF1BF00F7680E /* Weight.swift in Sources */,
@@ -1158,6 +1165,7 @@
 				48BD6F59274B16380007AC15 /* Weight.swift in Sources */,
 				48BD6F56274B162E0007AC15 /* Day.swift in Sources */,
 				E943AE7D2C9F58CC008588A8 /* SettingsView.swift in Sources */,
+				E92F38F52CB0411300B59499 /* File.swift in Sources */,
 				E99B51522BE56C18002CEB48 /* HomeScreenView.swift in Sources */,
 				48B984E12784E47700C0E93A /* ComplicationViews.swift in Sources */,
 				4832D11927835D3C00414573 /* WatchManager.swift in Sources */,

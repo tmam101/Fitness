@@ -28,4 +28,11 @@ extension Decimal {
         }
         return rounded
     }
+    
+    init?(_ string: String) {
+        if let double = Double(string) {
+            self = Decimal(double)
+        }
+        return nil
+    }
 }

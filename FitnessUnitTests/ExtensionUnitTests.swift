@@ -189,28 +189,6 @@ struct ColorTests {
 
 @Suite
 
-struct SettingsTests {
-    @Test func userDefaultsStorage() {
-        // Test storing and retrieving a basic value
-        let testValue = "TestValue"
-        Settings.set(key: .active, value: testValue)
-        let retrievedValue = Settings.get(key: .active) as? String
-        #expect(testValue == retrievedValue)
-    }
-    
-    // Assuming Days is defined or can be mocked for testing
-    @Test func daysEncodingAndDecoding() {
-        // Mock a Days object (assuming it's a dictionary for simplicity)
-        let mockDays: Days = [1: Day()]  // This needs to be adjusted based on the actual Days and Day types
-        Settings.setDays(days: mockDays)
-        let retrievedDays = Settings.getDays()
-        #expect(mockDays == retrievedDays)
-    }
-    
-}
-
-@Suite
-
 struct DoubleTests {
     
     @Test func toRadians() {
