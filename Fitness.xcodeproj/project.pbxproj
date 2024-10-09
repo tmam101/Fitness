@@ -354,6 +354,7 @@
 		E967015B2AFEBB5A0059E55C /* FitnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E967015D2AFEBB5A0059E55C /* FitnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITests.swift; sourceTree = "<group>"; };
 		E967015F2AFEBB5A0059E55C /* FitnessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E9808C3F2CB718BB0094DEDB /* FitnessWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FitnessWidgetExtension.entitlements; sourceTree = "<group>"; };
 		E982444F2C8399F000F13BDC /* HealthDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataTests.swift; sourceTree = "<group>"; };
 		E98244512C8F272E00F13BDC /* HealthStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStorageProtocol.swift; sourceTree = "<group>"; };
 		E98720362C8F9863003E20D8 /* NutritonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritonAPI.swift; sourceTree = "<group>"; };
@@ -455,6 +456,7 @@
 		48821CAA25B8BF3600C9F58A = {
 			isa = PBXGroup;
 			children = (
+				E9808C3F2CB718BB0094DEDB /* FitnessWidgetExtension.entitlements */,
 				E92F38FA2CB70EEA00B59499 /* Fitness (iOS).entitlements */,
 				E92F38F62CB700BB00B59499 /* Assets.xcassets */,
 				E9375FE02CAF36B3000BCBFD /* Config.xcconfig */,
@@ -1464,6 +1466,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = FitnessWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				INFOPLIST_FILE = FitnessWidget/Info.plist;
