@@ -127,6 +127,8 @@
 		E92F38F32CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
 		E92F38F42CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
 		E92F38F52CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
+		E92F38F72CB700BB00B59499 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E92F38F62CB700BB00B59499 /* Assets.xcassets */; };
+		E92F38F92CB7039A00B59499 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E92F38F62CB700BB00B59499 /* Assets.xcassets */; };
 		E9391CAB29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
@@ -329,6 +331,8 @@
 		E9211EF32C0E61DC0079A758 /* missingWeightsAtFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = missingWeightsAtFirst.swift; sourceTree = "<group>"; };
 		E924B76D2BFE3CE100BF00F6 /* RealisticWeightsIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealisticWeightsIssue.swift; sourceTree = "<group>"; };
 		E92F38F22CB0411300B59499 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		E92F38F62CB700BB00B59499 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E92F38FA2CB70EEA00B59499 /* Fitness (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Fitness (iOS).entitlements"; sourceTree = "<group>"; };
 		E9375FE02CAF36B3000BCBFD /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E9391CAA29AD205200D09252 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		E943AE7C2C9F58CC008588A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -451,6 +455,8 @@
 		48821CAA25B8BF3600C9F58A = {
 			isa = PBXGroup;
 			children = (
+				E92F38FA2CB70EEA00B59499 /* Fitness (iOS).entitlements */,
+				E92F38F62CB700BB00B59499 /* Assets.xcassets */,
 				E9375FE02CAF36B3000BCBFD /* Config.xcconfig */,
 				E9508E552CAEF10F00083E8A /* Config.xcconfig */,
 				E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */,
@@ -956,6 +962,7 @@
 				E901FC1C2BFFAD7D00C78104 /* twoDaysIssue.json in Resources */,
 				E901FC132BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 				E951EB6A2BF56ABA004D3CBF /* upAndDownWeights.json in Resources */,
+				E92F38F72CB700BB00B59499 /* Assets.xcassets in Resources */,
 				487A95192640F97500627BA3 /* strong.json in Resources */,
 				E951EB672BF56ABA004D3CBF /* weightGoingSteadilyDown.json in Resources */,
 				E951EB662BF56ABA004D3CBF /* missingConsumedCalories.json in Resources */,
@@ -991,6 +998,7 @@
 				E953C5412C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */,
 				E901FC112BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48BD6EFE274B12CB0007AC15 /* Assets.xcassets in Resources */,
+				E92F38F92CB7039A00B59499 /* Assets.xcassets in Resources */,
 				E901FC152BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1377,12 +1385,14 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = FitnessDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1403,10 +1413,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Fitness (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1474,9 +1487,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = "Watch WatchKit Extension/Watch WatchKit ExtensionDebug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -1484,7 +1498,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Watch;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
@@ -1512,16 +1526,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = "Watch WatchKit Extension/Watch WatchKit ExtensionDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Watch;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
