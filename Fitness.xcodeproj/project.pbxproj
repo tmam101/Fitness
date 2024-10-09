@@ -128,6 +128,7 @@
 		E92F38F42CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
 		E92F38F52CB0411300B59499 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F38F22CB0411300B59499 /* File.swift */; };
 		E92F38F72CB700BB00B59499 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E92F38F62CB700BB00B59499 /* Assets.xcassets */; };
+		E92F38F92CB7039A00B59499 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E92F38F62CB700BB00B59499 /* Assets.xcassets */; };
 		E9391CAB29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAC29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
 		E9391CAE29AD205200D09252 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9391CAA29AD205200D09252 /* TodayView.swift */; };
@@ -995,6 +996,7 @@
 				E953C5412C0689850087A326 /* inaccurateExpectedWeightToday.json in Resources */,
 				E901FC112BFE4AC800C78104 /* realisticWeightsIssue.json in Resources */,
 				48BD6EFE274B12CB0007AC15 /* Assets.xcassets in Resources */,
+				E92F38F92CB7039A00B59499 /* Assets.xcassets in Resources */,
 				E901FC152BFF83BA00C78104 /* firstDayNotAdjustingWhenMissing.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1480,9 +1482,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = "Watch WatchKit Extension/Watch WatchKit ExtensionDebug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -1518,9 +1521,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = "Watch WatchKit Extension/Watch WatchKit ExtensionDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
