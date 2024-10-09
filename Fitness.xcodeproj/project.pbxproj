@@ -1390,6 +1390,7 @@
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1415,6 +1416,7 @@
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1493,7 +1495,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Watch;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
@@ -1531,7 +1533,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2Q3YD4JS4N;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Watch;
+				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
