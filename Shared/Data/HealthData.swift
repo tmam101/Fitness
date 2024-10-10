@@ -183,11 +183,11 @@ class HealthData: ObservableObject {
     
     // TODO this is running during unit tests
     private func authorizeHealthKit() async -> Bool {
-        guard environment.isProduction() else {
-            return true
-        }
+//        guard environment.isProduction() else {
+//            return true
+//        }
         // TODO does this make sense
-        if !HKHealthStore.isHealthDataAvailable() { return false }
+//        if !HKHealthStore.isHealthDataAvailable() { return false }
         
         let readDataTypes: Swift.Set<HKSampleType> = [
             HKSampleType.quantityType(forIdentifier: .bodyMass)!,
@@ -206,12 +206,13 @@ class HealthData: ObservableObject {
             let status = try await HKHealthStore().statusForAuthorizationRequest(toShare: writeDataTypes, read: readDataTypes)
             switch status {
             case .unknown, .unnecessary:
+                try await HKHealthStore().requestAuthorization(toShare: writeDataTypes, read: readDataTypes)
                 return true
             case .shouldRequest:
                 try await HKHealthStore().requestAuthorization(toShare: writeDataTypes, read: readDataTypes)
                 return true
             @unknown default:
-                return true
+                return false
             }
         } catch {
             return false
