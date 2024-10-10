@@ -183,39 +183,23 @@ class HealthData: ObservableObject {
     
     // TODO this is running during unit tests
     private func authorizeHealthKit() async -> Bool {
-//        guard environment.isProduction() else {
-//            return true
-//        }
-        // TODO does this make sense
-//        if !HKHealthStore.isHealthDataAvailable() { return false }
-        
-        let readDataTypes: Swift.Set<HKSampleType> = [
-            HKSampleType.quantityType(forIdentifier: .bodyMass)!,
-            HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
-            HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
-            HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
-            HKSampleType.quantityType(forIdentifier: .dietaryProtein)!,
-            HKSampleType.workoutType(),
-            HKSampleType.quantityType(forIdentifier: .heartRate)!,
-            HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]
-        let writeDataTypes: Swift.Set<HKSampleType> = [
-            HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
-        ]
-        
-        do {
-            let status = try await HKHealthStore().statusForAuthorizationRequest(toShare: writeDataTypes, read: readDataTypes)
-            switch status {
-            case .unknown, .unnecessary:
-                try await HKHealthStore().requestAuthorization(toShare: writeDataTypes, read: readDataTypes)
-                return true
-            case .shouldRequest:
-                try await HKHealthStore().requestAuthorization(toShare: writeDataTypes, read: readDataTypes)
-                return true
-            @unknown default:
-                return false
-            }
-        } catch {
-            return false
+        return await withCheckedContinuation { continuation in
+            let readDataTypes: Swift.Set<HKSampleType> = [
+                HKSampleType.quantityType(forIdentifier: .bodyMass)!,
+                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
+                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
+                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+                HKSampleType.quantityType(forIdentifier: .dietaryProtein)!,
+                HKSampleType.workoutType(),
+                HKSampleType.quantityType(forIdentifier: .heartRate)!,
+                HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!]
+            let writeDataTypes: Swift.Set<HKSampleType> = [
+                HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+            ]
+            let store = HKHealthStore()
+            store.requestAuthorization(toShare: writeDataTypes, read: readDataTypes, completion: { didSucceed, error in
+                continuation.resume(returning: didSucceed)
+            })
         }
     }
 }

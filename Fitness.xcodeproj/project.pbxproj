@@ -1503,7 +1503,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "\"Please please please please please please please please\"";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1541,7 +1541,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "CICO Manager";
 				INFOPLIST_KEY_CLKComplicationPrincipalClass = Watch.ComplicationController;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = HKQuantityTypeIdentifierHeartRate;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "\"Please please please please please please please please\"";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "\"Please Please Please Please Please Please Please Please\"";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
