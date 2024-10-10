@@ -9,11 +9,13 @@ import SwiftUI
 
 #if !os(watchOS)
 public struct TimeFramePicker: View {
-    @Binding var selectedPeriod: Int
+    @Binding var selectedTimeFrame: TimeFrame
+    
     public var body: some View {
-        Picker(selection: $selectedPeriod, label: Text("Select Period")) {
-            ForEach(TimeFrame.timeFrames, id: \.self) { timeFrame in
+        Picker(selection: $selectedTimeFrame, label: Text("Select Period")) {
+            ForEach(TimeFrame.timeFrames) { timeFrame in
                 Text(timeFrame.shortName)
+                    .tag(timeFrame)
             }
         }
         .pickerStyle(SegmentedPickerStyle())
@@ -39,7 +41,7 @@ public struct HomeScreen: View {
     @State private var showWeeklyDeficitLine = false
     
     @State private var selectedPeriod = 2
-    @Binding var timeFrame: Int
+    @Binding var timeFrame: TimeFrame
     @State var bottomPadding: CGFloat = 0
         
     // MARK: - Body
@@ -47,7 +49,6 @@ public struct HomeScreen: View {
         GeometryReader { proxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    let timeFrame = TimeFrame.timeFrames[timeFrame]
                     
                     Text("Net Energy \(timeFrame.longName)")
                         .foregroundStyle(.white)
@@ -129,7 +130,7 @@ public struct HomeScreen: View {
             Text("Net Energy By Day")
                 .foregroundColor(.white)
                 .font(.title2)
-            NetEnergyBarChart(days: healthData.days, timeFrame: TimeFrame.timeFrames[timeFrame])
+            NetEnergyBarChart(days: healthData.days, timeFrame: timeFrame)
                 .frame(maxWidth: .infinity, minHeight: 300)
                 .mainBackground()
         }
@@ -173,13 +174,11 @@ public struct HomeScreen: View {
                 .foregroundColor(.white)
                 .font(.title2)
             
-            let timeFrame = TimeFrame.timeFrames[timeFrame]
-
             if let weightModels = HomeScreen.weightRingModels(days: healthData.days, timeFrame: timeFrame) {
                 renderNetEnergyRings(netEnergyModels: weightModels)
             }
             
-            WeightLineChart(days: healthData.days, timeFrame: TimeFrame.timeFrames[self.timeFrame])
+            WeightLineChart(days: healthData.days, timeFrame: self.timeFrame)
                 .frame(maxWidth: .infinity, minHeight: 200)
                 .mainBackground()
         }
@@ -203,7 +202,7 @@ public struct HomeScreen: View {
 
 public struct FitnessPreviewProvider {
     static func MainPreview(options: AppEnvironmentConfig) -> some View {
-        @State var timeFrame = 2
+        @State var timeFrame = TimeFrame.week
         return HomeScreen(timeFrame: $timeFrame)
             .environmentObject(HealthData(environment: options))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
@@ -211,7 +210,7 @@ public struct FitnessPreviewProvider {
     }
     
     static func MainPreview() -> some View {
-        @State var timeFrame = 2
+        @State var timeFrame = TimeFrame.week
         return HomeScreen(timeFrame: $timeFrame)
             .environmentObject(HealthData(environment: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)])))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))

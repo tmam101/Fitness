@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AppView: View {
     @EnvironmentObject var healthData: HealthData
-    @State private var selectedPeriod = 2
+    @State private var selectedPeriod: TimeFrame = .week
     @State private var playerOffset: CGFloat = 0
 
     var body: some View {
@@ -56,14 +56,14 @@ struct AppView: View {
 
 struct PickerOverlay: View {
     var offset: CGFloat
-    @Binding var selectedPeriod: Int
+    @Binding var selectedPeriod: TimeFrame
     
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(.black)
                 .frame(maxHeight: 50)
-            TimeFramePicker(selectedPeriod: $selectedPeriod)
+            TimeFramePicker(selectedTimeFrame: $selectedPeriod)
                 .background(.black)
                 .frame(maxHeight: 50)
         }
