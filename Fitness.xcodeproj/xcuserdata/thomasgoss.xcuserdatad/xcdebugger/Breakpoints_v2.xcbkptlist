@@ -32,8 +32,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "88"
             endingLineNumber = "88"
-            landmarkName = "getDays(forceReload:applyActiveCalorieModifier:)"
-            landmarkType = "7">
+            landmarkName = "CalorieManager"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "E481A5CF-A7CD-4E2D-84EA-6BA0E1A2E156 - 36da6e83cd4c58ad"
@@ -47,8 +47,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "88"
-                  endingLineNumber = "88"
-                  offsetFromSymbolStart = "220">
+                  endingLineNumber = "88">
                </Location>
                <Location
                   uuid = "E481A5CF-A7CD-4E2D-84EA-6BA0E1A2E156 - 55df654c9ba3faac"
@@ -62,8 +61,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "88"
-                  endingLineNumber = "88"
-                  offsetFromSymbolStart = "236">
+                  endingLineNumber = "88">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -112,8 +110,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "86"
             endingLineNumber = "86"
-            landmarkName = "getDays(forceReload:applyActiveCalorieModifier:)"
-            landmarkType = "7">
+            landmarkName = "CalorieManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -128,7 +126,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "230"
             endingLineNumber = "230"
-            landmarkName = "catchError(in:)"
+            landmarkName = "getDays(forPastDays:dealWithWeights:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -351,8 +349,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "26"
-                  endingLineNumber = "26"
-                  offsetFromSymbolStart = "76">
+                  endingLineNumber = "26">
                </Location>
                <Location
                   uuid = "3E8478AF-DB3D-4C79-8AFF-207891414FD5 - 37bed387871d47c7"
@@ -366,8 +363,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "220">
+                  endingLineNumber = "27">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -416,7 +412,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "202"
             endingLineNumber = "202"
-            landmarkName = "reload(days:fromDay:)"
+            landmarkName = "loadNecessaryDays(days:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -432,7 +428,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "133"
             endingLineNumber = "133"
-            landmarkName = "loadNecessaryDays(days:)"
+            landmarkName = "setup(overrideMinimumRestingCalories:overrideMinimumActiveCalories:shouldGetDays:oldestWeight:newestWeight:daysBetweenStartAndNow:forceLoad:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -447,8 +443,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "133"
-                  endingLineNumber = "133"
-                  offsetFromSymbolStart = "628">
+                  endingLineNumber = "133">
                </Location>
                <Location
                   uuid = "B713C2AE-E2E6-4B7A-B002-31B7754595F9 - 4ecee1e04b3aec40"
@@ -462,8 +457,7 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "133"
-                  endingLineNumber = "133"
-                  offsetFromSymbolStart = "44">
+                  endingLineNumber = "133">
                </Location>
                <Location
                   uuid = "B713C2AE-E2E6-4B7A-B002-31B7754595F9 - aede93f5a2695841"
@@ -477,8 +471,21 @@
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "133"
-                  endingLineNumber = "133"
-                  offsetFromSymbolStart = "60">
+                  endingLineNumber = "133">
+               </Location>
+               <Location
+                  uuid = "B713C2AE-E2E6-4B7A-B002-31B7754595F9 - 13fdbbc935275c72"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for Fitness.CalorieManager.setup(overrideMinimumRestingCalories: Swift.Optional&lt;__C.NSDecimal&gt;, overrideMinimumActiveCalories: Swift.Optional&lt;__C.NSDecimal&gt;, shouldGetDays: Swift.Bool, oldestWeight: Fitness.Weight, newestWeight: Fitness.Weight, daysBetweenStartAndNow: Swift.Int, forceLoad: Swift.Bool) async -&gt; ()"
+                  moduleName = "Fitness.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "133"
+                  endingLineNumber = "133">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -495,8 +502,38 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "213"
             endingLineNumber = "213"
-            landmarkName = "reload(days:fromDay:)"
+            landmarkName = "getEveryDay()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "56ED3E0D-BF78-4E51-BDEE-192A1907AEF6 - 5e3a46f2e424e73e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Fitness.CalorieManager.getEveryDay() async -&gt; Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;"
+                  moduleName = "Fitness.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "213"
+                  endingLineNumber = "213">
+               </Location>
+               <Location
+                  uuid = "56ED3E0D-BF78-4E51-BDEE-192A1907AEF6 - 20123ccb9724270f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for Fitness.CalorieManager.getEveryDay() async -&gt; Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;"
+                  moduleName = "Fitness.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "213"
+                  endingLineNumber = "213">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -511,8 +548,52 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "210"
             endingLineNumber = "210"
-            landmarkName = "reload(days:fromDay:)"
+            landmarkName = "loadNecessaryDays(days:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B47E1DD1-92C5-4C65-985E-35DD6214F284 - 12e49fc1d5555fc0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Fitness.CalorieManager.loadNecessaryDays(days: Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;) async -&gt; Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;"
+                  moduleName = "Fitness.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "210"
+                  endingLineNumber = "210">
+               </Location>
+               <Location
+                  uuid = "B47E1DD1-92C5-4C65-985E-35DD6214F284 - 7dcd037f9b679bc6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for Fitness.CalorieManager.loadNecessaryDays(days: Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;) async -&gt; Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;"
+                  moduleName = "Fitness.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "210"
+                  endingLineNumber = "210">
+               </Location>
+               <Location
+                  uuid = "B47E1DD1-92C5-4C65-985E-35DD6214F284 - 4497a83d2136e7c4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for Fitness.CalorieManager.loadNecessaryDays(days: Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;) async -&gt; Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;"
+                  moduleName = "Fitness.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "210"
+                  endingLineNumber = "210">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
