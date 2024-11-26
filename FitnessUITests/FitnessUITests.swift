@@ -47,30 +47,25 @@ final class FitnessUITests: XCTestCase {
     func testTimeFramePicker() throws {
         launchWithTestCase(path: .firstDayNotAdjustingWhenMissing)
         lookForText("Net Energy This Week")
-//        XCTAssertFalse(barExists(daysAgo: 10))
+        XCTAssert(app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"].waitForNonExistence(timeout: 5))
         app.buttons["Month"].tap()
-//        XCTAssertTrue(barExists(daysAgo: 10))
+        XCTAssert(app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"].waitForExistence(timeout: 5))
         lookForText("Net Energy This Month")
         XCTAssertEqual(app.otherElements["bar 0 days ago"].value as! String, "-2,250")
+        
+        // TODO check line graph. This query returns part of both the chart and the line graph so we aren't specific enough
+//        let x = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
     }
     
-    func testTwoDays() throws {
-        launchWithTestCase(path: .twoDaysIssue)
-//        lookForText("Net Energy This butt")
-        //Add in a count, so that the loop can escape if it's scrolled too many times
-        for i in [0,1,2] {
-            app.swipeUp(velocity: .fast)
+    func barValue(daysAgo: Int) -> String? {
+        guard let value = app.otherElements["bar \(daysAgo) days ago"].value as? String else {
+            return nil
         }
-        app.otherElements["expected weight point 1 days ago"].waitForExistence(timeout: 5)
+        return value
     }
     
-    func barExists(daysAgo: Int) -> Bool {
+    func testBarExists(daysAgo: Int) -> Bool {
         app.otherElements["bar \(daysAgo) days ago"].waitForExistence(timeout: 5)
-    }
-    
-    func testSomething() {
-        launchWithTestCase(path: .missingDataIssue)
-        lookForText("Net Energy This butt")
     }
     
     func lookForText(_ text: String) {

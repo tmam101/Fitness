@@ -27,7 +27,6 @@ struct AppView: View {
                 WeightView(weightManager: healthData.weightManager)
                     .tabItem { Label("Log", systemImage: "scalemass") }
                 
-                
                 TodayView()
                     .environmentObject(healthData)
                     .tabItem { Label("Today", systemImage: "clock") }
