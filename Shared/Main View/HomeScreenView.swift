@@ -22,24 +22,11 @@ public struct TimeFramePicker: View {
 }
 #endif
 
-//class HomeScreenViewModel {
-//    
-//}
-
 public struct HomeScreen: View {
     @EnvironmentObject var healthData: HealthData
     @Environment(\.scenePhase) private var scenePhase
     
-    // Variables
-    @State private var isDisplayingOverlay = false
-    @State private var deficitLineGraphDaysToShow: Double = 30.0
-    @State private var runsToShow: Double = 5.0
-    @State private var showLifts = false
-    @State private var showWeightRings = false
-    @State private var showWeeklyDeficitLine = false
-    
     @Binding var timeFrame: TimeFrame
-    @State var bottomPadding: CGFloat = 0
         
     // MARK: - Body
     public var body: some View {
@@ -50,8 +37,9 @@ public struct HomeScreen: View {
                     Text("Net Energy \(timeFrame.longName)")
                         .foregroundStyle(.white)
                         .font(.title)
-                    // MARK: Deficit Rings
                     
+                    // MARK: Deficit Rings
+    
                     if let netEnergyModels = HomeScreen.netEnergyRingModels(days: healthData.days, timeFrame: timeFrame) {
                         renderNetEnergyRings(netEnergyModels: netEnergyModels)
                     }
@@ -60,12 +48,8 @@ public struct HomeScreen: View {
                     renderDeficitBarChartSection()
                     
                     renderWeightRingsAndLineChartSection()
-                    
-                    // MARK: Mile Time
-                    //                renderMileTimeSection()
                 }
                 .padding()
-//                .padding(.bottom, bottomPadding)
             }
             .onChange(of: scenePhase) {
                 handleSceneChange()
