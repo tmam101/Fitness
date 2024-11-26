@@ -205,17 +205,7 @@ public class Day: Codable, Identifiable, Equatable, HasDate {
                 return .yellow
             case .weight:
                 return .green
-            case .activeCalories:
-                return nil
-            case .restingCalories:
-                return nil
-            case .consumedCalories:
-                return nil
-            case .realisticWeight:
-                return nil
-            case .netEnergy:
-                return nil
-            case .deficit:
+            case .activeCalories, .restingCalories, .consumedCalories, .realisticWeight, .netEnergy, .deficit:
                 return nil
             }
         }

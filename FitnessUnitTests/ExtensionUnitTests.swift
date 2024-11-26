@@ -396,4 +396,11 @@ struct TimeTests {
     }
 }
 
+struct StringExtensionTests {
+    @Test func decimalToString() {
+        let decimal: Decimal = 2.0
+        #expect(String(decimal) == "2.0")
+    }
+}
+
 
