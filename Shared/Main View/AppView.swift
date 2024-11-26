@@ -9,17 +9,17 @@ import SwiftUI
 
 struct AppView: View {
     @EnvironmentObject var healthData: HealthData
-    @State private var selectedPeriod = 2
+    @State private var selectedTimeFrame = TimeFrame.week
     @State private var playerOffset: CGFloat = 0
 
     var body: some View {
         GeometryReader { geometry in
             TabView {
-                HomeScreen(timeFrame: $selectedPeriod)
+                HomeScreen(timeFrame: $selectedTimeFrame)
                     .environmentObject(healthData)
                     .tabItem { Label("Over Time", systemImage: "calendar") }
                     .safeAreaInset(edge: .bottom) {
-                        PickerOverlay(offset: playerOffset, selectedPeriod: $selectedPeriod)
+                        PickerOverlay(offset: playerOffset, selectedTimeFrame: $selectedTimeFrame)
                     }
                 ChatView(chatService: ChatGPTService())
                     .tabItem { Label("Log", systemImage: "square.and.pencil") }
@@ -56,14 +56,14 @@ struct AppView: View {
 
 struct PickerOverlay: View {
     var offset: CGFloat
-    @Binding var selectedPeriod: Int
+    @Binding var selectedTimeFrame: TimeFrame
     
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(.black)
                 .frame(maxHeight: 50)
-            TimeFramePicker(selectedPeriod: $selectedPeriod)
+            TimeFramePicker(selectedTimeFrame: $selectedTimeFrame)
                 .background(.black)
                 .frame(maxHeight: 50)
         }
