@@ -24,7 +24,6 @@
       }
     },
     {
-      "enabled" : false,
       "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Fitness.xcodeproj",
