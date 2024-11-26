@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set the default folders to search
-folder_path="$HOME/Desktop/Personal/Fitness/Shared"
-test_folder_path="$HOME/Desktop/Personal/Fitness/FitnessUnitTests"
+folder_path="$HOME/Documents/GitHub/Fitness/Shared"
+test_folder_path="$HOME/Documents/GitHub/Fitness/FitnessUnitTests"
 output_file="filtered_output.txt"
 
 # Clear the output file if it exists
