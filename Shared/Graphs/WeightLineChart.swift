@@ -116,7 +116,7 @@ public class PlotViewModel {
     var shouldHavePoint: Bool {
         switch type {
         case .weight, .expectedWeight, .realisticWeight:
-            switch timeFrame.type {
+            switch timeFrame {
             case .allTime:
                 return false
             case .week, .month:
@@ -137,7 +137,7 @@ public class PlotViewModel {
         case .weight, .expectedWeightTomorrow, .realisticWeight:
             false
         case .expectedWeight:
-            switch timeFrame.type {
+            switch timeFrame {
             case .allTime, .month:
                 false
             case .week:
@@ -154,7 +154,7 @@ public class PlotViewModel {
         case .weight, .expectedWeightTomorrow, .realisticWeight:
             return false
         case .expectedWeight:
-            switch timeFrame.type {
+            switch timeFrame {
             case .allTime:
                 return false
             case .week, .month:
