@@ -58,9 +58,12 @@ final class FitnessUITests: XCTestCase {
             }
         }
         lookForText("Net Energy This Week")
-        XCTAssert(app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"].waitForNonExistence(timeout: 5))
+        let monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
+        
+        XCTAssert(monthAgoGraphPoint.waitForNonExistence(timeout: 5))
         app.buttons["Month"].tap()
-        XCTAssert(app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"].waitForExistence(timeout: 5))
+        XCTAssert(monthAgoGraphPoint.waitForExistence(timeout: 5))
+        XCTAssertEqual(monthAgoGraphPoint.firstMatch.value as? String, "700 to 700, 2 values")
         lookForText("Net Energy This Month")
         XCTAssertEqual(app.otherElements["bar 0 days ago"].value as! String, "-2,250")
         
