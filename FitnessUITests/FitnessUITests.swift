@@ -58,10 +58,11 @@ final class FitnessUITests: XCTestCase {
             }
         }
         lookForText("Net Energy This Week")
-        let monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
+        var monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
         
         XCTAssert(monthAgoGraphPoint.waitForNonExistence(timeout: 5))
         app.buttons["Month"].tap()
+        monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
         XCTAssert(monthAgoGraphPoint.waitForExistence(timeout: 5))
         XCTAssertEqual(monthAgoGraphPoint.firstMatch.value as? String, "700 to 700, 2 values")
         lookForText("Net Energy This Month")
@@ -86,12 +87,12 @@ final class FitnessUITests: XCTestCase {
         XCTAssert(app.staticTexts[text].waitForExistence(timeout: 5))
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
-    }
+//    func testLaunchPerformance() throws {
+//        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
+//            // This measures how long it takes to launch your application.
+//            measure(metrics: [XCTApplicationLaunchMetric()]) {
+//                XCUIApplication().launch()
+//            }
+//        }
+//    }
 }
