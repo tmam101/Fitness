@@ -38,14 +38,14 @@ final class FitnessUITests: XCTestCase {
         app.launch()
         self.app = app
         continueAfterFailure = false
+        approveHealthkitAccessIfNecessary()
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testTimeFramePicker() throws {
-        launchWithTestCase(path: .firstDayNotAdjustingWhenMissing)
+    
+    func approveHealthkitAccessIfNecessary() {
         let healthKitAccessButton = app.staticTexts["Turn On All"]
         let allowButton = app.buttons["Allow"]
         let notNowButton = app.buttons["Not Now"]
@@ -57,10 +57,12 @@ final class FitnessUITests: XCTestCase {
                 notNowButton.tap()
             }
         }
+    }
+
+    func testTimeFramePicker() throws {
+        launchWithTestCase(path: .firstDayNotAdjustingWhenMissing)
         lookForText("Net Energy This Week")
         
-//        var monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
-//        XCTAssert(monthAgoGraphPoint.waitForNonExistence(timeout: 5))
         lookForText("+307")
         lookForText("-113")
         lookForText("+0.61")
@@ -68,20 +70,14 @@ final class FitnessUITests: XCTestCase {
         
         app.buttons["Month"].tap()
         
-        // TODO I suspect this is failing on CI due to time zone changes.
-//        monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
-//        XCTAssert(monthAgoGraphPoint.waitForExistence(timeout: 5))
-//        XCTAssertEqual(monthAgoGraphPoint.firstMatch.value as? String, "700 to 700, 2 values")
-        
         lookForText("Net Energy This Month")
+        
         lookForText("+130")
         lookForText("+17")
         lookForText("+0.74")
         lookForText("+1.80")
-        XCTAssertEqual(app.otherElements["bar 0 days ago"].value as! String, "-2,250")
         
-        // TODO check line graph. This query returns part of both the chart and the line graph so we aren't specific enough
-//        let x = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
+        XCTAssertEqual(app.otherElements["bar 0 days ago"].value as! String, "-2,250")
     }
     
     func barValue(daysAgo: Int) -> String? {
@@ -106,5 +102,24 @@ final class FitnessUITests: XCTestCase {
 //                XCUIApplication().launch()
 //            }
 //        }
+//    }
+    
+//    func testGraphs() {
+//        launchWithTestCase(path: .firstDayNotAdjustingWhenMissing)
+//        
+//        var monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
+//        XCTAssert(monthAgoGraphPoint.waitForNonExistence(timeout: 5))
+//        
+//        app.buttons["Month"].tap()
+        
+//         TODO I suspect this is failing on CI due to time zone changes.
+//        monthAgoGraphPoint = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
+//        XCTAssert(monthAgoGraphPoint.waitForExistence(timeout: 5))
+//        XCTAssertEqual(monthAgoGraphPoint.firstMatch.value as? String, "700 to 700, 2 values")
+        
+//        XCTAssertEqual(app.otherElements["bar 0 days ago"].value as! String, "-2,250")
+        
+        // TODO check line graph. This query returns part of both the chart and the line graph so we aren't specific enough
+//        let x = app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"]
 //    }
 }
