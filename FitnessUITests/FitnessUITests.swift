@@ -46,6 +46,17 @@ final class FitnessUITests: XCTestCase {
 
     func testTimeFramePicker() throws {
         launchWithTestCase(path: .firstDayNotAdjustingWhenMissing)
+        let healthKitAccessButton = app.staticTexts["Turn On All"]
+        let allowButton = app.buttons["Allow"]
+        let notNowButton = app.buttons["Not Now"]
+        
+        if healthKitAccessButton.waitForExistence(timeout: 5) {
+            healthKitAccessButton.tap()
+            allowButton.tap()
+            if notNowButton.waitForExistence(timeout: 5) {
+                notNowButton.tap()
+            }
+        }
         lookForText("Net Energy This Week")
         XCTAssert(app.otherElements["May 3, 2024 at 12 AM to May 5, 2024 at 12 AM"].waitForNonExistence(timeout: 5))
         app.buttons["Month"].tap()
