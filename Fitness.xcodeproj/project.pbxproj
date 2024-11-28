@@ -27,9 +27,6 @@
 		4827C99E26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
 		4827C9A126828C18006700A1 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C9A026828C18006700A1 /* DoubleExtension.swift */; };
 		4827C9A226828C18006700A1 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C9A026828C18006700A1 /* DoubleExtension.swift */; };
-		4832D11727835D3400414573 /* WatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832D11627835D3400414573 /* WatchManager.swift */; };
-		4832D11827835D3400414573 /* WatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832D11627835D3400414573 /* WatchManager.swift */; };
-		4832D11927835D3C00414573 /* WatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832D11627835D3400414573 /* WatchManager.swift */; };
 		4845B7A225C0B2AA003BF999 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		4845B7A425C0B2AA003BF999 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4845B7A125C0B2AA003BF999 /* HealthData.swift */; };
 		485B992627CEC29C00C70C81 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485B992527CEC29C00C70C81 /* Settings.swift */; };
@@ -266,7 +263,6 @@
 		4810812F278A34B5008E9AE6 /* FitnessViewWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessViewWatch.swift; sourceTree = "<group>"; };
 		4827C99C26828BEF006700A1 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		4827C9A026828C18006700A1 /* DoubleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
-		4832D11627835D3400414573 /* WatchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchManager.swift; sourceTree = "<group>"; };
 		4845B7A125C0B2AA003BF999 /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
 		485B992527CEC29C00C70C81 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		48755A89267AF13200F7680E /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
@@ -451,7 +447,6 @@
 				E9B63C7A2B32008A0009C346 /* Fitness (iOS).xctestplan */,
 				E9BB46562AFEC427006BE634 /* FitnessUITests.xctestplan */,
 				E9EA45D02AEAE7CF00345CEA /* FitnessUnitTests.xctestplan */,
-				4832D11627835D3400414573 /* WatchManager.swift */,
 				48A0D4A125BB92DE007C40ED /* FitnessWidgetExtensionDebug.entitlements */,
 				48A0D49925BB8703007C40ED /* FitnessDebug.entitlements */,
 				48821CAF25B8BF3600C9F58A /* Shared */,
@@ -1030,7 +1025,6 @@
 				E943AE812C9F59C4008588A8 /* WeightView.swift in Sources */,
 				E94E203A2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */,
 				48E4B44D262619DE002321B5 /* Environment.swift in Sources */,
-				4832D11727835D3400414573 /* WatchManager.swift in Sources */,
 				48E0E20B26041E700037EEAF /* Stats.swift in Sources */,
 				E98B6D4F2C8361660021E292 /* DecimalExtension.swift in Sources */,
 				E9211EF42C0E61DC0079A758 /* missingWeightsAtFirst.swift in Sources */,
@@ -1078,7 +1072,6 @@
 				E94E203B2C0ACAC4004480AC /* ChartContentExtension.swift in Sources */,
 				48A0D46D25BB71CB007C40ED /* FitnessWidget.swift in Sources */,
 				48A7706D260529C3002E5853 /* ColorExtension.swift in Sources */,
-				4832D11827835D3400414573 /* WatchManager.swift in Sources */,
 				48E0E1E12603C47F0037EEAF /* GenericCircles.swift in Sources */,
 				48A0D48D25BB72F8007C40ED /* WeightManager.swift in Sources */,
 				E98B6D512C8361660021E292 /* DecimalExtension.swift in Sources */,
@@ -1154,7 +1147,6 @@
 				E92F38F52CB0411300B59499 /* StringExtension.swift in Sources */,
 				E99B51522BE56C18002CEB48 /* HomeScreenView.swift in Sources */,
 				48B984E12784E47700C0E93A /* ComplicationViews.swift in Sources */,
-				4832D11927835D3C00414573 /* WatchManager.swift in Sources */,
 				48BD6F4C274B16190007AC15 /* TimeExtension.swift in Sources */,
 				48BD6F4D274B16190007AC15 /* DoubleExtension.swift in Sources */,
 				E9391CAE29AD205200D09252 /* TodayView.swift in Sources */,
