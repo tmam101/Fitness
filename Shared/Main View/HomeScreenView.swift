@@ -12,7 +12,7 @@ public struct TimeFramePicker: View {
     @Binding var selectedTimeFrame: TimeFrame
     public var body: some View {
         Picker(selection: $selectedTimeFrame, label: Text("Select Period")) {
-            ForEach(TimeFrame.timeFrames, id: \.self) { timeFrame in
+            ForEach(TimeFrame.allCases, id: \.self) { timeFrame in
                 Text(timeFrame.shortName)
             }
         }

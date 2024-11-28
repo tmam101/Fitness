@@ -65,6 +65,7 @@ final class NetEnergyBarChartViewModelTests {
         let expectedMinValue = mockHealthData.days.filteredBy(.week).mappedToProperty(property: .netEnergy).min() ?? 0
         
         #expect(viewModel.maxValue == Double(expectedMaxValue).rounded(toNextSignificant: viewModel.lineInterval), "Max value should be the maximum net energy value")
+        // todo flaky
         #expect(viewModel.minValue == Double(expectedMinValue).rounded(toNextSignificant: viewModel.lineInterval), "Min value should be the minimum net energy value")
         
         // TODO more examples

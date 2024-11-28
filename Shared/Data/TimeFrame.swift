@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TimeFrameType {
+public enum TimeFrame: CaseIterable {
     case allTime
     case month
     case week
@@ -43,30 +43,5 @@ public enum TimeFrameType {
         case .week:
             7
         }
-    }
-}
-
-public struct TimeFrame: Identifiable, Hashable {
-    public var id = UUID()
-    var type: TimeFrameType
-    
-    static let allTime = TimeFrame(type: .allTime)
-    static let month = TimeFrame(type: .month)
-    static let week = TimeFrame(type: .week)
-    
-    static let timeFrames: [TimeFrame] = [
-        .allTime, .month, .week
-    ]
-    
-    var days: Int {
-        type.days
-    }
-    
-    var shortName: String {
-        type.shortName
-    }
-    
-    var longName: String {
-        type.longName
     }
 }
