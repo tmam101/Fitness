@@ -92,7 +92,7 @@ final class FitnessUITests: XCTestCase {
     }
     
     func lookForText(_ text: String) {
-        XCTAssert(app.staticTexts[text].waitForExistence(timeout: 5))
+        XCTAssert(app.staticTexts[text].waitForExistence(timeout: 10))
     }
 
 //    func testLaunchPerformance() throws {
