@@ -52,11 +52,11 @@ extension Tag {
         #expect(expectedWeightTomorrowStyle.color == Color.expectedWeightTomorrowYellow)
     }
     
-    @Test("Weight plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    @Test("Weight plot view model", .tags(.timeFrame), arguments: TimeFrame.allCases)
     func weightPlotViewModel(timeFrame: TimeFrame) {
         let weightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
         
-        switch timeFrame.type {
+        switch timeFrame {
         case .allTime:
             #expect(!weightViewModel.shouldHavePoint)
         case .month:
@@ -78,10 +78,10 @@ extension Tag {
     }
     
     
-    @Test("Exepected weight plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    @Test("Exepected weight plot view model", .tags(.timeFrame), arguments: TimeFrame.allCases)
     func expectedWeightPlotViewModel(timeFrame: TimeFrame) {
         let expectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
-        switch timeFrame.type {
+        switch timeFrame {
         case .allTime:
             #expect(!expectedWeightViewModel.shouldHavePoint)
             #expect(!expectedWeightViewModel.shouldHaveDayOverlay)
@@ -107,7 +107,7 @@ extension Tag {
         #expect(expectedWeightViewModel.shouldDisplay)
     }
     
-    @Test("Expected weight tomorrow plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    @Test("Expected weight tomorrow plot view model", .tags(.timeFrame), arguments: TimeFrame.allCases)
     func expectedWeightTomorrowPlotViewModel(timeFrame: TimeFrame) {
         let expectedWeightTomorrowViewModel = PlotViewModel(type: .expectedWeightTomorrow, day: day, timeFrame: timeFrame)
         #expect(expectedWeightTomorrowViewModel.xValue == day.date)
@@ -124,10 +124,10 @@ extension Tag {
         #expect(!expectedWeightTomorrowViewModel.shouldIndicateMissedDays)
     }
     
-    @Test("Realistic weight plot view model", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    @Test("Realistic weight plot view model", .tags(.timeFrame), arguments: TimeFrame.allCases)
     func realisticWeightPlotViewModel(timeFrame: TimeFrame) {
         let realisticWeightViewModel = PlotViewModel(type: .realisticWeight, day: day, timeFrame: timeFrame)
-        switch timeFrame.type {
+        switch timeFrame {
         case .allTime:
             #expect(!realisticWeightViewModel.shouldHavePoint)
         case .month:
@@ -148,7 +148,7 @@ extension Tag {
         #expect(!realisticWeightViewModel.shouldIndicateMissedDays)
     }
     
-    @Test("Points become red when they should", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    @Test("Points become red when they should", .tags(.timeFrame), arguments: TimeFrame.allCases)
     func pointsBecomeRedWhenTheyShould(timeFrame: TimeFrame) {
         let expectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
         let expectedWeightTomorrowViewModel = PlotViewModel(type: .expectedWeightTomorrow, day: day, timeFrame: timeFrame)
@@ -157,7 +157,7 @@ extension Tag {
         
         day.wasModifiedBecauseTheUserDidntEnterData = true
         
-        switch timeFrame.type {
+        switch timeFrame {
         case .allTime:
             #expect(expectedWeightViewModel.pointStyle as! Color == expectedWeightViewModel.type.color)
             #expect(!expectedWeightViewModel.shouldIndicateMissedDays)
@@ -175,10 +175,10 @@ extension Tag {
         #expect(weightViewModel.pointStyle as! Color == weightViewModel.type.color)
     }
     
-    @Test("Points dont show after month", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    @Test("Points dont show after month", .tags(.timeFrame), arguments: TimeFrame.allCases)
     func pointsDontShowAfterMonth(timeFrame: TimeFrame) {
         let longAgoWeightViewModel = PlotViewModel(type: .weight, day: day, timeFrame: timeFrame)
-        switch timeFrame.type {
+        switch timeFrame {
         case .allTime:
             #expect(!longAgoWeightViewModel.shouldHavePoint)
         case .month:
@@ -188,10 +188,10 @@ extension Tag {
         }
     }
     
-    @Test("Dont indicate missed days for all time", .tags(.timeFrame), arguments: TimeFrame.timeFrames)
+    @Test("Dont indicate missed days for all time", .tags(.timeFrame), arguments: TimeFrame.allCases)
     func dontIndicateMissedDaysForAllTime(timeFrame: TimeFrame) {
         let longAgoExpectedWeightViewModel = PlotViewModel(type: .expectedWeight, day: allTimeDay, timeFrame: timeFrame)
-        switch timeFrame.type {
+        switch timeFrame {
         case .allTime:
             #expect(!longAgoExpectedWeightViewModel.shouldIndicateMissedDays)
         case .month:
@@ -204,11 +204,11 @@ extension Tag {
     @Test func dayOfWeekLabelsDontShowAfterWeek() {
         let day = Day(date: Date(), daysAgo: 0, activeCalories: 3500, expectedWeight: 68, realisticWeight: 69, weight: 70)
         // Ensure day of week labels don't show up after a week
-        var timeFrame = TimeFrame(type: .week)
+        var timeFrame = TimeFrame.week
         let dayOfWeekViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
         #expect(dayOfWeekViewModel.shouldHaveDayOverlay)
         
-        timeFrame = TimeFrame(type: .month)
+        timeFrame = .month
         let dayOfMonthViewModel = PlotViewModel(type: .expectedWeight, day: day, timeFrame: timeFrame)
         #expect(!dayOfMonthViewModel.shouldHaveDayOverlay)
     }
@@ -223,7 +223,7 @@ extension Tag {
         days.setWeightOnEveryDay()
         #expect(day2.weight == 71)
         #expect(day2.weightWasEstimated)
-        for timeFrame in TimeFrame.timeFrames {
+        for timeFrame in TimeFrame.allCases {
             let vm = PlotViewModel(type: .weight, day: day2, timeFrame: timeFrame)
             #expect(!vm.shouldHavePoint)
         }
@@ -235,7 +235,7 @@ extension Tag {
         var days = Days()
         days[0] = day1
         days[1] = day2
-        let timeFrame = TimeFrame(type: .week)
+        let timeFrame = TimeFrame.week
         
         let viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
         #expect(viewModel.days.count == 3)
@@ -259,7 +259,7 @@ extension Tag {
         var days = Days()
         days[0] = day1
         days[1] = day2
-        let timeFrame = TimeFrame(type: .week)
+        let timeFrame = TimeFrame.week
         let viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
         var constructedDays = viewModel.constructDays(using: days)
         // Ensure tomorrow is added
