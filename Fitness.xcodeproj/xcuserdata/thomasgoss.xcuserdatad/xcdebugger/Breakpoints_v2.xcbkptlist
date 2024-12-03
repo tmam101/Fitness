@@ -414,8 +414,8 @@
             filePath = "FitnessUITests/FitnessUITests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "testTimeFramePicker()"
             landmarkType = "7">
          </BreakpointContent>
@@ -430,9 +430,9 @@
             filePath = "FitnessUITests/FitnessUITests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "testTimeFramePicker()"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "barValue(daysAgo:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
