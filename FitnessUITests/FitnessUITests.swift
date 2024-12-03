@@ -31,6 +31,7 @@ final class FitnessUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = [path.rawValue]
         app.launch()
+        XCUIDevice.shared.orientation = .portrait
         self.app = app
         continueAfterFailure = false
         approveHealthkitAccessIfNecessary()
