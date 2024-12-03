@@ -20,7 +20,6 @@
 		4803BEA3271F1AB500882BCC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803BE9E271F035C00882BCC /* Day.swift */; };
 		4805D2982925B989009F1F47 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
 		4805D29A2925B989009F1F47 /* NetEnergyBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */; };
-		48108127278A0FA8008E9AE6 /* WatchConnectivityWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48108124278A0FA8008E9AE6 /* WatchConnectivityWatch.swift */; };
 		4810812E278A34A8008E9AE6 /* AppViewWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4810812B278A34A8008E9AE6 /* AppViewWatch.swift */; };
 		48108132278A34B5008E9AE6 /* FitnessViewWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4810812F278A34B5008E9AE6 /* FitnessViewWatch.swift */; };
 		4827C99D26828BEF006700A1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4827C99C26828BEF006700A1 /* DateExtension.swift */; };
@@ -258,7 +257,6 @@
 		4802D49627875B7F0001BE9D /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		4803BE9E271F035C00882BCC /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		4805D2972925B989009F1F47 /* NetEnergyBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetEnergyBarChart.swift; sourceTree = "<group>"; };
-		48108124278A0FA8008E9AE6 /* WatchConnectivityWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityWatch.swift; sourceTree = "<group>"; };
 		4810812B278A34A8008E9AE6 /* AppViewWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewWatch.swift; sourceTree = "<group>"; };
 		4810812F278A34B5008E9AE6 /* FitnessViewWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessViewWatch.swift; sourceTree = "<group>"; };
 		4827C99C26828BEF006700A1 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -551,7 +549,6 @@
 			isa = PBXGroup;
 			children = (
 				48108133278A34BD008E9AE6 /* Main View */,
-				48108124278A0FA8008E9AE6 /* WatchConnectivityWatch.swift */,
 				48BD6F61274B191A0007AC15 /* Watch WatchKit ExtensionDebug.entitlements */,
 				48BD6F0C274B12CB0007AC15 /* NotificationController.swift */,
 				48BD6F0E274B12CB0007AC15 /* NotificationView.swift */,
@@ -1151,7 +1148,6 @@
 				48BD6F4D274B16190007AC15 /* DoubleExtension.swift in Sources */,
 				E9391CAE29AD205200D09252 /* TodayView.swift in Sources */,
 				E99F34802BF6A45C004E84C0 /* CodableExtension.swift in Sources */,
-				48108127278A0FA8008E9AE6 /* WatchConnectivityWatch.swift in Sources */,
 				4810812E278A34A8008E9AE6 /* AppViewWatch.swift in Sources */,
 				48BD6F0F274B12CB0007AC15 /* NotificationView.swift in Sources */,
 			);
