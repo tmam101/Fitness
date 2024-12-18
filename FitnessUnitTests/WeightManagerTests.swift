@@ -20,13 +20,13 @@ final class WeightManagerTests {
     
     @Test("Start date filters weights")
     func startDate() async {
-        let startDate = Date.dateFromString("05.05.2024")
+        let startDate = Date().subtracting(days: 10)
         await weightManager.setup(startDate: startDate)
         #expect(weightManager.weights.first?.weight == 229.2)
         #expect(weightManager.weights.last?.weight == 227.6)
-        #expect(weightManager.weights.first?.date.daysAgo() == 344)
-        #expect(weightManager.weightsAfterStartDate.first?.date.daysAgo() == 226)
-        #expect(weightManager.weightsAfterStartDate.first?.weight == 226.2)
+        #expect(weightManager.weights.first?.date.daysAgo() == 135)
+        #expect(weightManager.weightsAfterStartDate.first?.date.daysAgo() == 9)
+        #expect(weightManager.weightsAfterStartDate.first?.weight == 224.8)
         #expect(weightManager.startDate == startDate)
     }
     
@@ -40,7 +40,7 @@ final class WeightManagerTests {
     }
     
     @Test func startingWeightWithNoWeightsUntilAfterStartDate() async {
-        let startDate = Date().subtracting(days: 12)
+        let startDate = Date.dateFromString("05.05.2020")
         await weightManager.setup(startDate: startDate)
         #expect(weightManager.startingWeight == 229.2)
     }

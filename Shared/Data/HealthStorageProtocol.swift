@@ -87,7 +87,7 @@ class HealthStorage: HealthStorageProtocol {
 }
 
 class MockHealthStorage: HealthStorageProtocol {
-    static var standard = MockHealthStorage(days: Days.testDays(options: .init(isMissingConsumedCalories: true, testCase: .realisticWeightsIssue)))
+    static var standard = MockHealthStorage(days: Days.daysFromFileWithNoAdjustment(file: .realisticWeightsIssue))
 
     var days: Days
     var weightLimit = 3000
@@ -118,8 +118,8 @@ class MockHealthStorage: HealthStorageProtocol {
     func getAllWeights(resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
         let query = HKSampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor], resultsHandler: resultsHandler)
         
-        let weights: [Weight] = days.array().sorted(.longestAgoToMostRecent).map { day in
-            Weight(weight: day.weight, date: Date().subtracting(days: day.daysAgo))
+        let weights: [Weight] = days.array().sorted(.longestAgoToMostRecent).compactMap { day in
+            day.weight == 0 ? nil : Weight(weight: day.weight, date: Date().subtracting(days: day.daysAgo))
         }
         let samples = weights.map { HKQuantitySample(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: Double($0.weight)), start: $0.date, end: $0.date)}
         

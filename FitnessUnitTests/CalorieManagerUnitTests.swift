@@ -122,10 +122,11 @@ struct CalorieManagerUnitTests {
         #expect(oldestDay.activeCalories == 465.2399999999998)
         #expect(oldestDay.restingCalories == 2268.9560000000015)
         #expect(oldestDay.daysAgo == 20)
-        #expect(oldestDay.consumedCalories.isApproximately(3434.19, accuracy: 0.01))
+        #expect(oldestDay.consumedCalories == 0)
 //        XCTAssertEqual(oldestDay.expectedWeight, 230)
         // TODO We are now moving expected weight calculation into the Days object. TBD if i want this long term
-        #expect(oldestDay.runningTotalDeficit.isApproximately(-699.99, accuracy: 0.01))
+        #expect(oldestDay.runningTotalDeficit.isApproximately(2268.95 + 465.23, accuracy: 0.1))
+        #expect(oldestDay.netEnergy.isApproximately(0 - (2268.95 + 465.23), accuracy: 0.1))
         #expect(oldestDay.date == Date().subtracting(days: 20))
         #expect(oldestDay.protein == 0)
         #expect(oldestDay.deficit == oldestDay.runningTotalDeficit)
@@ -136,12 +137,13 @@ struct CalorieManagerUnitTests {
         #expect(newestDay.consumedCalories == 0)
         // Test deficit, net energy, and expected weight change
         let expectedTotalDeficit = days.sum(property: .deficit)
-        #expect(expectedTotalDeficit == Decimal(days.count) * Decimal(2150))
-        #expect(expectedTotalDeficit == 45150)
+        #expect(expectedTotalDeficit.isApproximately(56220.10, accuracy: 0.1))
         #expect(expectedTotalDeficit == days.newestDay?.runningTotalDeficit)
-        let expectedTotalNetEnergy = days.dropping(0).sum(property: .netEnergy)
-        #expect(expectedTotalNetEnergy == Decimal(days.count - 1) * Decimal(-2150))
-        #expect(expectedTotalNetEnergy == -43000)
+        for day in days.array() {
+            #expect(day.runningTotalDeficit != nil)
+        }
+        let expectedTotalNetEnergy = days.sum(property: .netEnergy)
+        #expect(expectedTotalNetEnergy.isApproximately(-56220.10, accuracy: 0.1))
         let expectedWeightChange = expectedTotalNetEnergy / Constants.numberOfCaloriesInPound
         #expect(expectedWeightChange.isApproximatelyEqual(to: -12.285714, absoluteTolerance: 0.001, norm: { (x) -> Double in
             return Double(x)

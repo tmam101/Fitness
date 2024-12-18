@@ -46,8 +46,8 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "setValues(environment:forceLoad:haveAlreadyRetried:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,10 +62,10 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
-            landmarkName = "setValues(environment:forceLoad:haveAlreadyRetried:)"
-            landmarkType = "7">
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "HealthData"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -206,10 +206,10 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "HealthData"
-            landmarkType = "3">
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "setValues(forceLoad:haveAlreadyRetried:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -270,8 +270,8 @@
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "setValues(forceLoad:haveAlreadyRetried:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -584,14 +584,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0F0ED037-9A55-4CA9-ADCD-47E3DD1783C5"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FitnessUnitTests/HealthDataTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
             landmarkName = "health()"
             landmarkType = "7">
          </BreakpointContent>
@@ -616,14 +616,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "8838A9B9-47B3-4038-A5A5-2C5763DB8C15"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "setValues(forceLoad:haveAlreadyRetried:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -638,8 +638,8 @@
             filePath = "Shared/Data/Day.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "316"
-            endingLineNumber = "316"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
             landmarkName = "formatAccordingTo(options:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -648,14 +648,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "EE58E6C4-7B24-4DAF-B2C1-5EC463A4F134"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FitnessUnitTests/HealthDataTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "health_gaps()"
             landmarkType = "7">
          </BreakpointContent>
@@ -664,7 +664,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "57FB2BB6-9E9C-4379-99CD-7B1C6D543101"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/WeightManager.swift"
@@ -696,14 +696,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D5704EA1-F84D-4EAE-A269-224ACE937DF0"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "init(environment:shouldSetValues:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -712,183 +712,39 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "166D661F-37F8-4BB3-8B71-FAF0B38E007F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
             landmarkName = "setValues(environment:forceLoad:haveAlreadyRetried:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "166D661F-37F8-4BB3-8B71-FAF0B38E007F - 3782bce6fa2b04fb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.CheckedContinuation&lt;Fitness.HealthData, Swift.Never&gt;) -&gt; () in static Fitness.HealthData.setValues(environment: Fitness.AppEnvironmentConfig, forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool) async -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87">
-               </Location>
-               <Location
-                  uuid = "166D661F-37F8-4BB3-8B71-FAF0B38E007F - c809c7052307bf09"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for static Fitness.HealthData.setValues(environment: Fitness.AppEnvironmentConfig, forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool) async -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87">
-               </Location>
-               <Location
-                  uuid = "166D661F-37F8-4BB3-8B71-FAF0B38E007F - c9e8a56281d58d1a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) await resume partial function for static Fitness.HealthData.setValues(environment: Fitness.AppEnvironmentConfig, forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool) async -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87">
-               </Location>
-               <Location
-                  uuid = "166D661F-37F8-4BB3-8B71-FAF0B38E007F - e4884dcfba8ff0f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(5) suspend resume partial function for static Fitness.HealthData.setValues(environment: Fitness.AppEnvironmentConfig, forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool) async -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "FD0BE968-EA85-42F5-AF66-8BA75C420551"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
             landmarkName = "setValues(forceLoad:haveAlreadyRetried:completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "FD0BE968-EA85-42F5-AF66-8BA75C420551 - 3ab3fb49348ff7a6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98">
-               </Location>
-               <Location
-                  uuid = "FD0BE968-EA85-42F5-AF66-8BA75C420551 - cc28f5093b63b1d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98">
-               </Location>
-               <Location
-                  uuid = "FD0BE968-EA85-42F5-AF66-8BA75C420551 - 641f916d9aa933a8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98">
-               </Location>
-               <Location
-                  uuid = "FD0BE968-EA85-42F5-AF66-8BA75C420551 - 3ab3fb49348ff647"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-               <Location
-                  uuid = "FD0BE968-EA85-42F5-AF66-8BA75C420551 - cc28f5093b63b032"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-               <Location
-                  uuid = "FD0BE968-EA85-42F5-AF66-8BA75C420551 - 641f916d9aa93249"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "12AF08BC-291E-4417-8A8A-2DA3407CDBD0"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Environment.swift"
@@ -904,106 +760,32 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0A97C173-2719-4CD6-896B-6547E5469286"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "init(environment:shouldSetValues:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0A97C173-2719-4CD6-896B-6547E5469286 - a3a0e54f419cdad6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 () async -&gt; () in Fitness.HealthData.init(environment: Fitness.AppEnvironmentConfig, shouldSetValues: Swift.Bool, startDate: Swift.Optional&lt;Foundation.Date&gt;) -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "47"
-                  endingLineNumber = "47">
-               </Location>
-               <Location
-                  uuid = "0A97C173-2719-4CD6-896B-6547E5469286 - b49ee38fb250de9e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 () async -&gt; () in Fitness.HealthData.init(environment: Fitness.AppEnvironmentConfig, shouldSetValues: Swift.Bool) -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "47"
-                  endingLineNumber = "47">
-               </Location>
-               <Location
-                  uuid = "0A97C173-2719-4CD6-896B-6547E5469286 - 65d72679ee567a8f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) await resume partial function for closure #1 () async -&gt; () in Fitness.HealthData.init(environment: Fitness.AppEnvironmentConfig, shouldSetValues: Swift.Bool) -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "47"
-                  endingLineNumber = "47">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "94EA7493-F19D-454D-A8EB-B8787D5B9030"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "init(environment:shouldSetValues:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "94EA7493-F19D-454D-A8EB-B8787D5B9030 - a3a0e54f419cdaf1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 () async -&gt; () in Fitness.HealthData.init(environment: Fitness.AppEnvironmentConfig, shouldSetValues: Swift.Bool, startDate: Swift.Optional&lt;Foundation.Date&gt;) -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "46"
-                  endingLineNumber = "46">
-               </Location>
-               <Location
-                  uuid = "94EA7493-F19D-454D-A8EB-B8787D5B9030 - b49ee38fb250deb9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 () async -&gt; () in Fitness.HealthData.init(environment: Fitness.AppEnvironmentConfig, shouldSetValues: Swift.Bool) -&gt; Fitness.HealthData"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "46"
-                  endingLineNumber = "46">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1026,7 +808,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E6F32227-3D46-4306-A5C7-D3D71F2D199F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/WeightManager.swift"
@@ -1042,7 +824,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "4D24E63B-6508-4810-B847-A1363952E770"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Main View/FitnessApp.swift"
@@ -1074,7 +856,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "1C5EE42B-22B9-4EFD-AB2A-E68E58EA75FD"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthStorageProtocol.swift"
@@ -1090,60 +872,30 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "C81B73CB-F67D-492F-A1F4-E1B8D84575CD"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
             landmarkName = "setValues(forceLoad:haveAlreadyRetried:completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C81B73CB-F67D-492F-A1F4-E1B8D84575CD - 4f7b2e91c0c26fc7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(5) suspend resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "101"
-                  endingLineNumber = "101">
-               </Location>
-               <Location
-                  uuid = "C81B73CB-F67D-492F-A1F4-E1B8D84575CD - 4f7b2e91c0c26fe4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(5) suspend resume partial function for Fitness.HealthData.setValues(forceLoad: Swift.Bool, haveAlreadyRetried: Swift.Bool, completion: Swift.Optional&lt;(Fitness.HealthData) -&gt; ()&gt;) async -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "100"
-                  endingLineNumber = "100">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "4FA081AB-70C4-41D6-AE23-F4FA862F66FE"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
             landmarkName = "setValues(forceLoad:haveAlreadyRetried:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1152,14 +904,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "A17A5864-6920-41E9-8EC5-24CD1C102DE2"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/Day.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "285"
+            endingLineNumber = "285"
             landmarkName = "testDays(options:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1168,7 +920,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "51EBD32A-45D7-44CF-96F2-14C011E2474F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/CalorieManager.swift"
@@ -1178,43 +930,13 @@
             endingLineNumber = "214"
             landmarkName = "getEveryDay()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "51EBD32A-45D7-44CF-96F2-14C011E2474F - 20123ccb9724272e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Fitness.CalorieManager.getEveryDay() async -&gt; Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "214"
-                  endingLineNumber = "214">
-               </Location>
-               <Location
-                  uuid = "51EBD32A-45D7-44CF-96F2-14C011E2474F - 1ef30906d5a763d8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for Fitness.CalorieManager.getEveryDay() async -&gt; Swift.Dictionary&lt;Swift.Int, Fitness.Day&gt;"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/CalorieManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "214"
-                  endingLineNumber = "214">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "936AF9B9-D8F4-466D-91E5-761F21BF806D"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/CalorieManager.swift"
@@ -1230,7 +952,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "4AAE91B7-41E9-45FD-9B2C-A9925B2DDCCD"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/CalorieManager.swift"
@@ -1246,166 +968,80 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D00DCF09-3DB6-4A7B-8A58-EDF13687C148"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
             landmarkName = "setupDates(environment:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "D00DCF09-3DB6-4A7B-8A58-EDF13687C148 - 72e4f8573145fc79"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "144"
-                  endingLineNumber = "144">
-               </Location>
-               <Location
-                  uuid = "D00DCF09-3DB6-4A7B-8A58-EDF13687C148 - 72e4f8573145fc79"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "144"
-                  endingLineNumber = "144">
-               </Location>
-               <Location
-                  uuid = "D00DCF09-3DB6-4A7B-8A58-EDF13687C148 - 72e4f8573145fc58"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143">
-               </Location>
-               <Location
-                  uuid = "D00DCF09-3DB6-4A7B-8A58-EDF13687C148 - 72e4f8573145fc58"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "2EC106E3-08D0-47E5-AEE5-BCDE8660C832"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "setupDates(environment:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "2EC106E3-08D0-47E5-AEE5-BCDE8660C832 - 72e4f8573145fe0d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "156"
-                  endingLineNumber = "156">
-               </Location>
-               <Location
-                  uuid = "2EC106E3-08D0-47E5-AEE5-BCDE8660C832 - 72e4f8573145feec"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "155"
-                  endingLineNumber = "155">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "FF8552DF-C4E0-4222-9BB7-F0C3A2EF8FE5"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Shared/Data/HealthData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
             landmarkName = "setupDates(environment:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "FF8552DF-C4E0-4222-9BB7-F0C3A2EF8FE5 - 72e4f8573145fd37"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "150"
-                  endingLineNumber = "150">
-               </Location>
-               <Location
-                  uuid = "FF8552DF-C4E0-4222-9BB7-F0C3A2EF8FE5 - 72e4f8573145fd16"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Fitness.HealthData.setupDates(environment: Fitness.AppEnvironmentConfig) -&gt; ()"
-                  moduleName = "Fitness.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomasgoss/Documents/GitHub/Fitness/Shared/Data/HealthData.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "149"
-                  endingLineNumber = "149">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "26FB0305-9659-4510-8F01-22EF2CEF8B67"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Data/WeightManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "setup(startDate:startDateString:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "62811816-72D9-4E0D-9FAA-02D79B4DAE93"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FitnessUnitTests/CalorieManagerUnitTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "getDays()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

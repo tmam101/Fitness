@@ -66,24 +66,28 @@ final class HomeScreenTests {
     
     @Test("Home screen weight models")
     func weight() throws {
-        // TODO Test more thoroughly - create days that I know the difference of, then test against that
         var days = Days()
-        days[0] = Day(daysAgo: 0, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 7)
-        days[1] = Day(daysAgo: 1, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 9.8)
-        days[2] = Day(daysAgo: 2, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 10)
-        days[3] = Day(daysAgo: 3, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 10.5)
+        // Set first day's expected weight to match its actual weight
+        days[7] = Day(daysAgo: 7, activeCalories: 0, restingCalories: 3500 / 7, consumedCalories: 0, expectedWeight: 210, weight: 210)
+        days[6] = Day(daysAgo: 6, activeCalories: 0, restingCalories: 3500 / 7, consumedCalories: 0, expectedWeight: 209.9, weight: 209.9)
+        days[5] = Day(daysAgo: 5, activeCalories: 0, restingCalories: 3500 / 7, consumedCalories: 0, expectedWeight: 209.8, weight: 209.8)
+        days[4] = Day(daysAgo: 4, activeCalories: 0, restingCalories: 3500 / 7, consumedCalories: 0, expectedWeight: 209.7, weight: 209.7)
+        days[3] = Day(daysAgo: 3, activeCalories: 0, restingCalories: 3500 / 7, consumedCalories: 0, expectedWeight: 209.6, weight: 209.6)
+        days[2] = Day(daysAgo: 2, activeCalories: 0, restingCalories: 3500 / 7, consumedCalories: 0, expectedWeight: 209.5, weight: 209.5)
+        days[1] = Day(daysAgo: 1, activeCalories: 0, restingCalories: 3500 / 7, consumedCalories: 0, expectedWeight: 209.4, weight: 209.4)
+        days[0] = Day(daysAgo: 0, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 209.3, weight: 209.3)
 
         // Test week
         var models = HomeScreen.weightRingModels(days: days, timeFrame: .week)
         var expectedWeightModel = try #require(models?.first)
-        #expect(expectedWeightModel.bodyText == "-3.00")
-        #expect(expectedWeightModel.percentage == 0)
+        #expect(expectedWeightModel.bodyText == "-1.00")
+        #expect(expectedWeightModel.percentage.isApproximately(0.5, accuracy: 0.01))
         #expect(expectedWeightModel.color == .yellow)
 
         var weightModel = try #require(models?[1])
-        #expect(weightModel.bodyText == "+0.83")
-        #expect(weightModel.percentage == 0)
-        #expect(weightModel.color == .white)
+        #expect(weightModel.bodyText == "-0.70") // TODO should this be days[0] - days[6] rather than days[7]?
+        #expect(weightModel.percentage.isApproximately(0.35, accuracy: 0.01))
+        #expect(weightModel.color == .green)
         
         // Test calculations
         let daysWithinTimeframe = days.filteredBy(.week)
@@ -91,10 +95,10 @@ final class HomeScreenTests {
         var newestDay = try #require(daysWithinTimeframe.newestDay) // shouldnt be today
 
         let expectedWeightDifference = newestDay.expectedWeight - oldestDay.expectedWeight
-        #expect(expectedWeightDifference.isApproximately(0.61, accuracy: 0.01))
+        #expect(expectedWeightDifference.isApproximately(-0.7, accuracy: 0.01))
         let weightDifference = newestDay.weight - oldestDay.weight
-        #expect(weightDifference.isApproximately(0.83, accuracy: 0.01))
-        
+        #expect(weightDifference.isApproximately(-0.7, accuracy: 0.01))
+
         // Test month
         models = HomeScreen.weightRingModels(days: days, timeFrame: .month)
         expectedWeightModel = try #require(models?.first)

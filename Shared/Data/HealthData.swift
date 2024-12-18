@@ -22,14 +22,11 @@ class HealthData: ObservableObject {
     @Published var environment: AppEnvironmentConfig
 #if !os(macOS)
     @Published var calorieManager: CalorieManager
-#endif
     @Published public var weightManager: WeightManager
-    
+#endif
     @Published public var days: Days = [:]
-    @Published public var daysBetweenStartAndNow: Int? = 350 // TODO needed?
+    @Published public var daysBetweenStartAndNow: Int?
     @Published public var hasLoaded: Bool = false
-    @Published public var realisticWeights: [Int: Double] = [:]
-    @Published public var weights: [Double] = []
     
     // Constants
     var startDate: Date?
