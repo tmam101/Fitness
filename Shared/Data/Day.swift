@@ -271,6 +271,9 @@ extension Days {
             }
             if let file = options.testCase {
                 var days: Days = Days.decode(path: file) ?? [:] // TODO
+                days.array().forEach { day in
+                    day.date = Date().subtracting(days: day.daysAgo)
+                }
                 days.formatAccordingTo(options: options)
                 return days
             }

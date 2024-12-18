@@ -67,14 +67,18 @@ final class HomeScreenTests {
     @Test("Home screen weight models")
     func weight() throws {
         // TODO Test more thoroughly - create days that I know the difference of, then test against that
-        let days = Days.testDays(options: .init([.isMissingConsumedCalories(true), .testCase(.realisticWeightsIssue)]))
-        
+        var days = Days()
+        days[0] = Day(daysAgo: 0, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 7)
+        days[1] = Day(daysAgo: 1, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 9.8)
+        days[2] = Day(daysAgo: 2, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 10)
+        days[3] = Day(daysAgo: 3, activeCalories: 0, restingCalories: 3500, consumedCalories: 0, expectedWeight: 10.5)
+
         // Test week
         var models = HomeScreen.weightRingModels(days: days, timeFrame: .week)
         var expectedWeightModel = try #require(models?.first)
-        #expect(expectedWeightModel.bodyText == "+0.61")
+        #expect(expectedWeightModel.bodyText == "-3.00")
         #expect(expectedWeightModel.percentage == 0)
-        #expect(expectedWeightModel.color == .white)
+        #expect(expectedWeightModel.color == .yellow)
 
         var weightModel = try #require(models?[1])
         #expect(weightModel.bodyText == "+0.83")
@@ -84,7 +88,7 @@ final class HomeScreenTests {
         // Test calculations
         let daysWithinTimeframe = days.filteredBy(.week)
         var oldestDay = try #require(daysWithinTimeframe.oldestDay)
-        var newestDay = try #require(daysWithinTimeframe.newestDay)
+        var newestDay = try #require(daysWithinTimeframe.newestDay) // shouldnt be today
 
         let expectedWeightDifference = newestDay.expectedWeight - oldestDay.expectedWeight
         #expect(expectedWeightDifference.isApproximately(0.61, accuracy: 0.01))

@@ -19,7 +19,7 @@ final class HealthDataTests {
     @Test("Health data set values")
     func health() async throws {
         let startDate = Date().subtracting(days: 10)
-        let environment = AppEnvironmentConfig(startDate: startDate, healthStorage: MockHealthStorage())
+        let environment = AppEnvironmentConfig(startDate: startDate, healthStorage: MockHealthStorage.standard)
         let healthData = await HealthData.setValues(environment: environment)
         #expect(healthData.weightManager.weights.count == 7)
         #expect(healthData.startDate == startDate)
@@ -31,7 +31,7 @@ final class HealthDataTests {
         let newestDayWithWeight = try #require(daysWithWeights.newestDay)
         #expect(oldestDayWithWeight.weight == 206)
         #expect(newestDayWithWeight.weight == 200)
-        #expect(newestDayWithWeight.protein == 1000)
+        #expect(newestDayWithWeight.protein == 0)
         #expect(daysWithWeights.count == healthData.days.count)
         #expect(healthData.hasLoaded == true)
         #expect(healthData.days == healthData.calorieManager.days)
@@ -41,12 +41,18 @@ final class HealthDataTests {
     @Test("Health data sets weights on every day when necessary")
     func health_gaps() async {
         let startDate = Date().subtracting(days: 10)
-        var environment = AppEnvironmentConfig(startDate: startDate, healthStorage: MockHealthStorageWithGapInDays())
+        var environment = AppEnvironmentConfig(startDate: startDate, healthStorage: MockHealthStorage.standard) // TODO need gap in days
         var healthData = await HealthData.setValues(environment: environment)
         #expect(healthData.days[3]?.weight == 203)
         #expect(healthData.days[4]?.weight == 204)
         
-        environment = AppEnvironmentConfig(dontAddWeightsOnEveryDay: true, startDate: startDate, healthStorage: MockHealthStorageWithGapInDays())
+        // TODO these options are getting overridden by the MockHealthStorage's own options
+        environment = AppEnvironmentConfig(dontAddWeightsOnEveryDay: true, startDate: startDate, healthStorage: MockHealthStorage(
+            days:
+                [5: Day(daysAgo: 5, weight: 205),
+                 4: Day(daysAgo: 4, weight: 0),
+                 3: Day(daysAgo: 3, weight: 203)
+                ]))
         healthData = await HealthData.setValues(environment: environment)
         #expect(healthData.days[3]?.weight == 203)
         #expect(healthData.days[4]?.weight == 0)

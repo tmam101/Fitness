@@ -63,6 +63,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E9DE686F2AD5A60F00320684"
+            BuildableName = "FitnessUnitTests.xctest"
+            BlueprintName = "FitnessUnitTests"
+            ReferencedContainer = "container:Fitness.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

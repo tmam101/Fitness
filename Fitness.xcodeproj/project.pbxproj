@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		480191522D078B59001A2B1D /* HealthStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480191512D078B59001A2B1D /* HealthStorageTests.swift */; };
 		4802D48F278581CB0001BE9D /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D48E278581CB0001BE9D /* RunManager.swift */; };
 		4802D490278582AD0001BE9D /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D48E278581CB0001BE9D /* RunManager.swift */; };
 		4802D491278582AE0001BE9D /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802D48E278581CB0001BE9D /* RunManager.swift */; };
@@ -252,6 +253,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		480191512D078B59001A2B1D /* HealthStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStorageTests.swift; sourceTree = "<group>"; };
 		4802D48E278581CB0001BE9D /* RunManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunManager.swift; sourceTree = "<group>"; };
 		4802D492278584750001BE9D /* CalorieManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieManager.swift; sourceTree = "<group>"; };
 		4802D49627875B7F0001BE9D /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
@@ -701,6 +703,7 @@
 		E9DE68712AD5A60F00320684 /* FitnessUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				480191512D078B59001A2B1D /* HealthStorageTests.swift */,
 				E982444F2C8399F000F13BDC /* HealthDataTests.swift */,
 				E98B6D522C8380A80021E292 /* HomeScreenTests.swift */,
 				E9DE68722AD5A60F00320684 /* DayUnitTests.swift */,
@@ -1192,6 +1195,7 @@
 				E94E20382C0AC877004480AC /* WeightLineChartTests.swift in Sources */,
 				E987203B2C9238E6003E20D8 /* NutrotionAPITests.swift in Sources */,
 				E95C9B812ADDC52C00B2FCC9 /* ExtensionUnitTests.swift in Sources */,
+				480191522D078B59001A2B1D /* HealthStorageTests.swift in Sources */,
 				E9B948CF2C0F8A09001183BE /* CalorieManagerUnitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

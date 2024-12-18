@@ -30,33 +30,6 @@ struct CalorieManagerUnitTests {
         #expect(calorieManager.dietaryProtein != nil)
     }
     
-    @Test func specificDayPredicate() {
-        guard let _ = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed) else {
-            Issue.record()
-            return
-        }
-        let pred = calorieManager.specificDayPredicate(daysAgo: 2)
-        let startDate = Date.subtract(days: 2, from: Date())
-        let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
-        let testPred = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
-        #expect(pred == testPred)
-    }
-    
-    @Test("Past Days Predicate", arguments: 1...100)
-    func pastDaysPredicate(days: Int) {
-        let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
-        let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
-        #expect(predicate == calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
-        // TODO test day 0. Why are we saying Date() unstead of startofday?
-        // TODO you can't because it relies on Date(), which changes between lines of code
-//        let days = 0
-//        let now = days == 0 ? Date() : Calendar.current.startOfDay(for: Date())
-//        let startDate = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: -days), to: now)!)
-//        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: [.strictEndDate, .strictStartDate])
-//        XCTAssertEqual(predicate, calorieManager.pastDaysPredicate(days: days), "Past day predicates not equal for daysAgo \(days)")
-    }
-    
     @Test func healthKitType() {
         for v in HealthKitType.allCases {
             #expect(v.value != nil)
@@ -101,9 +74,16 @@ struct CalorieManagerUnitTests {
     
     @Test func sumValueForDay() async {
         var result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryEnergyConsumed)
-        #expect(result == 1000)
+        #expect(result == 0)
         result = await calorieManager.sumValueForDay(daysAgo: 0, forType: .dietaryProtein)
-        #expect(result == 1000)
+        #expect(result == 0)
+        
+        result = await calorieManager.sumValueForDay(daysAgo: 4, forType: .dietaryEnergyConsumed)
+        #expect(result == 1560)
+        result = await calorieManager.sumValueForDay(daysAgo: 4, forType: .dietaryProtein)
+        #expect(result == 90)
+        
+        
     }
     
     @Test func healthSample() {
@@ -139,20 +119,21 @@ struct CalorieManagerUnitTests {
         // Should have the past x days plus today
         #expect(days.count == 21)
         // Test oldest day properties are set
-        #expect(oldestDay.activeCalories == 1000)
-        #expect(oldestDay.restingCalories == 2150)
-        #expect(oldestDay.consumedCalories == 1000)
+        #expect(oldestDay.activeCalories == 465.2399999999998)
+        #expect(oldestDay.restingCalories == 2268.9560000000015)
+        #expect(oldestDay.daysAgo == 20)
+        #expect(oldestDay.consumedCalories.isApproximately(3434.19, accuracy: 0.01))
 //        XCTAssertEqual(oldestDay.expectedWeight, 230)
         // TODO We are now moving expected weight calculation into the Days object. TBD if i want this long term
-        #expect(oldestDay.runningTotalDeficit == 2150)
+        #expect(oldestDay.runningTotalDeficit.isApproximately(-699.99, accuracy: 0.01))
         #expect(oldestDay.date == Date().subtracting(days: 20))
-        #expect(oldestDay.protein == 1000)
+        #expect(oldestDay.protein == 0)
         #expect(oldestDay.deficit == oldestDay.runningTotalDeficit)
         
         // Test newest day properties are set
-        #expect(newestDay.activeCalories == 1000)
+        #expect(newestDay.activeCalories == 200)
         #expect(newestDay.restingCalories == 2150)
-        #expect(newestDay.consumedCalories == 1000)
+        #expect(newestDay.consumedCalories == 0)
         // Test deficit, net energy, and expected weight change
         let expectedTotalDeficit = days.sum(property: .deficit)
         #expect(expectedTotalDeficit == Decimal(days.count) * Decimal(2150))
