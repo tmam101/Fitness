@@ -14,7 +14,7 @@ import WidgetKit
 #endif
 import ClockKit
 
-class WeightManager: ObservableObject {
+class WeightManager: ObservableObject { // TODO should we adjust weights in here? Add a weight for every day when they are missing?
     private var healthStorage: HealthStorageProtocol
     
     var startDate: Date?
@@ -58,8 +58,7 @@ class WeightManager: ObservableObject {
         self.weights = await getWeights()
         self.weightsAfterStartDate = self.weights.filter { $0.date >= startDate }
         
-        self.currentWeight = self.weights.last?.weight ?? 1
-        
+        self.currentWeight = self.weights.last?.weight ?? 1 
         self.startingWeight = weight(at: startDate) ?? 1 //TODO
         
         self.progressToWeight = self.getProgressToWeight()

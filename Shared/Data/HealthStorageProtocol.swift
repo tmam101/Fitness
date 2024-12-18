@@ -9,25 +9,23 @@ import Foundation
 import HealthKit
 
 protocol HealthStorageProtocol {
-    func sampleQuery(sampleType: HKSampleType, predicate: NSPredicate?, limit: Int, sortDescriptors: [NSSortDescriptor]?, resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void)
-    func statisticsQuery(
-        type: HealthKitType, quantitySamplePredicate: NSPredicate?, options: HKStatisticsOptions, completionHandler handler: @escaping (HKStatisticsQuery?, HKStatisticsProtocol?, (any Error)?) -> Void
-    )
     func save(
         _ object: HKObject,
         withCompletion completion: @escaping (Bool, (any Error)?) -> Void
     )
     func getAllWeights(resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void)
+    func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> HKQuantity?
+
 }
 
 //TODO: For now, all in one, then separate later
 class HealthStorage: HealthStorageProtocol {
     var weightLimit = 3000
-    var sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-    var querySampleType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
+    var weightSortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+    var weightQuerySampleType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
     
     func getAllWeights(resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
-        let query = HKSampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor], resultsHandler: resultsHandler)
+        let query = HKSampleQuery(sampleType: weightQuerySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [weightSortDescriptor], resultsHandler: resultsHandler)
         healthStore.execute(query)
     }
     
@@ -48,65 +46,85 @@ class HealthStorage: HealthStorageProtocol {
     ) {
         guard let quantityType = type.value else {
             handler(nil, nil, nil) // TODO return error
-            return 
+            return
         }
         
         let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: quantitySamplePredicate, options: options, completionHandler: handler)
         
         healthStore.execute(query)
     }
+    
+    // MARK: CONVENIENCE
+    
+    func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> HKQuantity? {
+        return await withUnsafeContinuation { continuation in
+            let predicate = specificDayPredicate(daysAgo: daysAgo)
+           
+            self.statisticsQuery(type: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
+                continuation.resume(returning: result?.sumQuantity())
+            }
+        }
+    }
+    
+    // MARK: PREDICATES
+    
+    func pastDaysPredicate(days: Int) -> NSPredicate {
+        let endDate = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
+        let startDate = Date.subtract(days: days, from: endDate)
+        return predicate(startDate: startDate, endDate: endDate)
+    }
+    
+    func specificDayPredicate(daysAgo: Int) -> NSPredicate? {
+        let startDate = Date.subtract(days: daysAgo, from: Date())
+        guard let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate)
+        else { return nil }
+        return predicate(startDate: startDate, endDate: endDate)
+    }
+    
+    func predicate(startDate: Date, endDate: Date) -> NSPredicate {
+        HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
+    }
 }
 
 class MockHealthStorage: HealthStorageProtocol {
+    static var standard = MockHealthStorage(days: Days.daysFromFileWithNoAdjustment(file: .realisticWeightsIssue))
+
+    var days: Days
     var weightLimit = 3000
     var sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
     var querySampleType = HKSampleType.quantityType(forIdentifier: .bodyMass)!
+    
+    init(days: Days) {
+        self.days = days
+    }
+    
+    init(file: Filepath.Days) {
+        self.days = Days.daysFromFileWithNoAdjustment(file: file)
+    }
+    
+    func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> HKQuantity? {
+        return switch type {
+        case .dietaryProtein:
+            HKQuantity(unit: .gram(), doubleValue: Double(days[daysAgo]?.protein ?? 1000)) // TODO 1000 not ideal
+        case .activeEnergyBurned:
+            HKQuantity(unit: .kilocalorie(), doubleValue: Double(days[daysAgo]?.activeCalories ?? 1000))
+        case .basalEnergyBurned:
+            HKQuantity(unit: .kilocalorie(), doubleValue: Double(days[daysAgo]?.restingCalories ?? 1000))
+        case .dietaryEnergyConsumed:
+            HKQuantity(unit: .kilocalorie(), doubleValue: Double(days[daysAgo]?.consumedCalories ?? 1000))
+        }
+    }
     
     func save(_ object: HKObject, withCompletion completion: @escaping (Bool, (any Error)?) -> Void) {
         //  TODO
     }
     
-    func statisticsQuery(type: HealthKitType, quantitySamplePredicate: NSPredicate?, options: HKStatisticsOptions, completionHandler handler: @escaping (HKStatisticsQuery?, HKStatisticsProtocol?, (any Error)?) -> Void) {
-        guard let quantityType = type.value else {
-            handler(nil, nil, nil) // TODO return error
-            return
-        }
-        let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: quantitySamplePredicate, options: options, completionHandler: handler)
-        let mock = MockHKStatistics(sumQuantity: .init(unit: type.unit, doubleValue: 1000))
-        handler(query, mock, nil)
-    }
-    
-    func sampleQuery(sampleType: HKSampleType, predicate: NSPredicate?, limit: Int, sortDescriptors: [NSSortDescriptor]?, resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
-        // TODO set up some Days, using testDays probably, then create samples from their weights
-        
-        let weights: [Weight] = [
-            .init(weight: 200, date: Date().subtracting(days: 0)),
-            .init(weight: 201, date: Date().subtracting(days: 1)),
-            .init(weight: 202, date: Date().subtracting(days: 2)),
-            .init(weight: 203, date: Date().subtracting(days: 3)),
-            .init(weight: 204, date: Date().subtracting(days: 4)),
-            .init(weight: 205, date: Date().subtracting(days: 5)),
-            .init(weight: 206, date: Date().subtracting(days: 6)),
-        ]
-        let samples = weights.map { HKQuantitySample(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: Double($0.weight)), start: $0.date, end: $0.date)}
-        
-        resultsHandler(query, samples, nil)
-    }
-    
     func getAllWeights(resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
         let query = HKSampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor], resultsHandler: resultsHandler)
-        // TODO set up some Days, using testDays probably, then create samples from their weights
         
-        let weights: [Weight] = [
-            .init(weight: 200, date: Date().subtracting(days: 0)),
-            .init(weight: 201, date: Date().subtracting(days: 1)),
-            .init(weight: 202, date: Date().subtracting(days: 2)),
-            .init(weight: 203, date: Date().subtracting(days: 3)),
-            .init(weight: 204, date: Date().subtracting(days: 4)),
-            .init(weight: 205, date: Date().subtracting(days: 5)),
-            .init(weight: 206, date: Date().subtracting(days: 6)),
-        ]
+        let weights: [Weight] = days.array().sorted(.longestAgoToMostRecent).compactMap { day in
+            day.weight == 0 ? nil : Weight(weight: day.weight, date: Date().subtracting(days: day.daysAgo))
+        }
         let samples = weights.map { HKQuantitySample(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: Double($0.weight)), start: $0.date, end: $0.date)}
         
         resultsHandler(query, samples, nil)
@@ -114,41 +132,24 @@ class MockHealthStorage: HealthStorageProtocol {
 }
 
 class MockHealthStorageWithGapInDays: MockHealthStorage {
+    let gappedWeights: [Weight]
+    
+    init(weights: [Weight]) {
+        self.gappedWeights = weights
+        super.init(days: [:])  // Empty days since we're providing weights directly
+    }
     
     override func getAllWeights(resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
         let query = HKSampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor], resultsHandler: resultsHandler)
-        // TODO set up some Days, using testDays probably, then create samples from their weights
         
-        let weights: [Weight] = [
-            .init(weight: 200, date: Date().subtracting(days: 0)),
-            .init(weight: 201, date: Date().subtracting(days: 1)),
-            .init(weight: 202, date: Date().subtracting(days: 2)),
-            .init(weight: 203, date: Date().subtracting(days: 3)),
-            .init(weight: 206, date: Date().subtracting(days: 6)),
-            .init(weight: 207, date: Date().subtracting(days: 7)),
-            .init(weight: 208, date: Date().subtracting(days: 8)),
-            .init(weight: 209, date: Date().subtracting(days: 9))
-        ]
-        
-        let samples = weights.map { HKQuantitySample(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: Double($0.weight)), start: $0.date, end: $0.date)}
-        
-        resultsHandler(query, samples, nil)
-    }
-    
-    override func sampleQuery(sampleType: HKSampleType, predicate: NSPredicate?, limit: Int, sortDescriptors: [NSSortDescriptor]?, resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
-        
-        let weights: [Weight] = [
-            .init(weight: 200, date: Date().subtracting(days: 0)),
-            .init(weight: 201, date: Date().subtracting(days: 1)),
-            .init(weight: 202, date: Date().subtracting(days: 2)),
-            .init(weight: 203, date: Date().subtracting(days: 3)),
-            .init(weight: 206, date: Date().subtracting(days: 6)),
-            .init(weight: 207, date: Date().subtracting(days: 7)),
-            .init(weight: 208, date: Date().subtracting(days: 8)),
-            .init(weight: 209, date: Date().subtracting(days: 9))
-        ]
-        let samples = weights.map { HKQuantitySample(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: Double($0.weight)), start: $0.date, end: $0.date)}
+        let samples = gappedWeights.map {
+            HKQuantitySample(
+                type: .init(.bodyMass),
+                quantity: .init(unit: .pound(), doubleValue: Double($0.weight)),
+                start: $0.date,
+                end: $0.date
+            )
+        }
         
         resultsHandler(query, samples, nil)
     }
@@ -171,4 +172,3 @@ class MockHKStatistics: HKStatisticsProtocol {
         return mockSumQuantity
     }
 }
-

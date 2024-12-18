@@ -22,14 +22,11 @@ class HealthData: ObservableObject {
     @Published var environment: AppEnvironmentConfig
 #if !os(macOS)
     @Published var calorieManager: CalorieManager
-#endif
     @Published public var weightManager: WeightManager
-    
+#endif
     @Published public var days: Days = [:]
-    @Published public var daysBetweenStartAndNow: Int? = 350 // TODO needed?
+    @Published public var daysBetweenStartAndNow: Int?
     @Published public var hasLoaded: Bool = false
-    @Published public var realisticWeights: [Int: Double] = [:]
-    @Published public var weights: [Double] = []
     
     // Constants
     var startDate: Date?
@@ -43,12 +40,6 @@ class HealthData: ObservableObject {
         Task {
             if await authorizeHealthKit() {
                 setupDates(environment: environment)
-                // Use test case if available
-                if environment.testCase != nil {
-                    let days = Days.testDays(options: environment)
-                    self.days = days // TODO publishing change from background thread
-                    return
-                }
                 if shouldSetValues {
                     await setValues(forceLoad: true, completion: nil)
                 }
@@ -73,12 +64,6 @@ class HealthData: ObservableObject {
         Task {
             if await authorizeHealthKit() { // TODO necessary?
                 setupDates(environment: environment)
-                // Use test case if available
-                if environment.testCase != nil {
-                    let days = Days.testDays(options: environment)
-                    self.days = days
-                    completion(self)
-                }
                 if shouldSetValues {
                     await setValues(forceLoad: true, completion: completion)
                 }
@@ -95,12 +80,6 @@ class HealthData: ObservableObject {
             _ = HealthData(environment: environment, shouldSetValues: false) { health in
                 continuation.resume(returning: health)
             }
-        }
-        // Use test case if available
-        if environment.testCase != nil {
-            let days = Days.testDays(options: environment)
-            health.days = days
-            return health
         }
         await health.setValues(forceLoad: true, completion: nil)
         return health
@@ -166,7 +145,9 @@ class HealthData: ObservableObject {
         // Otherwise use settings
         guard let startDate = Settings.get(.startDate),
               let daysBetweenStartAndNow = Date.daysBetween(date1: startDate, date2: Date())
-        else { return }
+        else {
+            return
+        }
         
         self.startDate = startDate
         self.daysBetweenStartAndNow = daysBetweenStartAndNow

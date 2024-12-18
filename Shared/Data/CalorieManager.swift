@@ -325,30 +325,8 @@ class CalorieManager: ObservableObject {
     
     //MARK: SUM VALUE FOR DAY
     func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> Decimal {
-        return await withUnsafeContinuation { continuation in
-            let predicate = specificDayPredicate(daysAgo: daysAgo)
-           
-            healthStorage.statisticsQuery(type: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { [self] _, result, _ in
-                continuation.resume(returning: convertSumToDecimal(sum: result?.sumQuantity(), type: type))
-            }
-        }
-    }
-    
-    func pastDaysPredicate(days: Int) -> NSPredicate {
-        let endDate = days == 0 ? Date() : Calendar.current.startOfDay(for: Date()) // why?
-        let startDate = Date.subtract(days: days, from: endDate)
-        return predicate(startDate: startDate, endDate: endDate)
-    }
-    
-    func specificDayPredicate(daysAgo: Int) -> NSPredicate? {
-        let startDate = Date.subtract(days: daysAgo, from: Date())
-        guard let endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: startDate) 
-        else { return nil }
-        return predicate(startDate: startDate, endDate: endDate)
-    }
-    
-    func predicate(startDate: Date, endDate: Date) -> NSPredicate {
-        HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictStartDate])
+        let sum = await healthStorage.sumValueForDay(daysAgo: daysAgo, forType: type)
+        return convertSumToDecimal(sum: sum, type: type)
     }
     
     func convertSumToDecimal(sum: HKQuantity?, type: HealthKitType) -> Decimal {
