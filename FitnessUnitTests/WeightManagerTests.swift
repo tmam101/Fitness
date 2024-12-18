@@ -31,12 +31,18 @@ final class WeightManagerTests {
     }
     
     @Test func startingWeightWithGapInDaysBeforeAndAfterStartDate() async {
-        let weightProcessor = MockHealthStorage.standard
-        environment = .init(healthStorage: weightProcessor)
+        let weights = [
+            Weight(weight: 229.2, date: Date().subtracting(days: 10)),  // Before start date
+            Weight(weight: 228.0, date: Date().subtracting(days: 2))    // After start date
+        ]
+        let mockStorage = MockHealthStorageWithGapInDays(weights: weights)
+        environment = .init(healthStorage: mockStorage)
         weightManager = WeightManager(environment: environment)
+        
         let startDate = Date().subtracting(days: 4)
         await weightManager.setup(startDate: startDate)
-        #expect(weightManager.startingWeight == 229.2)
+        
+        #expect(weightManager.startingWeight == 228.3)
     }
     
     @Test func startingWeightWithNoWeightsUntilAfterStartDate() async {

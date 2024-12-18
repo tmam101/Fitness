@@ -41,23 +41,29 @@ final class HealthDataTests {
         #expect(healthData.days.count == 11)
     }
     
-    @Test("Health data sets weights on every day when necessary")
-    func health_gaps() async {
+    @Test("Health data handles gaps in weight data correctly")
+    func health_gaps_in_weights() async throws {
         let startDate = Date().subtracting(days: 10)
-        var environment = AppEnvironmentConfig(startDate: startDate, healthStorage: MockHealthStorage.standard) // TODO need gap in days
-        var healthData = await HealthData.setValues(environment: environment)
-        #expect(healthData.days[3]?.weight == 203)
-        #expect(healthData.days[4]?.weight == 204)
+        let gappedWeights = [
+            Weight(weight: 200, date: Date().subtracting(days: 0)),
+            Weight(weight: 201, date: Date().subtracting(days: 1)),
+            // Gap on day 2
+            Weight(weight: 203, date: Date().subtracting(days: 3)),
+            // Gap on day 4 and 5
+            Weight(weight: 206, date: Date().subtracting(days: 6)),
+            Weight(weight: 207, date: Date().subtracting(days: 7))
+        ]
         
-        // TODO these options are getting overridden by the MockHealthStorage's own options
-        environment = AppEnvironmentConfig(dontAddWeightsOnEveryDay: true, startDate: startDate, healthStorage: MockHealthStorage(
-            days:
-                [5: Day(daysAgo: 5, weight: 205),
-                 4: Day(daysAgo: 4, weight: 0),
-                 3: Day(daysAgo: 3, weight: 203)
-                ]))
-        healthData = await HealthData.setValues(environment: environment)
-        #expect(healthData.days[3]?.weight == 203)
-        #expect(healthData.days[4]?.weight == 0)
+        let environment = AppEnvironmentConfig(
+            startDate: startDate,
+            healthStorage: MockHealthStorageWithGapInDays(weights: gappedWeights)
+        )
+        
+        let healthData = await HealthData.setValues(environment: environment)
+        
+        // Verify that gaps are filled
+        #expect(healthData.days[2]!.weight.isApproximately(202, accuracy: 0.1))
+        #expect(healthData.days[4]!.weight.isApproximately(204, accuracy: 0.1))
+        #expect(healthData.days[5]!.weight.isApproximately(205, accuracy: 0.1))
     }
 }

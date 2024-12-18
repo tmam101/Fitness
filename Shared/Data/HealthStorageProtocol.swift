@@ -46,7 +46,7 @@ class HealthStorage: HealthStorageProtocol {
     ) {
         guard let quantityType = type.value else {
             handler(nil, nil, nil) // TODO return error
-            return 
+            return
         }
         
         let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: quantitySamplePredicate, options: options, completionHandler: handler)
@@ -128,23 +128,24 @@ class MockHealthStorage: HealthStorageProtocol {
 }
 
 class MockHealthStorageWithGapInDays: MockHealthStorage {
+    let gappedWeights: [Weight]
+    
+    init(weights: [Weight]) {
+        self.gappedWeights = weights
+        super.init(days: [:])  // Empty days since we're providing weights directly
+    }
     
     override func getAllWeights(resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
         let query = HKSampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor], resultsHandler: resultsHandler)
-        // TODO set up some Days, using testDays probably, then create samples from their weights
         
-        let weights: [Weight] = [
-            .init(weight: 200, date: Date().subtracting(days: 0)),
-            .init(weight: 201, date: Date().subtracting(days: 1)),
-            .init(weight: 202, date: Date().subtracting(days: 2)),
-            .init(weight: 203, date: Date().subtracting(days: 3)),
-            .init(weight: 206, date: Date().subtracting(days: 6)),
-            .init(weight: 207, date: Date().subtracting(days: 7)),
-            .init(weight: 208, date: Date().subtracting(days: 8)),
-            .init(weight: 209, date: Date().subtracting(days: 9))
-        ]
-        
-        let samples = weights.map { HKQuantitySample(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: Double($0.weight)), start: $0.date, end: $0.date)}
+        let samples = gappedWeights.map {
+            HKQuantitySample(
+                type: .init(.bodyMass),
+                quantity: .init(unit: .pound(), doubleValue: Double($0.weight)),
+                start: $0.date,
+                end: $0.date
+            )
+        }
         
         resultsHandler(query, samples, nil)
     }
@@ -167,4 +168,3 @@ class MockHKStatistics: HKStatisticsProtocol {
         return mockSumQuantity
     }
 }
-
