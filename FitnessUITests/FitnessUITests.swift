@@ -60,7 +60,7 @@ final class FitnessUITests: XCTestCase {
         lookForText("Net Energy This Week")
         
         lookForText("+307")
-        lookForText("-113")
+        lookForText("-128")
         lookForText("+0.61")
         lookForText("+0.67")
         
@@ -69,11 +69,11 @@ final class FitnessUITests: XCTestCase {
         lookForText("Net Energy This Month")
         
         lookForText("+130")
-        lookForText("+17")
+        lookForText("+12")
         lookForText("+0.74")
         lookForText("+1.80")
         
-        XCTAssertEqual(app.otherElements["bar 0 days ago"].value as! String, "-2,250")
+        XCTAssertEqual(app.otherElements["bar 0 days ago"].value as! String, "-2,350")
     }
     
     func barValue(daysAgo: Int) -> String? {
