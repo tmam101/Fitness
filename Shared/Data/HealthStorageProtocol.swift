@@ -98,6 +98,10 @@ class MockHealthStorage: HealthStorageProtocol {
         self.days = days
     }
     
+    init(file: Filepath.Days) {
+        self.days = Days.daysFromFileWithNoAdjustment(file: file)
+    }
+    
     func sumValueForDay(daysAgo: Int, forType type: HealthKitType) async -> HKQuantity? {
         return switch type {
         case .dietaryProtein:
