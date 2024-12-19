@@ -230,29 +230,40 @@ extension Tag {
     }
     
     @Test func lineChartViewModel() {
-        let day1 = Day(date: Date(), daysAgo: 0, expectedWeight: 68, realisticWeight: 69, weight: 70)
-        let day2 = Day(date: Date().addingTimeInterval(-86400), daysAgo: 1, expectedWeight: 69, realisticWeight: 70, weight: 71)
+        let day1 = Day(date: Date(), daysAgo: 0,
+                      expectedWeight: 68,  // Middle
+                      realisticWeight: 65, // Minimum
+                      weight: 70)          // Middle
+        let day2 = Day(date: Date().addingTimeInterval(-86400), daysAgo: 1,
+                      expectedWeight: 72,  // Maximum
+                      realisticWeight: 69, // Middle
+                      weight: 67)          // Middle
         var days = Days()
         days[0] = day1
         days[1] = day2
         let timeFrame = TimeFrame.week
         
         let viewModel = LineChartViewModel(days: days, timeFrame: timeFrame)
+        
         #expect(viewModel.days.count == 3)
-        #expect(viewModel.maxValue == 71)
-        #expect(viewModel.minValue == 68)
+        #expect(viewModel.maxValue == 72) // Should be day2's expectedWeight
+        #expect(viewModel.minValue == 65) // Should be day1's realisticWeight
+        
+        viewModel.updateMinMaxValues(days: viewModel.days)
+        #expect(viewModel.maxValue == 72) // Should still be day2's expectedWeight
+        #expect(viewModel.minValue == 65) // Should still be day1's realisticWeight
+        
+        let day3 = Day(date: Date().addingTimeInterval(-172800), daysAgo: 2,
+                      expectedWeight: 69,  // Middle
+                      realisticWeight: 75, // New maximum
+                      weight: 63)          // New minimum
+        days[2] = day3
         
         viewModel.populateDays(for: days)
-        #expect(viewModel.days.count == 3)
-        
-        let constructedDays = viewModel.constructDays(using: days)
-        #expect(constructedDays.count == 3)
-        
-        viewModel.updateMinMaxValues(days: constructedDays)
-        #expect(viewModel.maxValue == 71)
-        #expect(viewModel.minValue == 68)
+        #expect(viewModel.maxValue == 75) // Should be day3's realisticWeight
+        #expect(viewModel.minValue == 63) // Should be day3's weight
     }
-    
+
     @Test func lineChartViewModel_constructDays() {
         let day1 = Day(daysAgo: 0, expectedWeight: 68, realisticWeight: 69, weight: 70)
         let day2 = Day(daysAgo: 1, expectedWeight: 69, realisticWeight: 70, weight: 71)

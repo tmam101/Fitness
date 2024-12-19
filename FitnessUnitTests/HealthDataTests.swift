@@ -56,7 +56,7 @@ final class HealthDataTests {
         
         let environment = AppEnvironmentConfig(
             startDate: startDate,
-            healthStorage: MockHealthStorageWithGapInDays(weights: gappedWeights)
+            healthStorage: MockHealthStorage(weights: gappedWeights)
         )
         
         let healthData = await HealthData.setValues(environment: environment)
