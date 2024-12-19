@@ -127,7 +127,12 @@ public struct HomeScreen: View {
         }
         let dayDifference = oldestDay.daysAgo - newestDay.daysAgo
         let weightChange = newestDay.weight - oldestDay.weight
-        let expectedWeightChange = newestDay.expectedWeight - oldestDay.expectedWeight
+//        let expectedWeightChange = newestDay.expectedWeight - oldestDay.expectedWeight
+        let expectedWeightChange = daysInTimeFrame.array()
+            .filter { $0.daysAgo != 0 }
+            .reduce(0, { oldValue, day in
+                oldValue + day.expectedWeightChangeBasedOnDeficit
+            })
         return [
             (expectedWeightChange, Day.Property.expectedWeight),
             (weightChange, Day.Property.weight)

@@ -245,6 +245,14 @@ extension Days {
         return testDays(options: nil)
     }
     
+    static func daysFromFileWithNoAdjustment(file: Filepath.Days) -> Days {
+        let days: Days = Days.decode(path: file) ?? [:] // TODO
+        days.array().forEach { day in
+            day.date = Date().subtracting(days: day.daysAgo)
+        }
+        return days
+    }
+    
     static func testDays(options: AppEnvironmentConfig?) -> Days {
         var days: Days = [:]
         guard
@@ -271,6 +279,9 @@ extension Days {
             }
             if let file = options.testCase {
                 var days: Days = Days.decode(path: file) ?? [:] // TODO
+                days.array().forEach { day in
+                    day.date = Date().subtracting(days: day.daysAgo)
+                }
                 days.formatAccordingTo(options: options)
                 return days
             }

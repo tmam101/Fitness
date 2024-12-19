@@ -30,7 +30,7 @@ enum ConfigCase: Equatable {
 
 class AppEnvironmentConfig {
     static var release = AppEnvironmentConfig()
-    static var debug = AppEnvironmentConfig(healthStorage: MockHealthStorage())
+    static var debug = AppEnvironmentConfig(healthStorage: MockHealthStorage.standard)
     
     var isMissingConsumedCalories: Bool = true
     var weightGoingSteadilyDown: Bool? = nil

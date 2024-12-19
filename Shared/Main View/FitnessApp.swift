@@ -13,7 +13,13 @@ class AppSettings: ObservableObject {
     init() {
         for path in Filepath.Days.allCases {
             if ProcessInfo.processInfo.arguments.contains(path.rawValue) {
-                healthData = HealthData(environment: .init([ .isMissingConsumedCalories(true), .testCase(path)]))
+                let healthStorage = MockHealthStorage(file: path)
+                var startDate: Date?
+                if let oldestDaysAgo = healthStorage.days.oldestDay?.daysAgo {
+                    startDate = Date().subtracting(days: oldestDaysAgo)
+                }
+                
+                healthData = HealthData(environment: .init(isMissingConsumedCalories: true, startDate: startDate, healthStorage: healthStorage))
                 return
             }
         }
