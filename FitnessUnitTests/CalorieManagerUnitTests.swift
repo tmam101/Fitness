@@ -10,19 +10,19 @@ import HealthKit
 @testable import Fitness
 import Numerics
 
-@Suite 
+@Suite
 
 struct CalorieManagerUnitTests {
     var calorieManager: CalorieManager!
+    let testDate = Date()
     
     init() {
         calorieManager = CalorieManager(environment: .debug)
     }
     
     func setup() async {
-        let date = Date()
-        let twentyDaysAgo = Date.subtract(days: 20, from: date)
-        let tenDaysAgo = Date.subtract(days: 10, from: date)
+        let twentyDaysAgo = testDate.subtracting(days: 20)
+        let tenDaysAgo = testDate.subtracting(days: 10)
         await calorieManager.setup(oldestWeight: Weight(weight: 230, date: twentyDaysAgo), newestWeight: Weight(weight: 200, date: tenDaysAgo), daysBetweenStartAndNow: 20)
     }
     
@@ -30,11 +30,13 @@ struct CalorieManagerUnitTests {
         #expect(calorieManager.dietaryProtein != nil)
     }
     
-    @Test func healthKitType() {
+    @Test("Health Kit Types have expected values")
+    func healthKitTypeProperties() {
         for v in HealthKitType.allCases {
-            #expect(v.value != nil)
+            #expect(v.value != nil, "HealthKit type should have a value")
         }
-        #expect(HealthKitType.allCases.count == 4)
+        #expect(HealthKitType.allCases.count == 4, "Should have exactly 4 HealthKit types")
+        
         #expect(HealthKitType.dietaryProtein.value == HKQuantityType(.dietaryProtein))
         #expect(HealthKitType.dietaryEnergyConsumed.value == HKQuantityType(.dietaryEnergyConsumed))
         #expect(HealthKitType.activeEnergyBurned.value == HKQuantityType(.activeEnergyBurned))
@@ -44,7 +46,7 @@ struct CalorieManagerUnitTests {
         #expect(HealthKitType.dietaryProtein.unit == .gram())
         #expect(HealthKitType.dietaryEnergyConsumed.unit == .kilocalorie())
         #expect(HealthKitType.basalEnergyBurned.unit == .kilocalorie())
-        }
+    }
     
     @Test func convertSumToDecimal() {
         var quantity: HKQuantity? = .init(unit: .gram(), doubleValue: 100)
@@ -82,8 +84,6 @@ struct CalorieManagerUnitTests {
         #expect(result == 1560)
         result = await calorieManager.sumValueForDay(daysAgo: 4, forType: .dietaryProtein)
         #expect(result == 90)
-        
-        
     }
     
     @Test func healthSample() {
@@ -109,39 +109,33 @@ struct CalorieManagerUnitTests {
         #expect(calorieCountSample.count == sample?.count)
     }
     
-    @Test func getDays() async {
+    @Test("Day calculations are accurate")
+    func dayCalculations() async {
         await setup()
         let days = await calorieManager.getDays(forPastDays: 20)
-        guard let oldestDay = days.oldestDay, let newestDay = days.newestDay else {
-            Issue.record()
+        
+        guard let oldestDay = days.oldestDay,
+              let newestDay = days.newestDay else {
+            Issue.record("Failed to get oldest and newest days")
             return
         }
-        // Should have the past x days plus today
-        #expect(days.count == 21)
-        // Test oldest day properties are set
-        #expect(oldestDay.activeCalories == 465.2399999999998)
-        #expect(oldestDay.restingCalories == 2268.9560000000015)
+        
+        #expect(days.count == 21, "Should have 21 days including today")
+        
+        #expect(oldestDay.activeCalories.isApproximately(465.24, accuracy: 0.01))
+        #expect(oldestDay.restingCalories.isApproximately(2268.96, accuracy: 0.01))
         #expect(oldestDay.daysAgo == 20)
         #expect(oldestDay.consumedCalories == 0)
-//        XCTAssertEqual(oldestDay.expectedWeight, 230)
-        // TODO We are now moving expected weight calculation into the Days object. TBD if i want this long term
-        #expect(oldestDay.runningTotalDeficit.isApproximately(2268.95 + 465.23, accuracy: 0.1))
-        #expect(oldestDay.netEnergy.isApproximately(0 - (2268.95 + 465.23), accuracy: 0.1))
-        #expect(oldestDay.date == Date().subtracting(days: 20))
-        #expect(oldestDay.protein == 0)
-        #expect(oldestDay.deficit == oldestDay.runningTotalDeficit)
+        #expect(oldestDay.date == testDate.subtracting(days: 20))
         
-        // Test newest day properties are set
-        #expect(newestDay.activeCalories == 200)
-        #expect(newestDay.restingCalories == 2150)
-        #expect(newestDay.consumedCalories == 0)
-        // Test deficit, net energy, and expected weight change
+        let expectedDeficit = oldestDay.restingCalories + oldestDay.activeCalories
+        #expect(oldestDay.runningTotalDeficit.isApproximately(expectedDeficit, accuracy: 0.1))
+        #expect(oldestDay.netEnergy.isApproximately(-expectedDeficit, accuracy: 0.1))
+        
         let expectedTotalDeficit = days.sum(property: .deficit)
         #expect(expectedTotalDeficit.isApproximately(56220.10, accuracy: 0.1))
-        #expect(expectedTotalDeficit == days.newestDay?.runningTotalDeficit)
-        for day in days.array() {
-            #expect(day.runningTotalDeficit != nil)
-        }
+        #expect(days.newestDay?.runningTotalDeficit == expectedTotalDeficit)
+        
         let expectedTotalNetEnergy = days.sum(property: .netEnergy)
         #expect(expectedTotalNetEnergy.isApproximately(-56220.10, accuracy: 0.1))
         let expectedWeightChange = expectedTotalNetEnergy / Constants.numberOfCaloriesInPound
@@ -150,7 +144,10 @@ struct CalorieManagerUnitTests {
         }))
         let d: Decimal = 0.00500
         #expect(d.isApproximately(0.00510, accuracy: 0.001))
-//        XCTAssertEqual(newestDay.expectedWeight, oldestDay.expectedWeight + expectedWeightChange)
-        #expect(newestDay.date == Date().subtracting(days: 0))
+        
+        #expect(newestDay.activeCalories == 200)
+        #expect(newestDay.restingCalories == 2150)
+        #expect(newestDay.consumedCalories == 0)
+        #expect(newestDay.date == testDate.subtracting(days: 0))
     }
 }

@@ -35,7 +35,7 @@ final class WeightManagerTests {
             Weight(weight: 229.2, date: Date().subtracting(days: 10)),  // Before start date
             Weight(weight: 228.0, date: Date().subtracting(days: 2))    // After start date
         ]
-        let mockStorage = MockHealthStorageWithGapInDays(weights: weights)
+        let mockStorage = MockHealthStorage(weights: weights)
         environment = .init(healthStorage: mockStorage)
         weightManager = WeightManager(environment: environment)
         

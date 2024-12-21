@@ -98,6 +98,17 @@ class MockHealthStorage: HealthStorageProtocol {
         self.days = days
     }
     
+    init(weights: [Weight]) {
+        self.days = [:]
+        // Create days from weights
+        for weight in weights {
+            if let daysAgo = weight.date.daysAgo() {
+                let day = Day(date: weight.date, daysAgo: daysAgo, weight: weight.weight)
+                self.days[daysAgo] = day
+            }
+        }
+    }
+    
     init(file: Filepath.Days) {
         self.days = Days.daysFromFileWithNoAdjustment(file: file)
     }
@@ -126,30 +137,6 @@ class MockHealthStorage: HealthStorageProtocol {
             day.weight == 0 ? nil : Weight(weight: day.weight, date: Date().subtracting(days: day.daysAgo))
         }
         let samples = weights.map { HKQuantitySample(type: .init(.bodyMass), quantity: .init(unit: .pound(), doubleValue: Double($0.weight)), start: $0.date, end: $0.date)}
-        
-        resultsHandler(query, samples, nil)
-    }
-}
-
-class MockHealthStorageWithGapInDays: MockHealthStorage {
-    let gappedWeights: [Weight]
-    
-    init(weights: [Weight]) {
-        self.gappedWeights = weights
-        super.init(days: [:])  // Empty days since we're providing weights directly
-    }
-    
-    override func getAllWeights(resultsHandler: @escaping (HKSampleQuery, [HKSample]?, (any Error)?) -> Void) {
-        let query = HKSampleQuery(sampleType: querySampleType, predicate: nil, limit: weightLimit, sortDescriptors: [sortDescriptor], resultsHandler: resultsHandler)
-        
-        let samples = gappedWeights.map {
-            HKQuantitySample(
-                type: .init(.bodyMass),
-                quantity: .init(unit: .pound(), doubleValue: Double($0.weight)),
-                start: $0.date,
-                end: $0.date
-            )
-        }
         
         resultsHandler(query, samples, nil)
     }

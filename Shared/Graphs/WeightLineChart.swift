@@ -214,8 +214,9 @@ public class LineChartViewModel: ObservableObject {
             $0.expectedWeight + $0.expectedWeightChangeBasedOnDeficit
         }.filter { $0 != 0 }
         
+        let realisticWeights = days.map { $0.realisticWeight }.filter { $0 != 0 }
         let realWeights = days.map { $0.weight }.filter { $0 != 0 }
-        let allValues = [expectedWeights, realWeights]
+        let allValues = [expectedWeights, realisticWeights, realWeights]
         maxValue = allValues.compactMap { $0.max() ?? nil }.max() ?? 1 //todo
         minValue = allValues.compactMap { $0.min() ?? nil }.min() ?? 1 //todo
     }
